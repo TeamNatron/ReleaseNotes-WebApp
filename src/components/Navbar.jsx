@@ -11,6 +11,7 @@ const Navbar = () => {
             src={
               "https://kundesider.cordel.no/wp-content/uploads/2019/07/logo-300x109.png"
             }
+            alt="Cordel Kundesenter"
           />
         </Brand>
       </FlexContainer>{" "}
@@ -21,8 +22,8 @@ const Navbar = () => {
 export default Navbar;
 
 const Header = styled.header`
-  position: fixed;
-  width: 100%;
+  position: sticky;
+  width: 100vw;
   height: 62px;
   top: 0;
   left: 0;
@@ -32,12 +33,12 @@ const Header = styled.header`
   color: white;
 
   > * {
-    max-height: 62px;
+    max-height: 60px;
   }
 `;
 
 const FlexContainer = styled.div`
-  max-width: 65rem;
+  max-width: ${props => props.theme.contentWidth};
   display: flex;
   margin: auto;
   padding: 0 2rem;

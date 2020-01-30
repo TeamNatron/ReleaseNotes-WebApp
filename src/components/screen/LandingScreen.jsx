@@ -1,10 +1,23 @@
-import React, { Component } from 'react';
+import React from "react";
+import styled from "styled-components";
+import ScreenTitle from "../shared/ScreenTitle";
+import PageContainer from "../shared/PageContainer";
+import Ingress from "../shared/Ingress";
 
-class LandingScreen extends Component {
-    state = {  }
-    render() { 
-        return (<div></div>  );
-    }
-}
- 
+const LandingScreen = props => {
+  return (
+    <React.Fragment>
+      <PageContainer>
+        <ScreenTitle>Produktoppdateringer</ScreenTitle>
+        <Ingress>Velg produkt</Ingress>
+        <ProductDisplay>{props.products}</ProductDisplay>
+      </PageContainer>
+    </React.Fragment>
+  );
+};
+
 export default LandingScreen;
+
+const ProductDisplay = styled.div`
+    display: flex;
+    flex-direction: row`;
