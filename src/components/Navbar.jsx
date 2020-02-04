@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
+import { AppBar, Toolbar, Box } from "@material-ui/core";
 
 const Navbar = () => {
   return (
     <Header>
-      {" "}
-      <FlexContainer>
+      <StyledToolbar>
         <Brand href="https://kundesider.cordel.no/">
           <img
             src={
@@ -14,44 +14,31 @@ const Navbar = () => {
             alt="Cordel Kundesenter"
           />
         </Brand>
-      </FlexContainer>{" "}
+      </StyledToolbar>
     </Header>
   );
 };
 
 export default Navbar;
 
-const Header = styled.header`
-  position: sticky;
-  width: 100vw;
-  height: 62px;
-  top: 0;
-  left: 0;
-  background: ${props => props.theme.mainColor};
-  z-index: 1;
-  font-size: 1.4rem;
-  color: white;
-
-  > * {
-    max-height: 60px;
+const Header = styled(AppBar)`
+  && {
+    position: sticky;
+    max-height: 62px;
+    background: ${props => props.theme.mainColor};
+    color: white;
   }
 `;
 
-const FlexContainer = styled.div`
+const StyledToolbar = styled(Toolbar)`
   max-width: ${props => props.theme.contentWidth};
-  display: flex;
-  margin: auto;
-  padding: 0 2rem;
-  justify-content: space-between;
-  align-items: center;
-  height: 100%;
-  & > * {
-      height: 100%;
+  > * {
+    height: 62px;
   }
 `;
 
 const Brand = styled.a`
-> img {
+  > img {
     height: 100%;
-}
+  }
 `;

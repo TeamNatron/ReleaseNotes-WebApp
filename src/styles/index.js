@@ -11,7 +11,6 @@ export const theme = {
   };
   
 export const GlobalStyle = createGlobalStyle`
-    ${normalize}
     body {
       background-color: ${theme.sectionColorLight}
     }

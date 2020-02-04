@@ -1,16 +1,14 @@
 import React from "react";
 import styled from "styled-components";
+import {Container} from "@material-ui/core"
 
 const PageContainer = props => {
-  return <Container>{props.children}</Container>;
+  return <StyledContainer>{props.children}</StyledContainer>;
 };
 
 export default PageContainer;
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: ${props => props.theme.contentWidth};
-  padding: 12px;
+const StyledContainer = styled(Container)`
+  max-width: ${props => props.theme.contentWidth};
   margin: auto;
 `;
