@@ -59,16 +59,16 @@ class Login extends Component {
 }
 const Title = styled.span`
   color: ${props => props.theme.secondaryColor};
-  font-size: 4vw;
+  font-size: 2rem;
   font-weight: bolder;
   text-align: center;
   margin: auto;
   margin-top: 1vw;
   margin-bottom: 1vw;
   display: block;
-  @media only screen and (max-width: 600px) {
-    font-size: 8vw;
-  }
+  /* @media only screen and (max-width: 600px) {
+    font-size: 1rem;
+  } */
 `;
 
 const StyledForm = styled.form`
