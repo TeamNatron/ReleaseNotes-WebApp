@@ -66,9 +66,6 @@ const Title = styled.span`
   margin-top: 1vw;
   margin-bottom: 1vw;
   display: block;
-  /* @media only screen and (max-width: 600px) {
-    font-size: 1rem;
-  } */
 `;
 
 const StyledForm = styled.form`
