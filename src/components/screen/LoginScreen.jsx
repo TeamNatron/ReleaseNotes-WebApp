@@ -2,7 +2,7 @@ import React from "react";
 import Login from "../auth/Login";
 import PageContainer from "../shared/PageContainer";
 
-const LoginScreen = () => {
+const LoginScreen = props => {
   return (
     <PageContainer>
       <Login />
