@@ -4,7 +4,7 @@ import "./App.css";
 import LandingScreen from "./components/screen/LandingScreen";
 import Navbar from "./components/Navbar";
 import { ThemeProvider } from "styled-components";
-import {GlobalStyle, theme} from "./styles/index"
+import { GlobalStyle, theme } from "./styles/index";
 
 function App() {
   return (
