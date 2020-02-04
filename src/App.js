@@ -4,12 +4,14 @@ import "./App.css";
 import LandingScreen from "./components/screen/LandingScreen";
 import Navbar from "./components/Navbar";
 import { ThemeProvider } from "styled-components";
-import {GlobalStyle, theme} from "./styles/index"
+import { GlobalStyle, theme } from "./styles/index";
+import { CssBaseline } from "@material-ui/core";
 
 function App() {
   return (
     <React.Fragment>
       <GlobalStyle />
+      <CssBaseline />
       <Router>
         <ThemeProvider theme={theme}>
           <Navbar />
