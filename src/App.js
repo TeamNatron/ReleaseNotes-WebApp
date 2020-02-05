@@ -1,25 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import "./App.css";
+import LandingScreen from "./components/screen/LandingScreen";
+import Navbar from "./components/Navbar";
+import { ThemeProvider } from "styled-components";
+import { GlobalStyle, theme } from "./styles/index";
+import { CssBaseline } from "@material-ui/core";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      <GlobalStyle />
+      <CssBaseline />
+      <Router>
+        <ThemeProvider theme={theme}>
+          <Navbar />
+          <Route path="/" component={LandingScreen} />
+        </ThemeProvider>
+      </Router>
+    </React.Fragment>
   );
 }
 
