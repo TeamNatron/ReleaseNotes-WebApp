@@ -138,6 +138,7 @@ const StyledToolbar = styled(Box)`
     padding: 4px 0;
     background-color: ${props => props.theme.sectionColorDark};
     border-radius: 6px;
+  }
 `;
 
 export default ReleaseNotesScreen;
