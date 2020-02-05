@@ -10,6 +10,7 @@ import { GlobalStyle, theme } from "./styles/index";
 import { CssBaseline } from "@material-ui/core";
 import { Provider, useDispatch } from "react-redux";
 import { store } from "./setupStore";
+import ArticleScreen from "./components/screen/ArticleScreen";
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
           <Navbar />
           <Route path="/" exact component={LandingScreen} />
           <Route path="/releases" exact component={ReleaseNotesScreen} />
-
+          <Route path="/articles/article01" exact component={ArticleScreen} />
         </ThemeProvider>
       </Router>
     </Provider>
