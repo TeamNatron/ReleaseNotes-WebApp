@@ -9,6 +9,9 @@ const PageContainer = props => {
 export default PageContainer;
 
 const StyledContainer = styled(Container)`
+&& {
   max-width: ${props => props.theme.contentWidth};
   margin: auto;
+}
+
 `;

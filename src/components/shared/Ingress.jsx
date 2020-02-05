@@ -7,8 +7,8 @@ const Ingress = props => {
 
 export default Ingress;
 
-const Text = styled.h1`
+const Text = styled.span`
   width: 100%;
   color: #666666;
-  font-size: 12px;
+  font-size: .8rem;
 `;
