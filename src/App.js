@@ -8,10 +8,12 @@ import Navbar from "./components/Navbar";
 import { ThemeProvider } from "styled-components";
 import { GlobalStyle, theme } from "./styles/index";
 import { CssBaseline } from "@material-ui/core";
+import { Provider, useDispatch } from "react-redux";
+import { store } from "./setupStore";
 
 function App() {
   return (
-    <React.Fragment>
+    <Provider store={store}>
       <GlobalStyle />
       <CssBaseline />
       <Router>
@@ -22,7 +24,7 @@ function App() {
 
         </ThemeProvider>
       </Router>
-    </React.Fragment>
+    </Provider>
   );
 }
 
