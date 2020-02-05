@@ -10,14 +10,14 @@ import {
   ListItemText,
   Typography,
   Icon,
-  Paper,
-  Container
+  Container,
+  Box
 } from "@material-ui/core";
 import styled from "styled-components";
-import { LocalOffer, CalendarToday } from "@material-ui/icons";
+import { LocalOffer, CalendarToday, FilterListOutlined } from "@material-ui/icons";
 import Ingress from "../shared/Ingress";
 
-const ReleaseNotesScreen = () => {
+const ReleaseNotesScreen = (props) => {
   const dummy = [
     {
       title: "Obama 2020",
@@ -49,15 +49,20 @@ const ReleaseNotesScreen = () => {
       <Ingress gutterBottom>Få med deg det aller siste</Ingress>
       <SpacedDivider></SpacedDivider>
       <NarrowContainer>
-        <Toolbar>
-          <Button variant="contained" color="primary">
-            Example filter button
-          </Button>
+        <StyledToolbar component="div">
+          <Toolbar>
+            <Icon edge="start">
+              <FilterListOutlined />
+            </Icon>
+            <Button disableElevation color="primary">
+              Example filter button
+            </Button>
 
-          <Button variant="contained" color="primary">
-            Example filter button
-          </Button>
-        </Toolbar>
+            <Button disableElevation color="primary">
+              Example filter button
+            </Button>
+          </Toolbar>
+        </StyledToolbar>
 
         <StyledList>
           {dummy.map(article => (
@@ -122,20 +127,17 @@ const Space = styled.span`
   margin: 0 10px;
 `;
 
-const StyledPaper = styled(Paper)`
+const SpacedDivider = styled(Divider)`
   && {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
+    margin: 32px 0;
   }
 `;
 
-const SpacedDivider = styled(Divider)`
-&& {
-    margin: 16px 0;
-
-}
-`
+const StyledToolbar = styled(Box)`
+  && {
+    padding: 4px 0;
+    background-color: ${props => props.theme.sectionColorDark};
+    border-radius: 6px;
+`;
 
 export default ReleaseNotesScreen;
