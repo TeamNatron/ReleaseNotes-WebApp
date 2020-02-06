@@ -4,15 +4,18 @@ import PageContainer from "../shared/PageContainer";
 import Product from "../product/Product";
 import List from "@material-ui/core/List";
 import { ListItem, Container } from "@material-ui/core";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { fetchProducts } from "../../actions/productActions";
 
 const LandingScreen = props => {
   const products = useSelector(state => state.products);
+  const loading = useSelector(state => state.products.pending);
+  const dispatch = useDispatch();
 
+  // https://blog.bitsrc.io/using-react-redux-hooks-97654aff01e4
   useEffect(() => {
-    fetchProducts();
-  });
+    dispatch(fetchProducts());
+  }, []);
 
   return (
     <React.Fragment>
@@ -25,11 +28,26 @@ const LandingScreen = props => {
       </WelcomeContainer>
       <PageContainer>
         <ProductDisplay>
-          {products.items.map(product => (
-            <ListItem>
-              <Product img="https://constructionaccidentlawfirms.com/files/2019/08/AdobeStock_192077668.jpg" />
-            </ListItem>
-          ))}
+          {loading ? (
+            <React.Fragment>
+              {[...Array(4)].map((i =>
+              <ListItem>
+                <Product loading key={i}/>
+              </ListItem>
+              ))}
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              {products.items.map(product => (
+                <ListItem>
+                  <Product
+                    loading
+                    img="https://constructionaccidentlawfirms.com/files/2019/08/AdobeStock_192077668.jpg"
+                  />
+                </ListItem>
+              ))}
+            </React.Fragment>
+          )}
         </ProductDisplay>
       </PageContainer>
     </React.Fragment>
