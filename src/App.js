@@ -11,6 +11,7 @@ import { Provider, useDispatch } from "react-redux";
 import { store } from "./setupStore";
 import ArticleScreen from "./components/screen/ArticleScreen";
 import AdminScreen from "./components/screen/AdminScreen";
+import LoginScreen from "./components/screen/LoginScreen";
 import Footer from "./components/Footer";
 
 function App() {
@@ -25,7 +26,8 @@ function App() {
           <Route path="/releases" exact component={ReleaseNotesScreen} />
           <Route path="/articles/article01" exact component={ArticleScreen} />
           <Route path="/adminpage/" exact component={AdminScreen} />
-          <Footer />
+          <Route path="/login/" exact component={LoginScreen} />
+          {/* <Footer /> */}
         </ThemeProvider>
       </Router>
     </Provider>
