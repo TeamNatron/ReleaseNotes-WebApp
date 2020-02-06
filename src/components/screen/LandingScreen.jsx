@@ -1,19 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import PageContainer from "../shared/PageContainer";
 import Product from "../product/Product";
 import List from "@material-ui/core/List";
 import { ListItem, Container } from "@material-ui/core";
-import { useSelector } from "react-redux";
-import { fetchProducts } from "../../actions/productActions";
 
 const LandingScreen = props => {
-  const products = useSelector(state => state.products);
-
-  useEffect(() => {
-    fetchProducts();
-  });
-
   return (
     <React.Fragment>
       <WelcomeContainer maxWidth="false">
@@ -25,11 +17,18 @@ const LandingScreen = props => {
       </WelcomeContainer>
       <PageContainer>
         <ProductDisplay>
-          {products.items.map(product => (
-            <ListItem>
-              <Product img="https://constructionaccidentlawfirms.com/files/2019/08/AdobeStock_192077668.jpg" />
-            </ListItem>
-          ))}
+          <ListItem>
+            <Product />
+          </ListItem>
+          <ListItem>
+            <Product />
+          </ListItem>
+          <ListItem>
+            <Product />
+          </ListItem>
+          <ListItem>
+            <Product />
+          </ListItem>
         </ProductDisplay>
       </PageContainer>
     </React.Fragment>
