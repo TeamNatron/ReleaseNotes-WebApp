@@ -2,7 +2,7 @@ import Axios from "axios";
 
 export const CREATE = "CREATE";
 export const UPDATE = "UPDATE";
-export const DELETE = "CREATE";
+export const DELETE = "DELETE";
 
 export function updateArticle(payload) {
   return {
