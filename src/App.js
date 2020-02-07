@@ -18,10 +18,20 @@ import AdminScreen from "./components/screen/AdminScreen";
 import Footer from "./components/Footer";
 
 // https://github.com/axios/axios
-const AUTH_TOKEN = "gervlingitaket"
-Axios.defaults.baseURL = '10.22.185.186:5000/api/'
-Axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
-Axios.defaults.headers.post['Content-Type'] = 'application/json';
+Axios.defaults.baseURL = 'http://localhost:5000/api/'
+//Axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+//Axios.defaults.headers.post['Content-Type'] = 'application/json';
+// intercept outgoing and incoming requests for debugging
+
+Axios.interceptors.request.use(request => {
+  console.log('Starting Request', request)
+  return request
+})
+
+Axios.interceptors.response.use(response => {
+  console.log('Response:', response)
+  return response
+})
 
 function App() {
   return (

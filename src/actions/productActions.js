@@ -4,14 +4,15 @@ export const FETCH_PRODUCTS_SUCCESS = "fetchProductsSuccess";
 export const FETCH_PRODUCTS_ERROR = "fetchProductsError";
 
 export function fetchProducts() {
-  console.log("1")
   return dispatch => {
-    console.log("2")
-
     dispatch(actions.fetchProductsPending());
-    return Axios.get("/products")
-      .then(res => dispatch(actions.fetchProductsSuccess(res.products)))
-      .catch(error => dispatch(actions.fetchProductsError(error)));
+    return Axios.get("products/")
+      .then(res => {
+        dispatch(actions.fetchProductsSuccess(res.data))
+      })
+      .catch(error => {
+        dispatch(actions.fetchProductsError(error));
+      })
   };
 }
 

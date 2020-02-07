@@ -7,7 +7,8 @@ const initialState = products
 export function productsReducer(state = initialState, action) {
     switch(action.type) {
         case FETCH_PRODUCTS_PENDING: 
-            return update(state, {pending: {$set: true}})
+            return update(state, {
+                pending: {$set: true}})
 
         case FETCH_PRODUCTS_SUCCESS:
             return update(state, {
@@ -16,7 +17,9 @@ export function productsReducer(state = initialState, action) {
                 error: {$set: null}
             })
         case FETCH_PRODUCTS_ERROR:
-            return update(state, {error: {$set: action.payload}})
+            return update(state, {
+                pending: {$set: false},
+                error: {$set: action.payload}})
 
         default: 
             return state;
