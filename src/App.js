@@ -11,18 +11,12 @@ import { Provider, useDispatch } from "react-redux";
 import { store } from "./setupStore";
 import Axios from "axios";
 
-
-
 import ArticleScreen from "./components/screen/ArticleScreen";
 import AdminScreen from "./components/screen/AdminScreen";
 import LoginScreen from "./components/screen/LoginScreen";
 import Footer from "./components/Footer";
 
-// https://github.com/axios/axios
-const AUTH_TOKEN = "gervlingitaket"
-Axios.defaults.baseURL = '10.22.185.186:5000/api/'
-Axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
-Axios.defaults.headers.post['Content-Type'] = 'application/json';
+Axios.defaults.baseURL = "http://localhost:5000/api/";
 
 function App() {
   return (
