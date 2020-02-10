@@ -1,10 +1,6 @@
 import Axios from "axios";
 
 export function login(paramEmail, paramPassword) {
-  Axios.interceptors.request.use(request => {
-    return request;
-  });
-
   return Axios.post(
     "login",
     {
