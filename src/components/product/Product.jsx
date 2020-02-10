@@ -6,8 +6,8 @@ import {
   Grid,
   Paper,
   CardActionArea,
-  Grow,
   Fade,
+  Grow,
 } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
 import styled from "styled-components";
@@ -19,11 +19,11 @@ const Product = props => {
   const history = useHistory();
 
   function handleClick() {
-    history.push("/articles/" + props.item.id)
+    history.push("/articles?product=" + props.item.id)
   }
 
   return (
-    <Fade in={!props.loading}>
+    <Grow in={!props.loading}>
       <ProductPaper elevation="6">
         {props.loading ? (
           <React.Fragment>
@@ -54,7 +54,7 @@ const Product = props => {
           </CardActionArea>
         )}
       </ProductPaper>
-    </Fade>
+    </Grow>
   );
 };
 export default Product;

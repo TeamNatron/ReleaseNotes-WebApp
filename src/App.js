@@ -42,8 +42,7 @@ function App() {
         <ThemeProvider theme={theme}>
           <Navbar />
           <Route path="/" exact component={LandingScreen} />
-          <Route path="/releases" exact component={ReleaseNotesScreen} />
-          <Route path="/articles/article01" exact component={ArticleScreen} />
+          <Route path="/articles" exact component={ReleaseNotesScreen} />
           <Route path="/adminpage/" exact component={AdminScreen} />
           <Footer />
         </ThemeProvider>
