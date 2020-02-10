@@ -9,9 +9,14 @@ import { GlobalStyle, theme } from "./styles/index";
 import { CssBaseline } from "@material-ui/core";
 import { Provider, useDispatch } from "react-redux";
 import { store } from "./setupStore";
+import Axios from "axios";
+
 import ArticleScreen from "./components/screen/ArticleScreen";
 import AdminScreen from "./components/screen/AdminScreen";
+import LoginScreen from "./components/screen/LoginScreen";
 import Footer from "./components/Footer";
+
+Axios.defaults.baseURL = "http://localhost:5000/api/";
 
 function App() {
   return (
@@ -25,7 +30,8 @@ function App() {
           <Route path="/releases" exact component={ReleaseNotesScreen} />
           <Route path="/articles/article01" exact component={ArticleScreen} />
           <Route path="/adminpage/" exact component={AdminScreen} />
-          <Footer />
+          <Route path="/login/" exact component={LoginScreen} />
+          {/* <Footer /> */}
         </ThemeProvider>
       </Router>
     </Provider>
