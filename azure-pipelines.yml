@@ -15,7 +15,7 @@ steps:
     npm install
     npm run build
 
-- script: npm test --ci --reporters=default --reporters=jest-junit
+- script: npm test -- --coverage --ci --reporters=default --reporters=jest-junit --coverageReporters=cobertura
   env:
     CI: true
 
@@ -26,3 +26,11 @@ steps:
     mergeTestResults: true
     failTaskOnFailedTests: true
   condition: succeededOrFailed()
+
+- task: PublishCodeCoverageResults@1
+  displayName: "Publish code coverage"
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: "$(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml"
+    reportDirectory: "$(System.DefaultWorkingDirectory)/coverage"
+    failIfCoverageEmpty: true
