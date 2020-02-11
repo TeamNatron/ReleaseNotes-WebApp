@@ -6,5 +6,22 @@ pool:
 
 
 steps: 
-- script: npm install
-- script: npm test --watchAll=false
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+    npm run build
+    npm test --ci --reporters=default --reporters=jest-junit
+
+- task: PublishTestResults@2
+  displayName: "Publish Test Results"
+  inputs:
+    testResultsFiles: junit.xml
+    mergeTestResults: true
+  condition: succeededOrFailed()
+
+variables:
+  CI: true
