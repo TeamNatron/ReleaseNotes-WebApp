@@ -14,11 +14,15 @@ steps:
 - script: |
     npm install
     npm run build
-    npm test --ci --reporters=default --reporters=jest-junit
+
+- script: npm test --ci --reporters=default --reporters=jest-junit
+  env:
+    CI: true
 
 - task: PublishTestResults@2
   displayName: "Publish Test Results"
   inputs:
     testResultsFiles: junit.xml
     mergeTestResults: true
+    failTaskOnFailedTests: true
   condition: succeededOrFailed()
