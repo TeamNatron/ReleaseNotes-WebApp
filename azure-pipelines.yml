@@ -7,4 +7,4 @@ pool:
 
 steps: 
 - script: npm install
-- script: npm test
+- script: npm test --watchAll=false
