@@ -11,18 +11,17 @@ import { Provider, useDispatch } from "react-redux";
 import { store } from "./setupStore";
 import Axios from "axios";
 
-
-
 import ArticleScreen from "./components/screen/ArticleScreen";
 import AdminScreen from "./components/screen/AdminScreen";
+import LoginScreen from "./components/screen/LoginScreen";
 import Footer from "./components/Footer";
 
 // https://github.com/axios/axios
-Axios.defaults.baseURL = 'http://localhost:5000/api/'
+Axios.defaults.baseURL = "http://localhost:5000/api/";
 //Axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 //Axios.defaults.headers.post['Content-Type'] = 'application/json';
-// intercept outgoing and incoming requests for debugging
 
+// intercept outgoing and incoming requests for debugging
 Axios.interceptors.request.use(request => {
   console.log('Starting Request', request)
   return request
@@ -44,6 +43,7 @@ function App() {
           <Route path="/" exact component={LandingScreen} />
           <Route path="/articles" exact component={ReleaseNotesScreen} />
           <Route path="/adminpage/" exact component={AdminScreen} />
+          <Route path="/login/" exact component={LoginScreen} />
           <Footer />
         </ThemeProvider>
       </Router>
