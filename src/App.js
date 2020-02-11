@@ -16,7 +16,21 @@ import AdminScreen from "./components/screen/AdminScreen";
 import LoginScreen from "./components/screen/LoginScreen";
 import Footer from "./components/Footer";
 
+// https://github.com/axios/axios
 Axios.defaults.baseURL = "http://localhost:5000/api/";
+//Axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+//Axios.defaults.headers.post['Content-Type'] = 'application/json';
+
+// intercept outgoing and incoming requests for debugging
+Axios.interceptors.request.use(request => {
+  console.log('Starting Request', request)
+  return request
+})
+
+Axios.interceptors.response.use(response => {
+  console.log('Response:', response)
+  return response
+})
 
 function App() {
   return (
@@ -27,11 +41,10 @@ function App() {
         <ThemeProvider theme={theme}>
           <Navbar />
           <Route path="/" exact component={LandingScreen} />
-          <Route path="/releases" exact component={ReleaseNotesScreen} />
-          <Route path="/articles/article01" exact component={ArticleScreen} />
+          <Route path="/articles" exact component={ReleaseNotesScreen} />
           <Route path="/adminpage/" exact component={AdminScreen} />
           <Route path="/login/" exact component={LoginScreen} />
-          {/* <Footer /> */}
+          <Footer />
         </ThemeProvider>
       </Router>
     </Provider>

@@ -5,5 +5,7 @@ export const products = {
 }
 
 export const articles = {
-    title: 'todo'
+    pending: false,
+    items: [],
+    error: null
 }

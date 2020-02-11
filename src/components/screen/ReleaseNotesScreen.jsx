@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PageContainer from "../shared/PageContainer";
 import ScreenTitle from "../shared/ScreenTitle";
 import {
@@ -16,32 +16,27 @@ import {
 import styled from "styled-components";
 import { LocalOffer, CalendarToday, FilterListOutlined } from "@material-ui/icons";
 import Ingress from "../shared/Ingress";
+import { fetchArticlesByProductId } from "../../actions/articleActions";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router";
 
 const ReleaseNotesScreen = (props) => {
-  const dummy = [
-    {
-      title: "Obama 2020",
-      date: "20.20.2020",
-      version: "1.20.12",
-      text:
-        "Michael Santiago Render (born April 20, 1975), better known by his stage name Barrack Obama, is an American rapper, actor, and activist. He is the founder of Grind Time Official Records, which he launched through the SMC and Fontana Distribution. Mike made his debut on Snappin and Trappin' from OutKast's 2000 LP Stankonia, and later appeared on the Grammy-winning song The Whole World, a single from Outkast's greatest hits album Big Boi and Dre Present...Outkast. He has since released five full-length albums as a solo artist. "
-    },
-    {
-      title: "Endelig påske",
-      date: "20.03.2020",
-      version: "1.20.11",
-      text:
-        "the emperor ... convened a council of 318 bishops ... in the city of Nicea ... They passed certain ecclesiastical canons at the council besides, and at the same time decreed in regard to the Passover that there must be one unanimous concord on the celebration of God's holy and supremely excellent day. For it was variously observed by people"
-    },
+  
 
-    {
-      title: "Cordel Narnia 1.20.10",
-      date: "20.01.2002",
-      version: "1.20.10",
-      text:
-        "List of unusual biological names \n List of bizarre buildings\n List of cars with non-standard door designs \nList of chemical compounds with unusual names"
-    }
-  ];
+  let query = useQuery();
+
+  const dispatch = useDispatch();
+
+  // https://blog.bitsrc.io/using-react-redux-hooks-97654aff01e4
+  
+  // Query trick https://reacttraining.com/react-router/web/example/query-parameters
+  useEffect(() => {
+    const productId = query.get("product")
+    dispatch(fetchArticlesByProductId(productId));
+  }, [dispatch]);
+  const articles = useSelector(state => state.articles.items);
+
+
 
   return (
     <PageContainer>
@@ -65,7 +60,7 @@ const ReleaseNotesScreen = (props) => {
         </StyledToolbar>
 
         <StyledList>
-          {dummy.map(article => (
+          {articles.map(article => (
             <li>
               <ListItem alignItems="flex-start">
                 <ListItemText
@@ -106,6 +101,10 @@ const ReleaseNotesScreen = (props) => {
     </PageContainer>
   );
 };
+
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 
 const StyledIcon = styled(Icon)`
   margin-right: 4px;

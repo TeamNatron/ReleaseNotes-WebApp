@@ -5,41 +5,42 @@ import {
   CardMedia,
   Grid,
   Paper,
-  CardActionArea
+  CardActionArea,
+  Fade,
+  Grow,
 } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { useHistory } from "react-router";
 
-class Product extends Component {
-  handleClick() {
-    this.props.onClick();
+const Product = props => {
+
+  const history = useHistory();
+
+  function handleClick() {
+    history.push("/articles?product=" + props.item.id)
   }
 
-  render() {
-    return (
+  return (
+    <Grow in={!props.loading}>
       <ProductPaper elevation="6">
-        {this.props.loading ? (
+        {props.loading ? (
           <React.Fragment>
+            <Skeleton variant="rect" height={250} />
             <Skeleton variant="text" />
-            <Skeleton variant="circle" width={40} height={40} />
-            <Skeleton variant="rect" />
+            ii
           </React.Fragment>
         ) : (
-          <CardActionArea onClick={this.handleClick}>
+          <CardActionArea onClick={handleClick}>
             <Grid container spacing={1}>
               <Grid item>
-                <CardImage
-                  component="img"
-                  image={this.props.img}
-                  title="Image"
-                />
+                <CardImage component="img" image={props.img} title="Image" />
               </Grid>
               <Grid item xs container>
                 <ProductCardContent>
-                  <Typography gutterBottom>Word of the Day</Typography>
-                  <Typography variant="h5" component="h2">
-                    Cordel INNE
+                  <Typography variant="h4" component="h2">
+                    {props.item.name}
                   </Typography>
                   <Typography>adjective</Typography>
                   <Typography variant="body2" component="p">
@@ -53,9 +54,9 @@ class Product extends Component {
           </CardActionArea>
         )}
       </ProductPaper>
-    );
-  }
-}
+    </Grow>
+  );
+};
 export default Product;
 
 Product.propTypes = {
@@ -78,6 +79,8 @@ const ProductCardContent = styled(CardContent)`
 `;
 
 const CardImage = styled(CardMedia)`
-  max-width: 400px;
-  width: 100% !important;
+  && {
+    max-width: auto 400px;
+    max-height: 250px;
+  }
 `;
