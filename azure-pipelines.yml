@@ -14,10 +14,14 @@ steps:
 - script: |
     npm install
     npm run build
+  displayName: 'Install, build and run'
+  
 
 - script: npm test -- --coverage --ci --reporters=default --reporters=jest-junit --coverageReporters=cobertura
   env:
     CI: true
+  displayName: 'Run tests'
+  
 
 - task: PublishTestResults@2
   displayName: "Publish Test Results"
