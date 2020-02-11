@@ -22,12 +22,12 @@ import {
   Sort
 } from "@material-ui/icons";
 import Ingress from "../shared/Ingress";
-import { fetchArticlesByProductId } from "../../actions/articleActions";
+import { fetchArticles } from "../../actions/articleActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router";
-import { sortKeys } from "../../sortKeys";
+import articleParameters, { sortKeys } from "../../articleParameters";
 
-const ReleaseNotesScreen = (props) => {
+const ReleaseNotesScreen = props => {
   const [anchorEl, setAnchorEl] = React.useState(null)
   let query = useQuery();
   const dispatch = useDispatch();
@@ -36,17 +36,17 @@ const ReleaseNotesScreen = (props) => {
   // https://blog.bitsrc.io/using-react-redux-hooks-97654aff01e4
   // Query trick https://reacttraining.com/react-router/web/example/query-parameters
   useEffect(() => {
-    dispatch(fetchArticlesByProductId(productId));
+    dispatch(fetchArticles(articleParameters(productId)));
   }, [dispatch]);
   const articles = useSelector(state => state.articles.items);
 
   function handleSortByNewest() {
-    dispatch(fetchArticlesByProductId(productId, sortKeys.NEWEST));
+    dispatch(fetchArticles(articleParameters(productId, sortKeys.NEWEST)));
     handleSortMenuClose()
   }
 
   function handleSortByOldest() {
-    dispatch(fetchArticlesByProductId(productId, sortKeys.OLDEST));
+    dispatch(fetchArticles(articleParameters(productId, sortKeys.OLDEST)));
     handleSortMenuClose()
   }
 
