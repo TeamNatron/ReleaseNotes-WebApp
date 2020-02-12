@@ -15,10 +15,18 @@ export function updateArticle(payload) {
   };
 }
 
-export function fetchArticlesByProductId(id) {
+export function fetchArticles(queryParameters) {
+  var query = ""
+  if (queryParameters) {
+    const id = queryParameters.productId;
+    const sortKey = queryParameters.sort;
+    query =
+    (id ? "?product=" + id : "") +
+    (sortKey ? "&sort=" + sortKey : "");
+  }
+
   return dispatch => {
     dispatch(actions.fetchArticlesPending());
-    const query = !Number.isNaN(id) ? "?product=" + id : ""
     return Axios.get("/articles" + query)
       .then(response => {
         dispatch(actions.fetchArticlesSuccess(response.data));
