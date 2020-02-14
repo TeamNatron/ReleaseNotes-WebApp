@@ -11,6 +11,7 @@ import { Provider, useDispatch } from "react-redux";
 import { store } from "./setupStore";
 import Axios from "axios";
 
+import EditReleaseNoteForm from "./components/EditReleaseNoteForm"
 import ArticleScreen from "./components/screen/ArticleScreen";
 import AdminScreen from "./components/screen/AdminScreen";
 import LoginScreen from "./components/screen/LoginScreen";
@@ -44,6 +45,7 @@ function App() {
           <Route path="/articles" exact component={ReleaseNotesScreen} />
           <Route path="/adminpage/" exact component={AdminScreen} />
           <Route path="/login/" exact component={LoginScreen} />
+          <Route path="/debug" exact component={EditReleaseNoteForm} />
           <Footer />
         </ThemeProvider>
       </Router>
