@@ -1,10 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import FacebookIcon from '@material-ui/icons/Facebook';
-import InstagramIcon from '@material-ui/icons/Instagram';
-import YouTubeIcon from '@material-ui/icons/YouTube';
+import React from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import FacebookIcon from "@material-ui/icons/Facebook";
+import InstagramIcon from "@material-ui/icons/Instagram";
+import YouTubeIcon from "@material-ui/icons/YouTube";
 //import LinkedinLogo from '../../public/LinkedinLogo';
 
 const Footer = () => {
@@ -120,6 +120,7 @@ const SectionTitle = styled.h4`
 const SectionInfo = styled.p``;
 
 const Div = styled.footer`
+  margin-top: 350px;
   width: 100vw;
   background: ${props => props.theme.mainColor};
   font-size: 1.4rem;

@@ -2,7 +2,11 @@ import Axios from "axios";
 
 export const CREATE = "CREATE";
 export const UPDATE = "UPDATE";
-export const DELETE = "CREATE";
+export const DELETE = "DELETE";
+
+export const FETCH_ARTICLES_SUCCESS = "FETCH_ARTICLES_SUCCESS";
+export const FETCH_ARTICLES_PENDING = "FETCH_ARTICLES_PENDING";
+export const FETCH_ARTICLES_ERROR = "FETCH_ARTICLES_ERROR";
 
 export function updateArticle(payload) {
   return {
@@ -11,14 +15,21 @@ export function updateArticle(payload) {
   };
 }
 
-// expmple thunk/axios action
-// https://github.com/axios/axios
-// https://github.com/reduxjs/redux-thunk
-export function createArticleAsync(article) {
+export function fetchArticles(queryParameters) {
+  var query = ""
+  if (queryParameters) {
+    const id = queryParameters.productId;
+    const sortKey = queryParameters.sort;
+    query =
+    (id ? "?product=" + id : "") +
+    (sortKey ? "&sort=" + sortKey : "");
+  }
+
   return dispatch => {
-    return Axios.create("/article", article)
+    dispatch(actions.fetchArticlesPending());
+    return Axios.get("/articles" + query)
       .then(response => {
-        dispatch(createArticle(response));
+        dispatch(actions.fetchArticlesSuccess(response.data));
       })
       .catch(error => {
         throw error;
@@ -26,9 +37,28 @@ export function createArticleAsync(article) {
   };
 }
 
-export function createArticle(article) {
-  return {
-    type: CREATE,
-    payload: article
-  };
-}
+export const actions = {
+  fetchArticlesPending() {
+    return {
+      type: FETCH_ARTICLES_PENDING
+    };
+  },
+
+  fetchArticlesSuccess(response) {
+    return {
+      type: FETCH_ARTICLES_SUCCESS,
+      payload: response
+    };
+  },
+
+  fetchArticlesError(error) {
+    return {
+      type: FETCH_ARTICLES_ERROR,
+      payload: error
+    };
+  }
+};
+
+// expmple thunk/axios action
+// https://github.com/axios/axios
+// https://github.com/reduxjs/redux-thunk

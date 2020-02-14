@@ -2,15 +2,39 @@ trigger:
 - master
 
 pool:
-  vmImage: 'Ubuntu-16.04'
+  vmImage: 'ubuntu-16.04'
 
-variables:
-  imageName: 'pipelines-javascript-docker'
 
-steps:
-- task: Docker@2
-  displayName: Build an image
+steps: 
+- task: NodeTool@0
   inputs:
-    repository: $(imageName)
-    command: build
-    Dockerfile: app/Dockerfile
+    versionSpec: '10.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+    npm run build
+  displayName: 'Install, build and run'
+  
+
+- script: npm test -- --coverage --ci --reporters=default --reporters=jest-junit --coverageReporters=cobertura
+  env:
+    CI: true
+  displayName: 'Run tests'
+  
+
+- task: PublishTestResults@2
+  displayName: "Publish Test Results"
+  inputs:
+    testResultsFiles: junit.xml
+    mergeTestResults: true
+    failTaskOnFailedTests: true
+  condition: succeededOrFailed()
+
+- task: PublishCodeCoverageResults@1
+  displayName: "Publish code coverage"
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: "$(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml"
+    reportDirectory: "$(System.DefaultWorkingDirectory)/coverage"
+    failIfCoverageEmpty: true
