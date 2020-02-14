@@ -12,6 +12,8 @@ import { store } from "./setupStore";
 import ArticleScreen from "./components/screen/ArticleScreen";
 import AdminScreen from "./components/screen/AdminScreen";
 import Footer from "./components/Footer";
+import LoginScreen from "./components/screen/LoginScreen";
+import styled from "styled-components";
 
 function App() {
   return (
@@ -21,10 +23,13 @@ function App() {
       <Router>
         <ThemeProvider theme={theme}>
           <Navbar />
-          <Route path="/" exact component={LandingScreen} />
-          <Route path="/releases" exact component={ReleaseNotesScreen} />
-          <Route path="/articles/article01" exact component={ArticleScreen} />
-          <Route path="/adminpage/" exact component={AdminScreen} />
+          <MainContent>
+            <Route path="/" exact component={LandingScreen} />
+            <Route path="/releases" exact component={ReleaseNotesScreen} />
+            <Route path="/articles/article01" exact component={ArticleScreen} />
+            <Route path="/adminpage/" exact component={AdminScreen} />
+            <Route path="/login/" exact component={LoginScreen} />
+          </MainContent>
           <Footer />
         </ThemeProvider>
       </Router>
@@ -33,3 +38,7 @@ function App() {
 }
 
 export default App;
+
+const MainContent = styled.div`
+  min-height: 90vw;
+`;
