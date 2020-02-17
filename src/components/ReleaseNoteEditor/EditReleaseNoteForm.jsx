@@ -1,15 +1,10 @@
 import React from "react";
-import {
-  TextField,
-  Paper,
-  Box,
-  FormControl,
-  InputLabel,
-  OutlinedInput,
-  Input
-} from "@material-ui/core";
-import PageContainer from "./shared/PageContainer";
+import { Paper, Box } from "@material-ui/core";
+import styled from "styled-components";
 import RichEditor from "./RichEditor";
+import PageContainer from "../shared/PageContainer";
+import ReleaseNoteInput from "./ReleaseNoteInput";
+import ReleaseNoteRichInput from "./ReleaseNoteRichInput";
 
 const EditReleaseNoteForm = () => {
   const [title, setTitle] = React.useState();
@@ -23,8 +18,9 @@ const EditReleaseNoteForm = () => {
   };
 
   const [description, setDescription] = React.useState();
-  const handleDescriptionChange = event => {
-    //setDescription(event.target.value);
+  const handleDescriptionChange = editorState => {
+    console.log(editorState)
+    setDescription(editorState)
   };
 
   const dummyRawText = {
@@ -34,7 +30,7 @@ const EditReleaseNoteForm = () => {
 
   return (
     <PageContainer>
-      <form>
+      <StyledForm>
         <div>
           <Paper variant="outlined">
             <Box m={2}>
@@ -43,38 +39,41 @@ const EditReleaseNoteForm = () => {
           </Paper>
         </div>
         <div>
-          <TextField
-            variant="outlined"
-            label="Tittel"
-            value={title}
+          <ReleaseNoteInput
             onChange={handleTitleChange}
-            margin="normal"
+            value={title}
+            label="Tittel"
           />
         </div>
 
         <div>
-          <TextField
-            multiline
-            variant="outlined"
-            label="Ingress"
-            value={ingress}
+          <ReleaseNoteInput
             onChange={handleIngressChange}
-            margin="normal"
+            value={ingress}
+            label="Ingress"
           />
         </div>
 
         <div>
-          <FormControl variant="outlined" fullWidth>
-            <InputLabel htmlFor="component-outlined">Beskrivelse</InputLabel>
-            <OutlinedInput
-            id="component-outlined"
-              inputComponent={RichEditor}
-            />
-          </FormControl>
+          <ReleaseNoteRichInput
+            onChange={handleDescriptionChange}
+            label="Beskrivelse"
+          />
         </div>
-      </form>
+        <div>
+          <RichEditor
+            title={title}
+            ingress={ingress}
+            descriptionEditorState={description}
+          />
+        </div>
+      </StyledForm>
     </PageContainer>
   );
 };
 
 export default EditReleaseNoteForm;
+
+const StyledForm = styled.form`
+  margin-top: 20px;
+`;
