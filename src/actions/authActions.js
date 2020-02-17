@@ -1,4 +1,5 @@
 import Axios from "axios";
+import { setAuthToken } from "../handlers/cookieHandler";
 
 export function login(paramEmail, paramPassword) {
   return Axios.post(
@@ -14,6 +15,6 @@ export function login(paramEmail, paramPassword) {
       }
     }
   ).then(response => {
-    document.cookie = "access_token=" + response.data.accessToken;
+    setAuthToken(response.data.accessToken);
   });
 }
