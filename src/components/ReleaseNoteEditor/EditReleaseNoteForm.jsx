@@ -6,7 +6,6 @@ import {
   Switch,
   FormControlLabel,
   Divider,
-  Typography
 } from "@material-ui/core";
 import styled from "styled-components";
 import RichEditor from "./RichEditor";
@@ -53,6 +52,7 @@ const EditReleaseNoteForm = () => {
     __html:
       "<div> <h2>This is the raw release note</h2> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</div></div>"
   };
+
 
   const dummyBlame = "@BenRedicFyFazan";
 

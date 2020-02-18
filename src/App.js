@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./App.css";
 import LandingScreen from "./components/screen/LandingScreen";
 import ReleaseNotesScreen from "./components/screen/ReleaseNotesScreen";
@@ -7,15 +7,15 @@ import Navbar from "./components/Navbar";
 import { ThemeProvider } from "styled-components";
 import { GlobalStyle, theme } from "./styles/index";
 import { CssBaseline } from "@material-ui/core";
-import { Provider, useDispatch } from "react-redux";
+import { Provider } from "react-redux";
 import { store } from "./setupStore";
 import Axios from "axios";
+import 'draft-js/dist/Draft.css';
 
-import EditReleaseNoteForm from "./components/EditReleaseNoteForm"
-import ArticleScreen from "./components/screen/ArticleScreen";
 import AdminScreen from "./components/screen/AdminScreen";
 import LoginScreen from "./components/screen/LoginScreen";
 import Footer from "./components/Footer";
+import EditReleaseNoteForm from "./components/ReleaseNoteEditor/EditReleaseNoteForm";
 
 // https://github.com/axios/axios
 Axios.defaults.baseURL = "http://localhost:5000/api/";

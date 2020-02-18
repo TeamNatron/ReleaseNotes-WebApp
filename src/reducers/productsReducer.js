@@ -1,4 +1,4 @@
-import { FETCH_PRODUCTS_PENDING, FETCH_PRODUCTS_SUCCESS, FETCH_PRODUCTS_ERROR, actions } from "../actions/productActions";
+import { FETCH_PRODUCTS_PENDING, FETCH_PRODUCTS_SUCCESS, FETCH_PRODUCTS_ERROR } from "../actions/productActions";
 import { products } from "./initialStates";
 import update from 'immutability-helper';
 
