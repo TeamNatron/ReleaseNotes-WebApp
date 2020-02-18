@@ -68,9 +68,8 @@ class AdminScreen extends Component {
     };
   }
 
-  createData = (name, code, population, size) => {
-    const density = population / size;
-    return { name, code, population, size, density };
+  createData = name => {
+    return { name };
   };
 
   handleClose = () => {

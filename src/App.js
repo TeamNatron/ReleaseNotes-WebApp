@@ -24,12 +24,10 @@ Axios.defaults.baseURL = "http://localhost:5000/api/";
 
 // intercept outgoing and incoming requests for debugging
 Axios.interceptors.request.use(request => {
-  console.log("Starting Request", request);
   return request;
 });
 
 Axios.interceptors.response.use(response => {
-  console.log("Response:", response);
   return response;
 });
 

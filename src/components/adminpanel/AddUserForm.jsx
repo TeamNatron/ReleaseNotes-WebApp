@@ -7,11 +7,10 @@ import {
   InputAdornment,
   Button,
   FormHelperText,
-  FormControl,
-  FormGroup
+  FormControl
 } from "@material-ui/core";
 import styled from "styled-components";
-import { Email, VpnKey, Check } from "@material-ui/icons";
+import { Email, VpnKey } from "@material-ui/icons";
 import { registerNewUser } from "../../actions/userRegActions";
 
 class AddUserForm extends Component {
