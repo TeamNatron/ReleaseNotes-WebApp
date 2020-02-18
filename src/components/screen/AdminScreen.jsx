@@ -24,6 +24,7 @@ import Ingress from "../shared/Ingress";
 import ScreenTitle from "../shared/ScreenTitle";
 import SpacedDivider from "../shared/SpacedDivider";
 import AddUserForm from "../adminpanel/AddUserForm";
+import AddProductForm from "../adminpanel/AddProductForm";
 
 class AdminScreen extends Component {
   constructor() {
@@ -64,7 +65,8 @@ class AdminScreen extends Component {
         this.createData("The Rock"),
         this.createData("Trond Viggo Torgersen"),
         this.createData("Sinnasnekkern")
-      ]
+      ],
+      formToRender: <div />
     };
   }
 
@@ -77,9 +79,17 @@ class AdminScreen extends Component {
     this.setState({ open: newValue });
   };
 
-  handleOpen = () => {
+  handleOpenUserForm = () => {
     const newValue = true;
-    this.setState({ open: newValue });
+    this.setState({ open: newValue, formToRender: <AddUserForm /> }, () => {});
+  };
+
+  handleOpenProductForm = () => {
+    const newValue = true;
+    this.setState(
+      { open: newValue, formToRender: <AddProductForm /> },
+      () => {}
+    );
   };
 
   render() {
@@ -97,9 +107,7 @@ class AdminScreen extends Component {
           }}
         >
           <Fade in={this.state.open}>
-            <DialogContent>
-              <AddUserForm />
-            </DialogContent>
+            <DialogContent>{this.state.formToRender}</DialogContent>
           </Fade>
         </Modal>
 
@@ -115,6 +123,15 @@ class AdminScreen extends Component {
             >
               <Typography>Produkter</Typography>
             </ExpansionPanelSummary>
+            <TablePanel>
+              <AddButton
+                onClick={this.handleOpenProductForm}
+                color="primary"
+                variant="contained"
+              >
+                Legg til
+              </AddButton>
+            </TablePanel>
             <TableContainer>
               <Table>
                 <TableHead>
@@ -180,7 +197,7 @@ class AdminScreen extends Component {
             </ExpansionPanelSummary>
             <TablePanel>
               <AddButton
-                onClick={this.handleOpen}
+                onClick={this.handleOpenUserForm}
                 color="primary"
                 variant="contained"
               >
