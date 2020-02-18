@@ -11,6 +11,7 @@
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
     "draft-js": "^0.11.4",
+    "draftjs-to-html": "^0.9.1",
     "immutability-helper": "^3.0.1",
     "immutable": "^4.0.0-rc.12",
     "jest-junit": "^10.0.0",
