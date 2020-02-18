@@ -9,7 +9,7 @@ import {
 } from "draft-js";
 import { List, Repeat } from "immutable";
 import { Paper } from "@material-ui/core";
-import "draft-js/dist/Draft.css";
+import styled from "styled-components";
 
 class RichEditor extends React.Component {
   TITLE = "title";
@@ -84,7 +84,6 @@ class RichEditor extends React.Component {
           editorState,
           this.props.descriptionEditorState
         );
-        console.log(content.getBlockMap());
       }
       this.onChange(
         EditorState.push(editorState, content, "change-block-data")
@@ -98,7 +97,9 @@ class RichEditor extends React.Component {
       .getBlockMap();
     return editorState
       .getCurrentContent()
-      .update("blockMap", blockMap => blockMap.take(2).merge(descriptionBlocks));
+      .update("blockMap", blockMap =>
+        blockMap.take(2).merge(descriptionBlocks)
+      );
   }
 
   updateBlock(editorState, key, text) {
@@ -117,11 +118,13 @@ class RichEditor extends React.Component {
   render() {
     return (
       <Paper variant="outlined">
-        <Editor
-          editorState={this.state.editorState}
-          onChange={this.onChange}
-          readOnly
-        />
+        <EditorInner>
+          <Editor
+            editorState={this.state.editorState}
+            onChange={this.onChange}
+            readOnly
+          />
+        </EditorInner>
       </Paper>
     );
   }
@@ -132,3 +135,7 @@ export default RichEditor;
 RichEditor.defaultProps = {
   descriptionEditorState: EditorState.createEmpty()
 };
+
+const EditorInner = styled.div`
+  margin: 14px 18.5px;
+`;

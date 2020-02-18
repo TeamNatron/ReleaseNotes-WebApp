@@ -5,6 +5,7 @@ import RichEditor from "./RichEditor";
 import PageContainer from "../shared/PageContainer";
 import ReleaseNoteInput from "./ReleaseNoteInput";
 import ReleaseNoteRichInput from "./ReleaseNoteRichInput";
+import "draft-js/dist/Draft.css";
 
 const EditReleaseNoteForm = () => {
   const [title, setTitle] = React.useState();
@@ -19,8 +20,7 @@ const EditReleaseNoteForm = () => {
 
   const [description, setDescription] = React.useState();
   const handleDescriptionChange = editorState => {
-    console.log(editorState)
-    setDescription(editorState)
+    setDescription(editorState);
   };
 
   const dummyRawText = {
@@ -61,7 +61,7 @@ const EditReleaseNoteForm = () => {
           />
         </div>
         <div>
-          <RichEditor
+          <PreviewContainer
             title={title}
             ingress={ingress}
             descriptionEditorState={description}
@@ -76,4 +76,10 @@ export default EditReleaseNoteForm;
 
 const StyledForm = styled.form`
   margin-top: 20px;
+`;
+
+const PreviewContainer = styled(RichEditor)`
+  &&& {
+    margin: 14px 18.5px;
+  }
 `;
