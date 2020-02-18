@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./App.css";
 import LandingScreen from "./components/screen/LandingScreen";
 import ReleaseNotesScreen from "./components/screen/ReleaseNotesScreen";
@@ -7,7 +7,7 @@ import Navbar from "./components/Navbar";
 import { ThemeProvider } from "styled-components";
 import { GlobalStyle, theme } from "./styles/index";
 import { CssBaseline } from "@material-ui/core";
-import { Provider, useDispatch } from "react-redux";
+import { Provider } from "react-redux";
 import { store } from "./setupStore";
 import Axios from "axios";
 
@@ -15,6 +15,7 @@ import ArticleScreen from "./components/screen/ArticleScreen";
 import AdminScreen from "./components/screen/AdminScreen";
 import LoginScreen from "./components/screen/LoginScreen";
 import Footer from "./components/Footer";
+import styled from "styled-components";
 
 // https://github.com/axios/axios
 Axios.defaults.baseURL = "http://localhost:5000/api/";
@@ -23,14 +24,12 @@ Axios.defaults.baseURL = "http://localhost:5000/api/";
 
 // intercept outgoing and incoming requests for debugging
 Axios.interceptors.request.use(request => {
-  console.log('Starting Request', request)
-  return request
-})
+  return request;
+});
 
 Axios.interceptors.response.use(response => {
-  console.log('Response:', response)
-  return response
-})
+  return response;
+});
 
 function App() {
   return (
@@ -40,10 +39,13 @@ function App() {
       <Router>
         <ThemeProvider theme={theme}>
           <Navbar />
-          <Route path="/" exact component={LandingScreen} />
-          <Route path="/articles" exact component={ReleaseNotesScreen} />
-          <Route path="/adminpage/" exact component={AdminScreen} />
-          <Route path="/login/" exact component={LoginScreen} />
+          <MainContent>
+            <Route path="/" exact component={LandingScreen} />
+            <Route path="/releases" exact component={ReleaseNotesScreen} />
+            <Route path="/articles/article01" exact component={ArticleScreen} />
+            <Route path="/adminpage/" exact component={AdminScreen} />
+            <Route path="/login/" exact component={LoginScreen} />
+          </MainContent>
           <Footer />
         </ThemeProvider>
       </Router>
@@ -52,3 +54,7 @@ function App() {
 }
 
 export default App;
+
+const MainContent = styled.div`
+  min-height: 90vw;
+`;
