@@ -1,28 +1,20 @@
 import React, { useState } from "react";
 import { FormControl, Divider } from "@material-ui/core";
 
-import { ToggleButtonGroup, ToggleButton } from "@material-ui/lab";
-import { EditorState, RichUtils } from "draft-js";
+import { EditorState } from "draft-js";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import styled from "styled-components";
-import {
-  FormatUnderlined,
-  FormatItalic,
-  FormatBold,
-} from "@material-ui/icons";
-
-import { Editor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 const ReleaseNoteRichInput = props => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
-  const [formats, setFormats] = React.useState(() => []);
 
   let editor = React.createRef();
 
   const focusEditor = () => {
-    editor.current.focus();
+    editor.current.focusEditor();
   };
-  const handleFormat = (event, newFormats) => {
+  /*const handleFormat = (event, newFormats) => {
     // https://stackoverflow.com/questions/1187518/how-to-get-the-difference-between-two-arrays-in-javascript
     let diff = newFormats
       .filter(format => !formats.includes(format))
@@ -31,41 +23,63 @@ const ReleaseNoteRichInput = props => {
     for (const format of diff) {
       onEditorChange(RichUtils.toggleInlineStyle(editorState, format));
     }
+
     // TODO: currently only applies to selected text
-  };
+  };*/
   const onEditorChange = editorState => {
     setEditorState(editorState);
     props.onChange(editorState);
   };
 
+  const handleImageUpload = image => {
+    var reader = new FileReader();
+
+    reader.onload = function(event) {
+    };
+    return reader.readAsDataURL(image);
+  }
+
   return (
     <FormControl variant="outlined" fullWidth margin="normal">
       <EditorWrapper>
-        <ToggleButtonGroup
-          value={formats}
-          onChange={handleFormat}
-          aria-label="text formatting"
-          size="small"
-        >
-          <ToggleButton value="BOLD" aria-label="bold">
-            <FormatBold />
-          </ToggleButton>
-          <ToggleButton value="ITALIC" aria-label="italic">
-            <FormatItalic />
-          </ToggleButton>
-          <ToggleButton value="UNDERLINE" aria-label="underline">
-            <FormatUnderlined />
-          </ToggleButton>
-
-          <Divider orientation="vertical" />
-        </ToggleButtonGroup>
         <Divider />
         <EditorInner onClick={focusEditor}>
           <Editor
             placeholder="Beskrivelse"
             ref={editor}
             editorState={editorState}
-            onChange={onEditorChange}
+            onEditorStateChange={onEditorChange}
+            editorClassName={"editor"}
+            toolbarClassName={"toolbar"}
+            toolbar={{
+              options: [
+                "inline",
+                "blockType",
+                "list",
+                "textAlign",
+                "colorPicker",
+                "link",
+                "emoji",
+                "embedded",
+                "image",
+                "remove",
+                "history"
+              ],
+              image: {
+                urlEnabled: true,
+                uploadEnabled: true,
+                alignmentEnabled: true,
+                uploadCallback: handleImageUpload,
+                previewImage: true,
+                inputAccept:
+                  "image/gif,image/jpeg,image/jpg,image/png,image/svg",
+                alt: { present: false, mandatory: false },
+                defaultSize: {
+                  height: "auto",
+                  width: "auto"
+                }
+              }
+            }}
           />
         </EditorInner>
       </EditorWrapper>
@@ -79,8 +93,8 @@ const EditorWrapper = styled.div`
   border: 1px solid black;
   border-radius: 4px;
   transition: 1s ease;
+  }
 `;
 const EditorInner = styled.div`
-  padding: 14px 18.5px;
   cursor: text;
 `;

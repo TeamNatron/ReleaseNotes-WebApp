@@ -2,14 +2,15 @@ import React, { Component } from "react";
 import {
   Editor,
   EditorState,
-  Modifier,
   ContentState,
   ContentBlock,
-  CharacterMetadata
+  CharacterMetadata,
+  convertToRaw
 } from "draft-js";
 import { List, Repeat } from "immutable";
 import { Paper } from "@material-ui/core";
 import styled from "styled-components";
+import draftToHtml from "draftjs-to-html";
 
 class RichEditor extends React.Component {
   TITLE = "title";
@@ -17,37 +18,28 @@ class RichEditor extends React.Component {
   DESCRIPTION = "desciption";
   constructor(props) {
     super(props);
-    const dummyText1 = "Title";
-    const dummyText2 = "Ingress Ingress Ingress Ingress Ingress ";
-    const dummyText3 =
-      "Description Description Description Description Description Description ";
+
     const blocks = [
       new ContentBlock({
         key: this.TITLE,
-        text: dummyText1,
+        text: "",
         type: "header-two",
         depth: 0,
-        characterList: new List(
-          Repeat(CharacterMetadata.create(), dummyText1.length)
-        )
+        characterList: new List(Repeat(CharacterMetadata.create(), 0))
       }),
       new ContentBlock({
         key: this.INGRESS,
-        text: dummyText2,
-        type: "paragraph",
+        text: "atomic",
+        type: "unstyled",
         depth: 0,
-        characterList: new List(
-          Repeat(CharacterMetadata.create(), dummyText2.length)
-        )
+        characterList: new List(Repeat(CharacterMetadata.create(), 0))
       }),
       new ContentBlock({
         key: this.DESCRIPTION,
-        text: dummyText3,
-        type: "paragraph",
+        text: "",
+        type: "unstyled",
         depth: 0,
-        characterList: new List(
-          Repeat(CharacterMetadata.create(), dummyText3.length)
-        )
+        characterList: new List(Repeat(CharacterMetadata.create(), 0))
       })
     ];
 
@@ -59,6 +51,10 @@ class RichEditor extends React.Component {
   }
 
   onChange = editorState => {
+    const rawContentState = convertToRaw(editorState.getCurrentContent());
+    const savedHtml = draftToHtml(rawContentState);
+    console.log(rawContentState);
+    console.log(savedHtml);
     this.setState({ editorState });
   };
 
@@ -114,7 +110,6 @@ class RichEditor extends React.Component {
       )
     );
   }
-
   render() {
     return (
       <Paper variant="outlined">
