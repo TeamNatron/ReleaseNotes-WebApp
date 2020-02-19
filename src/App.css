@@ -15,3 +15,21 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+
+.editor {
+  padding: 14px 18.5px;
+}
+
+.toolbar {
+  transition: all 1s ease;
+  -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 2s; /* Firefox < 16 */
+   -ms-animation: fadein 2s; /* Internet Explorer */
+    -o-animation: fadein 2s; /* Opera < 12.1 */
+       animation: fadein 2s;
+}
+
+.killAllSpacing {
+  margin: 0px;
+  padding: 0;
+}

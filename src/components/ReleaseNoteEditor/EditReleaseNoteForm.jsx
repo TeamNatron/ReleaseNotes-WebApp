@@ -5,42 +5,53 @@ import {
   Button,
   Switch,
   FormControlLabel,
-  Divider,
+  Divider
 } from "@material-ui/core";
 import styled from "styled-components";
-import RichEditor from "./RichEditor";
+import ComposedEditorsView from "./ComposedEditorsView";
 import PageContainer from "../shared/PageContainer";
 import ReleaseNoteInput from "./ReleaseNoteInput";
 import ReleaseNoteRichInput from "./ReleaseNoteRichInput";
 import "draft-js/dist/Draft.css";
 import draftToHtml from "draftjs-to-html";
-import { convertToRaw } from "draft-js";
+import { convertToRaw, RichUtils, EditorState } from "draft-js";
 
 const EditReleaseNoteForm = () => {
-  const [title, setTitle] = React.useState();
-  const handleTitleChange = event => {
-    setTitle(event.target.value);
-  };
-
-  const [ingress, setIngress] = React.useState();
-  const handleIngressChange = event => {
-    setIngress(event.target.value);
-  };
-
+  const [title, setTitle] = React.useState(
+    RichUtils.toggleBlockType(EditorState.createEmpty(), "header-two")
+  );
+  const [ingress, setIngress] = React.useState(
+    RichUtils.toggleInlineStyle(EditorState.createEmpty(), "ITALIC")
+  );
   const [description, setDescription] = React.useState();
+  const [ready, setReady] = React.useState();
+
+  const handleTitleChange = editorState => {
+    setTitle(editorState);
+  };
+
+  const handleIngressChange = editorState => {
+    setIngress(editorState);
+  };
+
   const handleDescriptionChange = editorState => {
     setDescription(editorState);
   };
 
-  const [ready, setReady] = React.useState();
-
   const handleSave = () => {
-    if (description) {
-      const rawContentState = convertToRaw(description.getCurrentContent());
-      const savedHtml = draftToHtml(rawContentState);
-      const readyForRelease = ready;
-    } else {
+    if (description && title && ingress) {
+      const rawContentState1 = convertToRaw(title.getCurrentContent());
+      const rawContentState2 = convertToRaw(ingress.getCurrentContent());
+      const rawContentState3 = convertToRaw(description.getCurrentContent());
 
+      const savedHtml1 = draftToHtml(rawContentState1);
+      const savedHtml2 = draftToHtml(rawContentState2);
+      const savedHtml3 = draftToHtml(rawContentState3);
+      const readyForRelease = ready;
+
+      const concatedHtml = savedHtml1 + savedHtml2 + savedHtml3;
+      console.log(concatedHtml);
+    } else {
     }
   };
 
@@ -48,11 +59,10 @@ const EditReleaseNoteForm = () => {
     setReady(!ready);
   };
 
-  const dummyRawText = {
+  var dummyRawText = {
     __html:
-      "<div> <h2>This is the raw release note</h2> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</div></div>"
+      "<div> <h2>This is the raw release note</h2> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</div><img src =https://cdn.mos.cms.futurecdn.net/z9WmRFVhrCJLKbmy4DcmjY-320-80.jpg /></div>"
   };
-
 
   const dummyBlame = "@BenRedicFyFazan";
 
@@ -75,7 +85,7 @@ const EditReleaseNoteForm = () => {
         <div>
           <ReleaseNoteInput
             onChange={handleTitleChange}
-            value={title}
+            editorState={title}
             label="Tittel"
           />
         </div>
@@ -83,7 +93,7 @@ const EditReleaseNoteForm = () => {
         <div>
           <ReleaseNoteInput
             onChange={handleIngressChange}
-            value={ingress}
+            editorState={ingress}
             label="Ingress"
           />
         </div>
@@ -97,10 +107,10 @@ const EditReleaseNoteForm = () => {
 
         <Box mt={5} mb={4}>
           <p>Forhåndsvisning</p>
-          <RichEditor
+          <ComposedEditorsView
             title={title}
             ingress={ingress}
-            descriptionEditorState={description}
+            description={description}
           />
         </Box>
 
