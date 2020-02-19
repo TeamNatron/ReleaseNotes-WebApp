@@ -23,7 +23,9 @@ const EditReleaseNoteForm = () => {
   const [ingress, setIngress] = React.useState(
     RichUtils.toggleInlineStyle(EditorState.createEmpty(), "ITALIC")
   );
-  const [description, setDescription] = React.useState();
+  const [description, setDescription] = React.useState(
+    EditorState.createEmpty()
+  );
   const [ready, setReady] = React.useState();
 
   const handleTitleChange = editorState => {
@@ -53,6 +55,14 @@ const EditReleaseNoteForm = () => {
       console.log(concatedHtml);
     } else {
     }
+  };
+
+  const canSave = () => {
+    return !(
+      ingress.getCurrentContent().hasText() ||
+      description.getCurrentContent().hasText() ||
+      title.getCurrentContent().hasText()
+    );
   };
 
   const handleReady = ev => {
@@ -115,7 +125,12 @@ const EditReleaseNoteForm = () => {
         </Box>
 
         <div>
-          <Button variant="contained" color="primary" onClick={handleSave}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSave}
+            disabled={canSave()}
+          >
             Lagre
           </Button>
           <StyledFormControlLabel

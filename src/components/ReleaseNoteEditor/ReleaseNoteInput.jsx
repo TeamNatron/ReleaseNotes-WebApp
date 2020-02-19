@@ -45,6 +45,6 @@ const EditorWrapper = styled.div`
   border: 1px solid black;
   border-radius: 4px;
   cursor: text;
-  transition: 1s ease;
+  padding: 14px 18.5px;
   }
 `;
