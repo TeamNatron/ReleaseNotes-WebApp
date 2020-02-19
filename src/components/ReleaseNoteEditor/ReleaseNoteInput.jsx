@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import { FormControl } from "@material-ui/core";
-import { Clear } from "@material-ui/icons";
 import { EditorState } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 
