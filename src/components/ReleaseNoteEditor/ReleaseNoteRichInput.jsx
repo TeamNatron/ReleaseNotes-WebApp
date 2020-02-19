@@ -32,12 +32,12 @@ const ReleaseNoteRichInput = props => {
   };
 
   const handleImageUpload = image => {
-    var reader = new FileReader();
-
-    reader.onload = function(event) {
-    };
-    return reader.readAsDataURL(image);
-  }
+    return new Promise(
+      (resolve, reject) => {
+        resolve({data: {link: URL.createObjectURL(image)}});
+      }
+    );
+  };
 
   return (
     <FormControl variant="outlined" fullWidth margin="normal">
