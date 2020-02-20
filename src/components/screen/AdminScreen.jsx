@@ -26,100 +26,55 @@ import SpacedDivider from "../shared/SpacedDivider";
 import AddUserForm from "../adminpanel/AddUserForm";
 import AddProductForm from "../adminpanel/AddProductForm";
 import AdminExpansionPanel from "../shared/AdminExpansionPanel";
+import { useSelector } from "react-redux";
 
-class AdminScreen extends Component {
-  constructor() {
-    super();
-    this.state = {
-      open: false,
-      productColumns: [
-        { id: "avatar", label: "", maxWidth: 20 },
-        { id: "name", label: "Name", minWidth: 100 },
-        {
-          id: "button",
-          label: "",
-          minWidth: 170,
-          align: "right",
-          format: value => value.toFixed(2)
-        }
-      ],
-      userColumns: [
-        { id: "avatar", label: "", maxWidth: 20 },
-        { id: "name", label: "Name", minWidth: 100 },
-        {
-          id: "button",
-          label: "",
-          minWidth: 170,
-          align: "right",
-          format: value => value.toFixed(2)
-        }
-      ],
+const AdminScreen = () => {
+  const articles = useSelector(state => state.articles.items);
 
-      productRows: [
-        this.createData("Cordel INNE"),
-        this.createData("Cordel UTE"),
-        this.createData("Cordel HER"),
-        this.createData("Cordel DER")
-      ],
-      userRows: [
-        this.createData("Michael Jackson"),
-        this.createData("The Rock"),
-        this.createData("Trond Viggo Torgersen"),
-        this.createData("Sinnasnekkern")
-      ],
-      formToRender: <div />
-    };
-  }
-
-  createData = name => {
+  const createData = name => {
     return { name };
   };
+  
+  const productRows = [
+    createData("Cordel INNE"),
+    createData("Cordel UTE"),
+    createData("Cordel HER"),
+    createData("Cordel DER")
+  ];
+  const userRows = [
+    createData("Michael Jackson"),
+    createData("The Rock"),
+    createData("Trond Viggo Torgersen"),
+    createData("Sinnasnekkern")
+  ];
 
-  handleClose = () => {
-    const newValue = false;
-    this.setState({ open: newValue });
-  };
 
-  handleOpenUserForm = () => {
-    const newValue = true;
-    this.setState({ open: newValue, formToRender: <AddUserForm /> }, () => {});
-  };
+  return (
+    <PageContainer>
+      <ScreenTitle>ADMINPANEL</ScreenTitle>
+      <Ingress gutterBottom>Behandle produkter og brukere.</Ingress>
+      <SpacedDivider />
+      <Container>
+        <AdminExpansionPanel
+          label="Produkter"
+          rows={productRows}
+          editContentComponent={<AddProductForm />}
+        />
+        <AdminExpansionPanel
+          label="Brukere"
+          rows={userRows}
+          editContentComponent={<AddUserForm />}
+        />
+        <AdminExpansionPanel
+          label="Releases"
+          rows={productRows}
+          //editContentComponent={AddReleaseForm}
+        />
+      </Container>
+    </PageContainer>
+  );
+};
 
-  handleOpenProductForm = () => {
-    const newValue = true;
-    this.setState(
-      { open: newValue, formToRender: <AddProductForm /> },
-      () => {}
-    );
-  };
-
-  render() {
-    return (
-      <PageContainer>
-        <ScreenTitle>ADMINPANEL</ScreenTitle>
-        <Ingress gutterBottom>Behandle produkter og brukere.</Ingress>
-        <SpacedDivider />
-        <Container>
-          <AdminExpansionPanel
-            label="Produkter"
-            rows={this.state.productRows}
-            editContentComponent={<AddProductForm />}
-          />
-          <AdminExpansionPanel
-            label="Brukere"
-            rows={this.state.userRows}
-            editContentComponent={<AddUserForm />}
-          />
-          <AdminExpansionPanel
-            label="Releases"
-            rows={this.state.productRows}
-            //editContentComponent={AddReleaseForm}
-          />
-        </Container>
-      </PageContainer>
-    );
-  }
-}
 export default AdminScreen;
 
 const EditButton = styled(Edit)`
