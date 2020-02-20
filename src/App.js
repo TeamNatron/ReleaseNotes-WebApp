@@ -16,6 +16,7 @@ import AdminScreen from "./components/screen/AdminScreen";
 import LoginScreen from "./components/screen/LoginScreen";
 import Footer from "./components/Footer";
 import EditReleaseNoteForm from "./components/ReleaseNoteEditor/EditReleaseNoteForm";
+import styled from "styled-components";
 
 // https://github.com/axios/axios
 Axios.defaults.baseURL = "http://localhost:5000/api/";
@@ -24,14 +25,12 @@ Axios.defaults.baseURL = "http://localhost:5000/api/";
 
 // intercept outgoing and incoming requests for debugging
 Axios.interceptors.request.use(request => {
-  console.log('Starting Request', request)
-  return request
-})
+  return request;
+});
 
 Axios.interceptors.response.use(response => {
-  console.log('Response:', response)
-  return response
-})
+  return response;
+});
 
 function App() {
   return (
@@ -41,11 +40,13 @@ function App() {
       <Router>
         <ThemeProvider theme={theme}>
           <Navbar />
-          <Route path="/" exact component={LandingScreen} />
-          <Route path="/articles" exact component={ReleaseNotesScreen} />
-          <Route path="/adminpage/" exact component={AdminScreen} />
-          <Route path="/login/" exact component={LoginScreen} />
-          <Route path="/debug" exact component={EditReleaseNoteForm} />
+          <MainContent>
+            <Route path="/" exact component={LandingScreen} />
+            <Route path="/releases" exact component={ReleaseNotesScreen} />
+            <Route path="/articles/article01" exact component={ArticleScreen} />
+            <Route path="/adminpage/" exact component={AdminScreen} />
+            <Route path="/login/" exact component={LoginScreen} />
+          </MainContent>
           <Footer />
         </ThemeProvider>
       </Router>
@@ -54,3 +55,7 @@ function App() {
 }
 
 export default App;
+
+const MainContent = styled.div`
+  min-height: 90vw;
+`;
