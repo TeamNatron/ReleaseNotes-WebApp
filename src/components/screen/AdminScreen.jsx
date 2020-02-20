@@ -25,6 +25,7 @@ import ScreenTitle from "../shared/ScreenTitle";
 import SpacedDivider from "../shared/SpacedDivider";
 import AddUserForm from "../adminpanel/AddUserForm";
 import AddProductForm from "../adminpanel/AddProductForm";
+import AdminExpansionPanel from "../shared/AdminExpansionPanel";
 
 class AdminScreen extends Component {
   constructor() {
@@ -95,169 +96,25 @@ class AdminScreen extends Component {
   render() {
     return (
       <PageContainer>
-        <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
-          open={this.state.open}
-          onClose={this.handleClose}
-          closeAfterTransition
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500
-          }}
-        >
-          <Fade in={this.state.open}>
-            <DialogContent>{this.state.formToRender}</DialogContent>
-          </Fade>
-        </Modal>
-
         <ScreenTitle>ADMINPANEL</ScreenTitle>
         <Ingress gutterBottom>Behandle produkter og brukere.</Ingress>
         <SpacedDivider />
         <Container>
-          <ExpansionPanel>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>Produkter</Typography>
-            </ExpansionPanelSummary>
-            <TablePanel>
-              <AddButton
-                onClick={this.handleOpenProductForm}
-                color="primary"
-                variant="contained"
-              >
-                Legg til
-              </AddButton>
-            </TablePanel>
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    {this.state.productColumns.map(column => (
-                      <TableCell key={column.id} align={column.align}>
-                        {column.label}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {this.state.productRows.map(row => {
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={row.code}
-                      >
-                        {this.state.productColumns.map(column => {
-                          if (column.id === "avatar") {
-                            return (
-                              <StyledTableCell>
-                                <DesktopWindows
-                                  color="disabled"
-                                  fontSize="small"
-                                />
-                              </StyledTableCell>
-                            );
-                          } else if (column.id === "button") {
-                            return (
-                              <StyledTableCell>
-                                <EditButton fontSize="small" />
-                              </StyledTableCell>
-                            );
-                          } else {
-                            const value = row[column.id];
-                            return (
-                              <TableCell key={column.id} align={column.align}>
-                                {column.format && typeof value === "number"
-                                  ? column.format(value)
-                                  : value}
-                              </TableCell>
-                            );
-                          }
-                        })}
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </ExpansionPanel>
-
-          <ExpansionPanel>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>Brukere</Typography>
-            </ExpansionPanelSummary>
-            <TablePanel>
-              <AddButton
-                onClick={this.handleOpenUserForm}
-                color="primary"
-                variant="contained"
-              >
-                Legg til
-              </AddButton>
-            </TablePanel>
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    {this.state.userColumns.map(column => (
-                      <TableCell key={column.id} align={column.align}>
-                        {column.label}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {this.state.userRows.map(row => {
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={row.code}
-                      >
-                        {this.state.userColumns.map(column => {
-                          if (column.id === "avatar") {
-                            return (
-                              <StyledTableCell>
-                                <PermIdentity
-                                  color="disabled"
-                                  fontSize="small"
-                                />
-                              </StyledTableCell>
-                            );
-                          } else if (column.id === "button") {
-                            return (
-                              <StyledTableCell>
-                                <EditButton fontSize="small" />
-                              </StyledTableCell>
-                            );
-                          } else {
-                            const value = row[column.id];
-                            return (
-                              <TableCell key={column.id} align={column.align}>
-                                {column.format && typeof value === "number"
-                                  ? column.format(value)
-                                  : value}
-                              </TableCell>
-                            );
-                          }
-                        })}
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </ExpansionPanel>
+          <AdminExpansionPanel
+            label="Produkter"
+            rows={this.state.productRows}
+            editContentComponent={<AddProductForm />}
+          />
+          <AdminExpansionPanel
+            label="Brukere"
+            rows={this.state.userRows}
+            editContentComponent={<AddUserForm />}
+          />
+          <AdminExpansionPanel
+            label="Releases"
+            rows={this.state.productRows}
+            //editContentComponent={AddReleaseForm}
+          />
         </Container>
       </PageContainer>
     );
