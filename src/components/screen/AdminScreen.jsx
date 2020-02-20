@@ -29,25 +29,24 @@ import AdminExpansionPanel from "../shared/AdminExpansionPanel";
 import { useSelector } from "react-redux";
 
 const AdminScreen = () => {
-  const articles = useSelector(state => state.articles.items);
+
+  const articleTitles = useSelector(state =>
+    state.articles.items.map(a => a.title)
+  );
+  const productTitles = useSelector(state =>
+    state.products.items.map(p => p.name)
+  );
 
   const createData = name => {
     return { name };
   };
-  
-  const productRows = [
-    createData("Cordel INNE"),
-    createData("Cordel UTE"),
-    createData("Cordel HER"),
-    createData("Cordel DER")
-  ];
-  const userRows = [
+
+  const dummyUsers = [
     createData("Michael Jackson"),
     createData("The Rock"),
     createData("Trond Viggo Torgersen"),
     createData("Sinnasnekkern")
   ];
-
 
   return (
     <PageContainer>
@@ -57,17 +56,17 @@ const AdminScreen = () => {
       <Container>
         <AdminExpansionPanel
           label="Produkter"
-          rows={productRows}
+          rows={productTitles}
           editContentComponent={<AddProductForm />}
         />
         <AdminExpansionPanel
           label="Brukere"
-          rows={userRows}
+          rows={dummyUsers}
           editContentComponent={<AddUserForm />}
         />
         <AdminExpansionPanel
           label="Releases"
-          rows={productRows}
+          //rows={articleTitles}
           //editContentComponent={AddReleaseForm}
         />
       </Container>

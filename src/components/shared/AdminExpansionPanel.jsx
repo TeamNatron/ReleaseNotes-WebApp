@@ -69,51 +69,63 @@ const AdminExpansionPanel = props => {
             Legg til
           </AddButton>
         </TablePanel>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                {columns.map(column => (
-                  <TableCell key={column.id} align={column.align}>
-                    {column.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {props.rows.map(row => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map(column => {
-                      if (column.id === "avatar") {
-                        return (
-                          <StyledTableCell>
-                            <DesktopWindows color="disabled" fontSize="small" />
-                          </StyledTableCell>
-                        );
-                      } else if (column.id === "button") {
-                        return (
-                          <StyledTableCell>
-                            <EditButton fontSize="small" />
-                          </StyledTableCell>
-                        );
-                      } else {
-                        const value = row[column.id];
-                        return (
-                          <TableCell key={column.id} align={column.align}>
-                            {column.format && typeof value === "number"
-                              ? column.format(value)
-                              : value}
-                          </TableCell>
-                        );
-                      }
-                    })}
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        {props.rows && props.rows.length > 0 ? (
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  {columns.map(column => (
+                    <TableCell key={column.id} align={column.align}>
+                      {column.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {props.rows.map(row => {
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      tabIndex={-1}
+                      key={row.code}
+                    >
+                      {columns.map(column => {
+                        if (column.id === "avatar") {
+                          return (
+                            <StyledTableCell>
+                              <DesktopWindows
+                                color="disabled"
+                                fontSize="small"
+                              />
+                            </StyledTableCell>
+                          );
+                        } else if (column.id === "button") {
+                          return (
+                            <StyledTableCell>
+                              <EditButton fontSize="small" />
+                            </StyledTableCell>
+                          );
+                        } else {
+                          const value = row[column.id];
+                          return (
+                            <TableCell key={column.id} align={column.align}>
+                              {column.format && typeof value === "number"
+                                ? column.format(value)
+                                : value}
+                            </TableCell>
+                          );
+                        }
+                      })}
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        ) : (
+          <ErrorLabel>Ingen innhold funnet</ErrorLabel>
+        )}
       </ExpansionPanel>
     </React.Fragment>
   );
@@ -124,8 +136,6 @@ export default AdminExpansionPanel;
 AdminExpansionPanel.propTypes = {
   label: PropTypes.string,
   rows: PropTypes.array,
-  editContentCallback: PropTypes.func,
-
   editContentComponent: PropTypes.element,
   icon: PropTypes.element
 };
@@ -149,3 +159,8 @@ const TablePanel = styled.div`
 const EditButton = styled(Edit)`
   margin-left: auto;
 `;
+
+const ErrorLabel = styled.div`
+  text-align: center;
+  margin: 16px;
+`
