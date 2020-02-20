@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import {
   CardContent,
   Typography,
@@ -6,7 +6,6 @@ import {
   Grid,
   Paper,
   CardActionArea,
-  Fade,
   Grow,
 } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";

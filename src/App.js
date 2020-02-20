@@ -10,12 +10,13 @@ import { CssBaseline } from "@material-ui/core";
 import { Provider } from "react-redux";
 import { store } from "./setupStore";
 import Axios from "axios";
+import 'draft-js/dist/Draft.css';
 
-import ArticleScreen from "./components/screen/ArticleScreen";
 import AdminScreen from "./components/screen/AdminScreen";
 import LoginScreen from "./components/screen/LoginScreen";
 import Footer from "./components/Footer";
 import styled from "styled-components";
+import ArticleScreen from "./components/screen/ArticleScreen";
 
 // https://github.com/axios/axios
 Axios.defaults.baseURL = "http://localhost:5000/api/";
