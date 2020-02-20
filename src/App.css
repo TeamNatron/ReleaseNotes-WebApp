@@ -15,3 +15,7 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+.killAllSpacing {
+  margin: 0px;
+  padding: 0;
+}

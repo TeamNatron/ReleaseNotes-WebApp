@@ -68,7 +68,7 @@ const Footer = () => {
 
 export default Footer;
 
-const LinkedinLogo = styled.button``;
+const LinkedinLogo = styled.span``;
 
 const SectionSocials = styled.article`
   margin-bottom: 3rem;

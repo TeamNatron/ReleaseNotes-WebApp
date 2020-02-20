@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { AppBar, Toolbar, Box } from "@material-ui/core";
+import { AppBar, Toolbar } from "@material-ui/core";
 
 const Navbar = () => {
   return (
