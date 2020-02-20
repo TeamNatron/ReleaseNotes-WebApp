@@ -15,8 +15,8 @@ import 'draft-js/dist/Draft.css';
 import AdminScreen from "./components/screen/AdminScreen";
 import LoginScreen from "./components/screen/LoginScreen";
 import Footer from "./components/Footer";
-import EditReleaseNoteForm from "./components/ReleaseNoteEditor/EditReleaseNoteForm";
 import styled from "styled-components";
+import ArticleScreen from "./components/screen/ArticleScreen";
 
 // https://github.com/axios/axios
 Axios.defaults.baseURL = "http://localhost:5000/api/";
