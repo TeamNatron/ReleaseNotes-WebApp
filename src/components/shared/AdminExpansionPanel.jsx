@@ -14,25 +14,29 @@ import {
   Table,
   TableHead,
   TableRow,
-  TableBody
+  TableBody,
+  IconButton
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import styled from "styled-components";
-import { Edit, DesktopWindows } from "@material-ui/icons";
+import { Edit } from "@material-ui/icons";
 
 const AdminExpansionPanel = props => {
   const [open, setOpen] = React.useState();
+  const [modalContent, setModalContent] = React.useState();
 
   const columns = [
     { id: "avatar", label: "", maxWidth: 20 },
     { id: "name", label: "Name", minWidth: 100 },
-    {
-      id: "button",
-      label: "",
-      minWidth: 170,
-      align: "right",
-      format: value => value.toFixed(2)
-    }
+    props.editContentComponent
+      ? {
+          id: "button",
+          label: "",
+          minWidth: 170,
+          align: "right",
+          format: value => value.toFixed(2)
+        }
+      : {}
   ];
 
   return (
@@ -49,7 +53,7 @@ const AdminExpansionPanel = props => {
         }}
       >
         <Fade in={open}>
-          <DialogContent>{props.editContentComponent}</DialogContent>
+          <DialogContent>{modalContent}</DialogContent>
         </Fade>
       </Modal>
       <ExpansionPanel>
@@ -62,7 +66,10 @@ const AdminExpansionPanel = props => {
         </ExpansionPanelSummary>
         <TablePanel>
           <AddButton
-            onClick={() => setOpen(true)}
+            onClick={() => {
+              setModalContent(props.createContentComponent);
+              setOpen(true);
+            }}
             color="primary"
             variant="contained"
           >
@@ -94,17 +101,30 @@ const AdminExpansionPanel = props => {
                         if (column.id === "avatar") {
                           return (
                             <StyledTableCell>
-                              <DesktopWindows
-                                color="disabled"
-                                fontSize="small"
-                              />
+                              {props.icon ? (
+                                React.cloneElement(props.icon, {
+                                  color: "disabled",
+                                  fontSize: "medium"
+                                })
+                              ) : (
+                                <React.Fragment />
+                              )}
                             </StyledTableCell>
                           );
                         } else if (column.id === "button") {
-                          return (
+                          return props.editContentComponent ? (
                             <StyledTableCell>
-                              <EditButton fontSize="small" />
+                              <IconButton
+                                onClick={() => {
+                                  setModalContent(props.editContentComponent);
+                                  setOpen(true);
+                                }}
+                              >
+                                <EditButton fontSize="small" />
+                              </IconButton>
                             </StyledTableCell>
+                          ) : (
+                            <React.Fragment />
                           );
                         } else {
                           const value = row[column.id];
@@ -136,8 +156,9 @@ export default AdminExpansionPanel;
 AdminExpansionPanel.propTypes = {
   label: PropTypes.string,
   rows: PropTypes.array,
-  editContentComponent: PropTypes.element,
-  icon: PropTypes.element
+  icon: PropTypes.element,
+  createContentComponent: PropTypes.element,
+  editContentComponent: PropTypes.element
 };
 
 const AddButton = styled(Button)`
@@ -163,4 +184,4 @@ const EditButton = styled(Edit)`
 const ErrorLabel = styled.div`
   text-align: center;
   margin: 16px;
-`
+`;

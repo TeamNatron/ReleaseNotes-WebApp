@@ -1,24 +1,6 @@
 import React, { Component } from "react";
-import {
-  TableContainer,
-  Table,
-  TableHead,
-  TableCell,
-  TableRow,
-  TableBody,
-  Container,
-  ExpansionPanel,
-  ExpansionPanelSummary,
-  Typography,
-  Button,
-  Modal,
-  Fade,
-  Backdrop,
-  DialogContent
-} from "@material-ui/core";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import styled from "styled-components";
-import { PermIdentity, DesktopWindows, Edit } from "@material-ui/icons";
+import { Container } from "@material-ui/core";
+import { PermIdentity, DesktopWindows, Description } from "@material-ui/icons";
 import PageContainer from "../shared/PageContainer";
 import Ingress from "../shared/Ingress";
 import ScreenTitle from "../shared/ScreenTitle";
@@ -29,7 +11,6 @@ import AdminExpansionPanel from "../shared/AdminExpansionPanel";
 import { useSelector } from "react-redux";
 
 const AdminScreen = () => {
-
   const articleTitles = useSelector(state =>
     state.articles.items.map(a => a.title)
   );
@@ -56,18 +37,25 @@ const AdminScreen = () => {
       <Container>
         <AdminExpansionPanel
           label="Produkter"
+          icon={<DesktopWindows />}
           rows={productTitles}
-          editContentComponent={<AddProductForm />}
+          createContentComponent={<AddProductForm />}
+          //editContentComponent={<AddProductForm />}
         />
         <AdminExpansionPanel
           label="Brukere"
+          icon={<PermIdentity />}
           rows={dummyUsers}
-          editContentComponent={<AddUserForm />}
+          createContentComponent={<AddUserForm />}
+          //editContentComponent={<AddUserForm />}
         />
         <AdminExpansionPanel
           label="Releases"
-          //rows={articleTitles}
-          //editContentComponent={AddReleaseForm}
+          icon={<Description />}
+          rows={articleTitles}
+          //createContentComponent={<AddReleaseForm />}
+          //editContentComponent={<AddReleaseForm />}
+
         />
       </Container>
     </PageContainer>
@@ -75,23 +63,3 @@ const AdminScreen = () => {
 };
 
 export default AdminScreen;
-
-const EditButton = styled(Edit)`
-  margin-left: auto;
-`;
-
-const AddButton = styled(Button)`
-  && {
-    align-self: end;
-    margin-left: auto;
-    margin-right: 2rem;
-  }
-`;
-
-const StyledTableCell = styled(TableCell)`
-  width: 0;
-`;
-
-const TablePanel = styled.div`
-  display: flex;
-`;
