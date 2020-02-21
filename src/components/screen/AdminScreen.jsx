@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import { Container } from "@material-ui/core";
 import { PermIdentity, DesktopWindows, Description } from "@material-ui/icons";
 import PageContainer from "../shared/PageContainer";
@@ -8,19 +8,30 @@ import SpacedDivider from "../shared/SpacedDivider";
 import AddUserForm from "../adminpanel/AddUserForm";
 import AddProductForm from "../adminpanel/AddProductForm";
 import AdminExpansionPanel from "../shared/AdminExpansionPanel";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchProducts } from "../../actions/productActions";
+import { fetchArticles } from "../../actions/articleActions";
 
 const AdminScreen = () => {
-  const articleTitles = useSelector(state =>
-    state.articles.items.map(a => a.title)
-  );
-  const productTitles = useSelector(state =>
-    state.products.items.map(p => p.name)
-  );
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, []);
+
+  useEffect(() => {
+    dispatch(fetchArticles());
+  }, []);
 
   const createData = name => {
     return { name };
   };
+
+  const releaseTitles = useSelector(state =>
+    state.articles.items.map(a => createData(a.title))
+  );
+  const productTitles = useSelector(state =>
+    state.products.items.map(p => createData(p.name))
+  );
 
   const dummyUsers = [
     createData("Michael Jackson"),
@@ -28,7 +39,6 @@ const AdminScreen = () => {
     createData("Trond Viggo Torgersen"),
     createData("Sinnasnekkern")
   ];
-
   return (
     <PageContainer>
       <ScreenTitle>ADMINPANEL</ScreenTitle>
@@ -52,10 +62,9 @@ const AdminScreen = () => {
         <AdminExpansionPanel
           label="Releases"
           icon={<Description />}
-          rows={articleTitles}
+          rows={releaseTitles}
           //createContentComponent={<AddReleaseForm />}
           //editContentComponent={<AddReleaseForm />}
-
         />
       </Container>
     </PageContainer>
