@@ -18,7 +18,7 @@ const Product = props => {
   const history = useHistory();
 
   function handleClick() {
-    history.push("/articles?product=" + props.item.id)
+    history.push("/releases?product=" + props.item.id)
   }
 
   return (
