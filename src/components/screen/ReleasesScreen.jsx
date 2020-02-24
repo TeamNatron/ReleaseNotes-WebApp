@@ -27,7 +27,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router";
 import articleParameters, { sortKeys } from "../../articleParameters";
 
-const ReleaseNotesScreen = props => {
+const ReleasesScreen = props => {
   const [anchorEl, setAnchorEl] = React.useState(null)
   let query = useQuery();
   const dispatch = useDispatch();
@@ -169,4 +169,4 @@ const StyledToolbar = styled(Box)`
   }
 `;
 
-export default ReleaseNotesScreen;
+export default ReleasesScreen;

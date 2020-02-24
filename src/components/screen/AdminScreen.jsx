@@ -1,5 +1,5 @@
 import React, { Component, useEffect } from "react";
-import { Container } from "@material-ui/core";
+import { Container, Button, Box } from "@material-ui/core";
 import { PermIdentity, DesktopWindows, Description } from "@material-ui/icons";
 import PageContainer from "../shared/PageContainer";
 import Ingress from "../shared/Ingress";
@@ -11,9 +11,14 @@ import AdminExpansionPanel from "../shared/AdminExpansionPanel";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProducts } from "../../actions/productActions";
 import { fetchArticles } from "../../actions/articleActions";
+import styled from "styled-components";
+import { useHistory } from "react-router";
+import AdminReleaseNotesScreen from "./AdminReleaseNotesScreen";
+import { BrowserRouter as Route } from "react-router-dom";
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   useEffect(() => {
     dispatch(fetchProducts());
   }, []);
@@ -32,6 +37,10 @@ const AdminScreen = () => {
   const productTitles = useSelector(state =>
     state.products.items.map(p => createData(p.name))
   );
+
+  const handleEditReleaseNotes = () => {
+    history.push("/admin/releasenotes");
+  };
 
   const dummyUsers = [
     createData("Michael Jackson"),
@@ -66,9 +75,26 @@ const AdminScreen = () => {
           //createContentComponent={<AddReleaseForm />}
           //editContentComponent={<AddReleaseForm />}
         />
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleEditReleaseNotes}
+        >
+          Release Notes
+        </Button>
       </Container>
     </PageContainer>
   );
 };
 
 export default AdminScreen;
+
+const StyledBox = styled(Box)`
+  & {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 0;
+    min-height: 48px;
+  }
+`;

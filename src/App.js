@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./App.css";
 import LandingScreen from "./components/screen/LandingScreen";
-import ReleaseNotesScreen from "./components/screen/ReleaseNotesScreen";
+import ReleasesScreen from "./components/screen/ReleasesScreen";
 import Navbar from "./components/Navbar";
 import { ThemeProvider } from "styled-components";
 import { GlobalStyle, theme } from "./styles/index";
@@ -18,6 +18,9 @@ import Footer from "./components/Footer";
 import styled from "styled-components";
 import ArticleScreen from "./components/screen/ArticleScreen";
 import ReleaseEditorScreen from "./components/screen/ReleaseEditorScreen";
+import EditReleaseNoteForm from "./components/ReleaseNoteEditor/EditReleaseNoteForm";
+import { getAuthToken } from "./handlers/cookieHandler";
+import AdminReleaseNotesScreen from "./components/screen/AdminReleaseNotesScreen";
 
 // https://github.com/axios/axios
 Axios.defaults.baseURL = "http://localhost:5000/api/";
@@ -26,6 +29,10 @@ Axios.defaults.baseURL = "http://localhost:5000/api/";
 
 // intercept outgoing and incoming requests for debugging
 Axios.interceptors.request.use(request => {
+  const token = getAuthToken();
+  if (token) {
+    request.headers.Authorization = `Bearer ${token}`;
+  }
   return request;
 });
 
@@ -43,15 +50,26 @@ function App() {
           <Navbar />
           <MainContent>
             <Route path="/" exact component={LandingScreen} />
-            <Route path="/releases" exact component={ReleaseNotesScreen} />
+            <Route path="/releases" exact component={ReleasesScreen} />
             <Route path="/articles/article01" exact component={ArticleScreen} />
-            <Route path="/adminpage/" exact component={AdminScreen} />
+            <Route path="/admin/" exact component={AdminScreen} />
+            <Route
+              path="/admin/releasenotes"
+              exact
+              component={AdminReleaseNotesScreen}
+            />
+            <Route
+              path="/admin/releasenotes/:id"
+              exact
+              render={props => <EditReleaseNoteForm {...props} />}
+            />
             <Route path="/login/" exact component={LoginScreen} />
             <Route
               path="/release/editor"
               exact
               component={ReleaseEditorScreen}
             />
+            <Route path="/debug/" exact component={EditReleaseNoteForm} />
           </MainContent>
           <Footer />
         </ThemeProvider>
