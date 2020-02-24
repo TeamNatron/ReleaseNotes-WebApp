@@ -6,7 +6,11 @@ import { Delete } from "@material-ui/icons";
 
 const ReleaseNote = props => {
   return (
-    <Draggable draggableId={props.id} id={props.id} index={props.index}>
+    <Draggable
+      draggableId={props.releaseNote.workItemTitle}
+      id={props.id}
+      index={props.index}
+    >
       {provided => (
         <StyledContainer
           {...provided.draggableProps}
@@ -15,7 +19,7 @@ const ReleaseNote = props => {
           isRelease={props.isRelease}
         >
           <ReleaseNoteHeader>
-            <Title>{props.releaseNote.title}</Title>
+            <Title>{props.releaseNote.workItemTitle}</Title>
             {props.isRelease && (
               <StyledIconButton
                 onClick={() => props.handleRemoveReleaseNote(props.index)}

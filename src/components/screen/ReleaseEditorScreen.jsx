@@ -14,6 +14,7 @@ import ScreenTitle from "../shared/ScreenTitle";
 import Ingress from "../shared/Ingress";
 import SpacedDivider from "../shared/SpacedDivider";
 import { ArrowDropDown } from "@material-ui/icons";
+import { getReleaseNotes } from "../../requests/releaseNote";
 
 class ReleaseEditorScreen extends Component {
   constructor() {
@@ -21,7 +22,27 @@ class ReleaseEditorScreen extends Component {
     this.handleRemoveReleaseNote = this.handleRemoveReleaseNote.bind(this);
   }
 
+  componentDidMount() {
+    getReleaseNotes()
+      .then(response => {
+        const newReleaseNotes = response.data;
+        let allItemsCopy = JSON.parse(JSON.stringify(this.state.allItems));
+        allItemsCopy.releaseNotes.list = newReleaseNotes;
+        this.setState({ allItems: allItemsCopy }, () => {
+          this.setState({ isLoaded: true });
+        });
+      })
+      .catch(error => {
+        if (error.response.status === 401) {
+          alert("Du er ikke logget inn!");
+        } else {
+          console.log(error.response);
+        }
+      });
+  }
+
   state = {
+    isLoaded: false,
     productVersionLabel: "",
     productVersion: "",
     anchorEl: {},
@@ -30,62 +51,12 @@ class ReleaseEditorScreen extends Component {
       release: {
         id: "release",
         name: "Release",
-        list: [
-          {
-            title: "Release Note 1",
-            ingress:
-              "In this release note we wrote everything we did to make things better",
-            id: "1"
-          },
-          {
-            title: "Release Note 2",
-            ingress:
-              "In this release note we wrote everything we did to make things better",
-            id: "2"
-          },
-          {
-            title: "Release Note 3",
-            ingress:
-              "In this release note we wrote everything we did to make things better",
-            id: "3"
-          },
-          {
-            title: "Release Note 4",
-            ingress:
-              "In this release note we wrote everything we did to make things better",
-            id: "4"
-          }
-        ]
+        list: []
       },
       releaseNotes: {
         id: "releaseNotes",
         name: "Release Notes",
-        list: [
-          {
-            title: "Release Note 5",
-            ingress:
-              "In this release note we wrote everything we did to make things better",
-            id: "5"
-          },
-          {
-            title: "Release Note 6",
-            ingress:
-              "In this release note we wrote everything we did to make things better",
-            id: "6"
-          },
-          {
-            title: "Release Note 7",
-            ingress:
-              "In this release note we wrote everything we did to make things better",
-            id: "7"
-          },
-          {
-            title: "Release Note 8",
-            ingress:
-              "In this release note we wrote everything we did to make things better",
-            id: "8"
-          }
-        ]
+        list: []
       }
     }
   };
@@ -167,9 +138,7 @@ class ReleaseEditorScreen extends Component {
     this.moveToAnotherColumn("release", "releaseNotes", srcIndex, 0);
   }
 
-  handleSave = () => {
-    console.log("Saved");
-  };
+  handleSave = () => {};
 
   handleCancel = () => {
     window.location = "http://localhost:3000/";
@@ -235,30 +204,34 @@ class ReleaseEditorScreen extends Component {
           </Menu>
         </ButtonToolbar>
         <FlexContainer>
-          <DragDropContext
-            onBeforeCapture={this.onBeforeCapture}
-            onDragEnd={this.onDragEnd}
-          >
-            <Column
-              isRelease={true}
-              styleSheet={this.releaseStyle}
-              key={this.state.allItems.release.id}
-              id={this.state.allItems.release.id}
-              title={this.state.allItems.release.name}
-              releaseNotes={this.state.allItems.release.list}
-              noteWidth={this.state.noteWidth}
-              handleRemoveReleaseNote={this.handleRemoveReleaseNote}
-            />
-            <VerticalDivider orientation={"vertical"} />
-            <Column
-              isRelease={false}
-              styleSheet={this.releaseNoteStyle}
-              key={this.state.allItems.releaseNotes.id}
-              id={this.state.allItems.releaseNotes.id}
-              title={this.state.allItems.releaseNotes.name}
-              releaseNotes={this.state.allItems.releaseNotes.list}
-            />
-          </DragDropContext>
+          {this.state.isLoaded ? (
+            <DragDropContext
+              onBeforeCapture={this.onBeforeCapture}
+              onDragEnd={this.onDragEnd}
+            >
+              <Column
+                isRelease={true}
+                styleSheet={this.releaseStyle}
+                key={this.state.allItems.release.id}
+                id={this.state.allItems.release.id}
+                title={this.state.allItems.release.name}
+                releaseNotes={this.state.allItems.release.list}
+                noteWidth={this.state.noteWidth}
+                handleRemoveReleaseNote={this.handleRemoveReleaseNote}
+              />
+              <VerticalDivider orientation={"vertical"} />
+              <Column
+                isRelease={false}
+                styleSheet={this.releaseNoteStyle}
+                key={this.state.allItems.releaseNotes.id}
+                id={this.state.allItems.releaseNotes.id}
+                title={this.state.allItems.releaseNotes.name}
+                releaseNotes={this.state.allItems.releaseNotes.list}
+              />
+            </DragDropContext>
+          ) : (
+            ""
+          )}
         </FlexContainer>
       </StyledPageContainer>
     );
