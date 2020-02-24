@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Paper,
   Box,
   Button,
   Switch,
   FormControlLabel,
-  Divider
+  Divider,
+  Typography,
+  CardActionArea,
+  AppBar,
+  Toolbar
 } from "@material-ui/core";
 import styled from "styled-components";
 import ComposedEditorsView from "./ComposedEditorsView";
@@ -14,17 +18,41 @@ import ReleaseNoteInput from "./ReleaseNoteInput";
 import ReleaseNoteRichInput from "./ReleaseNoteRichInput";
 import "draft-js/dist/Draft.css";
 import draftToHtml from "draftjs-to-html";
-import { convertToRaw, RichUtils, EditorState } from "draft-js";
+import PropTypes from "prop-types";
+import {
+  convertToRaw,
+  RichUtils,
+  EditorState,
+  convertFromHTML,
+  ContentState
+} from "draft-js";
+import { Assignment, Person } from "@material-ui/icons";
 
-const EditReleaseNoteForm = () => {
+const EditReleaseNoteForm = props => {
+  console.log(props)
+  /*
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchReleaseNote(1));
+  }, []);
+  const note = useSelector(state => state.releaseNotes.items[0]);
+  */
+
   const [title, setTitle] = React.useState(
-    RichUtils.toggleBlockType(EditorState.createEmpty(), "header-two")
+    RichUtils.toggleBlockType(
+      createStateFromText(props.note.title),
+      "header-two"
+    )
   );
+
   const [ingress, setIngress] = React.useState(
-    RichUtils.toggleInlineStyle(EditorState.createEmpty(), "ITALIC")
+    RichUtils.toggleInlineStyle(
+      createStateFromText(props.note.ingress),
+      "ITALIC"
+    )
   );
   const [description, setDescription] = React.useState(
-    EditorState.createEmpty()
+    createStateFromText(props.note.description)
   );
   const [ready, setReady] = React.useState();
 
@@ -40,21 +68,35 @@ const EditReleaseNoteForm = () => {
     setDescription(editorState);
   };
 
-  const handleSave = () => {
-    if (description && title && ingress) {
-      const rawContentState1 = convertToRaw(title.getCurrentContent());
-      const rawContentState2 = convertToRaw(ingress.getCurrentContent());
-      const rawContentState3 = convertToRaw(description.getCurrentContent());
-
-      const savedHtml1 = draftToHtml(rawContentState1);
-      const savedHtml2 = draftToHtml(rawContentState2);
-      const savedHtml3 = draftToHtml(rawContentState3);
-      const readyForRelease = ready;
-
-      const concatedHtml = savedHtml1 + savedHtml2 + savedHtml3;
-      console.log(concatedHtml);
-    } else {
+  function createStateFromText(text) {
+    if (!text) {
+      return EditorState.createEmpty();
     }
+    const blocksFromHTML = convertFromHTML(text);
+    console.log(blocksFromHTML);
+    const contentState = ContentState.createFromBlockArray(
+      blocksFromHTML.contentBlocks,
+      blocksFromHTML.entityMap
+    );
+    return EditorState.createWithContent(contentState);
+  }
+
+  const handleSave = () => {
+    const rawContentState1 = convertToRaw(title.getCurrentContent());
+    const rawContentState2 = convertToRaw(ingress.getCurrentContent());
+    const rawContentState3 = convertToRaw(description.getCurrentContent());
+
+    const savedHtml1 = draftToHtml(rawContentState1);
+    const savedHtml2 = draftToHtml(rawContentState2);
+    const savedHtml3 = draftToHtml(rawContentState3);
+
+    const returnObject = {
+      title: savedHtml1,
+      ingress: savedHtml2,
+      description: savedHtml3,
+      ready
+    };
+    props.onSave(returnObject);
   };
 
   const canSave = () => {
@@ -68,95 +110,159 @@ const EditReleaseNoteForm = () => {
   const handleReady = ev => {
     setReady(!ready);
   };
-
-  var dummyRawText = {
-    __html:
-      "<div> <h2>This is the raw release note</h2> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</div><img src =https://cdn.mos.cms.futurecdn.net/z9WmRFVhrCJLKbmy4DcmjY-320-80.jpg /></div>"
-  };
-
-  const dummyBlame = "@BenRedicFyFazan";
-
   return (
-    <PageContainer>
-      <StyledForm>
-        <div>
-          <Paper variant="outlined">
-            <Box m={2}>
-              <Box m={2}>
-                <div dangerouslySetInnerHTML={dummyRawText} />
-              </Box>
-              <Divider light p={9} />
-              <Box m={2}>
-                <a href="/">{dummyBlame}</a>
-              </Box>
-            </Box>
-          </Paper>
-        </div>
-        <div>
-          <ReleaseNoteInput
-            onChange={handleTitleChange}
-            editorState={title}
-            label="Tittel"
-          />
-        </div>
-
-        <div>
-          <ReleaseNoteInput
-            onChange={handleIngressChange}
-            editorState={ingress}
-            label="Ingress"
-          />
-        </div>
-
-        <div>
-          <ReleaseNoteRichInput
-            onChange={handleDescriptionChange}
-            label="Beskrivelse"
-          />
-        </div>
-
-        <Box mt={5} mb={4}>
-          <p>Forhåndsvisning</p>
-          <ComposedEditorsView
-            title={title}
-            ingress={ingress}
-            description={description}
-          />
-        </Box>
-
-        <div>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSave}
-            disabled={canSave()}
-          >
-            Lagre
-          </Button>
-          <StyledFormControlLabel
-            control={
-              <Switch
-                checked={ready}
-                onChange={handleReady}
-                value="ready"
-                color="primary"
-                inputProps={{ "aria-label": "primary checkbox" }}
+    <React.Fragment>
+      <BottomAppBar>
+        <ToolbarWrapper>
+          <StyledToolbar disableGutters variant="dense">
+            <CancelButton color="secondary" onClick={props.onCancel}>
+              Avbryt
+            </CancelButton>
+            <div>
+              <StyledFormControlLabel
+                edge="end"
+                control={
+                  <Switch
+                    checked={ready}
+                    size="small"
+                    onChange={handleReady}
+                    value="ready"
+                    color="primary"
+                    inputProps={{ "aria-label": "primary checkbox" }}
+                  />
+                }
+                label="Klar for release"
               />
-            }
-            label="Klar for release"
-          />
-        </div>
-      </StyledForm>
-    </PageContainer>
+              <SaveButton onClick={handleSave} disabled={canSave()}>
+                Lagre
+              </SaveButton>
+            </div>
+          </StyledToolbar>
+        </ToolbarWrapper>
+      </BottomAppBar>
+      <form>
+        <Box>
+          <div>
+            <Paper variant="outlined">
+              <CardActionArea>
+                <Box my={1} mx={4} display="flex" alignItems="center">
+                  <Box display="flex" alignItems="center">
+                    <Assignment display="flex" fontSize="small" />
+                    Task {props.note.workItemId}
+                  </Box>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    fontWeight={500}
+                    ml={1}
+                  >
+                    {props.note.workItemTitle}
+                  </Box>
+                </Box>
+                <Box mx={4} mb={1} display="flex" alignItems="center">
+                  <Person fontSize="small" />
+                  {props.note.authorName}
+                </Box>
+              </CardActionArea>
+
+              <Divider />
+              <Box m={4}>
+                {props.note.workItemDescriptionHtml ? (
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: props.note.workItemDescriptionHtml
+                    }}
+                  />
+                ) : (
+                  <div></div>
+                )}
+              </Box>
+            </Paper>
+          </div>
+          <div>
+            <ReleaseNoteInput
+              onChange={handleTitleChange}
+              editorState={title}
+              label="Tittel"
+            />
+          </div>
+
+          <div>
+            <ReleaseNoteInput
+              onChange={handleIngressChange}
+              editorState={ingress}
+              label="Ingress"
+            />
+          </div>
+
+          <div>
+            <ReleaseNoteRichInput
+              onChange={handleDescriptionChange}
+              editorState={description}
+              label="Beskrivelse"
+            />
+          </div>
+
+          <Box mt={5} mb={4}>
+            <p>Forhåndsvisning</p>
+            <ComposedEditorsView
+              title={title}
+              ingress={ingress}
+              description={description}
+            />
+          </Box>
+        </Box>
+      </form>
+    </React.Fragment>
   );
 };
 
 export default EditReleaseNoteForm;
 
+EditReleaseNoteForm.propTypes = {
+  onSave: PropTypes.func,
+  note: PropTypes.object
+};
+
 const StyledFormControlLabel = styled(FormControlLabel)`
   padding: 0 16px;
 `;
 
-const StyledForm = styled.form`
-  margin-top: 20px;
+
+const StyledBox = styled(Box)`
+  && {
+    vertical-align: middle;
+  }
+`;
+
+const SaveButton = styled(Button)`
+  && {
+    background-color: ${props => props.theme.secondaryColor};
+    color: white;
+  }
+`;
+
+const ToolbarWrapper = styled.div`
+  width: ${props => props.theme.contentWidth};
+  max-width: ${props => props.theme.contentWidth};
+  margin: auto;
+`;
+const StyledToolbar = styled(Toolbar)`
+  justify-content: space-between;
+`;
+
+const CancelButton = styled(Button)`
+  && {
+    color: white;
+    padding: 0 16px;
+  }
+`;
+
+const BottomAppBar = styled(AppBar)`
+  & {
+    background-color: ${props => props.theme.mainColor} !important;
+    position: fixed;
+    top: auto !important;
+    bottom: 0 !important;
+  }
 `;

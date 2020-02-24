@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Editor, EditorState } from "draft-js";
 import { Paper } from "@material-ui/core";
 import styled from "styled-components";
@@ -6,6 +6,7 @@ import { Map } from "immutable";
 import { Editor as EditorWysiwyg } from "react-draft-wysiwyg";
 
 const ComposedEditorsView = props => {
+
   const titleRenderMap = Map({
     unstyled: {
       element: "h2"

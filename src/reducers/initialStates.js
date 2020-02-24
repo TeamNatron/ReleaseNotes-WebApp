@@ -9,3 +9,15 @@ export const articles = {
     items: [],
     error: null
 }
+
+export const releaseNotes = {
+    pending: false,
+    items: [],
+    error: null
+}
+
+export const releaseNote = {
+    pending: false,
+    item: {},
+    error: null
+}

@@ -12,6 +12,7 @@
     "axios": "^0.19.2",
     "draft-js": "^0.11.4",
     "draftjs-to-html": "^0.9.1",
+    "html-to-draftjs": "^1.5.0",
     "immutability-helper": "^3.0.1",
     "immutable": "^4.0.0-rc.12",
     "jest-junit": "^10.0.0",
