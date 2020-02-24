@@ -8,7 +8,9 @@ import {
   Button,
   Menu,
   MenuItem,
-  ListItemText
+  ListItemText,
+  Switch,
+  FormControlLabel
 } from "@material-ui/core";
 import ScreenTitle from "../shared/ScreenTitle";
 import Ingress from "../shared/Ingress";
@@ -44,9 +46,7 @@ class ReleaseEditorScreen extends Component {
     getProductVersions().then(response => {
       if (response.status === 200) {
         const newProductVersions = response.data;
-        this.setState({ productVersions: newProductVersions }, () =>
-          console.log(this.state.productVersions)
-        );
+        this.setState({ productVersions: newProductVersions });
       } else {
         console.log(
           "Something went wrong while fetching productVersions" +
@@ -57,6 +57,11 @@ class ReleaseEditorScreen extends Component {
   }
 
   state = {
+    titleIsError: true,
+    releaseNotesIsError: true,
+    productVersionIsError: true,
+    submitDisabled: true,
+    isPublic: false,
     title: "",
     isLoaded: false,
     productVersions: [],
@@ -121,7 +126,9 @@ class ReleaseEditorScreen extends Component {
     column.splice(srcIndex, 1);
     column.splice(destIndex, 0, item);
 
-    this.setState({ allItems: allItemsCopy });
+    this.setState({ allItems: allItemsCopy }, () => {
+      this.validateReleaseNotes();
+    });
   };
 
   moveToAnotherColumn = (
@@ -140,7 +147,9 @@ class ReleaseEditorScreen extends Component {
     srcColumn.splice(srcIndex, 1);
     destColumn.splice(destIndex, 0, item);
 
-    this.setState({ allItems: allItemsCopy });
+    this.setState({ allItems: allItemsCopy }, () => {
+      this.validateReleaseNotes();
+    });
   };
 
   releaseStyle = {
@@ -162,17 +171,18 @@ class ReleaseEditorScreen extends Component {
       isPublic: this.state.isPublic,
       releaseNotesIds: this.state.allItems.release.list.map(rn => rn.id)
     };
-    saveRelease(release)
-      .then(response => {
-        if (response.status === 200) {
-          alert("Opprettet!");
-        } else {
-          console.log(response.statusText);
-        }
-      })
-      .catch(error => {
-        alert(error.response.data);
-      });
+    console.log(release);
+    // saveRelease(release)
+    //   .then(response => {
+    //     if (response.status === 200) {
+    //       alert("Opprettet!");
+    //     } else {
+    //       console.log(response.statusText);
+    //     }
+    //   })
+    //   .catch(error => {
+    //     alert(error.response.data);
+    //   });
   };
 
   handleCancel = () => {
@@ -181,15 +191,14 @@ class ReleaseEditorScreen extends Component {
 
   handleClickProductVersion = event => {
     const currentTarget = event.currentTarget;
-    this.setState({ anchorEl: currentTarget });
-    this.setState({ openMenu: true });
+    this.setState({ anchorEl: currentTarget, openMenu: true }, () =>
+      this.validateProductVersion()
+    );
   };
 
   handleCloseProductVersion = event => {
-    console.log(event.currentTarget);
     const newProductVersionId = event.currentTarget.id;
     const newProductVersionLabel = event.currentTarget.textContent;
-    console.log(newProductVersionLabel);
     this.setState(
       {
         selectedProductVersionId: newProductVersionId,
@@ -197,13 +206,91 @@ class ReleaseEditorScreen extends Component {
         anchorEl: null,
         openMenu: false
       },
-      console.log(this.state.selectedProductVersionLabel)
+      () => this.validateProductVersion()
     );
   };
 
   handleOnChangeTitle = result => {
     const newTitle = result.target.value;
-    this.setState({ title: newTitle });
+    this.setState({ title: newTitle }, () => {
+      this.validateTitle();
+    });
+  };
+
+  handleChangeIsPublic = () => {
+    this.setState({ isPublic: !this.state.isPublic });
+  };
+
+  validateTitle = input => {
+    // prettier-ignore
+    if (input === "") {
+      this.setState(
+        { titleIsError: true, titleErrorMsg: "Felt kan ikke være tomt" },
+        () => {
+          this.validateSubmit();
+        }
+      );
+    } else {
+      this.setState({ titleIsError: false, titleErrorMsg: "" }, () => {
+        this.validateSubmit();
+      });
+    }
+  };
+
+  validateReleaseNotes = () => {
+    if (!(this.state.allItems.release.list.length === 0)) {
+      this.setState(
+        { releaseNotesIsError: false, releaseNoteErrorMsg: "" },
+        () => {
+          this.validateSubmit();
+        }
+      );
+    } else {
+      this.setState(
+        {
+          releaseNotesIsError: true,
+          releaseNoteErrorMsg: "Du må ihvertfall velge en"
+        },
+        () => {
+          this.validateSubmit();
+        }
+      );
+    }
+  };
+
+  validateProductVersion = () => {
+    if (this.state.selectedProductVersionId) {
+      this.setState(
+        { productVersionIsError: false, productVersionErrorMsg: "" },
+        () => {
+          this.validateSubmit();
+        }
+      );
+    } else {
+      this.setState(
+        {
+          productVersionIsError: true,
+          productVersionErrorMsg: "Du må velge et produkt"
+        },
+        () => {
+          this.validateSubmit();
+        }
+      );
+    }
+  };
+
+  validateSubmit = () => {
+    if (
+      !(
+        this.state.titleIsError ||
+        this.state.releaseNotesIsError ||
+        this.state.productVersionIsError
+      )
+    ) {
+      this.setState({ submitDisabled: false });
+    } else {
+      this.setState({ submitDisabled: true });
+    }
   };
 
   render() {
@@ -213,7 +300,11 @@ class ReleaseEditorScreen extends Component {
         <Ingress gutterBottom>Redigering/Opprettelse av releases.</Ingress>
         <SpacedDivider />
         <ButtonToolbar>
-          <SaveButton variant="contained" onClick={this.handleSave}>
+          <SaveButton
+            disabled={this.state.submitDisabled}
+            variant="contained"
+            onClick={this.handleSave}
+          >
             Opprett
           </SaveButton>
           <CancelButton
@@ -234,6 +325,19 @@ class ReleaseEditorScreen extends Component {
               ? "Product"
               : this.state.selectedProductVersionLabel}
           </SelectProductVersion>
+          <FormControlLabel
+            style={{ marginLeft: "15px" }}
+            control={
+              <Switch
+                checked={this.state.isPublic}
+                onChange={this.handleChangeIsPublic}
+                value={this.state.isPublic}
+                color="primary"
+                inputProps={{ "aria-label": "primary checkbox" }}
+              />
+            }
+            label="Publisert"
+          />
           <Menu
             id="customized-menu"
             anchorEl={this.state.anchorEl}
