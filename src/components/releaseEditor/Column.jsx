@@ -7,15 +7,16 @@ import TitleTextField from "./TitleTextField";
 const Column = props => {
   return (
     <StyledPaper style={props.styleSheet}>
+      {props.isRelease && (
+        <TitleTextField handleOnChangeTitle={props.handleOnChangeTitle} />
+      )}
       <Droppable droppableId={props.id}>
         {provided => (
           <TaskList ref={provided.innerRef} {...provided.droppableProps}>
-            {props.isRelease && <TitleTextField />}
             {props.releaseNotes.map((releaseNote, index) => (
               <ReleaseNote
                 key={releaseNote.id}
                 releaseNote={releaseNote}
-                id={releaseNote.id}
                 index={index}
                 isRelease={props.isRelease}
                 handleRemoveReleaseNote={
@@ -34,9 +35,11 @@ const Column = props => {
 export default Column;
 
 const StyledPaper = styled.div`
-  min-height: 25rem;
   text-align: center;
   padding-bottom: 4rem;
 `;
 
-const TaskList = styled.div``;
+const TaskList = styled.div`
+  min-height: 100%;
+  background-color: #fff;
+`;

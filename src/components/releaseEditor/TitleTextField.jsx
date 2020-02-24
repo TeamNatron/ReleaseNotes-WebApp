@@ -2,20 +2,18 @@ import React, { Component } from "react";
 import { TextField, FormHelperText } from "@material-ui/core";
 import styled from "styled-components";
 
-class TitleTextField extends Component {
-  state = {};
-  render() {
-    return (
-      <React.Fragment>
-        <StyledTextField
-          variant="outlined"
-          aria-describedby="component-helper-text"
-          placeholder="Skriv en tittel"
-        />
-      </React.Fragment>
-    );
-  }
-}
+const TitleTextField = props => {
+  return (
+    <React.Fragment>
+      <StyledTextField
+        variant="outlined"
+        aria-describedby="component-helper-text"
+        placeholder="Skriv en tittel"
+        onChange={props.handleOnChangeTitle}
+      />
+    </React.Fragment>
+  );
+};
 
 export default TitleTextField;
 
