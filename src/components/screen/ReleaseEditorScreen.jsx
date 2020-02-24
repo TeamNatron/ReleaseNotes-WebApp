@@ -15,6 +15,8 @@ import Ingress from "../shared/Ingress";
 import SpacedDivider from "../shared/SpacedDivider";
 import { ArrowDropDown } from "@material-ui/icons";
 import { getReleaseNotes } from "../../requests/releaseNote";
+import { getProductVersions } from "../../requests/productVersion";
+import { saveRelease } from "../../requests/release";
 
 class ReleaseEditorScreen extends Component {
   constructor() {
@@ -39,12 +41,27 @@ class ReleaseEditorScreen extends Component {
           console.log(error.response);
         }
       });
+    getProductVersions().then(response => {
+      if (response.status === 200) {
+        const newProductVersions = response.data;
+        this.setState({ productVersions: newProductVersions }, () =>
+          console.log(this.state.productVersions)
+        );
+      } else {
+        console.log(
+          "Something went wrong while fetching productVersions" +
+            response.statusText
+        );
+      }
+    });
   }
 
   state = {
+    title: "",
     isLoaded: false,
-    productVersionLabel: "",
-    productVersion: "",
+    productVersions: [],
+    selectedProductVersionLabel: "",
+    selectedProductVersionId: "",
     anchorEl: {},
     openMenu: false,
     allItems: {
@@ -138,7 +155,25 @@ class ReleaseEditorScreen extends Component {
     this.moveToAnotherColumn("release", "releaseNotes", srcIndex, 0);
   }
 
-  handleSave = () => {};
+  handleSave = () => {
+    const release = {
+      productVersionId: this.state.selectedProductVersionId,
+      title: this.state.title,
+      isPublic: this.state.isPublic,
+      releaseNotesIds: this.state.allItems.release.list.map(rn => rn.id)
+    };
+    saveRelease(release)
+      .then(response => {
+        if (response.status === 200) {
+          alert("Opprettet!");
+        } else {
+          console.log(response.statusText);
+        }
+      })
+      .catch(error => {
+        alert(error.response.data);
+      });
+  };
 
   handleCancel = () => {
     window.location = "http://localhost:3000/";
@@ -151,12 +186,24 @@ class ReleaseEditorScreen extends Component {
   };
 
   handleCloseProductVersion = event => {
-    const newProductVersion = event.currentTarget.id;
+    console.log(event.currentTarget);
+    const newProductVersionId = event.currentTarget.id;
     const newProductVersionLabel = event.currentTarget.textContent;
-    this.setState({ productVersion: newProductVersion });
-    this.setState({ productVersionLabel: newProductVersionLabel });
-    this.setState({ anchorEl: null });
-    this.setState({ openMenu: false });
+    console.log(newProductVersionLabel);
+    this.setState(
+      {
+        selectedProductVersionId: newProductVersionId,
+        selectedProductVersionLabel: newProductVersionLabel,
+        anchorEl: null,
+        openMenu: false
+      },
+      console.log(this.state.selectedProductVersionLabel)
+    );
+  };
+
+  handleOnChangeTitle = result => {
+    const newTitle = result.target.value;
+    this.setState({ title: newTitle });
   };
 
   render() {
@@ -183,9 +230,9 @@ class ReleaseEditorScreen extends Component {
             onClick={this.handleClickProductVersion}
             endIcon={<ArrowDropDown />}
           >
-            {this.state.productVersionLabel === ""
+            {this.state.selectedProductVersionLabel === ""
               ? "Product"
-              : this.state.productVersionLabel}
+              : this.state.selectedProductVersionLabel}
           </SelectProductVersion>
           <Menu
             id="customized-menu"
@@ -194,13 +241,19 @@ class ReleaseEditorScreen extends Component {
             open={this.state.openMenu}
             onClose={this.handleCloseProductVersion}
           >
-            <MenuItem
-              id="4"
-              key="Cordel Ute - 2.1"
-              onClick={this.handleCloseProductVersion}
-            >
-              <ListItemText primary="Cordel Ute - 2.1" />
-            </MenuItem>
+            {this.state.productVersions.map(productVersion => (
+              <MenuItem
+                id={productVersion.id}
+                key={productVersion.product.name}
+                onClick={this.handleCloseProductVersion}
+              >
+                <ListItemText
+                  primary={
+                    productVersion.product.name + " - " + productVersion.version
+                  }
+                />
+              </MenuItem>
+            ))}
           </Menu>
         </ButtonToolbar>
         <FlexContainer>
@@ -218,6 +271,7 @@ class ReleaseEditorScreen extends Component {
                 releaseNotes={this.state.allItems.release.list}
                 noteWidth={this.state.noteWidth}
                 handleRemoveReleaseNote={this.handleRemoveReleaseNote}
+                handleOnChangeTitle={this.handleOnChangeTitle}
               />
               <VerticalDivider orientation={"vertical"} />
               <Column

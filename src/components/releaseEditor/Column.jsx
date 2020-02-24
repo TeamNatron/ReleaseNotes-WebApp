@@ -7,7 +7,9 @@ import TitleTextField from "./TitleTextField";
 const Column = props => {
   return (
     <StyledPaper style={props.styleSheet}>
-      {props.isRelease && <TitleTextField />}
+      {props.isRelease && (
+        <TitleTextField handleOnChangeTitle={props.handleOnChangeTitle} />
+      )}
       <Droppable droppableId={props.id}>
         {provided => (
           <TaskList ref={provided.innerRef} {...provided.droppableProps}>
@@ -39,5 +41,5 @@ const StyledPaper = styled.div`
 
 const TaskList = styled.div`
   min-height: 100%;
-  background-color: #f2f2f2;
+  background-color: #fff;
 `;

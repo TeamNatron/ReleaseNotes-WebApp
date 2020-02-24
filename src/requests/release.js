@@ -3,10 +3,12 @@ import { getAuthToken } from "../handlers/cookieHandler";
 
 export function saveRelease(release) {
   return Axios.post(
-    "release",
+    "releases",
     {
-      email: paramEmail,
-      password: paramPassword
+      ProductVersionId: release.productVersionId,
+      Title: release.title,
+      IsPublic: release.isPublic,
+      ReleaseNotesId: release.releaseNotesIds
     },
     {
       withCredentials: false,
