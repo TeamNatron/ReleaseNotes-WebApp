@@ -5,15 +5,15 @@ import styled from "styled-components";
 import PageContainer from "../shared/PageContainer";
 import {
   Divider,
-  AppBar,
-  Toolbar,
-  Typography,
   Button,
-  Menu
+  Menu,
+  MenuItem,
+  ListItemText
 } from "@material-ui/core";
 import ScreenTitle from "../shared/ScreenTitle";
 import Ingress from "../shared/Ingress";
 import SpacedDivider from "../shared/SpacedDivider";
+import { ArrowDropDown } from "@material-ui/icons";
 
 class ReleaseEditorScreen extends Component {
   constructor() {
@@ -22,6 +22,10 @@ class ReleaseEditorScreen extends Component {
   }
 
   state = {
+    productVersionLabel: "",
+    productVersion: "",
+    anchorEl: {},
+    openMenu: false,
     allItems: {
       release: {
         id: "release",
@@ -171,6 +175,21 @@ class ReleaseEditorScreen extends Component {
     window.location = "http://localhost:3000/";
   };
 
+  handleClickProductVersion = event => {
+    const currentTarget = event.currentTarget;
+    this.setState({ anchorEl: currentTarget });
+    this.setState({ openMenu: true });
+  };
+
+  handleCloseProductVersion = event => {
+    const newProductVersion = event.currentTarget.id;
+    const newProductVersionLabel = event.currentTarget.textContent;
+    this.setState({ productVersion: newProductVersion });
+    this.setState({ productVersionLabel: newProductVersionLabel });
+    this.setState({ anchorEl: null });
+    this.setState({ openMenu: false });
+  };
+
   render() {
     return (
       <StyledPageContainer>
@@ -179,7 +198,7 @@ class ReleaseEditorScreen extends Component {
         <SpacedDivider />
         <ButtonToolbar>
           <SaveButton variant="contained" onClick={this.handleSave}>
-            Lagre
+            Opprett
           </SaveButton>
           <CancelButton
             color="secondary"
@@ -188,6 +207,32 @@ class ReleaseEditorScreen extends Component {
           >
             Avbryt
           </CancelButton>
+          <SelectProductVersion
+            aria-controls="customized-menu"
+            aria-haspopup="true"
+            variant="contained"
+            onClick={this.handleClickProductVersion}
+            endIcon={<ArrowDropDown />}
+          >
+            {this.state.productVersionLabel === ""
+              ? "Product"
+              : this.state.productVersionLabel}
+          </SelectProductVersion>
+          <Menu
+            id="customized-menu"
+            anchorEl={this.state.anchorEl}
+            keepMounted
+            open={this.state.openMenu}
+            onClose={this.handleCloseProductVersion}
+          >
+            <MenuItem
+              id="4"
+              key="Cordel Ute - 2.1"
+              onClick={this.handleCloseProductVersion}
+            >
+              <ListItemText primary="Cordel Ute - 2.1" />
+            </MenuItem>
+          </Menu>
         </ButtonToolbar>
         <FlexContainer>
           <DragDropContext
@@ -222,19 +267,26 @@ class ReleaseEditorScreen extends Component {
 
 export default ReleaseEditorScreen;
 
+const SelectProductVersion = styled(Button)`
+  && {
+    align-self: flex-end;
+    margin-left: auto;
+  }
+`;
+
 const SaveButton = styled(Button)`
   && {
-    background-color: ${props => props.theme.secondaryColor};
+    background-color: green;
     color: white;
     align-self: flex-start;
+    margin-right: 1rem;
   }
 `;
 
 const CancelButton = styled(Button)`
   && {
     color: white;
-    align-self: flex-end;
-    margin-left: auto;
+    align-self: flex-start;
   }
 `;
 
