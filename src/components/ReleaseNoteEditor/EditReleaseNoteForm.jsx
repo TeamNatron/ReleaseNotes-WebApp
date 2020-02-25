@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Paper,
   Box,
@@ -6,14 +6,12 @@ import {
   Switch,
   FormControlLabel,
   Divider,
-  Typography,
   CardActionArea,
   AppBar,
   Toolbar
 } from "@material-ui/core";
 import styled from "styled-components";
 import ComposedEditorsView from "./ComposedEditorsView";
-import PageContainer from "../shared/PageContainer";
 import ReleaseNoteInput from "./ReleaseNoteInput";
 import ReleaseNoteRichInput from "./ReleaseNoteRichInput";
 import "draft-js/dist/Draft.css";
@@ -29,30 +27,21 @@ import {
 import { Assignment, Person } from "@material-ui/icons";
 
 const EditReleaseNoteForm = props => {
-  console.log(props)
-  /*
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchReleaseNote(1));
-  }, []);
-  const note = useSelector(state => state.releaseNotes.items[0]);
-  */
-
   const [title, setTitle] = React.useState(
     RichUtils.toggleBlockType(
-      createStateFromText(props.note.title),
+      createStateFromText(props.note.item.title),
       "header-two"
     )
   );
 
   const [ingress, setIngress] = React.useState(
     RichUtils.toggleInlineStyle(
-      createStateFromText(props.note.ingress),
+      createStateFromText(props.note.item.ingress),
       "ITALIC"
     )
   );
   const [description, setDescription] = React.useState(
-    createStateFromText(props.note.description)
+    createStateFromText(props.note.item.description)
   );
   const [ready, setReady] = React.useState();
 
@@ -148,7 +137,7 @@ const EditReleaseNoteForm = props => {
                 <Box my={1} mx={4} display="flex" alignItems="center">
                   <Box display="flex" alignItems="center">
                     <Assignment display="flex" fontSize="small" />
-                    Task {props.note.workItemId}
+                    Task {props.note.item.workItemId}
                   </Box>
                   <Box
                     display="flex"
@@ -156,21 +145,21 @@ const EditReleaseNoteForm = props => {
                     fontWeight={500}
                     ml={1}
                   >
-                    {props.note.workItemTitle}
+                    {props.note.item.workItemTitle}
                   </Box>
                 </Box>
                 <Box mx={4} mb={1} display="flex" alignItems="center">
                   <Person fontSize="small" />
-                  {props.note.authorName}
+                  {props.note.item.authorName}
                 </Box>
               </CardActionArea>
 
               <Divider />
               <Box m={4}>
-                {props.note.workItemDescriptionHtml ? (
+                {props.note.item.workItemDescriptionHtml ? (
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: props.note.workItemDescriptionHtml
+                      __html: props.note.item.workItemDescriptionHtml
                     }}
                   />
                 ) : (
@@ -219,6 +208,10 @@ const EditReleaseNoteForm = props => {
 
 export default EditReleaseNoteForm;
 
+EditReleaseNoteForm.defaultProps = {
+  note: { error: "note is undefined" }
+};
+
 EditReleaseNoteForm.propTypes = {
   onSave: PropTypes.func,
   note: PropTypes.object
@@ -226,13 +219,6 @@ EditReleaseNoteForm.propTypes = {
 
 const StyledFormControlLabel = styled(FormControlLabel)`
   padding: 0 16px;
-`;
-
-
-const StyledBox = styled(Box)`
-  && {
-    vertical-align: middle;
-  }
 `;
 
 const SaveButton = styled(Button)`

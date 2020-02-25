@@ -28,25 +28,25 @@ const AdminReleaseNotesScreen = () => {
       workItemTitle: "Release Note 5",
       ingress:
         "In this release note we wrote everything we did to make things better",
-      id: "5"
+      id: "4"
     },
     {
       workItemTitle: "Release Note 6",
       ingress:
         "In this release note we wrote everything we did to make things better",
-      id: "6"
+      id: "1"
     },
     {
       workItemTitle: "Release Note 7",
       ingress:
         "In this release note we wrote everything we did to make things better",
-      id: "7"
+      id: "2"
     },
     {
       workItemTitle: "Release Note 8",
       ingress:
         "In this release note we wrote everything we did to make things better",
-      id: "8"
+      id: "3"
     }
   ];
 
