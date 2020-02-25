@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Editor, EditorState } from "draft-js";
-import { Paper } from "@material-ui/core";
+import { Paper, Typography } from "@material-ui/core";
 import styled from "styled-components";
 import { Map } from "immutable";
 import { Editor as EditorWysiwyg } from "react-draft-wysiwyg";
+import PropTypes from "prop-types";
 
 const ComposedEditorsView = props => {
-
   const titleRenderMap = Map({
     unstyled: {
       element: "h2"
@@ -27,6 +27,14 @@ const ComposedEditorsView = props => {
   return (
     <Paper variant="outlined">
       <EditorInner>
+        <Typography
+          style={{ fontSize: 12 }}
+          display="block"
+          color="textSecondary"
+          gutterBottom
+        >
+          Forhåndsvisning
+        </Typography>
         {props.title.getCurrentContent().hasText() ? (
           <Editor
             editorState={EditorState.createWithContent(
@@ -77,7 +85,12 @@ ComposedEditorsView.defaultProps = {
   description: EditorState.createEmpty()
 };
 
+ComposedEditorsView.defaultProps = {
+  title: PropTypes.object,
+  ingress: PropTypes.object,
+  description: PropTypes.object
+};
+
 const EditorInner = styled.div`
   margin: 14px 18.5px;
 `;
-

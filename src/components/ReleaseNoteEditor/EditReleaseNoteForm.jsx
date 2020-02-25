@@ -6,9 +6,9 @@ import {
   Switch,
   FormControlLabel,
   Divider,
-  CardActionArea,
   AppBar,
-  Toolbar
+  Toolbar,
+  Typography
 } from "@material-ui/core";
 import styled from "styled-components";
 import ComposedEditorsView from "./ComposedEditorsView";
@@ -62,7 +62,6 @@ const EditReleaseNoteForm = props => {
       return EditorState.createEmpty();
     }
     const blocksFromHTML = convertFromHTML(text);
-    console.log(blocksFromHTML);
     const contentState = ContentState.createFromBlockArray(
       blocksFromHTML.contentBlocks,
       blocksFromHTML.entityMap
@@ -105,7 +104,7 @@ const EditReleaseNoteForm = props => {
         <ToolbarWrapper>
           <StyledToolbar disableGutters variant="dense">
             <CancelButton color="secondary" onClick={props.onCancel}>
-              Avbryt
+              Tilbake
             </CancelButton>
             <div>
               <StyledFormControlLabel
@@ -133,29 +132,31 @@ const EditReleaseNoteForm = props => {
         <Box>
           <div>
             <Paper variant="outlined">
-              <CardActionArea>
-                <Box my={1} mx={4} display="flex" alignItems="center">
+              <Box my={1} mx={3}>
+                <Typography
+                  style={{ fontSize: 12 }}
+                  display="block"
+                  color="textSecondary"
+                  gutterBottom
+                >
+                  Work item
+                </Typography>
+                <Box display="flex" alignItems="center">
                   <Box display="flex" alignItems="center">
                     <Assignment display="flex" fontSize="small" />
                     Task {props.note.item.workItemId}
                   </Box>
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    fontWeight={500}
-                    ml={1}
-                  >
-                    {props.note.item.workItemTitle}
+                  <Box display="flex" alignItems="center" ml={2}>
+                    <Typography>{props.note.item.workItemTitle}</Typography>
+                  </Box>
+                  <Box display="flex" alignItems="center" ml={2}>
+                    <Person fontSize="small" />
+                    {props.note.item.authorName}
                   </Box>
                 </Box>
-                <Box mx={4} mb={1} display="flex" alignItems="center">
-                  <Person fontSize="small" />
-                  {props.note.item.authorName}
-                </Box>
-              </CardActionArea>
-
+              </Box>
               <Divider />
-              <Box m={4}>
+              <Box m={3}>
                 {props.note.item.workItemDescriptionHtml ? (
                   <div
                     dangerouslySetInnerHTML={{
@@ -193,7 +194,6 @@ const EditReleaseNoteForm = props => {
           </div>
 
           <Box mt={5} mb={4}>
-            <p>Forhåndsvisning</p>
             <ComposedEditorsView
               title={title}
               ingress={ingress}
@@ -209,7 +209,7 @@ const EditReleaseNoteForm = props => {
 export default EditReleaseNoteForm;
 
 EditReleaseNoteForm.defaultProps = {
-  note: { error: "note is undefined" }
+  note: { item: { error: "note is undefined" } }
 };
 
 EditReleaseNoteForm.propTypes = {
