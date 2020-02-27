@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import {
   Paper,
   Box,
@@ -37,30 +37,35 @@ import {
   Error
 } from "@material-ui/icons";
 import { green, orange } from "@material-ui/core/colors";
+import BottomToolbar from "../shared/BottomToolbar";
 
 const EditReleaseNoteForm = props => {
+  //editor states
   const [title, setTitle] = React.useState(
     RichUtils.toggleBlockType(EditorState.createEmpty(), "header-two")
   );
-
   const [ingress, setIngress] = React.useState(
     RichUtils.toggleInlineStyle(EditorState.createEmpty(), "ITALIC")
   );
   const [description, setDescription] = React.useState(
     EditorState.createEmpty()
   );
+
+  // ready for release switch
   const [ready, setReady] = React.useState();
+
+  // saved / changed indicator
   const [changed, setChanged] = React.useState();
 
+  // initalize editors with loaded data
   useEffect(() => {
-    // initalize editors with loaded data
     setTitle(createStateFromText(props.note.item.title));
     setIngress(createStateFromText(props.note.item.ingress));
     setDescription(createStateFromText(props.note.item.description));
   }, [props.note.item]);
 
+  // update the given editor
   const handleEditorChange = (source, editorState) => {
-    // update the given editor
     switch (source) {
       case "INGRESS":
         doUpdateEditor(setIngress, ingress, editorState);
@@ -76,7 +81,6 @@ const EditReleaseNoteForm = props => {
         break;
     }
   };
-
   function doUpdateEditor(setState, oldState, newState) {
     if (newState.getCurrentContent() !== oldState.getCurrentContent()) {
       setChanged(true);
@@ -123,7 +127,7 @@ const EditReleaseNoteForm = props => {
   };
 
   const handleReady = ev => {
-    // "ready for release" toggle
+    // "ready for release" switch handler
     setReady(!ready);
   };
 
@@ -131,67 +135,59 @@ const EditReleaseNoteForm = props => {
     // editor contents are saved
     setChanged(false);
   }, [props.note.updated]);
-  console.log(props.note)
+
   return (
     <React.Fragment>
-      <BottomAppBar>
-        <Fade
-          in={props.note.pending}
-          style={{
-            transitionDelay: props.note.pending ? "800ms" : "0ms"
-          }}
-        >
-          <LinearProgress />
-        </Fade>
-        <ToolbarWrapper>
-          <StyledToolbar disableGutters variant="dense">
-            <CancelButton color="secondary" onClick={props.onCancel}>
-              Tilbake
-            </CancelButton>
-            <div>
-              <StyledFormControlLabel
-                edge="end"
-                control={
-                  <Switch
-                    checked={ready}
-                    size="small"
-                    onChange={handleReady}
-                    value="ready"
-                    color="primary"
-                    inputProps={{ "aria-label": "primary checkbox" }}
-                  />
-                }
-                label="Klar for release"
+      <BottomToolbar
+        loading={props.note.pending}
+        left={[
+          <CancelButton color="secondary" onClick={props.onCancel}>
+            Tilbake
+          </CancelButton>
+        ]}
+        right={[
+          <StyledFormControlLabel
+            edge="end"
+            control={
+              <Switch
+                checked={ready}
+                size="small"
+                onChange={handleReady}
+                value="ready"
+                color="primary"
+                inputProps={{ "aria-label": "primary checkbox" }}
               />
-              <SaveButton
-                onClick={handleSave}
-                disabled={canSave()}
-                startIcon={<Save />}
-              >
-                Lagre
-              </SaveButton>
-              <IconButton disableRipple>
-                {props.note.error ? (
-                  <Tooltip title="En feil oppstod når du prøvde å lagre endringene">
-                    <Error />
-                  </Tooltip>
-                ) : changed ? (
-                  <Tooltip title="Du har ulagrede endringer">
-                    <FiberManualRecord
-                      size="small"
-                      style={{ color: orange[500], opacity: "0.7" }}
-                    />
-                  </Tooltip>
-                ) : (
-                  <Tooltip title="Endringene er lagret">
-                    <Check style={{ color: green[500] }} />
-                  </Tooltip>
-                )}
-              </IconButton>
-            </div>
-          </StyledToolbar>
-        </ToolbarWrapper>
-      </BottomAppBar>
+            }
+            label="Klar for release"
+          />,
+          <SaveButton
+            onClick={handleSave}
+            disabled={canSave()}
+            startIcon={<Save />}
+          >
+            Lagre
+          </SaveButton>,
+          <IconButton disableRipple>
+            {props.note.error ? (
+              <Tooltip title="En feil oppstod når du prøvde å lagre endringene">
+                <Error />
+              </Tooltip>
+            ) : changed ? (
+              <Tooltip title="Du har ulagrede endringer">
+                <FiberManualRecord
+                  size="small"
+                  style={{ color: orange[500], opacity: "0.7" }}
+                />
+              </Tooltip>
+            ) : (
+              <Tooltip title="Endringene er lagret">
+                <Check style={{ color: green[500] }} />
+              </Tooltip>
+            )}
+          </IconButton>
+        ]}
+      />
+
       <form>
         <Box>
           <div>
@@ -296,11 +292,6 @@ const SaveButton = styled(Button)`
   }
 `;
 
-const ToolbarWrapper = styled.div`
-  width: ${props => props.theme.contentWidth};
-  max-width: ${props => props.theme.contentWidth};
-  margin: auto;
-`;
 const StyledToolbar = styled(Toolbar)`
   justify-content: space-between;
 `;
@@ -311,7 +302,11 @@ const CancelButton = styled(Button)`
     padding: 0 16px;
   }
 `;
-
+const ToolbarWrapper = styled.div`
+  width: ${props => props.theme.contentWidth};
+  max-width: ${props => props.theme.contentWidth};
+  margin: auto;
+`;
 const BottomAppBar = styled(AppBar)`
   & {
     background-color: ${props => props.theme.mainColor} !important;
