@@ -19,6 +19,7 @@ import { ArrowDropDown } from "@material-ui/icons";
 import { getReleaseNotes } from "../../requests/releaseNote";
 import { getProductVersions } from "../../requests/productVersion";
 import { saveRelease } from "../../requests/release";
+import TitleTextField from "../releaseEditor/TitleTextField";
 
 class ReleaseEditorScreen extends Component {
   constructor() {
@@ -152,11 +153,8 @@ class ReleaseEditorScreen extends Component {
     });
   };
 
-  releaseStyle = {
-    flexBasis: "80%"
-  };
-
   releaseNoteStyle = {
+    minWidth: "20rem",
     flexBasis: "20%"
   };
 
@@ -366,17 +364,20 @@ class ReleaseEditorScreen extends Component {
               onBeforeCapture={this.onBeforeCapture}
               onDragEnd={this.onDragEnd}
             >
-              <Column
-                isRelease={true}
-                styleSheet={this.releaseStyle}
-                key={this.state.allItems.release.id}
-                id={this.state.allItems.release.id}
-                title={this.state.allItems.release.name}
-                releaseNotes={this.state.allItems.release.list}
-                noteWidth={this.state.noteWidth}
-                handleRemoveReleaseNote={this.handleRemoveReleaseNote}
-                handleOnChangeTitle={this.handleOnChangeTitle}
-              />
+              <ReleaseContainer>
+                <TitleTextField
+                  handleOnChangeTitle={this.handleOnChangeTitle}
+                />
+                <Column
+                  isRelease={true}
+                  key={this.state.allItems.release.id}
+                  id={this.state.allItems.release.id}
+                  title={this.state.allItems.release.name}
+                  releaseNotes={this.state.allItems.release.list}
+                  noteWidth={this.state.noteWidth}
+                  handleRemoveReleaseNote={this.handleRemoveReleaseNote}
+                />
+              </ReleaseContainer>
               <VerticalDivider orientation={"vertical"} />
               <Column
                 isRelease={false}
@@ -397,6 +398,10 @@ class ReleaseEditorScreen extends Component {
 }
 
 export default ReleaseEditorScreen;
+
+const ReleaseContainer = styled.div`
+  flex-basis: 80%;
+`;
 
 const SelectProductVersion = styled(Button)`
   && {

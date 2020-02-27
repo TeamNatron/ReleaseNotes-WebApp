@@ -7,9 +7,6 @@ import TitleTextField from "./TitleTextField";
 const Column = props => {
   return (
     <StyledPaper style={props.styleSheet}>
-      {props.isRelease && (
-        <TitleTextField handleOnChangeTitle={props.handleOnChangeTitle} />
-      )}
       <Droppable droppableId={props.id}>
         {provided => (
           <TaskList ref={provided.innerRef} {...provided.droppableProps}>
