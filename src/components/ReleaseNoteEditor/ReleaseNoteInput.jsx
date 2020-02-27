@@ -15,7 +15,6 @@ const ReleaseNoteInput = props => {
   };
 
   let editor = React.createRef();
-
   const focusEditor = () => {
     editor.current.focusEditor();
   };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
   Paper,
   Box,
@@ -8,7 +8,11 @@ import {
   Divider,
   AppBar,
   Toolbar,
-  Typography
+  Typography,
+  Tooltip,
+  IconButton,
+  LinearProgress,
+  Fade
 } from "@material-ui/core";
 import styled from "styled-components";
 import ComposedEditorsView from "./ComposedEditorsView";
@@ -24,38 +28,61 @@ import {
   convertFromHTML,
   ContentState
 } from "draft-js";
-import { Assignment, Person } from "@material-ui/icons";
+import {
+  Assignment,
+  Person,
+  Save,
+  Check,
+  FiberManualRecord,
+  Error
+} from "@material-ui/icons";
+import { green, orange } from "@material-ui/core/colors";
 
 const EditReleaseNoteForm = props => {
   const [title, setTitle] = React.useState(
-    RichUtils.toggleBlockType(
-      createStateFromText(props.note.item.title),
-      "header-two"
-    )
+    RichUtils.toggleBlockType(EditorState.createEmpty(), "header-two")
   );
 
   const [ingress, setIngress] = React.useState(
-    RichUtils.toggleInlineStyle(
-      createStateFromText(props.note.item.ingress),
-      "ITALIC"
-    )
+    RichUtils.toggleInlineStyle(EditorState.createEmpty(), "ITALIC")
   );
   const [description, setDescription] = React.useState(
-    createStateFromText(props.note.item.description)
+    EditorState.createEmpty()
   );
   const [ready, setReady] = React.useState();
+  const [changed, setChanged] = React.useState();
 
-  const handleTitleChange = editorState => {
-    setTitle(editorState);
+  useEffect(() => {
+    // initalize editors with loaded data
+    setTitle(createStateFromText(props.note.item.title));
+    setIngress(createStateFromText(props.note.item.ingress));
+    setDescription(createStateFromText(props.note.item.description));
+  }, [props.note.item]);
+
+  const handleEditorChange = (source, editorState) => {
+    // update the given editor
+    switch (source) {
+      case "INGRESS":
+        doUpdateEditor(setIngress, ingress, editorState);
+        break;
+      case "TITLE":
+        doUpdateEditor(setTitle, title, editorState);
+        break;
+      case "DESCRIPTION":
+        doUpdateEditor(setDescription, description, editorState);
+        break;
+      default:
+        console.log("ERROR: Invalid editor name: " + source);
+        break;
+    }
   };
 
-  const handleIngressChange = editorState => {
-    setIngress(editorState);
-  };
-
-  const handleDescriptionChange = editorState => {
-    setDescription(editorState);
-  };
+  function doUpdateEditor(setState, oldState, newState) {
+    if (newState.getCurrentContent() !== oldState.getCurrentContent()) {
+      setChanged(true);
+    }
+    setState(newState);
+  }
 
   function createStateFromText(text) {
     if (!text) {
@@ -96,11 +123,26 @@ const EditReleaseNoteForm = props => {
   };
 
   const handleReady = ev => {
+    // "ready for release" toggle
     setReady(!ready);
   };
+
+  useEffect(() => {
+    // editor contents are saved
+    setChanged(false);
+  }, [props.note.updated]);
+  console.log(props.note)
   return (
     <React.Fragment>
       <BottomAppBar>
+        <Fade
+          in={props.note.pending}
+          style={{
+            transitionDelay: props.note.pending ? "800ms" : "0ms"
+          }}
+        >
+          <LinearProgress />
+        </Fade>
         <ToolbarWrapper>
           <StyledToolbar disableGutters variant="dense">
             <CancelButton color="secondary" onClick={props.onCancel}>
@@ -121,9 +163,31 @@ const EditReleaseNoteForm = props => {
                 }
                 label="Klar for release"
               />
-              <SaveButton onClick={handleSave} disabled={canSave()}>
+              <SaveButton
+                onClick={handleSave}
+                disabled={canSave()}
+                startIcon={<Save />}
+              >
                 Lagre
               </SaveButton>
+              <IconButton disableRipple>
+                {props.note.error ? (
+                  <Tooltip title="En feil oppstod når du prøvde å lagre endringene">
+                    <Error />
+                  </Tooltip>
+                ) : changed ? (
+                  <Tooltip title="Du har ulagrede endringer">
+                    <FiberManualRecord
+                      size="small"
+                      style={{ color: orange[500], opacity: "0.7" }}
+                    />
+                  </Tooltip>
+                ) : (
+                  <Tooltip title="Endringene er lagret">
+                    <Check style={{ color: green[500] }} />
+                  </Tooltip>
+                )}
+              </IconButton>
             </div>
           </StyledToolbar>
         </ToolbarWrapper>
@@ -171,7 +235,7 @@ const EditReleaseNoteForm = props => {
           </div>
           <div>
             <ReleaseNoteInput
-              onChange={handleTitleChange}
+              onChange={editorState => handleEditorChange("TITLE", editorState)}
               editorState={title}
               label="Tittel"
             />
@@ -179,7 +243,9 @@ const EditReleaseNoteForm = props => {
 
           <div>
             <ReleaseNoteInput
-              onChange={handleIngressChange}
+              onChange={editorState =>
+                handleEditorChange("INGRESS", editorState)
+              }
               editorState={ingress}
               label="Ingress"
             />
@@ -187,7 +253,9 @@ const EditReleaseNoteForm = props => {
 
           <div>
             <ReleaseNoteRichInput
-              onChange={handleDescriptionChange}
+              onChange={editorState =>
+                handleEditorChange("DESCRIPTION", editorState)
+              }
               editorState={description}
               label="Beskrivelse"
             />

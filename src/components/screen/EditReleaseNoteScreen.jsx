@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import EditReleaseNoteForm from "../ReleaseNoteEditor/EditReleaseNoteForm";
-import { Box, LinearProgress } from "@material-ui/core";
+import { Box, LinearProgress, Zoom } from "@material-ui/core";
 import { useHistory } from "react-router";
 import {
   putReleaseNote,
@@ -22,32 +22,27 @@ const EditReleaseNoteScreen = props => {
     if (!note) {
       dispatch(fetchReleaseNote(id));
     }
-  }, [id, dispatch, note]);
+  }, []);
 
   const handleSave = objectToSave => {
-    dispatch(putReleaseNote(objectToSave));
+    dispatch(putReleaseNote(id, objectToSave));
   };
+
   const handleCancel = () => {
     history.goBack();
   };
 
-  console.log(note);
-
   return (
     <React.Fragment>
-      {note && note.pending && !note.item ? (
-        <LinearProgress />
-      ) : (
-        <PageContainer>
-          <Box my={5}>
-            <EditReleaseNoteForm
-              note={note}
-              onSave={handleSave}
-              onCancel={handleCancel}
-            />
-          </Box>
-        </PageContainer>
-      )}
+      <PageContainer>
+        <Box my={5}>
+          <EditReleaseNoteForm
+            note={note}
+            onSave={handleSave}
+            onCancel={handleCancel}
+          />
+        </Box>
+      </PageContainer>
     </React.Fragment>
   );
 };

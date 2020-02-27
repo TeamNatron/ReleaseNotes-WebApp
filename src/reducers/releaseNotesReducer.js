@@ -33,8 +33,8 @@ export function releaseNotesReducer(state = initialState, action) {
 }
 
 function doUpdateItem(state, action) {
-  const index = state.items.findIndex(r => r.item.id === action.id);
-  console.log(index);
+  const index = state.items.findIndex(r => r.item.id == action.id);
+  console.log("item with index " + index);
   if (index === -1) {
     return update(state, {
       items: {
@@ -50,11 +50,14 @@ function doUpdateItem(state, action) {
 }
 
 // reducer for a single release note
-function releaseNoteReducer(state = releaseNote, action) {
+function releaseNoteReducer(state, action) {
   switch (action.type) {
+    case PUT_RELEASENOTE_PENDING:
     case FETCH_RELEASENOTE_PENDING:
+      console.log("Fuck bitches ge tmoney ey");
       return update(state, {
-        pending: { $set: true }
+        pending: { $set: true },
+        item: { $merge: { id: parseInt(action.id) } }
       });
     case FETCH_RELEASENOTE_SUCCESS:
       return update(state, {
@@ -62,6 +65,14 @@ function releaseNoteReducer(state = releaseNote, action) {
         item: { $set: action.payload },
         error: { $set: null }
       });
+    case PUT_RELEASENOTE_SUCCESS:
+      return update(state, {
+        pending: { $set: false },
+        item: { $set: action.payload },
+        error: { $set: null },
+        updated: { $set: Date.now() }
+      });
+    case PUT_RELEASENOTE_ERROR:
     case FETCH_RELEASENOTE_ERROR:
       return update(state, {
         pending: { $set: false },

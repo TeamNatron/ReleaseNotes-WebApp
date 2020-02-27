@@ -32,12 +32,12 @@ export function fetchReleaseNote(id) {
   };
 }
 
-export function putReleaseNote(note) {
-  const id = note.id;
+export function putReleaseNote(id, note) {
   return dispatch => {
     dispatch(actions.putReleaseNotePending(id));
     return Axios.put("/releasenote/" + id, note)
       .then(response => {
+        console.log(response)
         dispatch(actions.putReleaseNoteSuccess(response.data, id));
       })
       .catch(error => {
@@ -72,14 +72,14 @@ export const actions = {
 
   putReleaseNotePending(id) {
     return {
-      type: FETCH_RELEASENOTE_PENDING,
+      type: PUT_RELEASENOTE_PENDING,
       id
     };
   },
 
   putReleaseNoteSuccess(response, id) {
     return {
-      type: FETCH_RELEASENOTE_SUCCESS,
+      type: PUT_RELEASENOTE_SUCCESS,
       payload: response,
       id
     };
@@ -87,7 +87,7 @@ export const actions = {
 
   putReleaseNoteError(error, id) {
     return {
-      type: FETCH_RELEASENOTE_ERROR,
+      type: PUT_RELEASENOTE_ERROR,
       payload: error,
       id
     };

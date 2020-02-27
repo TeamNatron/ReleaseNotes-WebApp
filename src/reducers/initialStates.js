@@ -19,5 +19,6 @@ export const releaseNotes = {
 export const releaseNote = {
     pending: false,
     item: {},
-    error: null
+    error: null,
+    updated: null
 }
