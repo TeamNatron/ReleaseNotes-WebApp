@@ -37,6 +37,5 @@ const StyledPaper = styled.div`
 `;
 
 const TaskList = styled.div`
-  min-height: 100%;
   background-color: #fff;
 `;

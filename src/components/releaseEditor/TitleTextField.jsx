@@ -7,9 +7,10 @@ const TitleTextField = props => {
     <React.Fragment>
       <StyledTextField
         variant="outlined"
-        aria-describedby="component-helper-text"
-        placeholder="Skriv en tittel"
+        helperText={props.helperText}
+        error={props.error}
         onChange={props.handleOnChangeTitle}
+        placeholder="Skriv en tittel"
       />
     </React.Fragment>
   );
@@ -21,6 +22,9 @@ const StyledTextField = styled(TextField)`
   width: 100%;
   && {
     background-color: #fefefe;
+    p {
+      font-size: 1rem;
+    }
   }
   input {
     height: 7rem;

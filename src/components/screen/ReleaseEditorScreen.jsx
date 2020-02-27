@@ -219,12 +219,14 @@ class ReleaseEditorScreen extends Component {
     this.setState({ isPublic: !this.state.isPublic });
   };
 
-  validateTitle = input => {
+  validateTitle = () => {
+    const newTitle = this.state.title;
     // prettier-ignore
-    if (input === "") {
+    if (newTitle === "") {
       this.setState(
         { titleIsError: true, titleErrorMsg: "Felt kan ikke være tomt" },
         () => {
+          console.log(this.state.titleErrorMsg)
           this.validateSubmit();
         }
       );
@@ -367,6 +369,8 @@ class ReleaseEditorScreen extends Component {
               <ReleaseContainer>
                 <TitleTextField
                   handleOnChangeTitle={this.handleOnChangeTitle}
+                  error={this.state.titleIsError}
+                  helperText={this.state.titleErrorMsg}
                 />
                 <Column
                   isRelease={true}
