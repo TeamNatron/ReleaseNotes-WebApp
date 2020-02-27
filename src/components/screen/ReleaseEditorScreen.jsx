@@ -10,7 +10,11 @@ import {
   MenuItem,
   ListItemText,
   Switch,
-  FormControlLabel
+  FormControlLabel,
+  Select,
+  FormControl,
+  InputLabel,
+  FormHelperText
 } from "@material-ui/core";
 import ScreenTitle from "../shared/ScreenTitle";
 import Ingress from "../shared/Ingress";
@@ -19,6 +23,7 @@ import { ArrowDropDown } from "@material-ui/icons";
 import { getReleaseNotes } from "../../requests/releaseNote";
 import { getProductVersions } from "../../requests/productVersion";
 import { saveRelease } from "../../requests/release";
+import TitleTextField from "../releaseEditor/TitleTextField";
 
 class ReleaseEditorScreen extends Component {
   constructor() {
@@ -57,6 +62,7 @@ class ReleaseEditorScreen extends Component {
   }
 
   state = {
+    open: false,
     titleIsError: true,
     releaseNotesIsError: true,
     productVersionIsError: true,
@@ -67,8 +73,6 @@ class ReleaseEditorScreen extends Component {
     productVersions: [],
     selectedProductVersionLabel: "",
     selectedProductVersionId: "",
-    anchorEl: {},
-    openMenu: false,
     allItems: {
       release: {
         id: "release",
@@ -152,11 +156,8 @@ class ReleaseEditorScreen extends Component {
     });
   };
 
-  releaseStyle = {
-    flexBasis: "80%"
-  };
-
   releaseNoteStyle = {
+    minWidth: "20rem",
     flexBasis: "20%"
   };
 
@@ -171,43 +172,41 @@ class ReleaseEditorScreen extends Component {
       isPublic: this.state.isPublic,
       releaseNotesIds: this.state.allItems.release.list.map(rn => rn.id)
     };
-    console.log(release);
-    // saveRelease(release)
-    //   .then(response => {
-    //     if (response.status === 200) {
-    //       alert("Opprettet!");
-    //     } else {
-    //       console.log(response.statusText);
-    //     }
-    //   })
-    //   .catch(error => {
-    //     alert(error.response.data);
-    //   });
+    saveRelease(release)
+      .then(response => {
+        if (response.status === 200) {
+          alert("Opprettet!");
+        } else {
+          console.log(response.statusText);
+        }
+      })
+      .catch(error => {
+        alert(error.response.data);
+      });
   };
 
   handleCancel = () => {
     window.location = "http://localhost:3000/";
   };
 
-  handleClickProductVersion = event => {
-    const currentTarget = event.currentTarget;
-    this.setState({ anchorEl: currentTarget, openMenu: true }, () =>
-      this.validateProductVersion()
-    );
-  };
-
-  handleCloseProductVersion = event => {
+  handleOnChangeProductVersion = event => {
     const newProductVersionId = event.currentTarget.id;
-    const newProductVersionLabel = event.currentTarget.textContent;
+    const newProductVersionLabel = event.target.value;
     this.setState(
       {
         selectedProductVersionId: newProductVersionId,
-        selectedProductVersionLabel: newProductVersionLabel,
-        anchorEl: null,
-        openMenu: false
+        selectedProductVersionLabel: newProductVersionLabel
       },
       () => this.validateProductVersion()
     );
+  };
+
+  handleCloseProductVersions = () => {
+    this.setState({ open: false });
+  };
+
+  handleOpenProductVersions = () => {
+    this.setState({ open: true });
   };
 
   handleOnChangeTitle = result => {
@@ -221,12 +220,14 @@ class ReleaseEditorScreen extends Component {
     this.setState({ isPublic: !this.state.isPublic });
   };
 
-  validateTitle = input => {
+  validateTitle = () => {
+    const newTitle = this.state.title;
     // prettier-ignore
-    if (input === "") {
+    if (newTitle === "") {
       this.setState(
         { titleIsError: true, titleErrorMsg: "Felt kan ikke være tomt" },
         () => {
+          console.log(this.state.titleErrorMsg)
           this.validateSubmit();
         }
       );
@@ -249,7 +250,7 @@ class ReleaseEditorScreen extends Component {
       this.setState(
         {
           releaseNotesIsError: true,
-          releaseNoteErrorMsg: "Du må ihvertfall velge en"
+          releaseNoteErrorMsg: "Du må ihvertfall velge en Release Note"
         },
         () => {
           this.validateSubmit();
@@ -314,17 +315,34 @@ class ReleaseEditorScreen extends Component {
           >
             Avbryt
           </CancelButton>
-          <SelectProductVersion
-            aria-controls="customized-menu"
-            aria-haspopup="true"
-            variant="contained"
-            onClick={this.handleClickProductVersion}
-            endIcon={<ArrowDropDown />}
-          >
-            {this.state.selectedProductVersionLabel === ""
-              ? "Product"
-              : this.state.selectedProductVersionLabel}
-          </SelectProductVersion>
+          <ErrorMsgContainer>
+            <span>{this.state.releaseNoteErrorMsg}</span>
+          </ErrorMsgContainer>
+          <StyledFormControl error={this.state.productVersionIsError}>
+            <InputLabel id="product-version-error-label">Produkt</InputLabel>
+            <Select
+              labelId="product-version-error-label"
+              id="product-version-error-label"
+              value={this.state.selectedProductVersionLabel}
+              onChange={this.handleOnChangeProductVersion}
+              open={this.state.open}
+              onClose={this.handleCloseProductVersions}
+              onOpen={this.handleOpenProductVersions}
+            >
+              {this.state.productVersions.map(productVersion => (
+                <MenuItem
+                  id={productVersion.id}
+                  key={productVersion.product.name}
+                  value={
+                    productVersion.product.name + " - " + productVersion.version
+                  }
+                >
+                  {productVersion.product.name + " - " + productVersion.version}
+                </MenuItem>
+              ))}
+            </Select>
+            <FormHelperText>{this.state.productVersionErrorMsg}</FormHelperText>
+          </StyledFormControl>
           <FormControlLabel
             style={{ marginLeft: "15px" }}
             control={
@@ -338,27 +356,6 @@ class ReleaseEditorScreen extends Component {
             }
             label="Publisert"
           />
-          <Menu
-            id="customized-menu"
-            anchorEl={this.state.anchorEl}
-            keepMounted
-            open={this.state.openMenu}
-            onClose={this.handleCloseProductVersion}
-          >
-            {this.state.productVersions.map(productVersion => (
-              <MenuItem
-                id={productVersion.id}
-                key={productVersion.product.name}
-                onClick={this.handleCloseProductVersion}
-              >
-                <ListItemText
-                  primary={
-                    productVersion.product.name + " - " + productVersion.version
-                  }
-                />
-              </MenuItem>
-            ))}
-          </Menu>
         </ButtonToolbar>
         <FlexContainer>
           {this.state.isLoaded ? (
@@ -366,17 +363,22 @@ class ReleaseEditorScreen extends Component {
               onBeforeCapture={this.onBeforeCapture}
               onDragEnd={this.onDragEnd}
             >
-              <Column
-                isRelease={true}
-                styleSheet={this.releaseStyle}
-                key={this.state.allItems.release.id}
-                id={this.state.allItems.release.id}
-                title={this.state.allItems.release.name}
-                releaseNotes={this.state.allItems.release.list}
-                noteWidth={this.state.noteWidth}
-                handleRemoveReleaseNote={this.handleRemoveReleaseNote}
-                handleOnChangeTitle={this.handleOnChangeTitle}
-              />
+              <ReleaseContainer>
+                <TitleTextField
+                  handleOnChangeTitle={this.handleOnChangeTitle}
+                  error={this.state.titleIsError}
+                  helperText={this.state.titleErrorMsg}
+                />
+                <Column
+                  isRelease={true}
+                  key={this.state.allItems.release.id}
+                  id={this.state.allItems.release.id}
+                  title={this.state.allItems.release.name}
+                  releaseNotes={this.state.allItems.release.list}
+                  noteWidth={this.state.noteWidth}
+                  handleRemoveReleaseNote={this.handleRemoveReleaseNote}
+                />
+              </ReleaseContainer>
               <VerticalDivider orientation={"vertical"} />
               <Column
                 isRelease={false}
@@ -398,8 +400,25 @@ class ReleaseEditorScreen extends Component {
 
 export default ReleaseEditorScreen;
 
-const SelectProductVersion = styled(Button)`
+const ErrorMsgContainer = styled.div`
+  margin-left: auto;
+  color: red;
+`;
+
+const ReleaseContainer = styled.div`
+  flex-basis: 80%;
+`;
+
+// const SelectProductVersion = styled(Button)`
+//   && {
+//     align-self: flex-end;
+//     margin-left: auto;
+//   }
+// `;
+
+const StyledFormControl = styled(FormControl)`
   && {
+    min-width: 7rem;
     align-self: flex-end;
     margin-left: auto;
   }
