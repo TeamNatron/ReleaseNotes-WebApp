@@ -1,7 +1,5 @@
-import React, { useState } from "react";
+import React from 'react';
 import { FormControl, Divider } from "@material-ui/core";
-
-import { EditorState } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import styled from "styled-components";

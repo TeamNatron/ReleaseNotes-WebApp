@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Container, Button, Box } from "@material-ui/core";
 import { PermIdentity, DesktopWindows, Description } from "@material-ui/icons";
 import PageContainer from "../shared/PageContainer";
@@ -13,8 +13,6 @@ import { fetchProducts } from "../../actions/productActions";
 import { fetchArticles } from "../../actions/articleActions";
 import styled from "styled-components";
 import { useHistory } from "react-router";
-import AdminReleaseNotesScreen from "./AdminReleaseNotesScreen";
-import { BrowserRouter as Route } from "react-router-dom";
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
@@ -88,13 +86,3 @@ const AdminScreen = () => {
 };
 
 export default AdminScreen;
-
-const StyledBox = styled(Box)`
-  & {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 24px 0;
-    min-height: 48px;
-  }
-`;

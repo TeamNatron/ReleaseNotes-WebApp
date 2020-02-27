@@ -6,13 +6,9 @@ import {
   Switch,
   FormControlLabel,
   Divider,
-  AppBar,
-  Toolbar,
   Typography,
   Tooltip,
   IconButton,
-  LinearProgress,
-  Fade
 } from "@material-ui/core";
 import styled from "styled-components";
 import ComposedEditorsView from "./ComposedEditorsView";
@@ -292,26 +288,9 @@ const SaveButton = styled(Button)`
   }
 `;
 
-const StyledToolbar = styled(Toolbar)`
-  justify-content: space-between;
-`;
-
 const CancelButton = styled(Button)`
   && {
     color: white;
     padding: 0 16px;
-  }
-`;
-const ToolbarWrapper = styled.div`
-  width: ${props => props.theme.contentWidth};
-  max-width: ${props => props.theme.contentWidth};
-  margin: auto;
-`;
-const BottomAppBar = styled(AppBar)`
-  & {
-    background-color: ${props => props.theme.mainColor} !important;
-    position: fixed;
-    top: auto !important;
-    bottom: 0 !important;
   }
 `;

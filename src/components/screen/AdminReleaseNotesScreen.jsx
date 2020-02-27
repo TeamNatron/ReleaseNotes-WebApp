@@ -7,7 +7,6 @@ import {
   IconButton,
   TableBody,
   TableRow,
-  Button,
   TableCell,
   TableContainer,
   Table,
@@ -19,10 +18,8 @@ import { green, red } from "@material-ui/core/colors";
 import { useHistory } from "react-router";
 
 const AdminReleaseNotesScreen = () => {
-  const [open, setOpen] = React.useState();
   //const releaseNotes = useSelector(state => state.releaseNotes.items);
   // dummy data
-
   const releaseNotes = [
     {
       workItemTitle: "Release Note 5",
@@ -133,27 +130,10 @@ const AdminReleaseNotesScreen = () => {
 };
 export default AdminReleaseNotesScreen;
 
-const AddButton = styled(Button)`
-  && {
-    align-self: end;
-    margin-left: auto;
-    margin-right: 2rem;
-  }
-`;
-
 const StyledTableCell = styled(TableCell)`
   width: 0;
 `;
 
-const TablePanel = styled.div`
-  display: flex;
-`;
-
 const EditButton = styled(Edit)`
   margin-left: auto;
-`;
-
-const ErrorLabel = styled.div`
-  text-align: center;
-  margin: 16px;
 `;
