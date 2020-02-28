@@ -38,7 +38,6 @@ const AdminExpansionPanel = props => {
         }
       : {}
   ];
-
   return (
     <React.Fragment>
       <Modal
