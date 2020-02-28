@@ -6,9 +6,7 @@ import { useHistory } from "react-router";
 const AdminExpansionPanelRoute = props => {
   const history = useHistory();
 
-  
   const handleAction = (action, id) => {
-    console.log(id);
     switch (action) {
       case "CREATE":
         history.push(props.createContentRoute);
@@ -29,7 +27,11 @@ const AdminExpansionPanelRoute = props => {
 
   return (
     <React.Fragment>
-      <AdminExpansionPanelBase onAction={handleAction} {...props} />
+      <AdminExpansionPanelBase
+        onAction={handleAction}
+        edit={Boolean(props.editContentRoute)}
+        {...props}
+      />
     </React.Fragment>
   );
 };

@@ -40,7 +40,9 @@ const Routes = () => {
         render={props => <EditReleaseNoteScreen {...props} />}
       />
       <Route path="/login/" exact component={LoginScreen} />
-      <Route path="/release/editor" exact component={ReleaseEditorScreen} />
+      <Route path="/admin/releases/create" exact component={ReleaseEditorScreen} />
+      <Route path="/admin/releases/edit/:id" exact component={ReleaseEditorScreen} />
+
     </React.Fragment>
   );
 };

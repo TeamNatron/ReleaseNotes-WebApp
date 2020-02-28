@@ -10,13 +10,16 @@ const AdminExpansionPanelModal = props => {
   const handleAction = action => {
     switch (action) {
       case "CREATE":
-        setComponentToRender(props.createContentComponent)
+        setComponentToRender(props.createContentComponent);
         break;
       case "EDIT":
-        setComponentToRender(props.editContentComponent)
+        setComponentToRender(props.editContentComponent);
         break;
       default:
-        console.table("Action not found.. please contact your local developer", action)
+        console.table(
+          "Action not found.. please contact your local developer",
+          action
+        );
     }
     setOpen(true);
   };
@@ -37,7 +40,11 @@ const AdminExpansionPanelModal = props => {
           <DialogContent>{componentToRender}</DialogContent>
         </Fade>
       </Modal>
-      <AdminExpansionPanelBase onAction={handleAction} {...props} />
+      <AdminExpansionPanelBase
+        onAction={handleAction}
+        edit={props.editContentComponent ? true : false}
+        {...props}
+      />
     </React.Fragment>
   );
 };

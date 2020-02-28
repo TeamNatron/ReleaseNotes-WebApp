@@ -9,7 +9,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { fetchProductVersions } from "../../actions/productVersionsActions";
 
-const ReleaseEditorScreen = () => {
+const ReleaseEditorScreen = props => {
+  const id = props.match.params.id;
   const dispatch = useDispatch();
   useEffect(() => {
     //TODO: Uncomment when implemented
@@ -17,15 +18,16 @@ const ReleaseEditorScreen = () => {
   }, []);
   useEffect(() => {
     dispatch(fetchProductVersions());
-  }, [])
+  }, [dispatch]);
   const handleSave = objectToSave => {
     //TODO: Uncomment when implemented
     //dispatch(createRelease(objectToSave))
   };
   const releaseNotesResource = useSelector(state => state.releaseNotes);
   const productVersionsResource = useSelector(state => state.productVersions);
-  console.log(productVersionsResource)
   const history = useHistory();
+
+  const loadedContent = useSelector(state => state.articles.items.find(a => a.id == id))
 
   const handleCancel = () => {
     history.goBack();

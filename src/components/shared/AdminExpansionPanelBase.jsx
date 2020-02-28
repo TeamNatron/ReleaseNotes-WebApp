@@ -21,7 +21,7 @@ const AdminExpansionPanelBase = props => {
   const columns = [
     { id: "avatar", label: "", maxWidth: 20 },
     { id: "name", label: "Name", minWidth: 100 },
-    props.editContentComponent
+    props.edit
       ? {
           id: "button",
           label: "",
@@ -87,7 +87,7 @@ const AdminExpansionPanelBase = props => {
                             </StyledTableCell>
                           );
                         } else if (column.id === "button") {
-                          return props.editContentComponent ? (
+                          return props.edit ? (
                             <StyledTableCell>
                               <IconButton
                                 onClick={() => props.onAction("EDIT", row.id)}
