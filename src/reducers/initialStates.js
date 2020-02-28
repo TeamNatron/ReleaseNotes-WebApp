@@ -15,3 +15,9 @@ export const releaseNotes = {
   items: [],
   error: null
 };
+
+export const releaseNote = {
+  pending: false,
+  item: {},
+  error: null
+};

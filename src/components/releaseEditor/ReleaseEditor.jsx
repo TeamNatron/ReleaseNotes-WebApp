@@ -134,7 +134,7 @@ class ReleaseEditor extends Component {
       isPublic: this.state.isPublic,
       releaseNotesIds: this.state.allItems.release.list.map(rn => rn.id)
     };
-    this.props.onSave(release)
+    this.props.onSave(release);
   };
 
   handleOnChangeProductVersion = event => {
@@ -245,8 +245,8 @@ class ReleaseEditor extends Component {
   render() {
     return (
       <React.Fragment>
-        
-        {this.props.productVersionsResource && this.props.releaseNotesResource ? (
+        {this.props.productVersionsResource &&
+        this.props.releaseNotesResource ? (
           // make sure props are not undefined
 
           <React.Fragment>

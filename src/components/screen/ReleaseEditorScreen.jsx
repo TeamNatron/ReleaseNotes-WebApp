@@ -7,16 +7,18 @@ import SpacedDivider from "../shared/SpacedDivider";
 import ReleaseEditor from "../releaseEditor/ReleaseEditor";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router";
+import { fetchAllReleaseNotes } from "../../actions/releaseNoteActions";
 
 const ReleaseEditorScreen = () => {
   const dispatch = useDispatch();
   useEffect(() => {
+    console.log("asdasdsadsadsad");
     //TODO: Uncomment when implemented
-    //dispatch(fetchReleaseNotes());
-  });
+    dispatch(fetchAllReleaseNotes());
+  }, [dispatch]);
   const handleSave = objectToSave => {
     //TODO: Uncomment when implemented
-    //dispatch(createRelease(objectToSave))
+    //dispatch(createRelease(objectToSave));
   };
   const releaseNotesResource = useSelector(state => state.releaseNotes);
   const productVersionsResource = useSelector(state => state.productVersions);

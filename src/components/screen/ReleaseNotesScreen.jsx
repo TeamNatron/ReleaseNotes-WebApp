@@ -16,11 +16,7 @@ import {
   MenuItem
 } from "@material-ui/core";
 import styled from "styled-components";
-import {
-  LocalOffer,
-  CalendarToday,
-  Sort
-} from "@material-ui/icons";
+import { LocalOffer, CalendarToday, Sort } from "@material-ui/icons";
 import Ingress from "../shared/Ingress";
 import { fetchArticles } from "../../actions/articleActions";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,10 +24,10 @@ import { useLocation } from "react-router";
 import articleParameters, { sortKeys } from "../../articleParameters";
 
 const ReleaseNotesScreen = props => {
-  const [anchorEl, setAnchorEl] = React.useState(null)
+  const [anchorEl, setAnchorEl] = React.useState(null);
   let query = useQuery();
   const dispatch = useDispatch();
-  const productId = query.get("product")
+  const productId = query.get("product");
 
   // https://blog.bitsrc.io/using-react-redux-hooks-97654aff01e4
   // Query trick https://reacttraining.com/react-router/web/example/query-parameters
@@ -42,12 +38,12 @@ const ReleaseNotesScreen = props => {
 
   function handleSortByNewest() {
     dispatch(fetchArticles(articleParameters(productId, sortKeys.NEWEST)));
-    handleSortMenuClose()
+    handleSortMenuClose();
   }
 
   function handleSortByOldest() {
     dispatch(fetchArticles(articleParameters(productId, sortKeys.OLDEST)));
-    handleSortMenuClose()
+    handleSortMenuClose();
   }
 
   const handleSortBtnClick = event => {

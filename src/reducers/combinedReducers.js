@@ -1,10 +1,12 @@
-import {combineReducers} from 'redux'
-import {articlesReducer} from './articlesReducer'
-import { productsReducer } from './productsReducer'
+import { combineReducers } from "redux";
+import { articlesReducer } from "./articlesReducer";
+import { productsReducer } from "./productsReducer";
+import { releaseNotesReducer } from "./releaseNoteReducer";
 
 export default combineReducers({
-    //example1: example1Reducer,
-    //example2: example2Reducer,
-    articles: articlesReducer,
-    products: productsReducer,
-})
+  //example1: example1Reducer,
+  //example2: example2Reducer,
+  articles: articlesReducer,
+  products: productsReducer,
+  releasenotes: releaseNotesReducer
+});
