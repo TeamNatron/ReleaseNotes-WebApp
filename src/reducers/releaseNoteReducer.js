@@ -72,16 +72,9 @@ function doUpdateItem(state, action) {
 function releaseNoteReducer(state, action) {
   switch (action.type) {
     case PUT_RELEASENOTE_PENDING:
-    case FETCH_RELEASENOTE_PENDING:
       return update(state, {
         pending: { $set: true },
         item: { $merge: { id: parseInt(action.id) } }
-      });
-    case FETCH_ALL_RELEASENOTES_PENDING:
-      return update(state, {
-        pending: { $set: true }
-        // fetch all har ingen param
-        //item: { $merge: { id: parseInt(action.id) } }
       });
     case FETCH_RELEASENOTE_SUCCESS:
       return update(state, {
@@ -96,15 +89,7 @@ function releaseNoteReducer(state, action) {
         error: { $set: null },
         updated: { $set: Date.now() }
       });
-    case FETCH_ALL_RELEASENOTES_SUCCESS:
-      return update(state, {
-        pending: { $set: false },
-        item: { $set: action.payload },
-        error: { $set: null },
-        updated: { $set: Date.now() }
-      });
     case PUT_RELEASENOTE_ERROR:
-    case FETCH_ALL_RELEASENOTES_ERROR:
     case FETCH_RELEASENOTE_ERROR:
       return update(state, {
         pending: { $set: false },

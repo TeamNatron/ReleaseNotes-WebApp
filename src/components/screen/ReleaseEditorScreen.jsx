@@ -20,7 +20,7 @@ const ReleaseEditorScreen = () => {
 
   useEffect(() => {
     dispatch(fetchProductVersions());
-  }, []);
+  }, [dispatch]);
 
   const handleSave = objectToSave => {
     dispatch(createRelease(objectToSave));

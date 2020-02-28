@@ -21,6 +21,7 @@ import PropTypes from "prop-types";
 class ReleaseEditor extends Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.handleRemoveReleaseNote = this.handleRemoveReleaseNote.bind(this);
     console.log(this.props);
     this.state = {

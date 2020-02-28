@@ -93,7 +93,7 @@ export const actions = {
     };
   },
 
-  fetchAllReleaseNotesSucces(response) {
+  fetchAllReleaseNotesSuccess(response) {
     console.log("this is the fetch all release notes success");
     return {
       type: FETCH_ALL_RELEASENOTES_SUCCESS,
