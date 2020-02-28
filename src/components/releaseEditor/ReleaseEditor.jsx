@@ -134,7 +134,7 @@ class ReleaseEditor extends Component {
       isPublic: this.state.isPublic,
       releaseNotesIds: this.state.allItems.release.list.map(rn => rn.id)
     };
-    this.props.onSave(release)
+    this.props.onSave(release);
   };
 
   handleOnChangeProductVersion = event => {
@@ -245,119 +245,117 @@ class ReleaseEditor extends Component {
   render() {
     return (
       <React.Fragment>
-        
-        {this.props.productVersionsResource && this.props.releaseNotesResource ? (
+        {this.props.productVersionsResource ? (
           // make sure props are not undefined
-
-          <React.Fragment>
-            <ButtonToolbar>
-              <SaveButton
-                disabled={this.state.submitDisabled}
-                variant="contained"
-                onClick={this.handleSave}
+          <ButtonToolbar>
+            <SaveButton
+              disabled={this.state.submitDisabled}
+              variant="contained"
+              onClick={this.handleSave}
+            >
+              Opprett
+            </SaveButton>
+            <CancelButton
+              color="secondary"
+              variant="contained"
+              onClick={this.props.onCancel}
+            >
+              Avbryt
+            </CancelButton>
+            <ErrorMsgContainer>
+              <span>{this.state.releaseNoteErrorMsg}</span>
+            </ErrorMsgContainer>
+            <StyledFormControl error={this.state.productVersionIsError}>
+              <InputLabel id="product-version-error-label">Produkt</InputLabel>
+              <Select
+                labelId="product-version-error-label"
+                id="product-version-error-label"
+                value={this.state.selectedProductVersionLabel}
+                onChange={this.handleOnChangeProductVersion}
+                open={this.state.open}
+                onClose={this.handleCloseProductVersions}
+                onOpen={this.handleOpenProductVersions}
+                disabled={this.props.productVersionsResource.pending}
               >
-                Opprett
-              </SaveButton>
-              <CancelButton
-                color="secondary"
-                variant="contained"
-                onClick={this.props.onCancel}
-              >
-                Avbryt
-              </CancelButton>
-              <ErrorMsgContainer>
-                <span>{this.state.releaseNoteErrorMsg}</span>
-              </ErrorMsgContainer>
-              <StyledFormControl error={this.state.productVersionIsError}>
-                <InputLabel id="product-version-error-label">
-                  Produkt
-                </InputLabel>
-                <Select
-                  labelId="product-version-error-label"
-                  id="product-version-error-label"
-                  value={this.state.selectedProductVersionLabel}
-                  onChange={this.handleOnChangeProductVersion}
-                  open={this.state.open}
-                  onClose={this.handleCloseProductVersions}
-                  onOpen={this.handleOpenProductVersions}
-                  disabled={this.props.productVersionsResource.pending}
-                >
-                  {!this.props.productVersionsResource.pending &&
-                    this.props.productVersionsResource.items.map(
-                      productVersion => (
-                        <MenuItem
-                          id={productVersion.id}
-                          key={productVersion.product.name}
-                          value={
-                            productVersion.product.name +
-                            " - " +
-                            productVersion.version
-                          }
-                        >
-                          {productVersion.product.name +
-                            " - " +
-                            productVersion.version}
-                        </MenuItem>
-                      )
-                    )}
-                </Select>
-                <FormHelperText>
-                  {this.state.productVersionErrorMsg}
-                </FormHelperText>
-              </StyledFormControl>
-              <FormControlLabel
-                style={{ marginLeft: "15px" }}
-                control={
-                  <Switch
-                    checked={this.state.isPublic}
-                    onChange={this.handleChangeIsPublic}
-                    value={this.state.isPublic}
-                    color="primary"
-                    inputProps={{ "aria-label": "primary checkbox" }}
-                  />
-                }
-                label="Publisert"
-              />
-            </ButtonToolbar>
-
-            <FlexContainer>
-              <DragDropContext
-                onBeforeCapture={this.onBeforeCapture}
-                onDragEnd={this.onDragEnd}
-              >
-                <ReleaseContainer>
-                  <TitleTextField
-                    handleOnChangeTitle={this.handleOnChangeTitle}
-                    error={this.state.titleIsError}
-                    helperText={this.state.titleErrorMsg}
-                  />
-                  <Column
-                    isRelease={true}
-                    key={this.state.allItems.release.id}
-                    id={this.state.allItems.release.id}
-                    title={this.state.allItems.release.name}
-                    releaseNotes={this.state.allItems.release.list}
-                    noteWidth={this.state.noteWidth}
-                    handleRemoveReleaseNote={this.handleRemoveReleaseNote}
-                  />
-                </ReleaseContainer>
-                <VerticalDivider orientation={"vertical"} />
-                <Column
-                  isRelease={false}
-                  styleSheet={this.releaseNoteStyle}
-                  key={this.state.allItems.releaseNotes.id}
-                  id={this.state.allItems.releaseNotes.id}
-                  title={this.state.allItems.releaseNotes.name}
-                  releaseNotes={this.state.allItems.releaseNotes.list}
+                {!this.props.productVersionsResource.pending &&
+                  this.props.productVersionsResource.items.map(
+                    productVersion => (
+                      <MenuItem
+                        id={productVersion.id}
+                        key={productVersion.product.name}
+                        value={
+                          productVersion.product.name +
+                          " - " +
+                          productVersion.version
+                        }
+                      >
+                        {productVersion.product.name +
+                          " - " +
+                          productVersion.version}
+                      </MenuItem>
+                    )
+                  )}
+              </Select>
+              <FormHelperText>
+                {this.state.productVersionErrorMsg}
+              </FormHelperText>
+            </StyledFormControl>
+            <FormControlLabel
+              style={{ marginLeft: "15px" }}
+              control={
+                <Switch
+                  checked={this.state.isPublic}
+                  onChange={this.handleChangeIsPublic}
+                  value={this.state.isPublic}
+                  color="primary"
+                  inputProps={{ "aria-label": "primary checkbox" }}
                 />
-              </DragDropContext>
-            </FlexContainer>
-          </React.Fragment>
+              }
+              label="Publisert"
+            />
+          </ButtonToolbar>
+        ) : (
+          <React.Fragment />
+        )}
+
+        {this.props.releaseNotesResource ? (
+          <FlexContainer>
+            <DragDropContext
+              onBeforeCapture={this.onBeforeCapture}
+              onDragEnd={this.onDragEnd}
+            >
+              <ReleaseContainer>
+                <TitleTextField
+                  handleOnChangeTitle={this.handleOnChangeTitle}
+                  error={this.state.titleIsError}
+                  helperText={this.state.titleErrorMsg}
+                />
+                <Column
+                  isRelease={true}
+                  key={this.state.allItems.release.id}
+                  id={this.state.allItems.release.id}
+                  title={this.state.allItems.release.name}
+                  releaseNotes={this.state.allItems.release.list}
+                  noteWidth={this.state.noteWidth}
+                  handleRemoveReleaseNote={this.handleRemoveReleaseNote}
+                />
+              </ReleaseContainer>
+              <VerticalDivider orientation={"vertical"} />
+              <Column
+                isRelease={false}
+                styleSheet={this.releaseNoteStyle}
+                key={this.state.allItems.releaseNotes.id}
+                id={this.state.allItems.releaseNotes.id}
+                title={this.state.allItems.releaseNotes.name}
+                releaseNotes={this.state.allItems.releaseNotes.list}
+              />
+            </DragDropContext>
+          </FlexContainer>
         ) : (
           <React.Fragment />
         )}
       </React.Fragment>
-    );
+)
   }
 }
 
