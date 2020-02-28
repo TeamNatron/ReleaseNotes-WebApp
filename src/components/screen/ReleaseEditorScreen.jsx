@@ -4,17 +4,16 @@ import PageContainer from "../shared/PageContainer";
 import ScreenTitle from "../shared/ScreenTitle";
 import Ingress from "../shared/Ingress";
 import SpacedDivider from "../shared/SpacedDivider";
-import ReleaseEditor from "./ReleaseEditor";
+import ReleaseEditor from "../releaseEditor/ReleaseEditor";
 import { useSelector, useDispatch } from "react-redux";
-//import { fetchReleaseNotes } from "../../actions/releaseNotesActions";
 
 const ReleaseEditorScreen = () => {
-
   const dispatch = useDispatch();
   useEffect(() => {
     //dispatch(fetchReleaseNotes());
   });
-  const releaseNotes = useSelector(state => state.releaseNotes);
+  const releaseNotesResource = useSelector(state => state.releaseNotes);
+  const productVersionsResource = useSelector(state => state.productVersions);
 
   return (
     <StyledPageContainer>
@@ -22,7 +21,10 @@ const ReleaseEditorScreen = () => {
       <Ingress gutterBottom>Redigering/Opprettelse av releases.</Ingress>
       <SpacedDivider />
 
-      <ReleaseEditor releaseNotes={releaseNotes} />
+      <ReleaseEditor
+        releaseNotesResource={releaseNotesResource}
+        productVersionsResource={productVersionsResource}
+      />
     </StyledPageContainer>
   );
 };
