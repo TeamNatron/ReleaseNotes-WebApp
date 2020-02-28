@@ -3,7 +3,7 @@ import styled from "styled-components";
 import PageContainer from "../shared/PageContainer";
 import Product from "../product/Product";
 import List from "@material-ui/core/List";
-import { ListItem, Container, CircularProgress } from "@material-ui/core";
+import { ListItem, Container } from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProducts } from "../../actions/productActions";
 
