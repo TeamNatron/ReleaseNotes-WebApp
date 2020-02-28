@@ -54,7 +54,6 @@ function releaseNoteReducer(state, action) {
   switch (action.type) {
     case PUT_RELEASENOTE_PENDING:
     case FETCH_RELEASENOTE_PENDING:
-      console.log("Fuck bitches ge tmoney ey");
       return update(state, {
         pending: { $set: true },
         item: { $merge: { id: parseInt(action.id) } }

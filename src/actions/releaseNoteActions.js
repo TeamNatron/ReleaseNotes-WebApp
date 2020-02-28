@@ -37,7 +37,6 @@ export function putReleaseNote(id, note) {
     dispatch(actions.putReleaseNotePending(id));
     return Axios.put("/releasenote/" + id, note)
       .then(response => {
-        console.log(response)
         dispatch(actions.putReleaseNoteSuccess(response.data, id));
       })
       .catch(error => {
