@@ -1,12 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {
-  Backdrop,
   ExpansionPanelSummary,
   ExpansionPanel,
-  DialogContent,
-  Modal,
-  Fade,
   Typography,
   Button,
   TableCell,
@@ -21,10 +17,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import styled from "styled-components";
 import { Edit } from "@material-ui/icons";
 
-const AdminExpansionPanel = props => {
-  const [open, setOpen] = React.useState();
-  const [modalContent, setModalContent] = React.useState();
-
+const AdminExpansionPanelBase = props => {
   const columns = [
     { id: "avatar", label: "", maxWidth: 20 },
     { id: "name", label: "Name", minWidth: 100 },
@@ -38,23 +31,9 @@ const AdminExpansionPanel = props => {
         }
       : {}
   ];
+
   return (
     <React.Fragment>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={open}
-        onClose={() => setOpen(false)}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500
-        }}
-      >
-        <Fade in={open}>
-          <DialogContent>{modalContent}</DialogContent>
-        </Fade>
-      </Modal>
       <ExpansionPanel>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
@@ -65,10 +44,7 @@ const AdminExpansionPanel = props => {
         </ExpansionPanelSummary>
         <TablePanel>
           <AddButton
-            onClick={() => {
-              setModalContent(props.createContentComponent);
-              setOpen(true);
-            }}
+            onClick={() => props.onAction("CREATE")}
             color="primary"
             variant="contained"
           >
@@ -114,10 +90,7 @@ const AdminExpansionPanel = props => {
                           return props.editContentComponent ? (
                             <StyledTableCell>
                               <IconButton
-                                onClick={() => {
-                                  setModalContent(props.editContentComponent);
-                                  setOpen(true);
-                                }}
+                                onClick={() => props.onAction("EDIT", row.id)}
                               >
                                 <EditButton fontSize="small" />
                               </IconButton>
@@ -150,14 +123,13 @@ const AdminExpansionPanel = props => {
   );
 };
 
-export default AdminExpansionPanel;
+export default AdminExpansionPanelBase;
 
-AdminExpansionPanel.propTypes = {
+AdminExpansionPanelBase.propTypes = {
   label: PropTypes.string,
   rows: PropTypes.array,
   icon: PropTypes.element,
-  createContentComponent: PropTypes.element,
-  editContentComponent: PropTypes.element
+  onAction: PropTypes.func
 };
 
 const AddButton = styled(Button)`

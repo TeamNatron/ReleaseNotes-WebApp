@@ -17,7 +17,7 @@ import styled from "styled-components";
 import { green, red } from "@material-ui/core/colors";
 import { useHistory } from "react-router";
 
-const AdminReleaseNotesScreen = () => {
+const AdminReleaseNotesScreenModal = () => {
   //const releaseNotes = useSelector(state => state.releaseNotes.items);
   // dummy data
   const releaseNotes = [
@@ -128,7 +128,7 @@ const AdminReleaseNotesScreen = () => {
     </PageContainer>
   );
 };
-export default AdminReleaseNotesScreen;
+export default AdminReleaseNotesScreenModal;
 
 const StyledTableCell = styled(TableCell)`
   width: 0;
