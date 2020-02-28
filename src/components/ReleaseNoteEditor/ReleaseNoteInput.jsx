@@ -6,16 +6,12 @@ import { Editor } from "react-draft-wysiwyg";
 import styled from "styled-components";
 
 const ReleaseNoteInput = props => {
-  function handleClearInput() {
-    props.onChange(EditorState.createEmpty());
-  }
 
   const onEditorChange = editorState => {
     props.onChange(editorState);
   };
 
   let editor = React.createRef();
-
   const focusEditor = () => {
     editor.current.focusEditor();
   };
