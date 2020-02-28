@@ -14,8 +14,6 @@ import {
   InputLabel,
   FormHelperText
 } from "@material-ui/core";
-import { getReleaseNotes } from "../../requests/releaseNote";
-import { getProductVersions } from "../../requests/productVersion";
 import { saveRelease } from "../../requests/release";
 import TitleTextField from "./TitleTextField";
 import PropTypes from "prop-types";
@@ -136,21 +134,7 @@ class ReleaseEditor extends Component {
       isPublic: this.state.isPublic,
       releaseNotesIds: this.state.allItems.release.list.map(rn => rn.id)
     };
-    saveRelease(release)
-      .then(response => {
-        if (response.status === 200) {
-          alert("Opprettet!");
-        } else {
-          console.log(response.statusText);
-        }
-      })
-      .catch(error => {
-        alert(error.response.data);
-      });
-  };
-
-  handleCancel = () => {
-    window.location = "http://localhost:3000/";
+    this.props.onSave(release)
   };
 
   handleOnChangeProductVersion = event => {
@@ -277,7 +261,7 @@ class ReleaseEditor extends Component {
               <CancelButton
                 color="secondary"
                 variant="contained"
-                onClick={this.handleCancel}
+                onClick={this.props.onCancel}
               >
                 Avbryt
               </CancelButton>
@@ -381,7 +365,9 @@ export default ReleaseEditor;
 
 ReleaseEditor.propTypes = {
   releaseNotesResource: PropTypes.object,
-  productVersionsResource: PropTypes.object
+  productVersionsResource: PropTypes.object,
+  onCancel: PropTypes.func,
+  onSave: PropTypes.func
 };
 
 const ErrorMsgContainer = styled.div`
@@ -428,12 +414,6 @@ const ButtonToolbar = styled.div`
   width: 100%;
   padding: 1rem;
   display: inline-flex;
-`;
-
-const StyledPageContainer = styled(PageContainer)`
-  && {
-    margin-top: 8rem;
-  }
 `;
 
 const FlexContainer = styled.div`
