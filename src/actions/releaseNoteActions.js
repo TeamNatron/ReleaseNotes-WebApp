@@ -93,6 +93,4 @@ export const actions = {
   }
 };
 
-// expmple thunk/axios action
-// https://github.com/axios/axios
-// https://github.com/reduxjs/redux-thunk
+
