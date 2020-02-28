@@ -7,6 +7,7 @@ export const DELETE = "DELETE";
 export const FETCH_RELEASENOTE_SUCCESS = "FETCH_RELEASENOTE_SUCCESS";
 export const FETCH_RELEASENOTE_PENDING = "FETCH_RELEASENOTE_PENDING";
 export const FETCH_RELEASENOTE_ERROR = "FETCH_RELEASENOTE_ERROR";
+
 export const FETCH_ALL_RELEASENOTES_SUCCESS = "FETCH_ALL_RELEASENOTES_SUCCESS";
 export const FETCH_ALL_RELEASENOTES_PENDING = "FETCH_ALL_RELEASENOTES_PENDING";
 export const FETCH_ALL_RELEASENOTES_ERROR = "FETCH_ALL_RELEASENOTES_ERROR";
@@ -44,9 +45,6 @@ export function fetchAllReleaseNotes() {
       })
       .catch(error => {
         actions.fetchAllReleaseNotesError(error);
-      })
-      .catch(error => {
-        actions.fetchReleaseNoteError(error, id);
       });
   };
 }
@@ -68,8 +66,6 @@ export const actions = {
   fetchReleaseNotePending(id) {
     return {
       type: FETCH_RELEASENOTE_PENDING,
-    return {
-      type: FETCH_RELEASENOTE_PENDING,
       id
     };
   },
@@ -86,29 +82,6 @@ export const actions = {
     return {
       type: FETCH_RELEASENOTE_ERROR,
       payload: error,
-      id
-    };
-  },
-
-  fetchReleaseNoteSuccess(response, id) {
-    return {
-      type: FETCH_RELEASENOTE_SUCCESS,
-      payload: response,
-  putReleaseNotePending(id) {
-    return {
-      type: PUT_RELEASENOTE_PENDING,
-      id
-    };
-  },
-
-  fetchReleaseNoteErNoteError(error, id) {
-    return {
-      type: FETCH_RELEASENOTE_ERROR,
-      payload: error,
-  putReleaseNoteSuccess(response, id) {
-    return {
-      type: PUT_RELEASENOTE_SUCCESS,
-      payload: response,
       id
     };
   },
@@ -133,11 +106,6 @@ export const actions = {
     return {
       type: FETCH_ALL_RELEASENOTES_ERROR,
       payload: error
-  putReleaseNoteError(error, id) {
-    return {
-      type: PUT_RELEASENOTE_ERROR,
-      payload: error,
-      id
     };
   },
 
@@ -164,7 +132,3 @@ export const actions = {
     };
   }
 };
-
-// expmple thunk/axios action
-// https://github.com/axios/axios
-// https://github.com/reduxjs/redux-thunk
