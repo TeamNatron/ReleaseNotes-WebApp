@@ -15,6 +15,13 @@ export const PUT_RELEASENOTE_SUCCESS = "PUT_RELEASENOTE_SUCCESS";
 export const PUT_RELEASENOTE_PENDING = "PUT_RELEASENOTE_PENDING";
 export const PUT_RELEASENOTE_ERROR = "PUT_RELEASENOTE_ERROR";
 
+export function updateArticle(payload) {
+  return {
+    type: UPDATE,
+    payload: payload
+  };
+}
+
 export function fetchReleaseNote(id) {
   return dispatch => {
     dispatch(actions.fetchReleaseNotePending(id));
@@ -37,6 +44,9 @@ export function fetchAllReleaseNotes() {
       })
       .catch(error => {
         actions.fetchAllReleaseNotesError(error);
+      })
+      .catch(error => {
+        actions.fetchReleaseNoteError(error, id);
       });
   };
 }
@@ -58,6 +68,8 @@ export const actions = {
   fetchReleaseNotePending(id) {
     return {
       type: FETCH_RELEASENOTE_PENDING,
+    return {
+      type: FETCH_RELEASENOTE_PENDING,
       id
     };
   },
@@ -70,10 +82,33 @@ export const actions = {
     };
   },
 
+  fetchReleaseNoteError(error, id) {
+    return {
+      type: FETCH_RELEASENOTE_ERROR,
+      payload: error,
+      id
+    };
+  },
+
+  fetchReleaseNoteSuccess(response, id) {
+    return {
+      type: FETCH_RELEASENOTE_SUCCESS,
+      payload: response,
+  putReleaseNotePending(id) {
+    return {
+      type: PUT_RELEASENOTE_PENDING,
+      id
+    };
+  },
+
   fetchReleaseNoteErNoteError(error, id) {
     return {
       type: FETCH_RELEASENOTE_ERROR,
       payload: error,
+  putReleaseNoteSuccess(response, id) {
+    return {
+      type: PUT_RELEASENOTE_SUCCESS,
+      payload: response,
       id
     };
   },
@@ -98,6 +133,11 @@ export const actions = {
     return {
       type: FETCH_ALL_RELEASENOTES_ERROR,
       payload: error
+  putReleaseNoteError(error, id) {
+    return {
+      type: PUT_RELEASENOTE_ERROR,
+      payload: error,
+      id
     };
   },
 

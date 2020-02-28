@@ -4,6 +4,12 @@ export const products = {
   error: null
 };
 
+export const productVersions = {
+  pending: false,
+  items: [],
+  error: null
+};
+
 export const articles = {
   pending: false,
   items: [],
@@ -19,5 +25,6 @@ export const releaseNotes = {
 export const releaseNote = {
   pending: false,
   item: {},
-  error: null
+  error: null,
+  updated: null
 };
