@@ -22,12 +22,12 @@ export function fetchArticles(queryParameters) {
 
   return dispatch => {
     dispatch(actions.fetchArticlesPending());
-    return Axios.get("/articles" + query)
+    return Axios.get("/releases" + query)
       .then(response => {
         dispatch(actions.fetchArticlesSuccess(response.data));
       })
       .catch(error => {
-        throw error;
+        dispatch(actions.fetchArticlesError(error))
       });
   };
 }

@@ -17,10 +17,14 @@ const Routes = () => {
       return response;
     },
     error => {
-      if (error.response.status === 401) {
-        history.push("/login");
+      if (error.response) {
+        if (error.response.status === 401) history.push("/login");
+      } else {
+        // Error.response blir undefined når der e cors feil/ukjent endpoint/ingen internett og sikkert meir.
+        // For en eller anna grunn blir ikkje errors catcha i Axios når ditta skjer
+        console.log("Error response is undefined.")
       }
-      return Promise.reject(error.response);
+      return Promise.reject(error);
     }
   );
   return (
@@ -40,9 +44,16 @@ const Routes = () => {
         render={props => <EditReleaseNoteScreen {...props} />}
       />
       <Route path="/login/" exact component={LoginScreen} />
-      <Route path="/admin/releases/create" exact component={ReleaseEditorScreen} />
-      <Route path="/admin/releases/edit/:id" exact component={ReleaseEditorScreen} />
-
+      <Route
+        path="/admin/releases/create"
+        exact
+        component={ReleaseEditorScreen}
+      />
+      <Route
+        path="/admin/releases/edit/:id"
+        exact
+        component={ReleaseEditorScreen}
+      />
     </React.Fragment>
   );
 };
