@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import Column from "./Column";
 import styled from "styled-components";
-import PageContainer from "../shared/PageContainer";
 import {
   Divider,
   Button,
@@ -14,7 +13,6 @@ import {
   InputLabel,
   FormHelperText
 } from "@material-ui/core";
-import { saveRelease } from "../../requests/release";
 import TitleTextField from "./TitleTextField";
 import PropTypes from "prop-types";
 import BottomToolbar from "../shared/BottomToolbar";
@@ -23,17 +21,27 @@ class ReleaseEditor extends Component {
   constructor(props) {
     super(props);
     this.handleRemoveReleaseNote = this.handleRemoveReleaseNote.bind(this);
+
+    // assert default values to avoid crash
+    const release = props.release
+      ? props.release
+      : ReleaseEditor.defaultProps.release;
+    const productVersion = release.productVersion
+      ? release.productVersion
+      : { product: {} };
+
+    console.log(release.isPublic);
     this.state = {
       open: false,
       titleIsError: true,
       releaseNotesIsError: true,
       productVersionIsError: true,
       submitDisabled: true,
-      isPublic: false,
-      title: "",
+      isPublic: release.isPublic,
+      title: release.title,
       productVersions: [],
-      selectedProductVersionLabel: "",
-      selectedProductVersionId: "",
+      selectedProductVersionLabel: productVersion.product.name,
+      selectedProductVersionId: productVersion.version,
       allItems: {
         release: {
           id: "release",
@@ -54,9 +62,13 @@ class ReleaseEditor extends Component {
       this.setState(prevState => {
         const newAllItems = prevState.allItems;
         newAllItems.release.list = this.props.release.releaseNotes;
+        console.table("received new release", this.props.release.isPublic);
         return {
           title: this.props.release.title,
-          allItems: newAllItems
+          allItems: newAllItems,
+          isPublic: this.props.release.isPublic,
+          selectedProductVersionLabel: this.props.productVersion.product.name,
+          selectedProductVersionId: this.props.productVersion.version
         };
       });
     }
@@ -64,6 +76,7 @@ class ReleaseEditor extends Component {
       prevProps.releaseNotesResource !== this.props.releaseNotesResource &&
       this.props.releaseNotesResource
     ) {
+      console.table("received new releaseNotes", this.props.release.isPublic);
       this.setState(prevState => {
         const newAllItems = prevState.allItems;
         newAllItems.releaseNotes.list = this.props.releaseNotesResource.items;
@@ -157,7 +170,7 @@ class ReleaseEditor extends Component {
       productVersionId: this.state.selectedProductVersionId,
       title: this.state.title,
       isPublic: this.state.isPublic,
-      releaseNotesIds: this.state.allItems.release.list.map(rn => rn.id)
+      releaseNotesId: this.state.allItems.release.list.map(rn => rn.id)
     };
     this.props.onSave(release);
   };
@@ -268,7 +281,6 @@ class ReleaseEditor extends Component {
   };
 
   render() {
-    console.log(this.props);
     return (
       <React.Fragment>
         <BottomToolbar
@@ -304,11 +316,11 @@ class ReleaseEditor extends Component {
               Lagre
             </SaveButton>
           ]}
-          middle={
+          middle={[
             <ErrorMsgContainer>
               <span>{this.state.releaseNoteErrorMsg}</span>
             </ErrorMsgContainer>
-          }
+          ]}
         />
 
         {this.props.productVersionsResource ? (
@@ -356,6 +368,7 @@ class ReleaseEditor extends Component {
             >
               <ReleaseContainer>
                 <TitleTextField
+                  value={this.state.title}
                   handleOnChangeTitle={this.handleOnChangeTitle}
                   error={this.state.titleIsError}
                   helperText={this.state.titleErrorMsg}
@@ -390,6 +403,10 @@ class ReleaseEditor extends Component {
 }
 
 export default ReleaseEditor;
+
+ReleaseEditor.defaultProps = {
+  release: { productVersion: { product: {} } }
+};
 
 ReleaseEditor.propTypes = {
   releaseNotesResource: PropTypes.object,
