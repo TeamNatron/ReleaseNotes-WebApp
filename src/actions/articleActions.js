@@ -8,9 +8,9 @@ export const FETCH_ARTICLES_SUCCESS = "FETCH_ARTICLES_SUCCESS";
 export const FETCH_ARTICLES_PENDING = "FETCH_ARTICLES_PENDING";
 export const FETCH_ARTICLES_ERROR = "FETCH_ARTICLES_ERROR";
 
-export const CREATE_RELEASE_PENDING = "CREATE_RELEASE_PENDING";
-export const CREATE_RELEASE_SUCCESS = "CREATE_RELEASE_SUCCESS";
-export const CREATE_RELEASE_ERROR = "CREATE_RELEASE_ERROR";
+export const SAVE_RELEASE_PENDING = "CREATE_RELEASE_PENDING";
+export const SAVE_RELEASE_SUCCESS = "CREATE_RELEASE_SUCCESS";
+export const SAVE_RELEASE_ERROR = "CREATE_RELEASE_ERROR";
 
 export function fetchArticles(queryParameters) {
   var query = "";
@@ -27,38 +27,52 @@ export function fetchArticles(queryParameters) {
         dispatch(actions.fetchArticlesSuccess(response.data));
       })
       .catch(error => {
-        dispatch(actions.fetchArticlesError(error))
+        dispatch(actions.fetchArticlesError(error));
       });
   };
 }
 
 export function createRelease(releaseToCreate) {
   return dispatch => {
-    dispatch(actions.createReleasePending());
+    dispatch(actions.saveReleasePending());
     return Axios.post("releases", releaseToCreate)
       .then(response => {
-        dispatch(actions.createReleaseSuccess());
+        dispatch(actions.saveReleaseSuccess());
       })
       .catch(error => {
-        dispatch(actions.createReleaseError(error));
+        dispatch(actions.saveReleaseError(error));
+      });
+  };
+}
+
+export function updateRelease(updatedFields, id) {
+  return dispatch => {
+    dispatch(actions.saveReleasePending());
+    return Axios.put("releases/" + id, updatedFields)
+      .then(response => {
+        dispatch(actions.saveReleaseSuccess(response));
+      })
+      .catch(error => {
+        dispatch(actions.saveReleaseError(error));
       });
   };
 }
 
 export const actions = {
-  createReleasePending() {
+  saveReleasePending() {
     return {
-      type: CREATE_RELEASE_PENDING
+      type: SAVE_RELEASE_PENDING
     };
   },
-  createReleaseSuccess() {
+  saveReleaseSuccess(response) {
     return {
-      type: CREATE_RELEASE_SUCCESS
+      type: SAVE_RELEASE_SUCCESS,
+      payload: response
     };
   },
-  createReleaseError(error) {
+  saveReleaseError(error) {
     return {
-      type: CREATE_RELEASE_ERROR,
+      type: SAVE_RELEASE_ERROR,
       payload: error
     };
   },

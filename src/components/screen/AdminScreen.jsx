@@ -73,8 +73,8 @@ const AdminScreen = () => {
           label="Releases"
           icon={<Description />}
           rows={releaseTitles}
-          createContentRoute="releases/create"
-          editContentRoute="releases/edit/:id"
+          createContentRoute="/admin/releases/create"
+          editContentRoute="/admin/releases/edit/:id"
         />
         <Button
           variant="contained"

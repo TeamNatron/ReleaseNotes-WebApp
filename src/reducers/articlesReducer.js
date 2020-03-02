@@ -2,9 +2,9 @@ import {
   FETCH_ARTICLES_PENDING,
   FETCH_ARTICLES_SUCCESS,
   FETCH_ARTICLES_ERROR,
-  CREATE_RELEASE_ERROR,
-  CREATE_RELEASE_PENDING,
-  CREATE_RELEASE_SUCCESS
+  SAVE_RELEASE_PENDING,
+  SAVE_RELEASE_SUCCESS,
+  SAVE_RELEASE_ERROR
 } from "../actions/articleActions";
 import { articles } from "./initialStates";
 import update from "immutability-helper";
@@ -30,15 +30,23 @@ export function articlesReducer(state = initialState, action) {
         error: { $set: action.payload }
       });
 
-    case CREATE_RELEASE_PENDING:
+    case SAVE_RELEASE_PENDING:
       return update(state, {
         pending: { $set: true }
       });
-    case CREATE_RELEASE_SUCCESS:
-      return update(state, {
-        pending: { $set: false }
-      });
-    case CREATE_RELEASE_ERROR:
+    case SAVE_RELEASE_SUCCESS:
+      const index = state.items.findIndex(item => item.id == action.payload.id);
+      if (index !== -1 || !index || !action.payload) {
+        return update(state, {
+          pending: { $set: false },
+          items: { [index]: { $set: action.payload } }
+        });
+      } else {
+        return update(state, {
+          pending: { $set: false }
+        });
+      }
+    case SAVE_RELEASE_ERROR:
       return update(state, {
         pending: { $set: false },
         error: { $set: action.payload }
