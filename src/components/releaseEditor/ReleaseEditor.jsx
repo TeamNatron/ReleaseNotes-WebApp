@@ -17,12 +17,12 @@ import {
 import { saveRelease } from "../../requests/release";
 import TitleTextField from "./TitleTextField";
 import PropTypes from "prop-types";
+import BottomToolbar from "../shared/BottomToolbar";
 
 class ReleaseEditor extends Component {
   constructor(props) {
     super(props);
     this.handleRemoveReleaseNote = this.handleRemoveReleaseNote.bind(this);
-    console.log(this.props);
     this.state = {
       open: false,
       titleIsError: true,
@@ -43,7 +43,7 @@ class ReleaseEditor extends Component {
         releaseNotes: {
           id: "releaseNotes",
           name: "Release Notes",
-          list: this.props.releaseNotes ? this.props.releaseNotes : []
+          list: props.releaseNotesResource.items
         }
       }
     };
@@ -245,61 +245,18 @@ class ReleaseEditor extends Component {
   render() {
     return (
       <React.Fragment>
-        {this.props.productVersionsResource ? (
-          // make sure props are not undefined
-          <ButtonToolbar>
-            <SaveButton
-              disabled={this.state.submitDisabled}
-              variant="contained"
-              onClick={this.handleSave}
-            >
-              Opprett
-            </SaveButton>
-            <CancelButton
+        <BottomToolbar
+          loading={this.props.releaseNotesResource.pending}
+          left={[
+            <Button
               color="secondary"
               variant="contained"
               onClick={this.props.onCancel}
             >
               Avbryt
-            </CancelButton>
-            <ErrorMsgContainer>
-              <span>{this.state.releaseNoteErrorMsg}</span>
-            </ErrorMsgContainer>
-            <StyledFormControl error={this.state.productVersionIsError}>
-              <InputLabel id="product-version-error-label">Produkt</InputLabel>
-              <Select
-                labelId="product-version-error-label"
-                id="product-version-error-label"
-                value={this.state.selectedProductVersionLabel}
-                onChange={this.handleOnChangeProductVersion}
-                open={this.state.open}
-                onClose={this.handleCloseProductVersions}
-                onOpen={this.handleOpenProductVersions}
-                disabled={this.props.productVersionsResource.pending}
-              >
-                {!this.props.productVersionsResource.pending &&
-                  this.props.productVersionsResource.items.map(
-                    productVersion => (
-                      <MenuItem
-                        id={productVersion.id}
-                        key={productVersion.product.name}
-                        value={
-                          productVersion.product.name +
-                          " - " +
-                          productVersion.version
-                        }
-                      >
-                        {productVersion.product.name +
-                          " - " +
-                          productVersion.version}
-                      </MenuItem>
-                    )
-                  )}
-              </Select>
-              <FormHelperText>
-                {this.state.productVersionErrorMsg}
-              </FormHelperText>
-            </StyledFormControl>
+            </Button>
+          ]}
+          right={[
             <FormControlLabel
               style={{ marginLeft: "15px" }}
               control={
@@ -312,8 +269,55 @@ class ReleaseEditor extends Component {
                 />
               }
               label="Publisert"
-            />
-          </ButtonToolbar>
+            />,
+            <SaveButton
+              disabled={this.state.submitDisabled}
+              variant="contained"
+              onClick={this.handleSave}
+            >
+              Lagre
+            </SaveButton>
+          ]}
+          middle={
+            <ErrorMsgContainer>
+              <span>{this.state.releaseNoteErrorMsg}</span>
+            </ErrorMsgContainer>
+          }
+        />
+
+        {this.props.productVersionsResource ? (
+          // make sure props are not undefined
+          <StyledFormControl error={this.state.productVersionIsError}>
+            <InputLabel id="product-version-error-label">Produkt</InputLabel>
+            <Select
+              labelId="product-version-error-label"
+              id="product-version-error-label"
+              value={this.state.selectedProductVersionLabel}
+              onChange={this.handleOnChangeProductVersion}
+              open={this.state.open}
+              onClose={this.handleCloseProductVersions}
+              onOpen={this.handleOpenProductVersions}
+              disabled={this.props.productVersionsResource.pending}
+            >
+              {!this.props.productVersionsResource.pending &&
+                this.props.productVersionsResource.items.map(productVersion => (
+                  <MenuItem
+                    id={productVersion.id}
+                    key={productVersion.product.name}
+                    value={
+                      productVersion.product.name +
+                      " - " +
+                      productVersion.version
+                    }
+                  >
+                    {productVersion.product.name +
+                      " - " +
+                      productVersion.version}
+                  </MenuItem>
+                ))}
+            </Select>
+            <FormHelperText>{this.state.productVersionErrorMsg}</FormHelperText>
+          </StyledFormControl>
         ) : (
           <React.Fragment />
         )}
@@ -332,8 +336,8 @@ class ReleaseEditor extends Component {
                 />
                 <Column
                   isRelease={true}
-                  id={this.state.allItems.release.id}
                   key={this.state.allItems.release.id}
+                  id={this.state.allItems.release.id}
                   title={this.state.allItems.release.name}
                   releaseNotes={this.state.allItems.release.list}
                   noteWidth={this.state.noteWidth}
@@ -386,25 +390,16 @@ const ReleaseContainer = styled.div`
 
 const StyledFormControl = styled(FormControl)`
   && {
+    margin-bottom: 1rem;
     min-width: 7rem;
-    align-self: flex-end;
-    margin-left: auto;
   }
 `;
 
 const SaveButton = styled(Button)`
   && {
-    background-color: green;
+    background-color: ${props => props.theme.secondaryColor};
     color: white;
-    align-self: flex-start;
-    margin-right: 1rem;
-  }
-`;
-
-const CancelButton = styled(Button)`
-  && {
-    color: white;
-    align-self: flex-start;
+    margin-left: 1rem;
   }
 `;
 
