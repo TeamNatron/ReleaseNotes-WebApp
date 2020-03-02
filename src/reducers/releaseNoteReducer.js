@@ -22,37 +22,34 @@ export function releaseNotesReducer(state = initialState, action) {
       return doUpdateItem(state, action);
     case FETCH_RELEASENOTE_ERROR:
       return doUpdateItem(state, action);
-
     case PUT_RELEASENOTE_PENDING:
       return doUpdateItem(state, action);
     case PUT_RELEASENOTE_SUCCESS:
       return doUpdateItem(state, action);
     case PUT_RELEASENOTE_ERROR:
       return doUpdateItem(state, action);
-
+    case FETCH_ALL_RELEASENOTES_PENDING:
+      return update(state, {
+        pending: { $set: true }
+      });
     case FETCH_ALL_RELEASENOTES_SUCCESS:
       return update(state, {
         pending: { $set: false },
         items: { $set: action.payload },
         error: { $set: null }
       });
-    case FETCH_ALL_RELEASENOTES_PENDING:
-      return update(state, {
-        pending: { $set: true }
-      });
     case FETCH_ALL_RELEASENOTES_ERROR:
       return update(state, {
         pending: { $set: false },
         error: { $set: action.payload }
       });
-
     default:
       return state;
   }
 }
 
 function doUpdateItem(state, action) {
-  const index = state.items.findIndex(r => r.item.id == action.id);
+  const index = state.items.findIndex(r => r.item.id === action.id);
   console.log("item with index " + index);
   if (index === -1) {
     return update(state, {

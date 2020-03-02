@@ -21,7 +21,6 @@ import PropTypes from "prop-types";
 class ReleaseEditor extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.handleRemoveReleaseNote = this.handleRemoveReleaseNote.bind(this);
     console.log(this.props);
     this.state = {
@@ -333,8 +332,8 @@ class ReleaseEditor extends Component {
                 />
                 <Column
                   isRelease={true}
-                  key={this.state.allItems.release.id}
                   id={this.state.allItems.release.id}
+                  key={this.state.allItems.release.id}
                   title={this.state.allItems.release.name}
                   releaseNotes={this.state.allItems.release.list}
                   noteWidth={this.state.noteWidth}
