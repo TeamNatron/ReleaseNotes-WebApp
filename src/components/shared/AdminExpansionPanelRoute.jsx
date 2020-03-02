@@ -30,6 +30,7 @@ const AdminExpansionPanelRoute = props => {
       <AdminExpansionPanelBase
         onAction={handleAction}
         edit={Boolean(props.editContentRoute)}
+        isPublic={true}
         {...props}
       />
     </React.Fragment>
