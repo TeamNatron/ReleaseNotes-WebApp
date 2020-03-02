@@ -39,11 +39,4 @@ describe("releaseNotes reducer", () => {
       error: null
     });
   });
-  /*
-  it("should ", () => {
-    expect(
-      releaseNotesReducer(undefined, actions.fetchReleaseNotePending())
-    ).toHaveProperty("items");
-  });
-  */
 });

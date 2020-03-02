@@ -13,7 +13,7 @@ import { releaseNotes, releaseNote } from "./initialStates";
 import update from "immutability-helper";
 
 const initialState = releaseNotes;
-// reducer for all release notes
+
 export function releaseNotesReducer(state = initialState, action) {
   switch (action.type) {
     case FETCH_RELEASENOTE_PENDING:
@@ -65,7 +65,6 @@ function doUpdateItem(state, action) {
   });
 }
 
-// reducer for a single release note
 function releaseNoteReducer(state, action) {
   switch (action.type) {
     case PUT_RELEASENOTE_PENDING:

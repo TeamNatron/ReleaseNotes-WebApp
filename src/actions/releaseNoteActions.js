@@ -87,14 +87,12 @@ export const actions = {
   },
 
   fetchAllReleaseNotesPending() {
-    console.log("this is the fetch all release notes pending");
     return {
       type: FETCH_ALL_RELEASENOTES_PENDING
     };
   },
 
   fetchAllReleaseNotesSuccess(response) {
-    console.log("this is the fetch all release notes success");
     return {
       type: FETCH_ALL_RELEASENOTES_SUCCESS,
       payload: response
@@ -102,7 +100,6 @@ export const actions = {
   },
 
   fetchAllReleaseNotesError(error) {
-    console.log("this is the fetch all release notes error");
     return {
       type: FETCH_ALL_RELEASENOTES_ERROR,
       payload: error
