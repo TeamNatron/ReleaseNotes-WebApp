@@ -49,6 +49,31 @@ class ReleaseEditor extends Component {
     };
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.release !== this.props.release && this.props.release) {
+      this.setState(prevState => {
+        const newAllItems = prevState.allItems;
+        newAllItems.release.list = this.props.release.releaseNotes;
+        return {
+          title: this.props.release.title,
+          allItems: newAllItems
+        };
+      });
+    }
+    if (
+      prevProps.releaseNotesResource !== this.props.releaseNotesResource &&
+      this.props.releaseNotesResource
+    ) {
+      this.setState(prevState => {
+        const newAllItems = prevState.allItems;
+        newAllItems.releaseNotes.list = this.props.releaseNotesResource.items;
+        return {
+          allItems: newAllItems
+        };
+      });
+    }
+  }
+
   onDragEnd = result => {
     const { destination, source } = result;
 
@@ -243,6 +268,7 @@ class ReleaseEditor extends Component {
   };
 
   render() {
+    console.log(this.props);
     return (
       <React.Fragment>
         <BottomToolbar
@@ -368,6 +394,12 @@ export default ReleaseEditor;
 ReleaseEditor.propTypes = {
   releaseNotesResource: PropTypes.object,
   productVersionsResource: PropTypes.object,
+
+  /**
+   * Optional release object to populate the editor
+   */
+  release: PropTypes.object,
+
   onCancel: PropTypes.func,
   onSave: PropTypes.func
 };

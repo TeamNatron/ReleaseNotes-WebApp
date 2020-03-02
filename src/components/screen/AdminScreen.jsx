@@ -22,11 +22,11 @@ const AdminScreen = () => {
   const history = useHistory();
   useEffect(() => {
     dispatch(fetchProducts());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchArticles());
-  }, []);
+  }, [dispatch]);
 
   const createData = (name, id) => {
     return { name, id };
@@ -73,8 +73,8 @@ const AdminScreen = () => {
           label="Releases"
           icon={<Description />}
           rows={releaseTitles}
-          createContentRoute="admin/releases/create"
-          editContentRoute="admin/releases/edit/:id"
+          createContentRoute="releases/create"
+          editContentRoute="releases/edit/:id"
         />
         <Button
           variant="contained"

@@ -44,6 +44,7 @@ const ReleaseEditorScreen = props => {
       <ReleaseEditor
         releaseNotesResource={releaseNotesResource}
         productVersionsResource={productVersionsResource}
+        release={loadedContent}
         onCancel={handleCancel}
         onSave={handleSave}
       />
