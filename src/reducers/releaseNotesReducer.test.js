@@ -18,7 +18,7 @@ describe("releaseNotes reducer", () => {
       releaseNotesReducer(
         undefined,
         actions.fetchAllReleaseNotesError("some error")
-      ).console.error
+      ).error
     ).toEqual("some error");
 
     expect(

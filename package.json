@@ -13,6 +13,7 @@
     "axios": "^0.19.2",
     "draft-js": "^0.11.4",
     "draftjs-to-html": "^0.9.1",
+    "expect": "^25.1.0",
     "html-to-draftjs": "^1.5.0",
     "immutability-helper": "^3.0.1",
     "immutable": "^4.0.0-rc.12",
