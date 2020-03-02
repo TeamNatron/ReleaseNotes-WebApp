@@ -332,8 +332,8 @@ class ReleaseEditor extends Component {
                 />
                 <Column
                   isRelease={true}
-                  key={this.state.allItems.release.id}
                   id={this.state.allItems.release.id}
+                  key={this.state.allItems.release.id}
                   title={this.state.allItems.release.name}
                   releaseNotes={this.state.allItems.release.list}
                   noteWidth={this.state.noteWidth}
@@ -355,7 +355,7 @@ class ReleaseEditor extends Component {
           <React.Fragment />
         )}
       </React.Fragment>
-)
+    );
   }
 }
 

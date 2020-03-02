@@ -8,20 +8,22 @@ import ReleaseEditor from "../releaseEditor/ReleaseEditor";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { fetchProductVersions } from "../../actions/productVersionsActions";
+import { createRelease } from "../../actions/articleActions";
+import { fetchAllReleaseNotes } from "../../actions/releaseNoteActions";
 
 const ReleaseEditorScreen = props => {
   const id = props.match.params.id;
   const dispatch = useDispatch();
   useEffect(() => {
     //TODO: Uncomment when implemented
-    //dispatch(fetchReleaseNotes());
-  }, []);
+    dispatch(fetchAllReleaseNotes());
+  }, [dispatch]);
+
   useEffect(() => {
     dispatch(fetchProductVersions());
   }, [dispatch]);
   const handleSave = objectToSave => {
-    //TODO: Uncomment when implemented
-    //dispatch(createRelease(objectToSave))
+    dispatch(createRelease(objectToSave));
   };
   const releaseNotesResource = useSelector(state => state.releaseNotes);
   const productVersionsResource = useSelector(state => state.productVersions);
