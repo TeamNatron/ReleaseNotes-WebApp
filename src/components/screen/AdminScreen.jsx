@@ -28,13 +28,14 @@ const AdminScreen = () => {
     dispatch(fetchArticles());
   }, [dispatch]);
 
-  const createData = (name, id) => {
-    return { name, id };
+  const createData = (name, id, isPublic) => {
+    return { name, id, isPublic };
   };
 
   const releaseTitles = useSelector(state =>
-    state.articles.items.map(a => createData(a.title, a.id))
+    state.articles.items.map(a => createData(a.title, a.id, a.release.isPublic))
   );
+
   const productTitles = useSelector(state =>
     state.products.items.map(p => createData(p.name, p.id))
   );
