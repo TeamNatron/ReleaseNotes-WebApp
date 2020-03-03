@@ -30,7 +30,6 @@ class ReleaseEditor extends Component {
       ? release.productVersion
       : { product: {} };
 
-    console.log(release.isPublic);
     this.state = {
       open: false,
       titleIsError: true,

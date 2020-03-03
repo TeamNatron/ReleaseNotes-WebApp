@@ -52,7 +52,6 @@ export function releaseNotesReducer(state = initialState, action) {
 
 function doUpdateItem(state, action) {
   const index = state.items.findIndex(r => r.item.id == action.id);
-  console.log("item with index " + index);
   if (index === -1) {
     return update(state, {
       items: {
