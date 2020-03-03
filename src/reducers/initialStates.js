@@ -17,14 +17,14 @@ export const articles = {
 };
 
 export const releaseNotes = {
-    pending: false,
-    items: [],
-    error: null
-}
+  pending: false,
+  items: [],
+  error: null
+};
 
 export const releaseNote = {
-    pending: false,
-    item: {},
-    error: null,
-    updated: null
-}
+  pending: false,
+  item: {},
+  error: null,
+  updated: null
+};
