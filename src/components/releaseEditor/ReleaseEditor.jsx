@@ -51,7 +51,7 @@ class ReleaseEditor extends Component {
         releaseNotes: {
           id: "releaseNotes",
           name: "Release Notes",
-          list: props.releaseNotesResource.items
+          list: props.releaseNotesResource ? props.releaseNotesResource.items : []
         }
       }
     };
