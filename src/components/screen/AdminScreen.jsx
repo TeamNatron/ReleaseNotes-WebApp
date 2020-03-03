@@ -16,6 +16,7 @@ import ReleaseEditorScreen from "./ReleaseEditorScreen";
 import AdminExpansionPanelModal from "../shared/AdminExpansionPanelModal";
 import AdminExpansionPanelBase from "../shared/AdminExpansionPanelBase";
 import AdminExpansionPanelRoute from "../shared/AdminExpansionPanelRoute";
+import { fetchReleases } from "../../slices/releaseSlice";
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
@@ -26,6 +27,10 @@ const AdminScreen = () => {
 
   useEffect(() => {
     dispatch(fetchArticles());
+  }, []);
+
+  useEffect(() => {
+    dispatch(fetchReleases());
   }, []);
 
   const createData = (name, id, isPublic) => {
