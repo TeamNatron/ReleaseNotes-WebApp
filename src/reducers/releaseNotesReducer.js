@@ -4,7 +4,10 @@ import {
   FETCH_RELEASENOTE_ERROR,
   PUT_RELEASENOTE_PENDING,
   PUT_RELEASENOTE_SUCCESS,
-  PUT_RELEASENOTE_ERROR
+  PUT_RELEASENOTE_ERROR,
+  FETCH_ALL_RELEASENOTES_PENDING,
+  FETCH_ALL_RELEASENOTES_SUCCESS,
+  FETCH_ALL_RELEASENOTES_ERROR
 } from "../actions/releaseNoteActions";
 import { releaseNotes, releaseNote } from "./initialStates";
 import update from "immutability-helper";
@@ -27,6 +30,21 @@ export function releaseNotesReducer(state = initialState, action) {
     case PUT_RELEASENOTE_ERROR:
       return doUpdateItem(state, action);
 
+    case FETCH_ALL_RELEASENOTES_PENDING:
+      return update(state, {
+        pending: { $set: true }
+      });
+    case FETCH_ALL_RELEASENOTES_SUCCESS:
+      return update(state, {
+        pending: { $set: false },
+        items: { $set: action.payload },
+        error: { $set: null }
+      });
+    case FETCH_ALL_RELEASENOTES_ERROR:
+      return update(state, {
+        pending: { $set: false },
+        error: { $set: action.payload }
+      });
     default:
       return state;
   }
@@ -34,7 +52,6 @@ export function releaseNotesReducer(state = initialState, action) {
 
 function doUpdateItem(state, action) {
   const index = state.items.findIndex(r => r.item.id == action.id);
-  console.log("item with index " + index);
   if (index === -1) {
     return update(state, {
       items: {

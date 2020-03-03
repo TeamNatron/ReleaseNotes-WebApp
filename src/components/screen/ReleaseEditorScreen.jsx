@@ -8,20 +8,30 @@ import ReleaseEditor from "../releaseEditor/ReleaseEditor";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { fetchProductVersions } from "../../actions/productVersionsActions";
+import { saveRelease, createRelease, updateRelease } from "../../actions/articleActions";
+import { fetchAllReleaseNotes } from "../../actions/releaseNoteActions";
 
 const ReleaseEditorScreen = props => {
   const id = props.match.params.id;
   const dispatch = useDispatch();
+
   useEffect(() => {
     //TODO: Uncomment when implemented
-    //dispatch(fetchReleaseNotes());
-  }, []);
+    dispatch(fetchAllReleaseNotes());
+  }, [dispatch]);
+
   useEffect(() => {
     dispatch(fetchProductVersions());
   }, [dispatch]);
+
   const handleSave = objectToSave => {
-    //TODO: Uncomment when implemented
-    //dispatch(createRelease(objectToSave))
+    // if screen has an id, a release is being updated 
+    // otherwise, a release is being created
+    if(id) {
+      dispatch(updateRelease(objectToSave, id));
+    } else {
+      dispatch(createRelease(objectToSave));
+    }
   };
   const releaseNotesResource = useSelector(state => state.releaseNotes);
   const productVersionsResource = useSelector(state => state.productVersions);
@@ -42,6 +52,7 @@ const ReleaseEditorScreen = props => {
       <ReleaseEditor
         releaseNotesResource={releaseNotesResource}
         productVersionsResource={productVersionsResource}
+        release={loadedContent}
         onCancel={handleCancel}
         onSave={handleSave}
       />

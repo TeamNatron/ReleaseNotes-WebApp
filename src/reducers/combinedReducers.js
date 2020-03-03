@@ -10,5 +10,5 @@ export default combineReducers({
   products: productsReducer,
   productVersions: productVersionsReducer,
   releaseNotes: releaseNotesReducer,
-  releases: releaseSlice.reducer
+  releases: releaseSlice
 });

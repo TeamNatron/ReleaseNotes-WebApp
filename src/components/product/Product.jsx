@@ -6,7 +6,7 @@ import {
   Grid,
   Paper,
   CardActionArea,
-  Grow,
+  Grow
 } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
 import styled from "styled-components";
@@ -14,11 +14,10 @@ import PropTypes from "prop-types";
 import { useHistory } from "react-router";
 
 const Product = props => {
-
   const history = useHistory();
 
   function handleClick() {
-    history.push("/releases?product=" + props.item.id)
+    history.push("/releases?product=" + props.item.id);
   }
 
   return (

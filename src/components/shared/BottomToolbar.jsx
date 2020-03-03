@@ -17,6 +17,7 @@ const BottomToolbar = props => {
       <ToolbarWrapper>
         <StyledToolbar disableGutters variant="dense">
           <div>{props.left}</div>
+          <div>{props.middle}</div>
           <div>{props.right}</div>
         </StyledToolbar>
       </ToolbarWrapper>
@@ -29,6 +30,7 @@ export default BottomToolbar;
 BottomToolbar.propTypes = {
   loading: PropTypes.bool,
   left: PropTypes.arrayOf(PropTypes.element),
+  middle: PropTypes.arrayOf(PropTypes.element),
   right: PropTypes.arrayOf(PropTypes.element)
 };
 

@@ -9,6 +9,7 @@ const TitleTextField = props => {
         variant="outlined"
         helperText={props.helperText}
         error={props.error}
+        value={props.value}
         onChange={props.handleOnChangeTitle}
         placeholder="Skriv en tittel"
       />
