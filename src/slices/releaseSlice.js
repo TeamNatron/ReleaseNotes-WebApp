@@ -3,25 +3,19 @@ import Axios from "axios";
 
 // First, define the reducer and action creators via `createSlice`
 export const releaseSlice = createSlice({
-  name: "releases",
-  initialState: { loading: false, error: "", items: [] },
+  name: " ",
+  initialState: { pending: false, error: "", items: [] },
   reducers: {
     releasesFetchPending(state, action) {
-      if (state.loading === false) {
-        state.loading = true;
-      }
+      state.pending = true;
     },
     releasesFetchSuccess(state, action) {
-      if (state.loading === true) {
-        state.loading = false;
-        state.items = action.payload;
-      }
+      state.pending = false;
+      state.items = action.payload;
     },
     releasesFetchError(state, action) {
-      if (state.loading === true) {
-        state.loading = false;
-        state.error = action.payload;
-      }
+      state.pending = false;
+      state.error = action.payload;
     },
     updateIsPublic: () => {
       // Send requests
@@ -42,7 +36,9 @@ export const {
 export const fetchReleases = () => async dispatch => {
   dispatch(releasesFetchPending());
   Axios.get("/releases")
-    .then(res => dispatch(releasesFetchSuccess(res.data)))
+    .then(res => {
+      dispatch(releasesFetchSuccess(res.data));
+    })
     .catch(err => dispatch(releasesFetchError(err)));
 };
 

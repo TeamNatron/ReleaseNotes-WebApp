@@ -38,7 +38,7 @@ const AdminScreen = () => {
   };
 
   const releaseTitles = useSelector(state =>
-    state.articles.items.map(a => createData(a.title, a.id, a.release.isPublic))
+    state.releases.items.map(r => createData(r.title, r.id, r.isPublic))
   );
 
   const productTitles = useSelector(state =>
