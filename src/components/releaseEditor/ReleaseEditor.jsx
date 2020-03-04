@@ -22,13 +22,8 @@ class ReleaseEditor extends Component {
     super(props);
     this.handleRemoveReleaseNote = this.handleRemoveReleaseNote.bind(this);
 
-    // assert default values to avoid crash
-    const release = props.release
-      ? props.release
-      : ReleaseEditor.defaultProps.release;
-    const productVersion = release.productVersion
-      ? release.productVersion
-      : { product: {} };
+    const release = props.release;
+    const productVersion = release?.productVersion;
 
     this.state = {
       open: false,
@@ -36,11 +31,11 @@ class ReleaseEditor extends Component {
       releaseNotesIsError: true,
       productVersionIsError: true,
       submitDisabled: true,
-      isPublic: release.isPublic,
-      title: release.title,
+      isPublic: release?.isPublic,
+      title: release?.title,
       productVersions: [],
-      selectedProductVersionLabel: productVersion.product.name,
-      selectedProductVersionId: productVersion.version,
+      selectedProductVersionLabel: productVersion?.product?.name,
+      selectedProductVersionId: productVersion?.version,
       allItems: {
         release: {
           id: "release",
@@ -50,7 +45,9 @@ class ReleaseEditor extends Component {
         releaseNotes: {
           id: "releaseNotes",
           name: "Release Notes",
-          list: props.releaseNotesResource ? props.releaseNotesResource.items : []
+          list: props.releaseNotesResource
+            ? props.releaseNotesResource
+            : []
         }
       }
     };
@@ -61,13 +58,13 @@ class ReleaseEditor extends Component {
       this.setState(prevState => {
         const newAllItems = prevState.allItems;
         newAllItems.release.list = this.props.release.releaseNotes;
-        console.table("received new release", this.props.release.isPublic);
+        console.table("received new release", this.props.release);
         return {
           title: this.props.release.title,
           allItems: newAllItems,
           isPublic: this.props.release.isPublic,
-          selectedProductVersionLabel: this.props.productVersion.product.name,
-          selectedProductVersionId: this.props.productVersion.version
+          selectedProductVersionLabel: this.props.release.productVersion.product.name,
+          selectedProductVersionId: this.props.release.productVersion.version
         };
       });
     }
@@ -75,10 +72,9 @@ class ReleaseEditor extends Component {
       prevProps.releaseNotesResource !== this.props.releaseNotesResource &&
       this.props.releaseNotesResource
     ) {
-      console.table("received new releaseNotes", this.props.release.isPublic);
       this.setState(prevState => {
         const newAllItems = prevState.allItems;
-        newAllItems.releaseNotes.list = this.props.releaseNotesResource.items;
+        newAllItems.releaseNotes.list = this.props.releaseNotesResource;
         return {
           allItems: newAllItems
         };
@@ -283,7 +279,7 @@ class ReleaseEditor extends Component {
     return (
       <React.Fragment>
         <BottomToolbar
-          loading={this.props.releaseNotesResource.pending}
+          loading={this.props.loading}
           left={[
             <Button
               color="secondary"
@@ -334,9 +330,9 @@ class ReleaseEditor extends Component {
               open={this.state.open}
               onClose={this.handleCloseProductVersions}
               onOpen={this.handleOpenProductVersions}
-              disabled={this.props.productVersionsResource.pending}
+              disabled={this.props.loading}
             >
-              {!this.props.productVersionsResource.pending &&
+              {!this.props.loading &&
                 this.props.productVersionsResource.items.map(productVersion => (
                   <MenuItem
                     id={productVersion.id}

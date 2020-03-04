@@ -2,8 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import AdminExpansionPanelBase from "./AdminExpansionPanelBase";
 import { useHistory } from "react-router";
-import { updateIsPublic } from "../../slices/releaseSlice";
 import { useDispatch } from "react-redux";
+import { putReleaseById } from "../../slices/releaseSlice";
 
 const AdminExpansionPanelRoute = props => {
   const history = useHistory();
@@ -20,7 +20,7 @@ const AdminExpansionPanelRoute = props => {
         break;
 
       case "UPDATE":
-        dispatch(updateIsPublic(id, isPublic));
+        dispatch(putReleaseById(id, {isPublic}));
         break;
 
       default:

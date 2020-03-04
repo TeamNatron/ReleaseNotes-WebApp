@@ -55,10 +55,10 @@ const EditReleaseNoteForm = props => {
 
   // initalize editors with loaded data
   useEffect(() => {
-    setTitle(createStateFromText(props.note.item.title));
-    setIngress(createStateFromText(props.note.item.ingress));
-    setDescription(createStateFromText(props.note.item.description));
-  }, [props.note.item]);
+    setTitle(createStateFromText(props.note.title));
+    setIngress(createStateFromText(props.note.ingress));
+    setDescription(createStateFromText(props.note.description));
+  }, [props.note]);
 
   // update the given editor
   const handleEditorChange = (source, editorState) => {
@@ -200,23 +200,23 @@ const EditReleaseNoteForm = props => {
                 <Box display="flex" alignItems="center">
                   <Box display="flex" alignItems="center">
                     <Assignment display="flex" fontSize="small" />
-                    Task {props.note.item.workItemId}
+                    Task {props.note.workItemId}
                   </Box>
                   <Box display="flex" alignItems="center" ml={2}>
-                    <Typography>{props.note.item.workItemTitle}</Typography>
+                    <Typography>{props.note.workItemTitle}</Typography>
                   </Box>
                   <Box display="flex" alignItems="center" ml={2}>
                     <Person fontSize="small" />
-                    {props.note.item.authorName}
+                    {props.note.authorName}
                   </Box>
                 </Box>
               </Box>
               <Divider />
               <Box m={3}>
-                {props.note.item.workItemDescriptionHtml ? (
+                {props.note.workItemDescriptionHtml ? (
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: props.note.item.workItemDescriptionHtml
+                      __html: props.note.workItemDescriptionHtml
                     }}
                   />
                 ) : (
