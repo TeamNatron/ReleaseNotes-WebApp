@@ -6,7 +6,7 @@ export const releaseSlice = createSlice({
   name: "releases",
   initialState: { pending: false, error: "", items: [] },
   reducers: {
-    getPending(state, action) {
+    getPending(state) {
       state.pending = true;
     },
     getSuccess(state, action) {
@@ -68,4 +68,5 @@ export const updateIsPublic = (id, isPublic) => async dispatch => {
     });
 };
 
+export default releaseSlice.reducer;
 // https://github.com/reduxjs/redux-toolkit/blob/master/docs/usage/usage-guide.md
