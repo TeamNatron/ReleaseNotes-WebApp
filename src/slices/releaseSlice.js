@@ -3,17 +3,17 @@ import Axios from "axios";
 
 // First, define the reducer and action creators via `createSlice`
 export const releaseSlice = createSlice({
-  name: " ",
+  name: "releases",
   initialState: { pending: false, error: "", items: [] },
   reducers: {
-    releasesFetchPending(state, action) {
+    getPending(state, action) {
       state.pending = true;
     },
-    releasesFetchSuccess(state, action) {
+    getSuccess(state, action) {
       state.pending = false;
       state.items = action.payload;
     },
-    releasesFetchError(state, action) {
+    getError(state, action) {
       state.pending = false;
       state.error = action.payload;
     },
@@ -26,18 +26,21 @@ export const releaseSlice = createSlice({
       state.items.find(obj => {
         if (obj.id == action.payload.id) {
           obj.isPublic = newValue;
-    }
+        }
       });
     },
     putIsPublicError: (state, action) => {
       state.pending = false;
       state.error = action.payload;
-  }
+    }
   }
 });
 
 // Destructure and export the plain action creators
 export const {
+  getPending,
+  getSuccess,
+  getError,
   putIsPublicPending,
   putIsPublicSuccess,
   putIsPublicError
@@ -45,9 +48,14 @@ export const {
 
 // Thunk for fetching
 export const fetchReleases = () => async dispatch => {
-  dispatch(releasesFetchPending());
+  dispatch(getPending());
   Axios.get("/releases")
     .then(res => {
+      dispatch(getSuccess(res.data));
+    })
+    .catch(err => dispatch(getError(err)));
+};
+
 // Thunk for updating isPublic
 export const updateIsPublic = (id, isPublic) => async dispatch => {
   dispatch(putIsPublicPending());
