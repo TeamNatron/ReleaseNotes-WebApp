@@ -13,7 +13,7 @@ import { fetchProducts } from "../../actions/productActions";
 import { useHistory } from "react-router";
 import AdminExpansionPanelModal from "../shared/AdminExpansionPanelModal";
 import AdminExpansionPanelRoute from "../shared/AdminExpansionPanelRoute";
-import { fetchReleases } from "../../slices/releasesSlice";
+import { fetchReleases } from "../../slices/releaseSlice";
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
@@ -26,12 +26,16 @@ const AdminScreen = () => {
     dispatch(fetchReleases());
   }, [dispatch]);
 
+  useEffect(() => {
+    dispatch(fetchReleases());
+  }, []);
+
   const createData = (name, id, isPublic) => {
     return { name, id, isPublic };
   };
 
   const releaseTitles = useSelector(state =>
-    state.releases.items.map(a => createData(a.title, a.id, a.isPublic))
+    state.releases.items.map(r => createData(r.title, r.id, r.isPublic))
   );
 
   const productTitles = useSelector(state =>
