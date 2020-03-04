@@ -4,6 +4,8 @@ trigger:
 pool:
   vmImage: 'ubuntu-16.04'
 
+variables:
+  npm_config_cache: $(Pipeline.Workspace)/cache
 
 steps: 
 - task: NodeTool@0
