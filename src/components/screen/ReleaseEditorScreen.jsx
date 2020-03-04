@@ -10,13 +10,13 @@ import { useHistory } from "react-router";
 import { fetchProductVersions } from "../../actions/productVersionsActions";
 import { saveRelease, createRelease, updateRelease } from "../../actions/articleActions";
 import { fetchAllReleaseNotes } from "../../actions/releaseNoteActions";
+import { fetchRelease } from "../../slices/releaseSlice";
 
 const ReleaseEditorScreen = props => {
   const id = props.match.params.id;
   const dispatch = useDispatch();
 
   useEffect(() => {
-    //TODO: Uncomment when implemented
     dispatch(fetchAllReleaseNotes());
   }, [dispatch]);
 
@@ -24,6 +24,9 @@ const ReleaseEditorScreen = props => {
     dispatch(fetchProductVersions());
   }, [dispatch]);
 
+  useEffect(() => {
+    dispatch(fetchRelease(id))
+  }, [dispatch, id])
   const handleSave = objectToSave => {
     // if screen has an id, a release is being updated 
     // otherwise, a release is being created
@@ -35,9 +38,10 @@ const ReleaseEditorScreen = props => {
   };
   const releaseNotesResource = useSelector(state => state.releaseNotes);
   const productVersionsResource = useSelector(state => state.productVersions);
-  const history = useHistory();
+  const loadedContent = useSelector(state => state.releases.items.find(a => a.id == id))
 
-  const loadedContent = useSelector(state => state.articles.items.find(a => a.id == id))
+
+  const history = useHistory();
 
   const handleCancel = () => {
     history.goBack();

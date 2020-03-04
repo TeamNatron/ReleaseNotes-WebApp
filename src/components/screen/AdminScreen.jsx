@@ -10,12 +10,10 @@ import AddProductForm from "../adminpanel/AddProductForm";
 import AdminExpansionPanel from "../shared/AdminExpansionPanelModal";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProducts } from "../../actions/productActions";
-import { fetchArticles } from "../../actions/articleActions";
 import { useHistory } from "react-router";
-import ReleaseEditorScreen from "./ReleaseEditorScreen";
 import AdminExpansionPanelModal from "../shared/AdminExpansionPanelModal";
-import AdminExpansionPanelBase from "../shared/AdminExpansionPanelBase";
 import AdminExpansionPanelRoute from "../shared/AdminExpansionPanelRoute";
+import { fetchReleases } from "../../slices/releasesSlice";
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
@@ -25,7 +23,7 @@ const AdminScreen = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchArticles());
+    dispatch(fetchReleases());
   }, [dispatch]);
 
   const createData = (name, id, isPublic) => {
@@ -33,7 +31,7 @@ const AdminScreen = () => {
   };
 
   const releaseTitles = useSelector(state =>
-    state.articles.items.map(a => createData(a.title, a.id, a.release.isPublic))
+    state.releases.items.map(a => createData(a.title, a.id, a.isPublic))
   );
 
   const productTitles = useSelector(state =>
