@@ -24,7 +24,6 @@ steps:
   displayName: Cache npm
 
 - script: npm ci
-  condition: ne(variables.CACHE_RESTORED, 'true')
   displayName: 'Install dependencies'
 
 - script: npm test -- --coverage --ci --reporters=default --reporters=jest-junit --coverageReporters=cobertura
