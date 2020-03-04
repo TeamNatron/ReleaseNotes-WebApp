@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Container, Button, Box } from "@material-ui/core";
+import { Container, Button } from "@material-ui/core";
 import { PermIdentity, DesktopWindows, Description } from "@material-ui/icons";
 import PageContainer from "../shared/PageContainer";
 import Ingress from "../shared/Ingress";
@@ -7,33 +7,36 @@ import ScreenTitle from "../shared/ScreenTitle";
 import SpacedDivider from "../shared/SpacedDivider";
 import AddUserForm from "../adminpanel/AddUserForm";
 import AddProductForm from "../adminpanel/AddProductForm";
-import AdminExpansionPanel from "../shared/AdminExpansionPanel";
+import AdminExpansionPanel from "../shared/AdminExpansionPanelModal";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProducts } from "../../actions/productActions";
 import { fetchArticles } from "../../actions/articleActions";
-import styled from "styled-components";
 import { useHistory } from "react-router";
+import ReleaseEditorScreen from "./ReleaseEditorScreen";
+import AdminExpansionPanelModal from "../shared/AdminExpansionPanelModal";
+import AdminExpansionPanelBase from "../shared/AdminExpansionPanelBase";
+import AdminExpansionPanelRoute from "../shared/AdminExpansionPanelRoute";
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   useEffect(() => {
     dispatch(fetchProducts());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchArticles());
-  }, []);
+  }, [dispatch]);
 
-  const createData = name => {
-    return { name };
+  const createData = (name, id) => {
+    return { name, id };
   };
 
   const releaseTitles = useSelector(state =>
-    state.articles.items.map(a => createData(a.title))
+    state.articles.items.map(a => createData(a.title, a.id))
   );
   const productTitles = useSelector(state =>
-    state.products.items.map(p => createData(p.name))
+    state.products.items.map(p => createData(p.name, p.id))
   );
 
   const handleEditReleaseNotes = () => {
@@ -59,19 +62,19 @@ const AdminScreen = () => {
           createContentComponent={<AddProductForm />}
           //editContentComponent={<AddProductForm />}
         />
-        <AdminExpansionPanel
+        <AdminExpansionPanelModal
           label="Brukere"
           icon={<PermIdentity />}
           rows={dummyUsers}
           createContentComponent={<AddUserForm />}
           //editContentComponent={<AddUserForm />}
         />
-        <AdminExpansionPanel
+        <AdminExpansionPanelRoute
           label="Releases"
           icon={<Description />}
           rows={releaseTitles}
-          //createContentComponent={<AddReleaseForm />}
-          //editContentComponent={<AddReleaseForm />}
+          createContentRoute="/admin/releases/create"
+          editContentRoute="/admin/releases/edit/:id"
         />
         <Button
           variant="contained"

@@ -8,6 +8,10 @@ export const FETCH_RELEASENOTE_SUCCESS = "FETCH_RELEASENOTE_SUCCESS";
 export const FETCH_RELEASENOTE_PENDING = "FETCH_RELEASENOTE_PENDING";
 export const FETCH_RELEASENOTE_ERROR = "FETCH_RELEASENOTE_ERROR";
 
+export const FETCH_ALL_RELEASENOTES_SUCCESS = "FETCH_ALL_RELEASENOTES_SUCCESS";
+export const FETCH_ALL_RELEASENOTES_PENDING = "FETCH_ALL_RELEASENOTES_PENDING";
+export const FETCH_ALL_RELEASENOTES_ERROR = "FETCH_ALL_RELEASENOTES_ERROR";
+
 export const PUT_RELEASENOTE_SUCCESS = "PUT_RELEASENOTE_SUCCESS";
 export const PUT_RELEASENOTE_PENDING = "PUT_RELEASENOTE_PENDING";
 export const PUT_RELEASENOTE_ERROR = "PUT_RELEASENOTE_ERROR";
@@ -28,6 +32,19 @@ export function fetchReleaseNote(id) {
       })
       .catch(error => {
         actions.fetchReleaseNoteError(error, id);
+      });
+  };
+}
+
+export function fetchAllReleaseNotes() {
+  return dispatch => {
+    dispatch(actions.fetchAllReleaseNotesPending());
+    return Axios.get("/releasenote")
+      .then(res => {
+        dispatch(actions.fetchAllReleaseNotesSuccess(res.data));
+      })
+      .catch(error => {
+        actions.fetchAllReleaseNotesError(error);
       });
   };
 }
@@ -69,6 +86,26 @@ export const actions = {
     };
   },
 
+  fetchAllReleaseNotesPending() {
+    return {
+      type: FETCH_ALL_RELEASENOTES_PENDING
+    };
+  },
+
+  fetchAllReleaseNotesSuccess(response) {
+    return {
+      type: FETCH_ALL_RELEASENOTES_SUCCESS,
+      payload: response
+    };
+  },
+
+  fetchAllReleaseNotesError(error) {
+    return {
+      type: FETCH_ALL_RELEASENOTES_ERROR,
+      payload: error
+    };
+  },
+
   putReleaseNotePending(id) {
     return {
       type: PUT_RELEASENOTE_PENDING,
@@ -92,5 +129,3 @@ export const actions = {
     };
   }
 };
-
-

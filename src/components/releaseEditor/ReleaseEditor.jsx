@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import Column from "./Column";
 import styled from "styled-components";
-import PageContainer from "../shared/PageContainer";
 import {
   Divider,
   Button,
@@ -14,26 +13,34 @@ import {
   InputLabel,
   FormHelperText
 } from "@material-ui/core";
-import { saveRelease } from "../../requests/release";
 import TitleTextField from "./TitleTextField";
 import PropTypes from "prop-types";
+import BottomToolbar from "../shared/BottomToolbar";
 
 class ReleaseEditor extends Component {
   constructor(props) {
     super(props);
     this.handleRemoveReleaseNote = this.handleRemoveReleaseNote.bind(this);
-    console.log(this.props);
+
+    // assert default values to avoid crash
+    const release = props.release
+      ? props.release
+      : ReleaseEditor.defaultProps.release;
+    const productVersion = release.productVersion
+      ? release.productVersion
+      : { product: {} };
+
     this.state = {
       open: false,
       titleIsError: true,
       releaseNotesIsError: true,
       productVersionIsError: true,
       submitDisabled: true,
-      isPublic: false,
-      title: "",
+      isPublic: release.isPublic,
+      title: release.title,
       productVersions: [],
-      selectedProductVersionLabel: "",
-      selectedProductVersionId: "",
+      selectedProductVersionLabel: productVersion.product.name,
+      selectedProductVersionId: productVersion.version,
       allItems: {
         release: {
           id: "release",
@@ -43,10 +50,40 @@ class ReleaseEditor extends Component {
         releaseNotes: {
           id: "releaseNotes",
           name: "Release Notes",
-          list: this.props.releaseNotes ? this.props.releaseNotes : []
+          list: props.releaseNotesResource ? props.releaseNotesResource.items : []
         }
       }
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.release !== this.props.release && this.props.release) {
+      this.setState(prevState => {
+        const newAllItems = prevState.allItems;
+        newAllItems.release.list = this.props.release.releaseNotes;
+        console.table("received new release", this.props.release.isPublic);
+        return {
+          title: this.props.release.title,
+          allItems: newAllItems,
+          isPublic: this.props.release.isPublic,
+          selectedProductVersionLabel: this.props.productVersion.product.name,
+          selectedProductVersionId: this.props.productVersion.version
+        };
+      });
+    }
+    if (
+      prevProps.releaseNotesResource !== this.props.releaseNotesResource &&
+      this.props.releaseNotesResource
+    ) {
+      console.table("received new releaseNotes", this.props.release.isPublic);
+      this.setState(prevState => {
+        const newAllItems = prevState.allItems;
+        newAllItems.releaseNotes.list = this.props.releaseNotesResource.items;
+        return {
+          allItems: newAllItems
+        };
+      });
+    }
   }
 
   onDragEnd = result => {
@@ -132,7 +169,7 @@ class ReleaseEditor extends Component {
       productVersionId: this.state.selectedProductVersionId,
       title: this.state.title,
       isPublic: this.state.isPublic,
-      releaseNotesIds: this.state.allItems.release.list.map(rn => rn.id)
+      releaseNotesId: this.state.allItems.release.list.map(rn => rn.id)
     };
     this.props.onSave(release);
   };
@@ -245,61 +282,18 @@ class ReleaseEditor extends Component {
   render() {
     return (
       <React.Fragment>
-        {this.props.productVersionsResource ? (
-          // make sure props are not undefined
-          <ButtonToolbar>
-            <SaveButton
-              disabled={this.state.submitDisabled}
-              variant="contained"
-              onClick={this.handleSave}
-            >
-              Opprett
-            </SaveButton>
-            <CancelButton
+        <BottomToolbar
+          loading={this.props.releaseNotesResource.pending}
+          left={[
+            <Button
               color="secondary"
               variant="contained"
               onClick={this.props.onCancel}
             >
               Avbryt
-            </CancelButton>
-            <ErrorMsgContainer>
-              <span>{this.state.releaseNoteErrorMsg}</span>
-            </ErrorMsgContainer>
-            <StyledFormControl error={this.state.productVersionIsError}>
-              <InputLabel id="product-version-error-label">Produkt</InputLabel>
-              <Select
-                labelId="product-version-error-label"
-                id="product-version-error-label"
-                value={this.state.selectedProductVersionLabel}
-                onChange={this.handleOnChangeProductVersion}
-                open={this.state.open}
-                onClose={this.handleCloseProductVersions}
-                onOpen={this.handleOpenProductVersions}
-                disabled={this.props.productVersionsResource.pending}
-              >
-                {!this.props.productVersionsResource.pending &&
-                  this.props.productVersionsResource.items.map(
-                    productVersion => (
-                      <MenuItem
-                        id={productVersion.id}
-                        key={productVersion.product.name}
-                        value={
-                          productVersion.product.name +
-                          " - " +
-                          productVersion.version
-                        }
-                      >
-                        {productVersion.product.name +
-                          " - " +
-                          productVersion.version}
-                      </MenuItem>
-                    )
-                  )}
-              </Select>
-              <FormHelperText>
-                {this.state.productVersionErrorMsg}
-              </FormHelperText>
-            </StyledFormControl>
+            </Button>
+          ]}
+          right={[
             <FormControlLabel
               style={{ marginLeft: "15px" }}
               control={
@@ -312,8 +306,55 @@ class ReleaseEditor extends Component {
                 />
               }
               label="Publisert"
-            />
-          </ButtonToolbar>
+            />,
+            <SaveButton
+              disabled={this.state.submitDisabled}
+              variant="contained"
+              onClick={this.handleSave}
+            >
+              Lagre
+            </SaveButton>
+          ]}
+          middle={[
+            <ErrorMsgContainer>
+              <span>{this.state.releaseNoteErrorMsg}</span>
+            </ErrorMsgContainer>
+          ]}
+        />
+
+        {this.props.productVersionsResource ? (
+          // make sure props are not undefined
+          <StyledFormControl error={this.state.productVersionIsError}>
+            <InputLabel id="product-version-error-label">Produkt</InputLabel>
+            <Select
+              labelId="product-version-error-label"
+              id="product-version-error-label"
+              value={this.state.selectedProductVersionLabel}
+              onChange={this.handleOnChangeProductVersion}
+              open={this.state.open}
+              onClose={this.handleCloseProductVersions}
+              onOpen={this.handleOpenProductVersions}
+              disabled={this.props.productVersionsResource.pending}
+            >
+              {!this.props.productVersionsResource.pending &&
+                this.props.productVersionsResource.items.map(productVersion => (
+                  <MenuItem
+                    id={productVersion.id}
+                    key={productVersion.product.name}
+                    value={
+                      productVersion.product.name +
+                      " - " +
+                      productVersion.version
+                    }
+                  >
+                    {productVersion.product.name +
+                      " - " +
+                      productVersion.version}
+                  </MenuItem>
+                ))}
+            </Select>
+            <FormHelperText>{this.state.productVersionErrorMsg}</FormHelperText>
+          </StyledFormControl>
         ) : (
           <React.Fragment />
         )}
@@ -326,6 +367,7 @@ class ReleaseEditor extends Component {
             >
               <ReleaseContainer>
                 <TitleTextField
+                  value={this.state.title}
                   handleOnChangeTitle={this.handleOnChangeTitle}
                   error={this.state.titleIsError}
                   helperText={this.state.titleErrorMsg}
@@ -355,15 +397,25 @@ class ReleaseEditor extends Component {
           <React.Fragment />
         )}
       </React.Fragment>
-)
+    );
   }
 }
 
 export default ReleaseEditor;
 
+ReleaseEditor.defaultProps = {
+  release: { productVersion: { product: {} } }
+};
+
 ReleaseEditor.propTypes = {
   releaseNotesResource: PropTypes.object,
   productVersionsResource: PropTypes.object,
+
+  /**
+   * Optional release object to populate the editor
+   */
+  release: PropTypes.object,
+
   onCancel: PropTypes.func,
   onSave: PropTypes.func
 };
@@ -386,25 +438,16 @@ const ReleaseContainer = styled.div`
 
 const StyledFormControl = styled(FormControl)`
   && {
+    margin-bottom: 1rem;
     min-width: 7rem;
-    align-self: flex-end;
-    margin-left: auto;
   }
 `;
 
 const SaveButton = styled(Button)`
   && {
-    background-color: green;
+    background-color: ${props => props.theme.secondaryColor};
     color: white;
-    align-self: flex-start;
-    margin-right: 1rem;
-  }
-`;
-
-const CancelButton = styled(Button)`
-  && {
-    color: white;
-    align-self: flex-start;
+    margin-left: 1rem;
   }
 `;
 
