@@ -2,11 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import AdminExpansionPanelBase from "./AdminExpansionPanelBase";
 import { useHistory } from "react-router";
+import { updateIsPublic } from "../../slices/releaseSlice";
+import { useDispatch } from "react-redux";
 
 const AdminExpansionPanelRoute = props => {
   const history = useHistory();
+  const dispatch = useDispatch();
 
-  const handleAction = (action, id) => {
+  const handleAction = (action, id, isPublic) => {
     switch (action) {
       case "CREATE":
         history.push(props.createContentRoute);
@@ -14,6 +17,10 @@ const AdminExpansionPanelRoute = props => {
 
       case "EDIT":
         history.push(props.editContentRoute.replace(":id", id));
+        break;
+
+      case "UPDATE":
+        dispatch(updateIsPublic(id, isPublic));
         break;
 
       default:

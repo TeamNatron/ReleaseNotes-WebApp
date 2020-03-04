@@ -17,19 +17,30 @@ export const releaseSlice = createSlice({
       state.pending = false;
       state.error = action.payload;
     },
-    updateIsPublic: () => {
-      // Send requests
-      // Modify state of specific release
-      // Handle error
+    putIsPublicPending: state => {
+      state.pending = true;
+    },
+    putIsPublicSuccess: (state, action) => {
+      state.pending = false;
+      const newValue = action.payload.data.isPublic;
+      state.items.find(obj => {
+        if (obj.id == action.payload.id) {
+          obj.isPublic = newValue;
     }
+      });
+    },
+    putIsPublicError: (state, action) => {
+      state.pending = false;
+      state.error = action.payload;
+  }
   }
 });
 
 // Destructure and export the plain action creators
 export const {
-  releasesFetchPending,
-  releasesFetchSuccess,
-  releasesFetchError
+  putIsPublicPending,
+  putIsPublicSuccess,
+  putIsPublicError
 } = releaseSlice.actions;
 
 // Thunk for fetching
@@ -37,9 +48,16 @@ export const fetchReleases = () => async dispatch => {
   dispatch(releasesFetchPending());
   Axios.get("/releases")
     .then(res => {
-      dispatch(releasesFetchSuccess(res.data));
+// Thunk for updating isPublic
+export const updateIsPublic = (id, isPublic) => async dispatch => {
+  dispatch(putIsPublicPending());
+  Axios.put("/releases/" + id, { isPublic: isPublic })
+    .then(res => {
+      dispatch(putIsPublicSuccess({ id: id, data: res.data }));
     })
-    .catch(err => dispatch(releasesFetchError(err)));
+    .catch(err => {
+      dispatch(putIsPublicError(err));
+    });
 };
 
 // https://github.com/reduxjs/redux-toolkit/blob/master/docs/usage/usage-guide.md
