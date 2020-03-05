@@ -26,6 +26,8 @@ steps:
 - script: npm ci
   displayName: 'Install dependencies'
 
+- script: npm ci
+- script: npm run build
 - script: npm test -- --coverage --ci --reporters=default --reporters=jest-junit --coverageReporters=cobertura
   env:
     CI: true
