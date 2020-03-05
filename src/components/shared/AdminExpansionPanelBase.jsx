@@ -11,7 +11,8 @@ import {
   TableHead,
   TableRow,
   TableBody,
-  IconButton
+  IconButton,
+  Switch
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import styled from "styled-components";
@@ -21,6 +22,12 @@ const AdminExpansionPanelBase = props => {
   const columns = [
     { id: "avatar", label: "", maxWidth: 20 },
     { id: "name", label: "Name", minWidth: 100 },
+    props.isPublic
+      ? {
+          id: "isPublicSwitch",
+          label: "Publisert"
+        }
+      : {},
     props.edit
       ? {
           id: "button",
@@ -84,6 +91,26 @@ const AdminExpansionPanelBase = props => {
                               ) : (
                                 <React.Fragment />
                               )}
+                            </StyledTableCell>
+                          );
+                        } else if (column.id === "isPublicSwitch") {
+                          return (
+                            <StyledTableCell>
+                              <Switch
+                                color="primary"
+                                value={row.isPublic}
+                                checked={row.isPublic}
+                                onChange={() =>
+                                  props.onAction(
+                                    "UPDATE",
+                                    row.id,
+                                    !row.isPublic
+                                  )
+                                }
+                                inputProps={{
+                                  "aria-label": "primary checkbox"
+                                }}
+                              />
                             </StyledTableCell>
                           );
                         } else if (column.id === "button") {
