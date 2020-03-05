@@ -10,11 +10,8 @@ import AddProductForm from "../adminpanel/AddProductForm";
 import AdminExpansionPanel from "../shared/AdminExpansionPanelModal";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProducts } from "../../actions/productActions";
-import { fetchArticles } from "../../actions/articleActions";
 import { useHistory } from "react-router";
-import ReleaseEditorScreen from "./ReleaseEditorScreen";
 import AdminExpansionPanelModal from "../shared/AdminExpansionPanelModal";
-import AdminExpansionPanelBase from "../shared/AdminExpansionPanelBase";
 import AdminExpansionPanelRoute from "../shared/AdminExpansionPanelRoute";
 import { fetchReleases } from "../../slices/releaseSlice";
 
@@ -26,7 +23,7 @@ const AdminScreen = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchArticles());
+    dispatch(fetchReleases());
   }, [dispatch]);
 
   useEffect(() => {

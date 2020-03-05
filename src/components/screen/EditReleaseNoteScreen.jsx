@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import EditReleaseNoteForm from "../ReleaseNoteEditor/EditReleaseNoteForm";
-import { Box, LinearProgress, Zoom } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import { useHistory } from "react-router";
-import {
-  putReleaseNote,
-  fetchReleaseNote
-} from "../../actions/releaseNoteActions";
 import { useDispatch, useSelector } from "react-redux";
 import PageContainer from "../shared/PageContainer";
+import { fetchReleaseNoteById, putReleaseNote } from "../../slices/releaseNoteSlice";
 
 const EditReleaseNoteScreen = props => {
   const id = props.match.params.id;
@@ -15,12 +12,12 @@ const EditReleaseNoteScreen = props => {
   const dispatch = useDispatch();
 
   const note = useSelector(state =>
-    state.releaseNotes.items.find(r => r.item.id == id)
+    state.releaseNotes.items.find(r => r.id == id)
   );
 
   useEffect(() => {
     if (!note) {
-      dispatch(fetchReleaseNote(id));
+      dispatch(fetchReleaseNoteById(id));
     }
   }, []);
 

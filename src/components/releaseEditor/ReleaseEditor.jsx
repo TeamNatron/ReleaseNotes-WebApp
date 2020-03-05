@@ -16,31 +16,27 @@ import {
 import TitleTextField from "./TitleTextField";
 import PropTypes from "prop-types";
 import BottomToolbar from "../shared/BottomToolbar";
+import shortid from "shortid";
 
 class ReleaseEditor extends Component {
   constructor(props) {
     super(props);
     this.handleRemoveReleaseNote = this.handleRemoveReleaseNote.bind(this);
 
-    // assert default values to avoid crash
-    const release = props.release
-      ? props.release
-      : ReleaseEditor.defaultProps.release;
-    const productVersion = release.productVersion
-      ? release.productVersion
-      : { product: {} };
-
+    const release = props.release;
+    const productVersion = release?.productVersion;
+    const isError = release ? false : true;
     this.state = {
       open: false,
-      titleIsError: true,
-      releaseNotesIsError: true,
-      productVersionIsError: true,
+      titleIsError: isError,
+      releaseNotesIsError: isError,
+      productVersionIsError: isError,
       submitDisabled: true,
-      isPublic: release.isPublic,
-      title: release.title,
+      isPublic: release?.isPublic,
+      title: release?.title,
       productVersions: [],
-      selectedProductVersionLabel: productVersion.product.name,
-      selectedProductVersionId: productVersion.version,
+      selectedProductVersionLabel: productVersion?.product?.name,
+      selectedProductVersionId: productVersion?.version,
       allItems: {
         release: {
           id: "release",
@@ -50,39 +46,51 @@ class ReleaseEditor extends Component {
         releaseNotes: {
           id: "releaseNotes",
           name: "Release Notes",
-          list: props.releaseNotesResource ? props.releaseNotesResource.items : []
+          list: props.releaseNotesResource ? props.releaseNotesResource : []
         }
       }
     };
+    this.validateSubmit();
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.release !== this.props.release && this.props.release) {
-      this.setState(prevState => {
-        const newAllItems = prevState.allItems;
-        newAllItems.release.list = this.props.release.releaseNotes;
-        console.table("received new release", this.props.release.isPublic);
-        return {
-          title: this.props.release.title,
-          allItems: newAllItems,
-          isPublic: this.props.release.isPublic,
-          selectedProductVersionLabel: this.props.productVersion.product.name,
-          selectedProductVersionId: this.props.productVersion.version
-        };
-      });
+      this.setState(
+        prevState => {
+          const newAllItems = prevState.allItems;
+          newAllItems.release.list = this.props.release.releaseNotes;
+          const selectedVersion =
+            this.props.release.productVersion?.product?.name +
+            " - " +
+            this.props.release.productVersion.version;
+          return {
+            title: this.props.release.title,
+            allItems: newAllItems,
+            isPublic: this.props.release.isPublic,
+            selectedProductVersionLabel: selectedVersion,
+            selectedProductVersionId: this.props.release.productVersion?.id
+          };
+        },
+        () => {
+          this.validateTitle();
+          this.validateProductVersion();
+        }
+      );
     }
     if (
       prevProps.releaseNotesResource !== this.props.releaseNotesResource &&
       this.props.releaseNotesResource
     ) {
-      console.table("received new releaseNotes", this.props.release.isPublic);
-      this.setState(prevState => {
-        const newAllItems = prevState.allItems;
-        newAllItems.releaseNotes.list = this.props.releaseNotesResource.items;
-        return {
-          allItems: newAllItems
-        };
-      });
+      this.setState(
+        prevState => {
+          const newAllItems = prevState.allItems;
+          newAllItems.releaseNotes.list = this.props.releaseNotesResource;
+          return {
+            allItems: newAllItems
+          };
+        },
+        () => this.validateReleaseNotes()
+      );
     }
   }
 
@@ -212,7 +220,6 @@ class ReleaseEditor extends Component {
       this.setState(
         { titleIsError: true, titleErrorMsg: "Felt kan ikke være tomt" },
         () => {
-          console.log(this.state.titleErrorMsg)
           this.validateSubmit();
         }
       );
@@ -235,7 +242,7 @@ class ReleaseEditor extends Component {
       this.setState(
         {
           releaseNotesIsError: true,
-          releaseNoteErrorMsg: "Du må ihvertfall velge en Release Note"
+          releaseNoteErrorMsg: "Du må i hvert fall velge en Release Note"
         },
         () => {
           this.validateSubmit();
@@ -283,7 +290,7 @@ class ReleaseEditor extends Component {
     return (
       <React.Fragment>
         <BottomToolbar
-          loading={this.props.releaseNotesResource.pending}
+          loading={this.props.loading}
           left={[
             <Button
               color="secondary"
@@ -331,16 +338,16 @@ class ReleaseEditor extends Component {
               id="product-version-error-label"
               value={this.state.selectedProductVersionLabel}
               onChange={this.handleOnChangeProductVersion}
-              open={this.state.open}
               onClose={this.handleCloseProductVersions}
               onOpen={this.handleOpenProductVersions}
-              disabled={this.props.productVersionsResource.pending}
+              open={this.state.open}
+              disabled={this.props.loading}
             >
-              {!this.props.productVersionsResource.pending &&
+              {!this.props.loading &&
                 this.props.productVersionsResource.items.map(productVersion => (
                   <MenuItem
                     id={productVersion.id}
-                    key={productVersion.product.name}
+                    key={shortid.generate()}
                     value={
                       productVersion.product.name +
                       " - " +
@@ -403,12 +410,10 @@ class ReleaseEditor extends Component {
 
 export default ReleaseEditor;
 
-ReleaseEditor.defaultProps = {
-  release: { productVersion: { product: {} } }
-};
+ReleaseEditor.defaultProps = {};
 
 ReleaseEditor.propTypes = {
-  releaseNotesResource: PropTypes.object,
+  releaseNotesResource: PropTypes.array,
   productVersionsResource: PropTypes.object,
 
   /**
@@ -429,13 +434,6 @@ const ReleaseContainer = styled.div`
   flex-basis: 80%;
 `;
 
-// const SelectProductVersion = styled(Button)`
-//   && {
-//     align-self: flex-end;
-//     margin-left: auto;
-//   }
-// `;
-
 const StyledFormControl = styled(FormControl)`
   && {
     margin-bottom: 1rem;
@@ -449,12 +447,6 @@ const SaveButton = styled(Button)`
     color: white;
     margin-left: 1rem;
   }
-`;
-
-const ButtonToolbar = styled.div`
-  width: 100%;
-  padding: 1rem;
-  display: inline-flex;
 `;
 
 const FlexContainer = styled.div`

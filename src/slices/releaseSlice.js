@@ -1,52 +1,39 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createReducer, createAction } from "@reduxjs/toolkit";
 import Axios from "axios";
 
-// First, define the reducer and action creators via `createSlice`
-export const releaseSlice = createSlice({
-  name: "releases",
-  initialState: { pending: false, error: "", items: [] },
-  reducers: {
-    getPending(state) {
-      state.pending = true;
-    },
-    getSuccess(state, action) {
-      state.pending = false;
-      state.items = action.payload;
-    },
-    getError(state, action) {
-      state.pending = false;
-      state.error = action.payload;
-    },
-    putIsPublicPending: state => {
-      state.pending = true;
-    },
-    putIsPublicSuccess: (state, action) => {
-      state.pending = false;
-      const newValue = action.payload.data.isPublic;
-      state.items.find(obj => {
-        if (obj.id == action.payload.id) {
-          obj.isPublic = newValue;
-        }
-      });
-    },
-    putIsPublicError: (state, action) => {
-      state.pending = false;
-      state.error = action.payload;
-    }
+// ACTIONS
+export const name = "release/";
+export const getPending = createAction(name + "getPending");
+export const getSuccess = createAction(name + "getSuccess");
+export const getError = createAction(name + "getError");
+
+export const getByIdSuccess = createAction(name + "getByIdSuccess");
+export const getByIdError = createAction(name + "getByIdError");
+export const getByIdPending = createAction(name + "getByIdPending");
+
+export const putByIdPending = createAction(name + "putByIdPending");
+export const putByIdSuccess = createAction(name + "putByIdSuccess");
+export const putByIdError = createAction(name + "putByIdError");
+
+export const postPending = createAction(name + "postPending");
+export const postError = createAction(name + "postError");
+export const postSuccess = createAction(name + "postSuccess");
+
+// REDUCER
+const initialState = { pending: false, error: "", items: [] };
+export const releaseReducer = createReducer(initialState, {
+  [getSuccess]: (state, action) => {
+    state.items = action.payload;
+  },
+  [getByIdSuccess]: (state, action) => {
+    updateInArray(state, action);
+  },
+  [putByIdSuccess]: (state, action) => {
+    updateInArray(state, action);
   }
 });
 
-// Destructure and export the plain action creators
-export const {
-  getPending,
-  getSuccess,
-  getError,
-  putIsPublicPending,
-  putIsPublicSuccess,
-  putIsPublicError
-} = releaseSlice.actions;
-
-// Thunk for fetching
+// THUNKS
 export const fetchReleases = () => async dispatch => {
   dispatch(getPending());
   Axios.get("/releases")
@@ -56,17 +43,55 @@ export const fetchReleases = () => async dispatch => {
     .catch(err => dispatch(getError(err)));
 };
 
-// Thunk for updating isPublic
-export const updateIsPublic = (id, isPublic) => async dispatch => {
-  dispatch(putIsPublicPending());
-  Axios.put("/releases/" + id, { isPublic: isPublic })
+// Thunk for fetching
+export const fetchReleaseById = id => async dispatch => {
+  if (!id) {
+    dispatch(
+      getByIdError({ id, error: "Attempted to fetch item with undefined Id" })
+    );
+    return;
+  }
+  dispatch(getByIdPending({ id }));
+  Axios.get("/releases/" + id)
     .then(res => {
-      dispatch(putIsPublicSuccess({ id: id, data: res.data }));
+      dispatch(getByIdSuccess({ id, data: res.data }));
     })
-    .catch(err => {
-      dispatch(putIsPublicError(err));
+    .catch(error => {
+      dispatch(getByIdError({ id, error }));
     });
 };
 
-export default releaseSlice.reducer;
+export const putReleaseById = (id, data) => async dispatch => {
+  dispatch(putByIdPending({ id }));
+  Axios.put("/releases/" + id, data)
+    .then(res => {
+      dispatch(putByIdSuccess({ id: id, data: res.data }));
+    })
+    .catch(error => {
+      dispatch(putByIdError({ id, error }));
+    });
+};
+
+export function postRelease(releaseToCreate) {
+  return dispatch => {
+    dispatch(postPending());
+    return Axios.post("releases", releaseToCreate)
+      .then(response => {
+        dispatch(postSuccess(response.data));
+      })
+      .catch(error => {
+        dispatch(postError(error));
+      });
+  };
+}
+
+// UTIL
+const updateInArray = (state, action) => {
+  let index = state.items.findIndex(obj => obj.id == action.payload.id);
+  if (index === -1) {
+    state.items.push(action.payload.data);
+  } else {
+    state.items[index] = action.payload.data;
+  }
+};
 // https://github.com/reduxjs/redux-toolkit/blob/master/docs/usage/usage-guide.md

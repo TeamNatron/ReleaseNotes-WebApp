@@ -27,7 +27,7 @@ describe("<ReleaseEditorScreen /> ", () => {
   const state = {
     releaseNotes,
     productVersions,
-    articles
+    releases: {items: []}
   };
   beforeEach(() => {
     store = mockStore(state);

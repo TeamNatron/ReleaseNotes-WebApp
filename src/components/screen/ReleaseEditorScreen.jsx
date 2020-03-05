@@ -8,37 +8,48 @@ import ReleaseEditor from "../releaseEditor/ReleaseEditor";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { fetchProductVersions } from "../../actions/productVersionsActions";
-import { saveRelease, createRelease, updateRelease } from "../../actions/articleActions";
-import { fetchAllReleaseNotes } from "../../actions/releaseNoteActions";
+import {
+  fetchReleaseById,
+  putReleaseById,
+  postRelease
+} from "../../slices/releaseSlice";
+import { loadingSelector } from "../../slices/loadingSlice";
+import { fetchReleaseNotes } from "../../slices/releaseNoteSlice";
+import {
+  initReleaseEditorReleaseNotes,
+  findReleaseById
+} from "../../selectors/releaseEditorSelector";
 
 const ReleaseEditorScreen = props => {
   const id = props.match.params.id;
   const dispatch = useDispatch();
 
   useEffect(() => {
-    //TODO: Uncomment when implemented
-    dispatch(fetchAllReleaseNotes());
+    dispatch(fetchReleaseNotes());
   }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchProductVersions());
   }, [dispatch]);
 
+  useEffect(() => {
+    dispatch(fetchReleaseById(id));
+  }, [dispatch, id]);
   const handleSave = objectToSave => {
-    // if screen has an id, a release is being updated 
+    // if screen has an id, a release is being updated
     // otherwise, a release is being created
-    if(id) {
-      dispatch(updateRelease(objectToSave, id));
+    if (id) {
+      dispatch(putReleaseById(id, objectToSave));
     } else {
-      dispatch(createRelease(objectToSave));
+      dispatch(postRelease(objectToSave));
     }
   };
-  const releaseNotesResource = useSelector(state => state.releaseNotes);
   const productVersionsResource = useSelector(state => state.productVersions);
+  const releaseNotes = useSelector(initReleaseEditorReleaseNotes(id));
+  const loadedRelease = useSelector(findReleaseById(id));
+  const loading = useSelector(loadingSelector);
+
   const history = useHistory();
-
-  const loadedContent = useSelector(state => state.articles.items.find(a => a.id == id))
-
   const handleCancel = () => {
     history.goBack();
   };
@@ -50,11 +61,12 @@ const ReleaseEditorScreen = props => {
       <SpacedDivider />
 
       <ReleaseEditor
-        releaseNotesResource={releaseNotesResource}
+        releaseNotesResource={releaseNotes}
         productVersionsResource={productVersionsResource}
-        release={loadedContent}
+        release={loadedRelease}
         onCancel={handleCancel}
         onSave={handleSave}
+        loading={loading}
       />
     </StyledPageContainer>
   );
