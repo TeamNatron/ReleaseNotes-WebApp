@@ -4,6 +4,8 @@ trigger:
 pool:
   vmImage: 'ubuntu-16.04'
 
+variables:
+  npm_config_cache: $(Pipeline.Workspace)/cache
 
 steps: 
 - task: NodeTool@0
@@ -11,11 +13,18 @@ steps:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
 
-- script: |
-    npm install
-    npm run build
-  displayName: 'Install, build and run'
-  
+- task: Cache@2
+  inputs:
+    key: 'npm | "$(Agent.OS)" | package-lock.json'
+    restoreKeys: |
+       npm | "$(Agent.OS)"
+       npm
+    path: $(npm_config_cache)
+    cacheHitVar: CACHE_RESTORED
+  displayName: Cache npm
+
+- script: npm ci
+  displayName: 'Install dependencies'
 
 - script: npm test -- --coverage --ci --reporters=default --reporters=jest-junit --coverageReporters=cobertura
   env:
