@@ -55,7 +55,6 @@ class ReleaseEditor extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.release !== this.props.release && this.props.release) {
-      console.log("YO");
       this.setState(
         prevState => {
           const newAllItems = prevState.allItems;

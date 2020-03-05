@@ -50,7 +50,6 @@ const ReleaseEditorScreen = props => {
   const loading = useSelector(loadingSelector);
 
   const history = useHistory();
-  console.log(releaseNotes);
   const handleCancel = () => {
     history.goBack();
   };
