@@ -1,4 +1,4 @@
-[![Build Status](https://dev.azure.com/ReleaseNoteSystem/Release%20Note%20System/_apis/build/status/TeamNatron.ReleaseNotes-WebApp?branchName=master)](https://dev.azure.com/ReleaseNoteSystem/Release%20Note%20System/_build/latest?definitionId=4&branchName=master)
+[![Build Status](https://dev.azure.com/ReleaseNoteSystem/Release%20Note%20System/_apis/build/status/TeamNatron.ReleaseNotes-WebApp?branchName=develop)](https://dev.azure.com/ReleaseNoteSystem/Release%20Note%20System/_build/latest?definitionId=4&branchName=develop)
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
