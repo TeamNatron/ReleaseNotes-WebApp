@@ -26,6 +26,10 @@ const AdminScreen = () => {
     dispatch(fetchReleases());
   }, [dispatch]);
 
+  useEffect(() => {
+    dispatch(fetchReleases());
+  }, []);
+
   const createData = (name, id, isPublic) => {
     return { name, id, isPublic };
   };

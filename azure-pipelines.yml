@@ -4,6 +4,8 @@ trigger:
 pool:
   vmImage: 'ubuntu-16.04'
 
+variables:
+  npm_config_cache: $(Pipeline.Workspace)/cache
 
 steps: 
 - task: NodeTool@0
@@ -18,10 +20,12 @@ steps:
        npm | "$(Agent.OS)"
        npm
     path: $(npm_config_cache)
+    cacheHitVar: CACHE_RESTORED
   displayName: Cache npm
 
 - script: npm ci
-- script: npm run build
+  displayName: 'Install dependencies'
+
 - script: npm test -- --coverage --ci --reporters=default --reporters=jest-junit --coverageReporters=cobertura
   env:
     CI: true
