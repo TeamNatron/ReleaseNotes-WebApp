@@ -27,7 +27,6 @@ describe("<ReleaseEditorScreen /> ", () => {
   const state = {
     releaseNotes,
     productVersions,
-    articles,
     releases: {items: []}
   };
   beforeEach(() => {
