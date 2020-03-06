@@ -35,6 +35,7 @@ export const releaseReducer = createReducer(initialState, {
   },
   [putByIdSuccess]: (state, action) => {
     updateInArray(state, action);
+    state.successMsg = action.payload.response;
   },
   [postSuccess]: (state, action) => {
     state.successMsg = action.payload;
@@ -73,7 +74,9 @@ export const putReleaseById = (id, data) => async dispatch => {
   dispatch(putByIdPending({ id }));
   Axios.put("/releases/" + id, data)
     .then(res => {
-      dispatch(putByIdSuccess({ id: id, data: res.data }));
+      dispatch(
+        putByIdSuccess({ id: id, data: res.data, response: res.statusText })
+      );
     })
     .catch(error => {
       dispatch(putByIdError({ id, error }));
