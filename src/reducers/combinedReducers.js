@@ -5,6 +5,7 @@ import { productVersionsReducer } from "./productVersionsReducer";
 import { loadingReducer } from "../slices/loadingSlice";
 import { releaseReducer } from "../slices/releaseSlice";
 import { releaseNoteReducer } from "../slices/releaseNoteSlice";
+import { errorReducer } from "../slices/errorSlice";
 
 export default combineReducers({
   articles: articlesReducer,
@@ -12,5 +13,6 @@ export default combineReducers({
   productVersions: productVersionsReducer,
   releaseNotes: releaseNoteReducer,
   releases: releaseReducer,
-  loading: loadingReducer
+  loading: loadingReducer,
+  error: errorReducer
 });
