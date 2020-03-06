@@ -32,7 +32,7 @@ class ReleaseEditor extends Component {
       releaseNotesIsError: isError,
       productVersionIsError: isError,
       submitDisabled: true,
-      isPublic: release?.isPublic,
+      isPublic: release?.isPublic || false,
       title: release?.title,
       productVersions: [],
       selectedProductVersionLabel: productVersion?.product?.name,
