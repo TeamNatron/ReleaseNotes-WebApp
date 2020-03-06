@@ -35,8 +35,9 @@ class ReleaseEditor extends Component {
       isPublic: release?.isPublic,
       title: release?.title,
       productVersions: [],
-      selectedProductVersionLabel: productVersion?.product?.name,
-      selectedProductVersionId: productVersion?.version,
+      selectedProductVersionLabel:
+        productVersion?.product?.name + " - " + productVersion?.version,
+      selectedProductVersionId: productVersion?.id,
       allItems: {
         release: {
           id: "release",
@@ -50,6 +51,9 @@ class ReleaseEditor extends Component {
         }
       }
     };
+  }
+
+  componentDidMount() {
     this.validateSubmit();
   }
 
@@ -293,6 +297,7 @@ class ReleaseEditor extends Component {
           loading={this.props.loading}
           left={[
             <Button
+              key="cancelBtn"
               color="secondary"
               variant="contained"
               onClick={this.props.onCancel}
@@ -302,6 +307,7 @@ class ReleaseEditor extends Component {
           ]}
           right={[
             <FormControlLabel
+              key="isPublicSwitch"
               style={{ marginLeft: "15px" }}
               control={
                 <Switch
@@ -315,6 +321,7 @@ class ReleaseEditor extends Component {
               label="Publisert"
             />,
             <SaveButton
+              key="cancelBtn"
               disabled={this.state.submitDisabled}
               variant="contained"
               onClick={this.handleSave}
@@ -323,7 +330,7 @@ class ReleaseEditor extends Component {
             </SaveButton>
           ]}
           middle={[
-            <ErrorMsgContainer>
+            <ErrorMsgContainer key="errorMsgContainer">
               <span>{this.state.releaseNoteErrorMsg}</span>
             </ErrorMsgContainer>
           ]}
