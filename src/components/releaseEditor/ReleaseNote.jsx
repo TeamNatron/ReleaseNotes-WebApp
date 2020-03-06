@@ -19,7 +19,7 @@ const ReleaseNote = props => {
           isRelease={props.isRelease}
         >
           <ReleaseNoteHeader>
-            <Title>{props.releaseNote.workItemTitle}</Title>
+            <Title>{props.releaseNote.title}</Title>
             {props.isRelease && (
               <StyledIconButton
                 onClick={() => props.handleRemoveReleaseNote(props.index)}
