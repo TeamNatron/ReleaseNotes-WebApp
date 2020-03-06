@@ -30,7 +30,10 @@ describe("<ReleaseEditorScreen /> ", () => {
   const state = {
     releaseNotes: { items: [{ id: 0 }, { id: 1 }] },
     productVersions,
-    releases: { items: [{ id: 0, title: "abc", isPublic: true }] }
+    releases: {
+      items: [{ id: 0, title: "abc", isPublic: true, successMsg: "" }]
+    },
+    error: ""
   };
   beforeEach(() => {
     store = mockStore(state);
@@ -58,7 +61,6 @@ describe("<ReleaseEditorScreen /> ", () => {
     const buttons = editor.find(Button);
     const isPublic = editor.find(Switch).at(0);
     const Columns = editor.find(Column);
-
 
     // title input
     expect(titleInput.prop("value")).toEqual("abc");

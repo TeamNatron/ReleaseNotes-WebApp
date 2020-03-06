@@ -11,5 +11,8 @@ export const errorReducer = (state = {}, action) => {
 };
 
 export const errorMessageSelector = state => {
+  if (!state.error.text) {
+    return "";
+  }
   return state.error.text;
 };
