@@ -47,7 +47,8 @@ describe("releases reducer", () => {
 const initialStateWithoutItems = {
   pending: false,
   error: "",
-  items: []
+  items: [],
+  successMsg: ""
 };
 
 const initialState = {
@@ -185,5 +186,6 @@ const updatedState = {
       isPublic: false,
       releaseNotes: []
     }
-  ]
+  ],
+  successMsg: ""
 };
