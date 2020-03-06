@@ -20,7 +20,12 @@ export const postError = createAction(name + "postError");
 export const postSuccess = createAction(name + "postSuccess");
 
 // REDUCER
-const initialState = { pending: false, error: "", items: [] };
+const initialState = {
+  pending: false,
+  error: "",
+  items: [],
+  successMsg: ""
+};
 export const releaseReducer = createReducer(initialState, {
   [getSuccess]: (state, action) => {
     state.items = action.payload;
@@ -30,6 +35,9 @@ export const releaseReducer = createReducer(initialState, {
   },
   [putByIdSuccess]: (state, action) => {
     updateInArray(state, action);
+  },
+  [postSuccess]: (state, action) => {
+    state.successMsg = action.payload;
   }
 });
 
@@ -77,7 +85,7 @@ export function postRelease(releaseToCreate) {
     dispatch(postPending());
     return Axios.post("releases", releaseToCreate)
       .then(response => {
-        dispatch(postSuccess(response.data));
+        dispatch(postSuccess(response.statusText));
       })
       .catch(error => {
         dispatch(postError(error));
@@ -95,3 +103,8 @@ const updateInArray = (state, action) => {
   }
 };
 // https://github.com/reduxjs/redux-toolkit/blob/master/docs/usage/usage-guide.md
+
+// SELECTORS
+export const getSuccesMessage = state => {
+  return state.releases.successMsg;
+};
