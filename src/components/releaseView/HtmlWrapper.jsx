@@ -7,7 +7,6 @@ import PropTypes from "prop-types";
  * @param {*} props
  */
 const HtmlWrapper = props => {
-  console.log(props.gutterBottom);
   return (
     <React.Fragment key={props.key}>
       {props.strip ? (
