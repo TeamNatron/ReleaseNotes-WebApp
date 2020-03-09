@@ -9,6 +9,7 @@ import EditReleaseNoteScreen from "./screen/EditReleaseNoteScreen";
 import LoginScreen from "./screen/LoginScreen";
 import ReleaseEditorScreen from "./screen/ReleaseEditorScreen";
 import Axios from "axios";
+import ReleaseScreen from "./screen/ReleaseScreen";
 
 const Routes = () => {
   const history = useHistory();
@@ -22,7 +23,7 @@ const Routes = () => {
       } else {
         // Error.response blir undefined når der e cors feil/ukjent endpoint/ingen internett og sikkert meir.
         // For en eller anna grunn blir ikkje errors catcha i Axios når ditta skjer
-        console.log("Error response is undefined.")
+        console.log("Error response is undefined.");
       }
       return Promise.reject(error);
     }
@@ -42,6 +43,11 @@ const Routes = () => {
         path="/admin/releasenotes/:id"
         exact
         render={props => <EditReleaseNoteScreen {...props} />}
+      />
+      <Route
+        path="/release/:id"
+        exact
+        render={props => <ReleaseScreen {...props} />}
       />
       <Route path="/login/" exact component={LoginScreen} />
       <Route
