@@ -20,14 +20,16 @@ import { LocalOffer, CalendarToday, Sort } from "@material-ui/icons";
 import Ingress from "../shared/Ingress";
 import { fetchArticles } from "../../actions/articleActions";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router";
+import { useLocation, useHistory } from "react-router";
 import articleParameters, { sortKeys } from "../../articleParameters";
+import { Link } from "react-router-dom";
 
 const ReleasesScreen = props => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   let query = useQuery();
   const dispatch = useDispatch();
   const productId = query.get("product");
+  const history = useHistory();
 
   // https://blog.bitsrc.io/using-react-redux-hooks-97654aff01e4
   // Query trick https://reacttraining.com/react-router/web/example/query-parameters
@@ -91,7 +93,9 @@ const ReleasesScreen = props => {
                 <ListItemText
                   primary={
                     <React.Fragment>
-                      <Typography variant="h4">{article.title}</Typography>
+                      <StyledLink to={"/release/" + article.id}>
+                        {article.title}
+                      </StyledLink>
                       <Typography
                         variant="body2"
                         color="textSecondary"
@@ -130,6 +134,12 @@ const ReleasesScreen = props => {
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: #3f51b5;
+  font-size: 1.5rem;
+`;
 
 const StyledIcon = styled(Icon)`
   margin-right: 4px;
