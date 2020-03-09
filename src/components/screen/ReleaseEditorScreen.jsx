@@ -11,7 +11,8 @@ import { fetchProductVersions } from "../../actions/productVersionsActions";
 import {
   fetchReleaseById,
   putReleaseById,
-  postRelease
+  postRelease,
+  getSuccesMessage
 } from "../../slices/releaseSlice";
 import { loadingSelector } from "../../slices/loadingSlice";
 import { fetchReleaseNotes } from "../../slices/releaseNoteSlice";
@@ -19,6 +20,8 @@ import {
   initReleaseEditorReleaseNotes,
   findReleaseById
 } from "../../selectors/releaseEditorSelector";
+import ResponseSnackbar from "../shared/ResponseSnackbar";
+import { errorMessageSelector } from "../../slices/errorSlice";
 
 const ReleaseEditorScreen = props => {
   const id = props.match.params.id;
@@ -33,7 +36,7 @@ const ReleaseEditorScreen = props => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchReleaseById(id));
+    if (id) dispatch(fetchReleaseById(id));
   }, [dispatch, id]);
   const handleSave = objectToSave => {
     // if screen has an id, a release is being updated
@@ -48,6 +51,8 @@ const ReleaseEditorScreen = props => {
   const releaseNotes = useSelector(initReleaseEditorReleaseNotes(id));
   const loadedRelease = useSelector(findReleaseById(id));
   const loading = useSelector(loadingSelector);
+  const error = useSelector(errorMessageSelector);
+  const success = useSelector(getSuccesMessage);
 
   const history = useHistory();
   const handleCancel = () => {
@@ -68,6 +73,7 @@ const ReleaseEditorScreen = props => {
         onSave={handleSave}
         loading={loading}
       />
+      <ResponseSnackbar error={error} success={success} />
     </StyledPageContainer>
   );
 };
