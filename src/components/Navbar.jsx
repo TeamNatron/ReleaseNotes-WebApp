@@ -1,12 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import { AppBar, Toolbar } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
     <Header>
       <StyledToolbar>
-        <Brand href="https://kundesider.cordel.no/">
+        <Brand to="/">
           <img
             src={
               "https://kundesider.cordel.no/wp-content/uploads/2019/07/logo-300x109.png"
@@ -37,7 +38,7 @@ const StyledToolbar = styled(Toolbar)`
   }
 `;
 
-const Brand = styled.a`
+const Brand = styled(Link)`
   > img {
     height: 100%;
   }
