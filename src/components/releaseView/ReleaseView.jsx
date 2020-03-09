@@ -1,19 +1,18 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import DenseReleaseNoteRow from "./DenseReleaseNoteRow";
 import FullReleaseNote from "./FullReleaseNote";
 import {
   TableBody,
-  TableContainer,
   TableRow,
   Table,
   Typography,
   Paper,
-  Box,
-  Divider
+  Box
 } from "@material-ui/core";
-import shortid from "shortid";
 import styled from "styled-components";
+import ReleaseH1 from "../shared/ReleaseH1";
+import ReleaseH2 from "../shared/ReleaseH2";
 
 /**
  * Takes a release with releasenotes and generates a full
@@ -50,22 +49,20 @@ const ReleaseView = props => {
 
   return (
     <React.Fragment>
-      <Typography variant="h1">
-        {props.release.title}
+      <Typography component={ReleaseH1}>{props.release.title}</Typography>
+      <Typography variant="subtitle1" color="textSecondary">
+        Torsdag, 2. Mars 2020
       </Typography>
-
       <Box my={4}>{fullNotes}</Box>
 
-      <Typography gutterBottom variant="h2">Andre endringer</Typography>
+      <Typography component={ReleaseH2}>Andre endringer</Typography>
 
-      <Box>
+      <Box mt={2}>
         <TablePaper elevation={0} variant="outlined">
           <Table size="small">
             <TableBody>
               {denseNotes.map(denseNote => (
-                <React.Fragment>
-                  <TableRow >{denseNote}</TableRow>
-                </React.Fragment>
+                <TableRow key={denseNote.key}>{denseNote}</TableRow>
               ))}
             </TableBody>
           </Table>
@@ -82,8 +79,6 @@ const TablePaper = styled(Paper)`
     background-color: transparent;
   }
 `;
-
-const StyledTableRow = styled(TableRow)``;
 
 // empty html tag | empty string
 const isEmptyRegEx = /<[^/][^>]*><\/[^>]+>|^$/;
@@ -117,7 +112,7 @@ ReleaseView.defaultProps = {
       version: "3.1.1",
       isPublic: false
     },
-    title: "Love Sosa",
+    title: "Cordel 1.9.4.2.5: Incredible thoughts",
     isPublic: false,
     releaseNotes: [
       {
@@ -166,7 +161,8 @@ ReleaseView.defaultProps = {
         id: 1,
         title: "<h2>Trump bygger veggg mot Corona</h2>",
         ingress: "",
-        description: "<p>Det hjelper fint lite, sier forskere</p>",
+        description:
+          "<p>Rudolf Blodstrupmoen er en fiktiv figur som ble skapt av Kjell Aukrust. Aukrust introduserte disponent Blodstrupmoen i Mannskapsavisas avisspalte Våre Duster og overførte ham senere til den fiktive avisen Flåklypa Tidende.</p><p> Disponent Blodstrupmoen var barnefødt i Flåklypa, og jobbet på Reodor Felgens verksted som lærling. Etter hvert flyttet han til byen der han både ble disponent i «Christiania Mark og Soppkontroll» og en dyktig racerbilfører. </p> <p>Rudolf Blodstrupmoen tåler ikke å tape og gjør hva som helst for å vinne. I filmen Flåklypa Grand Prix spilte Blodstrupmoen «skurken» og var førstefører i racerbilen GT Boomerang Rapido (bygget etter «spitfire»-prinsippet). Andrefører var den synske Mysil Bergsprekken, som med sine forutseende evner var en ideell andrefører</p>",
         authorName: "Ronnay Voudrait",
         authorEmail: "ronnay@natron.no",
         workItemDescriptionHtml: "<div>Whoa whoa hey hey hey</div>",
