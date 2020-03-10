@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import Settings from "@material-ui/icons/Settings";
 import { useSelector, useDispatch } from "react-redux";
 import { loggedInSelector, checkLoggedIn } from "../slices/authSlice";
-import ProtectedButton from "./ProtectedButton";
 
 const Navbar = () => {
   const dispatch = useDispatch();
