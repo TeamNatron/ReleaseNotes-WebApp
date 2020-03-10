@@ -14,7 +14,7 @@ const DateRangePicker = props => {
   const { onChange } = props;
   useMemo(() => {
     onChange({
-      startDate: startDate.toJSON(),
+      startDate: startDate?.toJSON(),
       endDate: endDate?.toJSON()
     });
   }, [startDate, endDate, onChange]);
