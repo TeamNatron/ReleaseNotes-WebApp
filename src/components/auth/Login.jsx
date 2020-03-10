@@ -5,7 +5,7 @@ import Button from "@material-ui/core/Button";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import styled from "styled-components";
 import { ListItem, Input, Paper } from "@material-ui/core";
-import { login } from "../../requests/auth";
+import { login } from "../../slices/authSlice";
 
 class Login extends Component {
   constructor() {
@@ -25,7 +25,7 @@ class Login extends Component {
 
   enterFunction = event => {
     if (event.keyCode === 13) {
-      this.handleSubmit();
+      this.props.handleSubmit(this.state.email, this.state.password);
     }
   };
 
@@ -37,27 +37,6 @@ class Login extends Component {
   onChangePwd = input => {
     const newValue = input.target.value;
     this.setState({ password: newValue });
-  };
-
-  handleSubmit = () => {
-    let promise = login(this.state.email, this.state.password);
-    promise
-      .then(
-        response => (
-          (document.getElementById("successContainer").hidden = false),
-          (document.getElementById("successMessage").innerHTML =
-            "Innlogging vellykket!"),
-          (document.getElementById("successCheck").style.display = "block")
-        )
-      )
-      .catch(
-        error => (
-          (document.getElementById("successContainer").hidden = false),
-          (document.getElementById("successMessage").innerHTML =
-            "Beklager, finner ikke den brukeren med det passordet.."),
-          (document.getElementById("successCheck").style.display = "none")
-        )
-      );
   };
 
   render() {
@@ -104,7 +83,9 @@ class Login extends Component {
                 id="loginBtn"
                 variant="contained"
                 type="button"
-                onClick={this.handleSubmit}
+                onClick={() =>
+                  this.props.handleSubmit(this.state.email, this.state.password)
+                }
               >
                 Logg på
               </Button>

@@ -7,5 +7,5 @@ export function getAuthToken() {
 }
 
 export function setAuthToken(accessToken) {
-  Cookies.set(ACCESS_TOKEN, accessToken);
+  Cookies.set(ACCESS_TOKEN, accessToken.accessToken);
 }
