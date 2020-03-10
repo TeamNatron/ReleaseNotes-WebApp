@@ -314,11 +314,14 @@ class ReleaseEditor extends Component {
       Object.entries(object).forEach(e => {
         // e[0] = property name
         // e[1] = property value
+
+        // does entry exist in the string?
         if (query.search(e[0]) !== -1) {
           // replace entry
+
+          // regex to match the name+value of a given name in the query
           const regex = new RegExp("[&?]" + e[0] + "=(.*?)(?=&|$)");
-          const newQuery = this.createQuery(query, e[0], e[1]);
-          query = query.replace(regex, newQuery);
+          query = query.replace(regex, this.createQuery(query, e[0], e[1]));
         } else {
           // add entry
           query = this.createQuery(query, e[0], e[1]);
