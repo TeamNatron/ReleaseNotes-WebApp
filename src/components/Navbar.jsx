@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { AppBar, Toolbar } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import Settings from "@material-ui/icons/Settings";
 
 const Navbar = () => {
   return (
@@ -15,6 +16,9 @@ const Navbar = () => {
             alt="Cordel Kundesenter"
           />
         </Brand>
+        <StyledIcon to="/admin/">
+          <Settings />
+        </StyledIcon>
       </StyledToolbar>
     </Header>
   );
@@ -32,14 +36,31 @@ const Header = styled(AppBar)`
 `;
 
 const StyledToolbar = styled(Toolbar)`
-  max-width: ${props => props.theme.contentWidth};
   > * {
     height: 62px;
+    display: inline-flex;
+    align-items: center;
   }
 `;
 
 const Brand = styled(Link)`
+  a {
+    width: 0;
+  }
   > img {
     height: 100%;
+    justify-self: left;
+  }
+`;
+
+const StyledIcon = styled(Link)`
+  text-decoration: none;
+  margin-left: auto;
+  svg {
+    font-size: 2rem;
+  }
+  color: white;
+  :hover {
+    color: ${props => props.theme.secondaryColor};
   }
 `;
