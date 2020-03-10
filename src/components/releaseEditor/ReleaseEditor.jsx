@@ -310,20 +310,18 @@ class ReleaseEditor extends Component {
   handleFilter = object => {
     this.setState(state => {
       var query = state.filterQuery;
-      console.log(query);
+
       Object.entries(object).forEach(e => {
         // e[0] = property name
         // e[1] = property value
         if (query.search(e[0]) !== -1) {
           // replace entry
-          //
           const regex = new RegExp("[&?]" + e[0] + "=(.*?)(?=&|$)");
           const newQuery = this.createQuery(query, e[0], e[1]);
           query = query.replace(regex, newQuery);
         } else {
           // add entry
           query = this.createQuery(query, e[0], e[1]);
-          console.log(query)
         }
         return { filterQuery: query };
       });
