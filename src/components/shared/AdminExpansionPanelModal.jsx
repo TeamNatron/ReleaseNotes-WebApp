@@ -7,13 +7,17 @@ const AdminExpansionPanelModal = props => {
   const [open, setOpen] = React.useState();
   const [componentToRender, setComponentToRender] = React.useState();
 
-  const handleAction = action => {
+  const handleAction = (action, id) => {
     switch (action) {
       case "CREATE":
         setComponentToRender(props.createContentComponent);
         break;
       case "EDIT":
         setComponentToRender(props.editContentComponent);
+        console.log(id);
+        if (id) {
+          props.setRowId(id);
+        }
         break;
       default:
         console.table(

@@ -7,6 +7,7 @@ import ScreenTitle from "../shared/ScreenTitle";
 import SpacedDivider from "../shared/SpacedDivider";
 import AddUserForm from "../adminpanel/AddUserForm";
 import AddProductForm from "../adminpanel/AddProductForm";
+import ChangePasswordForm from "../adminpanel/ChangePasswordForm";
 import AdminExpansionPanel from "../shared/AdminExpansionPanelModal";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProducts } from "../../actions/productActions";
@@ -16,6 +17,8 @@ import AdminExpansionPanelRoute from "../shared/AdminExpansionPanelRoute";
 import { fetchReleases } from "../../slices/releaseSlice";
 
 const AdminScreen = () => {
+  const [rowId, setRowId] = React.useState();
+
   const dispatch = useDispatch();
   const history = useHistory();
   useEffect(() => {
@@ -47,10 +50,10 @@ const AdminScreen = () => {
   };
 
   const dummyUsers = [
-    createData("Michael Jackson"),
-    createData("The Rock"),
-    createData("Trond Viggo Torgersen"),
-    createData("Sinnasnekkern")
+    createData("Michael Jackson", 1),
+    createData("The Rock", 2),
+    createData("Trond Viggo Torgersen", 3),
+    createData("Sinnasnekkern", 4)
   ];
   return (
     <PageContainer>
@@ -70,7 +73,10 @@ const AdminScreen = () => {
           icon={<PermIdentity />}
           rows={dummyUsers}
           createContentComponent={<AddUserForm />}
-          //editContentComponent={<AddUserForm />}
+          editContentComponent={
+            <ChangePasswordForm id={rowId ? rowId : undefined} />
+          }
+          setRowId={setRowId}
         />
         <AdminExpansionPanelRoute
           label="Releases"
