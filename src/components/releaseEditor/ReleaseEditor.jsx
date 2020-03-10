@@ -11,22 +11,32 @@ import {
   Select,
   FormControl,
   InputLabel,
-  FormHelperText
+  FormHelperText,
+  IconButton,
+  Collapse,
+  Box
 } from "@material-ui/core";
 import TitleTextField from "./TitleTextField";
 import PropTypes from "prop-types";
 import BottomToolbar from "../shared/BottomToolbar";
 import shortid from "shortid";
+import ToolbarBase from "../shared/ToolbarBase";
+import { FilterListRounded } from "@material-ui/icons";
+import DateRangePicker from "../shared/DateRangePicker";
+import FilterDropdown from "../shared/PopperButton";
+import PopperButton from "../shared/PopperButton";
+import FilterToolbar from "./FilterToolbar";
 
 class ReleaseEditor extends Component {
   constructor(props) {
     super(props);
     this.handleRemoveReleaseNote = this.handleRemoveReleaseNote.bind(this);
-
     const release = props.release;
     const productVersion = release?.productVersion;
     const isError = release ? false : true;
     this.state = {
+      filterQuery: "?",
+      filterOpen: false,
       open: false,
       titleIsError: isError,
       releaseNotesIsError: isError,
@@ -290,6 +300,42 @@ class ReleaseEditor extends Component {
     }
   };
 
+  toggleFilter = () => {
+    this.setState(state => ({ filterOpen: !state.filterOpen }));
+  };
+
+  /**
+   * update query string based on properties in received object
+   */
+  handleFilter = object => {
+    this.setState(state => {
+      var query = state.filterQuery;
+      console.log(query);
+      Object.entries(object).forEach(e => {
+        // e[0] = property name
+        // e[1] = property value
+        if (query.search(e[0]) !== -1) {
+          // replace entry
+          //
+          const regex = new RegExp("[&?]" + e[0] + "=(.*?)(?=&|$)");
+          const newQuery = this.createQuery(query, e[0], e[1]);
+          query = query.replace(regex, newQuery);
+        } else {
+          // add entry
+          query = this.createQuery(query, e[0], e[1]);
+          console.log(query)
+        }
+        return { filterQuery: query };
+      });
+    });
+  };
+
+  createQuery = (query, name, value) => {
+    return query.length > 1
+      ? query + "&" + name + "=" + value
+      : query + name + "=" + value;
+  };
+
   render() {
     return (
       <React.Fragment>
@@ -338,37 +384,57 @@ class ReleaseEditor extends Component {
 
         {this.props.productVersionsResource ? (
           // make sure props are not undefined
-          <StyledFormControl error={this.state.productVersionIsError}>
-            <InputLabel id="product-version-error-label">Produkt</InputLabel>
-            <Select
-              labelId="product-version-error-label"
-              id="product-version-error-label"
-              value={this.state.selectedProductVersionLabel}
-              onChange={this.handleOnChangeProductVersion}
-              onClose={this.handleCloseProductVersions}
-              onOpen={this.handleOpenProductVersions}
-              open={this.state.open}
-              disabled={this.props.loading}
-            >
-              {!this.props.loading &&
-                this.props.productVersionsResource.items.map(productVersion => (
-                  <MenuItem
-                    id={productVersion.id}
-                    key={shortid.generate()}
-                    value={
-                      productVersion.product.name +
-                      " - " +
-                      productVersion.version
-                    }
+          <React.Fragment>
+            <ToolbarBase
+              left={
+                <StyledFormControl error={this.state.productVersionIsError}>
+                  <InputLabel id="product-version-error-label">
+                    Produkt
+                  </InputLabel>
+                  <Select
+                    labelId="product-version-error-label"
+                    id="product-version-error-label"
+                    value={this.state.selectedProductVersionLabel}
+                    onChange={this.handleOnChangeProductVersion}
+                    onClose={this.handleCloseProductVersions}
+                    onOpen={this.handleOpenProductVersions}
+                    open={this.state.open}
+                    disabled={this.props.loading}
                   >
-                    {productVersion.product.name +
-                      " - " +
-                      productVersion.version}
-                  </MenuItem>
-                ))}
-            </Select>
-            <FormHelperText>{this.state.productVersionErrorMsg}</FormHelperText>
-          </StyledFormControl>
+                    {!this.props.loading &&
+                      this.props.productVersionsResource.items.map(
+                        productVersion => (
+                          <MenuItem
+                            id={productVersion.id}
+                            key={shortid.generate()}
+                            value={
+                              productVersion.product.name +
+                              " - " +
+                              productVersion.version
+                            }
+                          >
+                            {productVersion.product.name +
+                              " - " +
+                              productVersion.version}
+                          </MenuItem>
+                        )
+                      )}
+                  </Select>
+                  <FormHelperText>
+                    {this.state.productVersionErrorMsg}
+                  </FormHelperText>
+                </StyledFormControl>
+              }
+              right={
+                <IconButton onClick={this.toggleFilter}>
+                  <FilterListRounded />
+                </IconButton>
+              }
+            ></ToolbarBase>
+            <Collapse in={this.state.filterOpen}>
+              <FilterToolbar onChange={this.handleFilter} />
+            </Collapse>
+          </React.Fragment>
         ) : (
           <React.Fragment />
         )}
