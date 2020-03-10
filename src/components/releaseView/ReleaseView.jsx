@@ -13,6 +13,8 @@ import {
 import styled from "styled-components";
 import ReleaseH1 from "../shared/ReleaseH1";
 import ReleaseH2 from "../shared/ReleaseH2";
+import { useEffect } from "react";
+import { formatDate } from "../../utils/parser";
 
 /**
  * Takes a release with releasenotes and generates a full
@@ -22,6 +24,9 @@ import ReleaseH2 from "../shared/ReleaseH2";
 const ReleaseView = props => {
   const [fullNotes, setFullNotes] = useState([]);
   const [denseNotes, setDenseNotes] = useState([]);
+  const [formattedDate, setFormattedDate] = useState(
+    "Her mangler det en dato.."
+  );
 
   useMemo(() => {
     const formatNote = note => {
@@ -47,11 +52,18 @@ const ReleaseView = props => {
     });
   }, [props]);
 
+  useEffect(() => {
+    if (props.release.date) {
+      setFormattedDate(formatDate(props.release.date));
+      console.log(formattedDate);
+    }
+  }, [props.release.date]);
+
   return (
     <React.Fragment>
       <Typography component={ReleaseH1}>{props.release.title}</Typography>
       <Typography variant="subtitle1" color="textSecondary">
-        Torsdag, 2. Mars 2020
+        {formattedDate}
       </Typography>
       <Box my={4}>{fullNotes}</Box>
 
