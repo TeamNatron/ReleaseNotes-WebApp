@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { AppBar, Toolbar } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import Settings from "@material-ui/icons/Settings";
+import { useSelector, useDispatch } from "react-redux";
+import { loggedInSelector, checkLoggedIn } from "../slices/authSlice";
+import ProtectedButton from "./ProtectedButton";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+
+  const isLogged = useSelector(loggedInSelector);
+
+  useEffect(() => {
+    dispatch(checkLoggedIn());
+  }, [isLogged]);
+
   return (
     <Header>
       <StyledToolbar>
@@ -16,9 +27,13 @@ const Navbar = () => {
             alt="Cordel Kundesenter"
           />
         </Brand>
-        <StyledIcon to="/admin/">
-          <Settings />
-        </StyledIcon>
+        {isLogged ? (
+          <StyledIcon to="/admin/">
+            <Settings />
+          </StyledIcon>
+        ) : (
+          ""
+        )}
       </StyledToolbar>
     </Header>
   );

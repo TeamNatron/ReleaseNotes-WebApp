@@ -1,5 +1,5 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
-import { setAuthToken } from "../handlers/cookieHandler";
+import { setAuthToken, getAuthToken } from "../handlers/cookieHandler";
 import Axios from "axios";
 
 const name = "auth/";
@@ -7,6 +7,9 @@ const postPending = createAction(name + "postPending");
 const postError = createAction(name + "postError");
 const postSuccess = createAction(name + "postSuccess");
 
+const checkLoggedInPending = createAction(name + "checkLoggedInPending");
+const checkLoggedInError = createAction(name + "checkLoggedInError");
+const checkLoggedInSuccess = createAction(name + "checkLoggedInSuccess");
 
 export const authReducer = createReducer(
   { isLogged: false, sucessMsg: "" },
@@ -15,6 +18,12 @@ export const authReducer = createReducer(
       state.isLogged = true;
       state.sucessMsg = action.payload.statusText;
       setAuthToken(action.payload.data);
+    },
+    [checkLoggedInSuccess]: (state, action) => {
+      state.isLogged = true;
+    },
+    [checkLoggedInError]: state => {
+      state.isLogged = false;
     }
   }
 );
@@ -43,7 +52,16 @@ export const login = (paramEmail, paramPassword) => async dispatch => {
     });
 };
 
+export const checkLoggedIn = () => async dispatch => {
+  dispatch(checkLoggedInPending());
+  if (getAuthToken()) {
+    dispatch(checkLoggedInSuccess());
+    return;
+  }
+  dispatch(checkLoggedInError());
+};
+
 // SELECTORS
 export const loggedInSelector = state => {
-  return state.isLogged;
+  return state.auth.isLogged;
 };
