@@ -2,24 +2,22 @@ import React from "react";
 import { Fade, LinearProgress, AppBar, Toolbar } from "@material-ui/core";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import ToolbarBase from "./ToolbarBase";
 
 const BottomToolbar = props => {
+  const { loading, ...toolbarBaseProps } = props;
   return (
     <BottomAppBar>
       <Fade
-        in={props.loading}
+        in={loading}
         style={{
-          transitionDelay: props.loading ? "800ms" : "0ms"
+          transitionDelay: loading ? "800ms" : "0ms"
         }}
       >
         <LinearProgress />
       </Fade>
       <ToolbarWrapper>
-        <StyledToolbar disableGutters variant="dense">
-          <div>{props.left}</div>
-          <div>{props.middle}</div>
-          <div>{props.right}</div>
-        </StyledToolbar>
+        <ToolbarBase {...toolbarBaseProps} />
       </ToolbarWrapper>
     </BottomAppBar>
   );
@@ -33,10 +31,6 @@ BottomToolbar.propTypes = {
   middle: PropTypes.arrayOf(PropTypes.element),
   right: PropTypes.arrayOf(PropTypes.element)
 };
-
-const StyledToolbar = styled(Toolbar)`
-  justify-content: space-between;
-`;
 
 const ToolbarWrapper = styled.div`
   width: ${props => props.theme.contentWidth};
