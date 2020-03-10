@@ -13,8 +13,7 @@ import {
   InputLabel,
   FormHelperText,
   IconButton,
-  Collapse,
-  Box
+  Collapse
 } from "@material-ui/core";
 import TitleTextField from "./TitleTextField";
 import PropTypes from "prop-types";
@@ -22,9 +21,6 @@ import BottomToolbar from "../shared/BottomToolbar";
 import shortid from "shortid";
 import ToolbarBase from "../shared/ToolbarBase";
 import { FilterListRounded } from "@material-ui/icons";
-import DateRangePicker from "../shared/DateRangePicker";
-import FilterDropdown from "../shared/PopperButton";
-import PopperButton from "../shared/PopperButton";
 import FilterToolbar from "./FilterToolbar";
 
 class ReleaseEditor extends Component {

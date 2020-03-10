@@ -1,10 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { Box, IconButton, Button } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import PopperButton from "../shared/PopperButton";
 import DateRangePicker from "../shared/DateRangePicker";
 import ToolbarBase from "../shared/ToolbarBase";
-import { FilterListRounded, ExpandMore } from "@material-ui/icons";
 import PropTypes from "prop-types";
 
 const FilterToolbar = props => {
