@@ -5,6 +5,7 @@ import IconButton from "@material-ui/core/IconButton";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import InstagramIcon from "@material-ui/icons/Instagram";
 import YouTubeIcon from "@material-ui/icons/YouTube";
+import { Link } from "react-router-dom";
 //import LinkedinLogo from '../../public/LinkedinLogo';
 
 const Footer = () => {
@@ -60,7 +61,9 @@ const Footer = () => {
           <SectionInfo>info@cordel.no</SectionInfo>
         </Section>
 
-        <LoginButton>Logg inn</LoginButton>
+        <Link to="/login/">
+          <LoginButton>Logg inn</LoginButton>
+        </Link>
       </FlexContainer>
     </Div>
   );

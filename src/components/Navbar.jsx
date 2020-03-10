@@ -1,12 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { AppBar, Toolbar } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import Settings from "@material-ui/icons/Settings";
+import { useSelector, useDispatch } from "react-redux";
+import { loggedInSelector, checkLoggedIn } from "../slices/authSlice";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+
+  const isLogged = useSelector(loggedInSelector);
+
+  useEffect(() => {
+    dispatch(checkLoggedIn());
+  }, [isLogged]);
+
   return (
     <Header>
       <StyledToolbar>
-        <Brand href="https://kundesider.cordel.no/">
+        <Brand to="/">
           <img
             src={
               "https://kundesider.cordel.no/wp-content/uploads/2019/07/logo-300x109.png"
@@ -14,6 +26,13 @@ const Navbar = () => {
             alt="Cordel Kundesenter"
           />
         </Brand>
+        {isLogged ? (
+          <StyledIcon to="/admin/">
+            <Settings />
+          </StyledIcon>
+        ) : (
+          ""
+        )}
       </StyledToolbar>
     </Header>
   );
@@ -31,14 +50,31 @@ const Header = styled(AppBar)`
 `;
 
 const StyledToolbar = styled(Toolbar)`
-  max-width: ${props => props.theme.contentWidth};
   > * {
     height: 62px;
+    display: inline-flex;
+    align-items: center;
   }
 `;
 
-const Brand = styled.a`
+const Brand = styled(Link)`
+  a {
+    width: 0;
+  }
   > img {
     height: 100%;
+    justify-self: left;
+  }
+`;
+
+const StyledIcon = styled(Link)`
+  text-decoration: none;
+  margin-left: auto;
+  svg {
+    font-size: 2rem;
+  }
+  color: white;
+  :hover {
+    color: ${props => props.theme.secondaryColor};
   }
 `;

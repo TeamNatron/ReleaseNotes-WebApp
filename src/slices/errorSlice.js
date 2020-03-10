@@ -5,9 +5,12 @@ export const errorReducer = (state = {}, action) => {
   if (!matches) {
     return state;
   }
-  return {
-    text: payload.response ? payload.response.data : payload.error
-  };
+  if (payload) {
+    return {
+      text: payload.response ? payload.response.data : payload.error
+    };
+  }
+  return state;
 };
 
 export const errorMessageSelector = state => {
