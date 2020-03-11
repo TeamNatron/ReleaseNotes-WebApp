@@ -55,7 +55,6 @@ const ReleaseView = props => {
   useEffect(() => {
     if (props.release.date) {
       setFormattedDate(formatDate(props.release.date));
-      console.log(formattedDate);
     }
   }, [props.release.date]);
 
