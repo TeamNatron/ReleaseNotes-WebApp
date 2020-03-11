@@ -6,6 +6,7 @@ import { loadingReducer } from "../slices/loadingSlice";
 import { releaseReducer } from "../slices/releaseSlice";
 import { releaseNoteReducer } from "../slices/releaseNoteSlice";
 import { errorReducer } from "../slices/errorSlice";
+import { authReducer } from "../slices/authSlice";
 
 export default combineReducers({
   articles: articlesReducer,
@@ -14,5 +15,6 @@ export default combineReducers({
   releaseNotes: releaseNoteReducer,
   releases: releaseReducer,
   loading: loadingReducer,
-  error: errorReducer
+  error: errorReducer,
+  auth: authReducer
 });
