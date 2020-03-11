@@ -24,9 +24,7 @@ import { formatDate } from "../../utils/parser";
 const ReleaseView = props => {
   const [fullNotes, setFullNotes] = useState([]);
   const [denseNotes, setDenseNotes] = useState([]);
-  const [formattedDate, setFormattedDate] = useState(
-    "Her mangler det en dato.."
-  );
+  const [formattedDate, setFormattedDate] = useState("");
 
   useMemo(() => {
     const formatNote = note => {
