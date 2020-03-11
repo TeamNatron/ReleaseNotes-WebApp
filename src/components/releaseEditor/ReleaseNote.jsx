@@ -31,11 +31,7 @@ const ReleaseNote = props => {
               )}
             </Box>
           </Box>
-          <ReleaseNoteDivider
-            flexItem
-            fullWidth
-            isRelease={props.isRelease ? true : undefined}
-          />
+          <ReleaseNoteDivider isRelease={props.isRelease ? true : undefined} />
         </StyledContainer>
       )}
     </Draggable>
