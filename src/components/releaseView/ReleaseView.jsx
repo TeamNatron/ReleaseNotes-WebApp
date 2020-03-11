@@ -15,6 +15,7 @@ import ReleaseH1 from "../shared/ReleaseH1";
 import ReleaseH2 from "../shared/ReleaseH2";
 import { useEffect } from "react";
 import { formatDate } from "../../utils/parser";
+import { classifyReleaseNote } from "../../utils/releaseNoteUtil";
 
 /**
  * Takes a release with releasenotes and generates a full
@@ -27,26 +28,22 @@ const ReleaseView = props => {
   const [formattedDate, setFormattedDate] = useState("");
 
   useMemo(() => {
-    const formatNote = note => {
-      const { title, ingress, description } = note;
-      const [hasTitle, hasIngress, hasDescription] = [
-        hasText(title),
-        hasText(ingress),
-        hasText(description)
-      ];
-
-      if (!hasDescription) return; // there should always be a description
-      if (hasDescription && !hasIngress && !hasTitle) {
-        setDenseNotes(d =>
-          d.concat([<DenseReleaseNoteRow note={note} key={note.id} />])
-        );
-      } else
-        setFullNotes(f =>
-          f.concat([<FullReleaseNote note={note} key={note.id} />])
-        );
-    };
     props.release.releaseNotes.forEach(note => {
-      formatNote(note);
+      const type = classifyReleaseNote(note);
+      switch (type) {
+        case "DENSE":
+          setDenseNotes(d =>
+            d.concat([<DenseReleaseNoteRow note={note} key={note.id} />])
+          );
+          break;
+        case "FULL":
+          setFullNotes(f =>
+            f.concat([<FullReleaseNote note={note} key={note.id} />])
+          );
+          break;
+        default:
+          break;
+      }
     });
   }, [props]);
 
@@ -88,12 +85,6 @@ const TablePaper = styled(Paper)`
     background-color: transparent;
   }
 `;
-
-// empty html tag | empty string
-const isEmptyRegEx = /<[^/][^>]*><\/[^>]+>|^$/;
-const hasText = str => {
-  return !(str ? isEmptyRegEx.test(str) : true);
-};
 
 ReleaseView.propTypes = {
   /*release: PropTypes.objectOf(
