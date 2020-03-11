@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useHistory } from "react-router";
 import articleParameters, { sortKeys } from "../../articleParameters";
 import { Link } from "react-router-dom";
+import { formatDate } from "../../utils/parser";
 
 const ReleasesScreen = props => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -109,7 +110,7 @@ const ReleasesScreen = props => {
                         <StyledIcon>
                           <CalendarToday fontSize="small" />
                         </StyledIcon>
-                        {article.date}
+                        {formatDate(article.date) }
                       </Typography>
                     </React.Fragment>
                   }
