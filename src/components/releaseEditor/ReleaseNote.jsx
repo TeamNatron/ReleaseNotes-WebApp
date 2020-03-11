@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { Paper, Divider, IconButton } from "@material-ui/core";
+import { Paper, Divider, IconButton, Box } from "@material-ui/core";
 import styled from "styled-components";
 import { Delete } from "@material-ui/icons";
+import ReleaseNotePreview from "../shared/ReleaseNotePreview";
 
 const ReleaseNote = props => {
   return (
@@ -18,18 +19,27 @@ const ReleaseNote = props => {
           ref={provided.innerRef}
           isRelease={props.isRelease}
         >
-          <ReleaseNoteHeader>
-            <Title>{props.releaseNote.title}</Title>
-            {props.isRelease && (
-              <StyledIconButton
-                onClick={() => props.handleRemoveReleaseNote(props.index)}
-              >
-                <Delete />
-              </StyledIconButton>
-            )}
-          </ReleaseNoteHeader>
-          <ReleaseNoteDivider isRelease={props.isRelease ? true : undefined} />
-          <span style={{ marginTop: "15px" }}>{props.releaseNote.ingress}</span>
+          <Box display="flex" flexDirection="row">
+            <Box flexGrow={2}>
+              <ReleaseNotePreview note={props.releaseNote} />
+            </Box>
+            <Box>
+              {props.isRelease && (
+                <React.Fragment>
+                  <StyledIconButton
+                    onClick={() => props.handleRemoveReleaseNote(props.index)}
+                  >
+                    <Delete />
+                  </StyledIconButton>
+                </React.Fragment>
+              )}
+            </Box>
+          </Box>
+          <ReleaseNoteDivider
+            flexItem
+            fullWidth
+            isRelease={props.isRelease ? true : undefined}
+          />
         </StyledContainer>
       )}
     </Draggable>
@@ -43,18 +53,6 @@ const StyledIconButton = styled(IconButton)`
     margin-left: auto;
     display: flex-end;
   }
-`;
-
-const ReleaseNoteHeader = styled.div`
-  display: flex;
-  flex-direction: row;
-  padding-bottom: 0.8rem;
-  font-size: 1.2rem;
-`;
-
-const Title = styled.span`
-  margin: 0;
-  display: flex;
 `;
 
 const StyledContainer = styled(Paper)`
@@ -79,7 +77,6 @@ const ReleaseNoteDivider = styled(Divider)`
     height: 7px;
     border-radius: 3px;
     background-color: ${props => (props.isRelease ? "#05865a" : "#ffa900")};
-    transition: background-color 1s;
   }
   /* prettier-ignore-start */
 `;
