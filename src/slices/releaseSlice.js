@@ -43,9 +43,16 @@ export const releaseReducer = createReducer(initialState, {
 });
 
 // THUNKS
-export const fetchReleases = () => async dispatch => {
+export const fetchReleases = queryParameters => async dispatch => {
+  var query = "";
+  if (queryParameters) {
+    const id = queryParameters.productId;
+    const sortKey = queryParameters.sort;
+    query = (id ? "?product=" + id : "") + (sortKey ? "&sort=" + sortKey : "");
+  }
+
   dispatch(getPending());
-  Axios.get("/releases")
+  Axios.get("/releases" + query)
     .then(res => {
       dispatch(getSuccess(res.data));
     })

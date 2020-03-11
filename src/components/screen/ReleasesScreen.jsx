@@ -18,12 +18,12 @@ import {
 import styled from "styled-components";
 import { LocalOffer, CalendarToday, Sort } from "@material-ui/icons";
 import Ingress from "../shared/Ingress";
-import { fetchArticles } from "../../actions/articleActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useHistory } from "react-router";
 import articleParameters, { sortKeys } from "../../articleParameters";
 import { Link } from "react-router-dom";
 import { formatDate } from "../../utils/parser";
+import { fetchReleases } from "../../slices/releaseSlice";
 
 const ReleasesScreen = props => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -35,17 +35,16 @@ const ReleasesScreen = props => {
   // https://blog.bitsrc.io/using-react-redux-hooks-97654aff01e4
   // Query trick https://reacttraining.com/react-router/web/example/query-parameters
   useEffect(() => {
-    dispatch(fetchArticles(articleParameters(productId)));
-  }, [dispatch]);
-  const articles = useSelector(state => state.articles.items);
+    dispatch(fetchReleases(articleParameters(productId)));
+  }, [dispatch, productId]);
 
   function handleSortByNewest() {
-    dispatch(fetchArticles(articleParameters(productId, sortKeys.NEWEST)));
+    dispatch(fetchReleases(articleParameters(productId, sortKeys.NEWEST)));
     handleSortMenuClose();
   }
 
   function handleSortByOldest() {
-    dispatch(fetchArticles(articleParameters(productId, sortKeys.OLDEST)));
+    dispatch(fetchReleases(articleParameters(productId, sortKeys.OLDEST)));
     handleSortMenuClose();
   }
 
@@ -56,6 +55,8 @@ const ReleasesScreen = props => {
   const handleSortMenuClose = () => {
     setAnchorEl(null);
   };
+
+  const articles = useSelector(state => state.releases.items);
 
   return (
     <PageContainer>
@@ -110,7 +111,7 @@ const ReleasesScreen = props => {
                         <StyledIcon>
                           <CalendarToday fontSize="small" />
                         </StyledIcon>
-                        {formatDate(article.date) }
+                        {formatDate(article.date)}
                       </Typography>
                     </React.Fragment>
                   }
