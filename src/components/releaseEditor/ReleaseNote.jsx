@@ -7,11 +7,7 @@ import ReleaseNotePreview from "../shared/ReleaseNotePreview";
 
 const ReleaseNote = props => {
   return (
-    <Draggable
-      draggableId={props.releaseNote.workItemTitle}
-      id={props.id}
-      index={props.index}
-    >
+    <Draggable draggableId={"draggable-" + props.id} index={props.index}>
       {provided => (
         <StyledContainer
           {...provided.draggableProps}
