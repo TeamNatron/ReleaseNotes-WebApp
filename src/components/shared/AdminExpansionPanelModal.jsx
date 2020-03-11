@@ -13,10 +13,10 @@ const AdminExpansionPanelModal = props => {
         setComponentToRender(props.createContentComponent);
         break;
       case "EDIT":
-        setComponentToRender(props.editContentComponent);
-        console.log(id);
-        if (id) {
-          props.setRowId(id);
+        if (props.editContentComponent.type.name === "ChangePasswordForm") {
+          setComponentToRender(getChangePasswordComponent(id));
+        } else {
+          setComponentToRender(props.editContentComponent);
         }
         break;
       default:
@@ -27,6 +27,13 @@ const AdminExpansionPanelModal = props => {
     }
     setOpen(true);
   };
+
+  const getChangePasswordComponent = id => {
+    return React.Children.map(props.editContentComponent, child =>
+      React.cloneElement(child, { id: id })
+    )[0];
+  };
+
   return (
     <React.Fragment>
       <Modal

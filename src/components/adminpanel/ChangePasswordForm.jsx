@@ -89,7 +89,7 @@ class ChangePasswordForm extends Component {
   };
 
   handleSubmit = () => {
-    let promise = changePassword(this.state.password, this.prop.id);
+    let promise = changePassword(this.state.password, this.props.id);
     promise
       .then(
         response => (

@@ -17,8 +17,6 @@ import AdminExpansionPanelRoute from "../shared/AdminExpansionPanelRoute";
 import { fetchReleases } from "../../slices/releaseSlice";
 
 const AdminScreen = () => {
-  const [rowId, setRowId] = React.useState();
-
   const dispatch = useDispatch();
   const history = useHistory();
   useEffect(() => {
@@ -73,10 +71,7 @@ const AdminScreen = () => {
           icon={<PermIdentity />}
           rows={dummyUsers}
           createContentComponent={<AddUserForm />}
-          editContentComponent={
-            <ChangePasswordForm id={rowId ? rowId : undefined} />
-          }
-          setRowId={setRowId}
+          editContentComponent={<ChangePasswordForm />}
         />
         <AdminExpansionPanelRoute
           label="Releases"
