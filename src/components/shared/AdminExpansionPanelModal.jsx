@@ -7,13 +7,17 @@ const AdminExpansionPanelModal = props => {
   const [open, setOpen] = React.useState();
   const [componentToRender, setComponentToRender] = React.useState();
 
-  const handleAction = action => {
+  const handleAction = (action, id) => {
     switch (action) {
       case "CREATE":
         setComponentToRender(props.createContentComponent);
         break;
       case "EDIT":
-        setComponentToRender(props.editContentComponent);
+        if (props.editContentComponent.type.name === "ChangePasswordForm") {
+          setComponentToRender(getChangePasswordComponent(id));
+        } else {
+          setComponentToRender(props.editContentComponent);
+        }
         break;
       default:
         console.table(
@@ -23,6 +27,13 @@ const AdminExpansionPanelModal = props => {
     }
     setOpen(true);
   };
+
+  const getChangePasswordComponent = id => {
+    return React.Children.map(props.editContentComponent, child =>
+      React.cloneElement(child, { id: id })
+    )[0];
+  };
+
   return (
     <React.Fragment>
       <Modal
