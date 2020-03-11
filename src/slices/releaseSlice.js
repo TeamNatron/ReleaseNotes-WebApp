@@ -46,7 +46,7 @@ export const releaseReducer = createReducer(initialState, {
 export const fetchReleases = queryParameters => async dispatch => {
   var query = "";
   if (queryParameters) {
-    const id = queryParameters.productId;
+    const id = queryParameters.product;
     const sortKey = queryParameters.sort;
     query = (id ? "?product=" + id : "") + (sortKey ? "&sort=" + sortKey : "");
   }
