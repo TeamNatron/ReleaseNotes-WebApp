@@ -3,7 +3,10 @@ import { createSelector } from "@reduxjs/toolkit";
 export const findReleaseById = id =>
   createSelector(
     state => state.releases.items,
-    items => items[items.findIndex(r => r.id == id)]
+    items => {
+      if (!id) return undefined;
+      return items[items.findIndex(r => r.id == id)];
+    }
   );
 
 /**
