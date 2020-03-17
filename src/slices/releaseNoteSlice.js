@@ -14,6 +14,9 @@ export const savePending = createAction(name + "savePending");
 export const saveError = createAction(name + "saveError");
 export const saveSuccess = createAction(name + "saveSuccess");
 
+export const createPending = createAction(name + "createPending");
+export const createError = createAction(name + "createError");
+
 export const releaseNoteReducer = createReducer(
   {items: []},
   {
@@ -65,6 +68,19 @@ export function fetchReleaseNoteById(id) {
         })
         .catch(error => {
           saveError({error, id});
+        });
+    };
+  }
+
+  export function postReleaseNote(note) {
+    return dispatch => {
+      dispatch(createPending());
+      return Axios.put("/releasenote/", note)
+        .then(response => {
+          dispatch(saveSuccess({data: response.data, id: response.data.id}));
+        })
+        .catch(error => {
+          createError({error});
         });
     };
   }
