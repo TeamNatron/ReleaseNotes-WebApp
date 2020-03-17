@@ -48,15 +48,13 @@ const AdminScreen = () => {
     state.releaseNotes.items.map(rn => createData(rn.title, rn.id, rn.isPublic))
   );
 
-  const handleEditReleaseNotes = () => {
-    history.push("/admin/releasenotes");
-  };
-
   const dummyUsers = [
+    //TODO get real users 
     createData("Michael Jackson", 1),
     createData("The Rock", 2),
     createData("Trond Viggo Torgersen", 3),
-    createData("Sinnasnekkern", 4)
+    createData("Sinnasnekkern", 4),
+    createData("admin@ungspiller.no", 5)
   ];
   return (
     <PageContainer>
@@ -92,13 +90,6 @@ const AdminScreen = () => {
           createContentRoute="/admin/releasenotes/create"
           editContentRoute="/admin/releasenotes/edit/:id"
         />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleEditReleaseNotes}
-        >
-          Release Notes
-        </Button>
       </Container>
     </PageContainer>
   );
