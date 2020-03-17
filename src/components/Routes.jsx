@@ -40,9 +40,14 @@ const Routes = () => {
         component={AdminReleaseNotesScreen}
       />
       <Route
-        path="/admin/releasenotes/:id"
+        path="/admin/releasenotes/edit/:id"
         exact
         render={props => <EditReleaseNoteScreen {...props} />}
+      />
+      <Route
+        path="/admin/releasenotes/create"
+        exact
+        component={EditReleaseNoteScreen}
       />
       <Route
         path="/release/:id"

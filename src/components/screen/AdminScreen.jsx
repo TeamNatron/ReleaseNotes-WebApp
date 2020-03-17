@@ -15,6 +15,7 @@ import { useHistory } from "react-router";
 import AdminExpansionPanelModal from "../shared/AdminExpansionPanelModal";
 import AdminExpansionPanelRoute from "../shared/AdminExpansionPanelRoute";
 import { fetchReleases } from "../../slices/releaseSlice";
+import { fetchReleaseNotes } from "../../slices/releaseNoteSlice";
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
@@ -28,8 +29,8 @@ const AdminScreen = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchReleases());
-  }, []);
+    dispatch(fetchReleaseNotes());
+  }, [dispatch]);
 
   const createData = (name, id, isPublic) => {
     return { name, id, isPublic };
@@ -41,6 +42,10 @@ const AdminScreen = () => {
 
   const productTitles = useSelector(state =>
     state.products.items.map(p => createData(p.name, p.id))
+  );
+
+  const releaseNoteRows = useSelector(state =>
+    state.releaseNotes.items.map(rn => createData(rn.title, rn.id, rn.isPublic))
   );
 
   const handleEditReleaseNotes = () => {
@@ -79,6 +84,13 @@ const AdminScreen = () => {
           rows={releaseTitles}
           createContentRoute="/admin/releases/create"
           editContentRoute="/admin/releases/edit/:id"
+        />
+        <AdminExpansionPanelRoute
+          label="Release notes"
+          icon={<Description />}
+          rows={releaseNoteRows}
+          createContentRoute="/admin/releasenotes/create"
+          editContentRoute="/admin/releasenotes/edit/:id"
         />
         <Button
           variant="contained"
