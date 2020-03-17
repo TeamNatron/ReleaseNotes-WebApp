@@ -4,7 +4,6 @@ import LandingScreen from "./screen/LandingScreen";
 import ReleasesScreen from "./screen/ReleasesScreen";
 import ArticleScreen from "./screen/ArticleScreen";
 import AdminScreen from "./screen/AdminScreen";
-import AdminReleaseNotesScreen from "./screen/AdminReleaseNotesScreen";
 import EditReleaseNoteScreen from "./screen/EditReleaseNoteScreen";
 import LoginScreen from "./screen/LoginScreen";
 import ReleaseEditorScreen from "./screen/ReleaseEditorScreen";
@@ -34,11 +33,6 @@ const Routes = () => {
       <Route path="/releases" exact component={ReleasesScreen} />
       <Route path="/articles/article01" exact component={ArticleScreen} />
       <Route path="/admin/" exact component={AdminScreen} />
-      <Route
-        path="/admin/releasenotes"
-        exact
-        component={AdminReleaseNotesScreen}
-      />
       <Route
         path="/admin/releasenotes/edit/:id"
         exact
