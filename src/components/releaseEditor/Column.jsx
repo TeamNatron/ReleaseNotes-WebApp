@@ -1,8 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 import ReleaseNote from "./ReleaseNote";
 import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
-import TitleTextField from "./TitleTextField";
 
 const Column = props => {
   return (
@@ -13,6 +12,7 @@ const Column = props => {
             {props.releaseNotes.map((releaseNote, index) => (
               <ReleaseNote
                 key={releaseNote.id}
+                id={releaseNote.id}
                 releaseNote={releaseNote}
                 index={index}
                 isRelease={props.isRelease}
