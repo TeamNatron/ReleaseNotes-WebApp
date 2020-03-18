@@ -12,7 +12,6 @@ export const loadingReducer = (state = {}, action) => {
 
   // not a *_REQUEST / *_SUCCESS /  *_FAILURE actions, so we ignore them
   if (!matches) return state;
-
   const [, requestName, requestState] = matches;
   return {
     ...state,
@@ -23,7 +22,4 @@ export const loadingReducer = (state = {}, action) => {
 /**
  * Selector that returns a bool telling if anything is currently loading
  */
-export const loadingSelector = createSelector(state => {
-  if (!state) return false;
-  return Object.values(state).includes(true);
-});
+export const loadingSelector = state => Object.values(state.loading).includes(true);

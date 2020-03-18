@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import { AppBar, Toolbar } from "@material-ui/core";
+import { AppBar, Toolbar, Fade, LinearProgress } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import Settings from "@material-ui/icons/Settings";
 import { useSelector, useDispatch } from "react-redux";
 import { loggedInSelector, checkLoggedIn } from "../slices/authSlice";
+import { loadingSelector } from "../slices/loadingSlice";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -13,28 +14,42 @@ const Navbar = () => {
 
   useEffect(() => {
     dispatch(checkLoggedIn());
-  }, [isLogged]);
+  }, [dispatch, isLogged]);
 
+  const loading = useSelector(loadingSelector);
   return (
-    <Header>
-      <StyledToolbar>
-        <Brand to="/">
-          <img
-            src={
-              "https://kundesider.cordel.no/wp-content/uploads/2019/07/logo-300x109.png"
-            }
-            alt="Cordel Kundesenter"
-          />
-        </Brand>
-        {isLogged ? (
-          <StyledIcon to="/admin/">
-            <Settings />
-          </StyledIcon>
-        ) : (
-          ""
-        )}
-      </StyledToolbar>
-    </Header>
+    <React.Fragment>
+      <Header>
+        <StyledToolbar>
+          <Brand to="/">
+            <img
+              src={
+                "https://kundesider.cordel.no/wp-content/uploads/2019/07/logo-300x109.png"
+              }
+              alt="Cordel Kundesenter"
+            />
+          </Brand>
+          {isLogged ? (
+            <StyledIcon to="/admin/">
+              <Settings />
+            </StyledIcon>
+          ) : (
+            ""
+          )}
+        </StyledToolbar>
+        <Fade
+          in={loading}
+          style={{
+            transitionDelay: loading ? "800ms" : "0ms",
+            position: "absolute",
+            bottom: 0,
+            width: "100%"
+          }}
+        >
+          <LinearProgress />
+        </Fade>
+      </Header>
+    </React.Fragment>
   );
 };
 
