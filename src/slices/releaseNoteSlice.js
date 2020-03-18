@@ -75,7 +75,7 @@ export function fetchReleaseNoteById(id) {
   export function postReleaseNote(note) {
     return dispatch => {
       dispatch(createPending());
-      return Axios.put("/releasenote/", note)
+      return Axios.post("/releasenote/", note)
         .then(response => {
           dispatch(saveSuccess({data: response.data, id: response.data.id}));
         })
