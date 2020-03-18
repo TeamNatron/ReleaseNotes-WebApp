@@ -63,7 +63,7 @@ class ReleaseEditor extends Component {
     this.validateSubmit();
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (prevProps.release !== this.props.release && this.props.release) {
       this.setState(
         prevState => {
@@ -101,6 +101,9 @@ class ReleaseEditor extends Component {
         },
         () => this.validateReleaseNotes()
       );
+    }
+    if (this.state.filterQuery !== prevState.filterQuery) {
+      this.props.onFilter(this.state.filterQuery);
     }
   }
 
@@ -314,16 +317,15 @@ class ReleaseEditor extends Component {
         // does entry exist in the string?
         if (query.search(e[0]) !== -1) {
           // replace entry
-
           // regex to match the name+value of a given name in the query
-          const regex = new RegExp("[&?]" + e[0] + "=(.*?)(?=&|$)");
-          query = query.replace(regex, this.createQuery(query, e[0], e[1]));
+          const regex = new RegExp("(?=[&?]*)" + e[0] + "=(.*?)(?=&|$)");
+          query = query.replace(regex, e[0] + "=" + e[1]);
         } else {
           // add entry
           query = this.createQuery(query, e[0], e[1]);
         }
-        return { filterQuery: query };
       });
+      return { filterQuery: query };
     });
   };
 
@@ -492,7 +494,8 @@ ReleaseEditor.propTypes = {
   release: PropTypes.object,
 
   onCancel: PropTypes.func,
-  onSave: PropTypes.func
+  onSave: PropTypes.func,
+  onFilter: PropTypes.func
 };
 
 const ErrorMsgContainer = styled.div`

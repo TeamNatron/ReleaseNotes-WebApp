@@ -15,7 +15,7 @@ export const saveError = createAction(name + "saveError");
 export const saveSuccess = createAction(name + "saveSuccess");
 
 export const releaseNoteReducer = createReducer(
-  {items: []},
+  { items: [] },
   {
     [getSuccess]: (state, action) => {
       state.items = action.payload;
@@ -29,45 +29,46 @@ export const releaseNoteReducer = createReducer(
   }
 );
 
-// THUNKS 
+// THUNKS
 export function fetchReleaseNoteById(id) {
-    return dispatch => {
-      dispatch(getByIdPending({id}));
-      return Axios.get("/releasenote/" + id)
-        .then(response => {
-          dispatch(getByIdSuccess({data: response.data, id}));
-        })
-        .catch(error => {
-          getByIdError({error, id});
-        });
-    };
-  }
-  
-  export function fetchReleaseNotes() {
-    return dispatch => {
-      dispatch(getPending());
-      return Axios.get("/releasenote")
-        .then(res => {
-          dispatch(getSuccess(res.data));
-        })
-        .catch(error => {
-          getError(error);
-        });
-    };
-  }
-  
-  export function putReleaseNote(id, note) {
-    return dispatch => {
-      dispatch(savePending({id}));
-      return Axios.put("/releasenote/" + id, note)
-        .then(response => {
-          dispatch(saveSuccess({data: response.data, id}));
-        })
-        .catch(error => {
-          saveError({error, id});
-        });
-    };
-  }
+  return dispatch => {
+    dispatch(getByIdPending({ id }));
+    return Axios.get("/releasenote/" + id)
+      .then(response => {
+        dispatch(getByIdSuccess({ data: response.data, id }));
+      })
+      .catch(error => {
+        getByIdError({ error, id });
+      });
+  };
+}
+
+export function fetchReleaseNotes(_query) {
+  const query = _query ? _query : "";
+  return dispatch => {
+    dispatch(getPending());
+    return Axios.get("/releasenote" + query)
+      .then(res => {
+        dispatch(getSuccess(res.data));
+      })
+      .catch(error => {
+        getError(error);
+      });
+  };
+}
+
+export function putReleaseNote(id, note) {
+  return dispatch => {
+    dispatch(savePending({ id }));
+    return Axios.put("/releasenote/" + id, note)
+      .then(response => {
+        dispatch(saveSuccess({ data: response.data, id }));
+      })
+      .catch(error => {
+        saveError({ error, id });
+      });
+  };
+}
 
 // UTIL
 const updateInArray = (state, action) => {
