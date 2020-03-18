@@ -18,7 +18,6 @@ const Navbar = () => {
 
   const loading = useSelector(loadingSelector);
   return (
-    <React.Fragment>
       <Header>
         <StyledToolbar>
           <Brand to="/">
@@ -49,7 +48,6 @@ const Navbar = () => {
           <LinearProgress />
         </Fade>
       </Header>
-    </React.Fragment>
   );
 };
 

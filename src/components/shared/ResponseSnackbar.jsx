@@ -4,16 +4,17 @@ import { Snackbar } from "@material-ui/core";
 
 /*Takes in prop values for success and error, and these messages
   in a SnackBar at the bottom of the screen viewport.*/
-const ReponseSnackbar = props => {
+const ResponseSnackbar = props => {
   const [open, setOpen] = useState();
 
+  const { error, success } = props;
   useEffect(() => {
-    if (props?.error) setOpen(true);
-  }, [props.error]);
+    if (error) setOpen(true);
+  }, [error]);
 
   useEffect(() => {
-    if (props?.success) setOpen(true);
-  }, [props.success]);
+    if (success) setOpen(true);
+  }, [success]);
 
   const handleClose = (event, reason) => {
     // If the user presses anywhere on the screen,
@@ -39,4 +40,4 @@ const ReponseSnackbar = props => {
   );
 };
 
-export default ReponseSnackbar;
+export default ResponseSnackbar;
