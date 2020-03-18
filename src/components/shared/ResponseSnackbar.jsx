@@ -4,7 +4,7 @@ import { Snackbar } from "@material-ui/core";
 
 /*Takes in prop values for success and error, and these messages
   in a SnackBar at the bottom of the screen viewport.*/
-const ReponseSnackBar = props => {
+const ReponseSnackbar = props => {
   const [open, setOpen] = useState();
 
   useEffect(() => {
@@ -39,4 +39,4 @@ const ReponseSnackBar = props => {
   );
 };
 
-export default ReponseSnackBar;
+export default ReponseSnackbar;
