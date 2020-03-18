@@ -130,7 +130,7 @@ const ReleaseNoteEditor = props => {
   useEffect(() => {
     // editor contents are saved
     setChanged(false);
-  }, [props.note.updated]);
+  }, [props.note]);
 
   return (
     <React.Fragment>

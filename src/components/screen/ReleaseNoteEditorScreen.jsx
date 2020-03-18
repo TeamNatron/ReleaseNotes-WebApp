@@ -29,7 +29,10 @@ const ReleaseNoteEditorScreen = props => {
     // if screen has an id, a release is being updated
     // otherwise, a release is being created
     if (id) dispatch(putReleaseNote(id, objectToSave));
-    else dispatch(postReleaseNote(objectToSave));
+    else {
+      dispatch(postReleaseNote(objectToSave));
+      handleCancel()
+    }
   };
 
   const handleCancel = () => {
