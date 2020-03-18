@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import EditReleaseNoteForm from "../ReleaseNoteEditor/EditReleaseNoteForm";
 import { Box } from "@material-ui/core";
 import { useHistory } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,8 +8,9 @@ import {
   putReleaseNote,
   postReleaseNote
 } from "../../slices/releaseNoteSlice";
+import ReleaseNoteEditor from "../releaseNoteEditor/ReleaseNoteEditor";
 
-const EditReleaseNoteScreen = props => {
+const ReleaseNoteEditorScreen = props => {
   const id = props.match.params.id;
   const history = useHistory();
   const dispatch = useDispatch();
@@ -40,7 +40,7 @@ const EditReleaseNoteScreen = props => {
     <React.Fragment>
       <PageContainer>
         <Box my={5}>
-          <EditReleaseNoteForm
+          <ReleaseNoteEditor
             note={note}
             onSave={handleSave}
             onCancel={handleCancel}
@@ -51,4 +51,4 @@ const EditReleaseNoteScreen = props => {
   );
 };
 
-export default EditReleaseNoteScreen;
+export default ReleaseNoteEditorScreen;

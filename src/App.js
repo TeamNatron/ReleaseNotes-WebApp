@@ -13,7 +13,6 @@ import "draft-js/dist/Draft.css";
 import Footer from "./components/Footer";
 import styled from "styled-components";
 import { getAuthToken } from "./handlers/cookieHandler";
-import EditReleaseNoteScreen from "./components/screen/EditReleaseNoteScreen";
 import Routes from "./components/Routes";
 
 // https://github.com/axios/axios

@@ -35,7 +35,7 @@ import {
 import { green, orange } from "@material-ui/core/colors";
 import BottomToolbar from "../shared/BottomToolbar";
 
-const EditReleaseNoteForm = props => {
+const ReleaseNoteEditor = props => {
   //editor states
   const [title, setTitle] = React.useState(
     RichUtils.toggleBlockType(EditorState.createEmpty(), "header-two")
@@ -97,8 +97,9 @@ const EditReleaseNoteForm = props => {
   }
 
   const handleSave = () => {
-
-    const descriptionRawContentState = convertToRaw(description.getCurrentContent());
+    const descriptionRawContentState = convertToRaw(
+      description.getCurrentContent()
+    );
 
     const savedContent1 = title.getCurrentContent().getPlainText();
     const savedContent2 = ingress.getCurrentContent().getPlainText();
@@ -265,13 +266,13 @@ const EditReleaseNoteForm = props => {
   );
 };
 
-export default EditReleaseNoteForm;
+export default ReleaseNoteEditor;
 
-EditReleaseNoteForm.defaultProps = {
+ReleaseNoteEditor.defaultProps = {
   note: { item: { error: "note is undefined" } }
 };
 
-EditReleaseNoteForm.propTypes = {
+ReleaseNoteEditor.propTypes = {
   onSave: PropTypes.func,
   note: PropTypes.object
 };
