@@ -22,4 +22,7 @@ export const loadingReducer = (state = {}, action) => {
 /**
  * Selector that returns a bool telling if anything is currently loading
  */
-export const loadingSelector = state => Object.values(state.loading).includes(true);
+export const loadingSelector = state => {
+  if (!state?.loading) return false;
+  return Object.values(state.loading).includes(true);
+};
