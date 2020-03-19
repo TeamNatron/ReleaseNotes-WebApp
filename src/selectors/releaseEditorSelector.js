@@ -1,4 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit";
+import { loadingSelector } from "../slices/loadingSlice";
 
 export const findReleaseById = id =>
   createSelector(
@@ -16,9 +17,9 @@ export const findReleaseById = id =>
 export const initReleaseEditorReleaseNotes = id =>
   createSelector(
     findReleaseById(id),
+    loadingSelector,
     state => state.releaseNotes.items,
-    state => state.loading,
-    (release, releaseNotes, loading) => {
+    (release, loading, releaseNotes) => {
       if (loading) return [];
       if (!id) return releaseNotes;
       if (!release) return [];
