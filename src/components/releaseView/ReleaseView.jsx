@@ -28,24 +28,25 @@ const ReleaseView = props => {
   const [formattedDate, setFormattedDate] = useState("");
 
   useMemo(() => {
+    console.log("doing it");
+    const newDenseNotes = [];
+    const newFullNotes = [];
     props.release.releaseNotes.forEach(note => {
       const type = classifyReleaseNote(note);
       switch (type) {
         case "DENSE":
-          setDenseNotes(d =>
-            d.concat([<DenseReleaseNoteRow note={note} key={note.id} />])
-          );
+          newDenseNotes.push(<DenseReleaseNoteRow note={note} key={note.id} />);
           break;
         case "FULL":
-          setFullNotes(f =>
-            f.concat([<FullReleaseNote note={note} key={note.id} />])
-          );
+          newFullNotes.push(<FullReleaseNote note={note} key={note.id} />);
           break;
         default:
           break;
       }
     });
-  }, [props]);
+    setDenseNotes(newDenseNotes);
+    setFullNotes(newFullNotes);
+  }, [props.release.releaseNotes]);
 
   useEffect(() => {
     if (props.release.date) {
