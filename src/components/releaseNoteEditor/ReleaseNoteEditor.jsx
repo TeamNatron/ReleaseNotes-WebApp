@@ -60,11 +60,6 @@ const ReleaseNoteEditor = props => {
     setDescription(createStateFromText(props.note.description));
   }, [props.note]);
 
-  useEffect(() => {
-    console.log("ready:");
-    console.log(ready);
-  }, [ready]);
-
   // update the given editor
   const handleEditorChange = (source, editorState) => {
     switch (source) {
