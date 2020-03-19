@@ -13,11 +13,10 @@ import "draft-js/dist/Draft.css";
 import Footer from "./components/Footer";
 import styled from "styled-components";
 import { getAuthToken } from "./handlers/cookieHandler";
-import EditReleaseNoteScreen from "./components/screen/EditReleaseNoteScreen";
 import Routes from "./components/Routes";
 
 // https://github.com/axios/axios
-Axios.defaults.baseURL = "http://localhost:5000/api/";
+Axios.defaults.baseURL = process.env.REACT_APP_APP_URL + "/api/";
 Axios.interceptors.request.use(request => {
   const token = getAuthToken();
   if (token) {

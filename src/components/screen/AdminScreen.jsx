@@ -16,6 +16,7 @@ import AdminExpansionPanelModal from "../shared/AdminExpansionPanelModal";
 import AdminExpansionPanelRoute from "../shared/AdminExpansionPanelRoute";
 import { fetchReleases } from "../../slices/releaseSlice";
 import { fetchUsers } from "../../slices/userSlice";
+import { fetchReleaseNotes } from "../../slices/releaseNoteSlice";
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
@@ -29,8 +30,8 @@ const AdminScreen = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchReleases());
-  }, []);
+    dispatch(fetchReleaseNotes());
+  }, [dispatch]);
 
   useEffect(() => dispatch(fetchUsers()), [dispatch]);
   const createData = (name, id, isPublic) => {
@@ -52,12 +53,17 @@ const AdminScreen = () => {
   const handleEditReleaseNotes = () => {
     history.push("/admin/releasenotes");
   };
+  const releaseNoteRows = useSelector(state =>
+    state.releaseNotes.items.map(rn => createData(rn.title, rn.id, rn.isPublic))
+  );
 
   const dummyUsers = [
+    //TODO get real users 
     createData("Michael Jackson", 1),
     createData("The Rock", 2),
     createData("Trond Viggo Torgersen", 3),
-    createData("Sinnasnekkern", 4)
+    createData("Sinnasnekkern", 4),
+    createData("admin@ungspiller.no", 5)
   ];
   return (
     <PageContainer>
@@ -86,13 +92,13 @@ const AdminScreen = () => {
           createContentRoute="/admin/releases/create"
           editContentRoute="/admin/releases/edit/:id"
         />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleEditReleaseNotes}
-        >
-          Release Notes
-        </Button>
+        <AdminExpansionPanelRoute
+          label="Release notes"
+          icon={<Description />}
+          rows={releaseNoteRows}
+          createContentRoute="/admin/releasenotes/create"
+          editContentRoute="/admin/releasenotes/edit/:id"
+        />
       </Container>
     </PageContainer>
   );

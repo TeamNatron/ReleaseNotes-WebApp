@@ -8,7 +8,7 @@ import {
   Divider,
   Typography,
   Tooltip,
-  IconButton,
+  IconButton
 } from "@material-ui/core";
 import styled from "styled-components";
 import ComposedEditorsView from "./ComposedEditorsView";
@@ -35,7 +35,7 @@ import {
 import { green, orange } from "@material-ui/core/colors";
 import BottomToolbar from "../shared/BottomToolbar";
 
-const EditReleaseNoteForm = props => {
+const ReleaseNoteEditor = props => {
   //editor states
   const [title, setTitle] = React.useState(
     RichUtils.toggleBlockType(EditorState.createEmpty(), "header-two")
@@ -97,18 +97,18 @@ const EditReleaseNoteForm = props => {
   }
 
   const handleSave = () => {
-    const rawContentState1 = convertToRaw(title.getCurrentContent());
-    const rawContentState2 = convertToRaw(ingress.getCurrentContent());
-    const rawContentState3 = convertToRaw(description.getCurrentContent());
+    const descriptionRawContentState = convertToRaw(
+      description.getCurrentContent()
+    );
 
-    const savedHtml1 = draftToHtml(rawContentState1);
-    const savedHtml2 = draftToHtml(rawContentState2);
-    const savedHtml3 = draftToHtml(rawContentState3);
+    const savedContent1 = title.getCurrentContent().getPlainText();
+    const savedContent2 = ingress.getCurrentContent().getPlainText();
+    const savedContent3 = draftToHtml(descriptionRawContentState);
 
     const returnObject = {
-      title: savedHtml1,
-      ingress: savedHtml2,
-      description: savedHtml3,
+      title: savedContent1,
+      ingress: savedContent2,
+      description: savedContent3,
       ready
     };
     props.onSave(returnObject);
@@ -130,7 +130,7 @@ const EditReleaseNoteForm = props => {
   useEffect(() => {
     // editor contents are saved
     setChanged(false);
-  }, [props.note.updated]);
+  }, [props.note]);
 
   return (
     <React.Fragment>
@@ -266,13 +266,13 @@ const EditReleaseNoteForm = props => {
   );
 };
 
-export default EditReleaseNoteForm;
+export default ReleaseNoteEditor;
 
-EditReleaseNoteForm.defaultProps = {
+ReleaseNoteEditor.defaultProps = {
   note: { item: { error: "note is undefined" } }
 };
 
-EditReleaseNoteForm.propTypes = {
+ReleaseNoteEditor.propTypes = {
   onSave: PropTypes.func,
   note: PropTypes.object
 };
