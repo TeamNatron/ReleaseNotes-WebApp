@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import { Editor, EditorState } from "draft-js";
 import { Paper, Typography } from "@material-ui/core";
 import styled from "styled-components";

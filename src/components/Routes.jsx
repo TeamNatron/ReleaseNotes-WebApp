@@ -4,12 +4,11 @@ import LandingScreen from "./screen/LandingScreen";
 import ReleasesScreen from "./screen/ReleasesScreen";
 import ArticleScreen from "./screen/ArticleScreen";
 import AdminScreen from "./screen/AdminScreen";
-import AdminReleaseNotesScreen from "./screen/AdminReleaseNotesScreen";
-import EditReleaseNoteScreen from "./screen/EditReleaseNoteScreen";
 import LoginScreen from "./screen/LoginScreen";
 import ReleaseEditorScreen from "./screen/ReleaseEditorScreen";
 import Axios from "axios";
 import ReleaseScreen from "./screen/ReleaseScreen";
+import ReleaseNoteEditorScreen from "./screen/ReleaseNoteEditorScreen";
 
 const Routes = () => {
   const history = useHistory();
@@ -35,14 +34,14 @@ const Routes = () => {
       <Route path="/articles/article01" exact component={ArticleScreen} />
       <Route path="/admin/" exact component={AdminScreen} />
       <Route
-        path="/admin/releasenotes"
+        path="/admin/releasenotes/edit/:id"
         exact
-        component={AdminReleaseNotesScreen}
+        render={props => <ReleaseNoteEditorScreen {...props} />}
       />
       <Route
-        path="/admin/releasenotes/:id"
+        path="/admin/releasenotes/create"
         exact
-        render={props => <EditReleaseNoteScreen {...props} />}
+        component={ReleaseNoteEditorScreen}
       />
       <Route
         path="/release/:id"

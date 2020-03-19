@@ -70,6 +70,19 @@ export function putReleaseNote(id, note) {
   };
 }
 
+  export function postReleaseNote(note) {
+    return dispatch => {
+      dispatch(savePending());
+      return Axios.post("/releasenote/", note)
+        .then(response => {
+          dispatch(saveSuccess({data: response.data, id: response.data.id}));
+        })
+        .catch(error => {
+          saveError({error});
+        });
+    };
+  }
+
 // UTIL
 const updateInArray = (state, action) => {
   let index = state.items.findIndex(obj => obj.id == action.payload.id);

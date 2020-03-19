@@ -1,9 +1,4 @@
-import {
-  loadingReducer,
-  createLoadingSelector,
-  loadingSelector
-} from "./loadingSlice";
-import { useSelector } from "react-redux";
+import { loadingReducer, loadingSelector } from "./loadingSlice";
 
 describe("loadingSlice", () => {
   it("Adds correctly handles loading states when receiving actions", () => {
@@ -20,16 +15,15 @@ describe("loadingSlice", () => {
 
 describe("loadingSlice selectors", () => {
   it("returns true if anything is loading", () => {
-    // empty state
-    const loading = loadingSelector.resultFunc(mockState);
+    const loading = loadingSelector(mockState);
     expect(loading).toEqual(true);
   });
   it("returns false if nothing is loading", () => {
-    const loading = loadingSelector.resultFunc(mockStateAllFalse);
+    const loading = loadingSelector(mockStateAllFalse);
     expect(loading).toEqual(false);
   });
   it("returns false state us undefined", () => {
-    const loading = loadingSelector.resultFunc(null);
+    const loading = loadingSelector(null);
     expect(loading).toEqual(false);
   });
 });
@@ -38,5 +32,9 @@ const actionPending = { type: "someActionPending" };
 const action2Pending = { type: "someOtherActionPending" };
 const actionError = { type: "someActionError" };
 
-const mockState = { 1: false, 2: true, 3: true, 4: true, 5: false };
-const mockStateAllFalse = { 1: false, 2: false, 3: false, 4: false, 5: false };
+const mockState = {
+  loading: { 1: false, 2: true, 3: true, 4: true, 5: false }
+};
+const mockStateAllFalse = {
+  loading: { 1: false, 2: false, 3: false, 4: false, 5: false }
+};
