@@ -15,6 +15,7 @@ import { useHistory } from "react-router";
 import AdminExpansionPanelModal from "../shared/AdminExpansionPanelModal";
 import AdminExpansionPanelRoute from "../shared/AdminExpansionPanelRoute";
 import { fetchReleases } from "../../slices/releaseSlice";
+import { fetchUsers } from "../../slices/userSlice";
 import { fetchReleaseNotes } from "../../slices/releaseNoteSlice";
 
 const AdminScreen = () => {
@@ -32,6 +33,7 @@ const AdminScreen = () => {
     dispatch(fetchReleaseNotes());
   }, [dispatch]);
 
+  useEffect(() => dispatch(fetchUsers()), [dispatch]);
   const createData = (name, id, isPublic) => {
     return { name, id, isPublic };
   };
@@ -44,6 +46,13 @@ const AdminScreen = () => {
     state.products.items.map(p => createData(p.name, p.id))
   );
 
+  const userRows = useSelector(state =>
+    state.users.items.map(u => createData(u.email, u.id))
+  );
+
+  const handleEditReleaseNotes = () => {
+    history.push("/admin/releasenotes");
+  };
   const releaseNoteRows = useSelector(state =>
     state.releaseNotes.items.map(rn => createData(rn.title, rn.id, rn.isPublic))
   );
@@ -72,7 +81,7 @@ const AdminScreen = () => {
         <AdminExpansionPanelModal
           label="Brukere"
           icon={<PermIdentity />}
-          rows={dummyUsers}
+          rows={userRows}
           createContentComponent={<AddUserForm />}
           editContentComponent={<ChangePasswordForm />}
         />
