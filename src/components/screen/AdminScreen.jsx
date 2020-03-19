@@ -51,7 +51,13 @@ const AdminScreen = () => {
   );
 
   const releaseNoteRows = useSelector(state =>
-    state.releaseNotes.items.map(rn => createData(rn.title, rn.id, rn.isPublic))
+    state.releaseNotes.items.map(r => {
+      return createData(
+        r.title === "" ? "Release note #" + r.id : r.title,
+        r.id,
+        r.isPublic
+      );
+    })
   );
 
   return (
