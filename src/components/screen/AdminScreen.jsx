@@ -50,21 +50,16 @@ const AdminScreen = () => {
     state.users.items.map(u => createData(u.email, u.id))
   );
 
-  const handleEditReleaseNotes = () => {
-    history.push("/admin/releasenotes");
-  };
   const releaseNoteRows = useSelector(state =>
-    state.releaseNotes.items.map(rn => createData(rn.title, rn.id, rn.isPublic))
+    state.releaseNotes.items.map(r => {
+      return createData(
+        r.title === "" ? "Release note #" + r.id : r.title,
+        r.id,
+        r.isPublic
+      );
+    })
   );
 
-  const dummyUsers = [
-    //TODO get real users 
-    createData("Michael Jackson", 1),
-    createData("The Rock", 2),
-    createData("Trond Viggo Torgersen", 3),
-    createData("Sinnasnekkern", 4),
-    createData("admin@ungspiller.no", 5)
-  ];
   return (
     <PageContainer>
       <ScreenTitle>ADMINPANEL</ScreenTitle>
