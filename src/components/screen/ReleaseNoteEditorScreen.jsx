@@ -31,7 +31,7 @@ const ReleaseNoteEditorScreen = props => {
     if (id) dispatch(putReleaseNote(id, objectToSave));
     else {
       dispatch(postReleaseNote(objectToSave));
-      handleCancel()
+      handleCancel();
     }
   };
 
