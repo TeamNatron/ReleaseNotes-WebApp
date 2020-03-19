@@ -38,6 +38,7 @@ const ReleaseEditorScreen = props => {
   useEffect(() => {
     if (id) dispatch(fetchReleaseById(id));
   }, [dispatch, id]);
+
   const handleSave = objectToSave => {
     // if screen has an id, a release is being updated
     // otherwise, a release is being created
@@ -47,6 +48,11 @@ const ReleaseEditorScreen = props => {
       dispatch(postRelease(objectToSave));
     }
   };
+
+  const handleFilter = query => {
+    dispatch(fetchReleaseNotes(query));
+  };
+
   const productVersionsResource = useSelector(state => state.productVersions);
   const releaseNotes = useSelector(initReleaseEditorReleaseNotes(id));
   const loadedRelease = useSelector(findReleaseById(id));
@@ -71,6 +77,7 @@ const ReleaseEditorScreen = props => {
         release={loadedRelease}
         onCancel={handleCancel}
         onSave={handleSave}
+        onFilter={handleFilter}
         loading={loading}
       />
       <ResponseSnackbar error={error} success={success} />
