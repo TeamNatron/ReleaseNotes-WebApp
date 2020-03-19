@@ -17,7 +17,9 @@ export const initReleaseEditorReleaseNotes = id =>
   createSelector(
     findReleaseById(id),
     state => state.releaseNotes.items,
-    (release, releaseNotes) => {
+    state => state.loading,
+    (release, releaseNotes, loading) => {
+      if (loading) return [];
       if (!id) return releaseNotes;
       if (!release) return [];
       const idsToRemove = release.releaseNotes.map(rn => rn.id);
