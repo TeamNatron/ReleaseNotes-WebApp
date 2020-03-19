@@ -48,7 +48,7 @@ const ReleaseNoteEditor = props => {
   );
 
   // ready for release switch
-  const [ready, setReady] = React.useState();
+  const [ready, setReady] = React.useState(false);
 
   // saved / changed indicator
   const [changed, setChanged] = React.useState();
@@ -59,6 +59,11 @@ const ReleaseNoteEditor = props => {
     setIngress(createStateFromText(props.note.ingress));
     setDescription(createStateFromText(props.note.description));
   }, [props.note]);
+
+  useEffect(() => {
+    console.log("ready:");
+    console.log(ready);
+  }, [ready]);
 
   // update the given editor
   const handleEditorChange = (source, editorState) => {
@@ -109,7 +114,7 @@ const ReleaseNoteEditor = props => {
       title: savedContent1,
       ingress: savedContent2,
       description: savedContent3,
-      ready
+      isPublic: ready
     };
     props.onSave(returnObject);
   };
@@ -122,7 +127,7 @@ const ReleaseNoteEditor = props => {
     );
   };
 
-  const handleReady = ev => {
+  const handleReady = () => {
     // "ready for release" switch handler
     setReady(!ready);
   };
