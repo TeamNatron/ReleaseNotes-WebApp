@@ -28,7 +28,6 @@ const ReleaseView = props => {
   const [formattedDate, setFormattedDate] = useState("");
 
   useMemo(() => {
-    console.log("doing it");
     const newDenseNotes = [];
     const newFullNotes = [];
     props.release.releaseNotes.forEach(note => {
