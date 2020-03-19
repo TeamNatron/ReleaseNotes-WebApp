@@ -15,6 +15,7 @@ import { useHistory } from "react-router";
 import AdminExpansionPanelModal from "../shared/AdminExpansionPanelModal";
 import AdminExpansionPanelRoute from "../shared/AdminExpansionPanelRoute";
 import { fetchReleases } from "../../slices/releaseSlice";
+import { fetchUsers } from "../../slices/userSlice";
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ const AdminScreen = () => {
     dispatch(fetchReleases());
   }, []);
 
+  useEffect(() => dispatch(fetchUsers()), [dispatch]);
   const createData = (name, id, isPublic) => {
     return { name, id, isPublic };
   };
@@ -41,6 +43,10 @@ const AdminScreen = () => {
 
   const productTitles = useSelector(state =>
     state.products.items.map(p => createData(p.name, p.id))
+  );
+
+  const userRows = useSelector(state =>
+    state.users.items.map(u => createData(u.email, u.id))
   );
 
   const handleEditReleaseNotes = () => {
@@ -69,7 +75,7 @@ const AdminScreen = () => {
         <AdminExpansionPanelModal
           label="Brukere"
           icon={<PermIdentity />}
-          rows={dummyUsers}
+          rows={userRows}
           createContentComponent={<AddUserForm />}
           editContentComponent={<ChangePasswordForm />}
         />
