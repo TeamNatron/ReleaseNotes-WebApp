@@ -2,7 +2,6 @@ import React from "react";
 import { Route, useHistory } from "react-router";
 import LandingScreen from "./screen/LandingScreen";
 import ReleasesScreen from "./screen/ReleasesScreen";
-import ArticleScreen from "./screen/ArticleScreen";
 import AdminScreen from "./screen/AdminScreen";
 import LoginScreen from "./screen/LoginScreen";
 import ReleaseEditorScreen from "./screen/ReleaseEditorScreen";
@@ -31,7 +30,6 @@ const Routes = () => {
     <React.Fragment>
       <Route path="/" exact component={LandingScreen} />
       <Route path="/releases" exact component={ReleasesScreen} />
-      <Route path="/articles/article01" exact component={ArticleScreen} />
       <Route path="/admin/" exact component={AdminScreen} />
       <Route
         path="/admin/releasenotes/edit/:id"
