@@ -1,5 +1,6 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
 import Axios from "axios";
+import { updateInArray, deleteInArray } from "../utils/stateUtil";
 
 const name = "releaseNote/";
 export const getPending = createAction(name + "getPending");
@@ -14,6 +15,10 @@ export const savePending = createAction(name + "savePending");
 export const saveError = createAction(name + "saveError");
 export const saveSuccess = createAction(name + "saveSuccess");
 
+export const deletePending = createAction(name + "deletePending");
+export const deleteError = createAction(name + "deleteError");
+export const deleteSuccess = createAction(name + "deleteSuccess");
+
 export const releaseNoteReducer = createReducer(
   { items: [] },
   {
@@ -25,6 +30,9 @@ export const releaseNoteReducer = createReducer(
     },
     [getByIdSuccess]: (state, action) => {
       updateInArray(state, action);
+    },
+    [deleteSuccess]: (state, action) => {
+      deleteInArray(state, action);
     }
   }
 );
@@ -70,25 +78,27 @@ export function putReleaseNote(id, note) {
   };
 }
 
-  export function postReleaseNote(note) {
-    return dispatch => {
-      dispatch(savePending());
-      return Axios.post("/releasenote/", note)
-        .then(response => {
-          dispatch(saveSuccess({data: response.data, id: response.data.id}));
-        })
-        .catch(error => {
-          saveError({error});
-        });
-    };
-  }
-
-// UTIL
-const updateInArray = (state, action) => {
-  let index = state.items.findIndex(obj => obj.id == action.payload.id);
-  if (index === -1) {
-    state.items.push(action.payload.data);
-  } else {
-    state.items[index] = action.payload.data;
-  }
-};
+export function postReleaseNote(note) {
+  return dispatch => {
+    dispatch(savePending());
+    return Axios.post("/releasenote/", note)
+      .then(response => {
+        dispatch(saveSuccess({ data: response.data, id: response.data.id }));
+      })
+      .catch(error => {
+        saveError({ error });
+      });
+  };
+}
+export function deleteReleaseNote(id) {
+  return dispatch => {
+    dispatch(deletePending());
+    return Axios.delete("/releasenote/" + id)
+      .then(response => {
+        dispatch(deleteSuccess({ id }));
+      })
+      .catch(error => {
+        dispatch(deleteError(error));
+      });
+  };
+}
