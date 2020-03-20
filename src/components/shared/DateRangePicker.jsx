@@ -9,9 +9,7 @@ import PropTypes from "prop-types";
 moment.locale("nb");
 
 const DateRangePicker = props => {
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(new Date());
-  const { onChange } = props;
+  const { onChange, startDate, endDate, setStartDate, setEndDate } = props;
   useMemo(() => {
     onChange({
       startDate: startDate?.toJSON(),
