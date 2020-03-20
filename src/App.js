@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/navbar/Navbar";
 import { ThemeProvider } from "styled-components";
 import { GlobalStyle, theme } from "./styles/index";
 import { CssBaseline } from "@material-ui/core";
