@@ -69,12 +69,6 @@ export const fetchReleases = queryParameters => async dispatch => {
 
 // Thunk for fetching
 export const fetchReleaseById = id => async dispatch => {
-  if (!id) {
-    dispatch(
-      getByIdError({ id, error: "Attempted to fetch item with undefined Id" })
-    );
-    return;
-  }
   dispatch(getByIdPending({ id }));
   Axios.get("/releases/" + id)
     .then(res => {

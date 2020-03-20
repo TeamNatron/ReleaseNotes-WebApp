@@ -3,9 +3,21 @@ import {
   getPending,
   getSuccess,
   getError,
-  putByIdSuccess
+  putByIdSuccess,
+  fetchReleaseById,
+  fetchReleases,
+  putReleaseById,
+  postRelease,
+  deleteRelease
 } from "./releaseSlice";
-
+import { testThunkConformance } from "../utils/test/testThunkConformance";
+describe("releaseNotes Thunks", () => {
+  testThunkConformance(fetchReleaseById);
+  testThunkConformance(fetchReleases);
+  testThunkConformance(putReleaseById);
+  testThunkConformance(postRelease);
+  testThunkConformance(deleteRelease);
+});
 describe("releases reducer", () => {
   it("should handle initial state", () => {
     expect(releaseReducer(undefined, {})).toEqual(initialStateWithoutItems);

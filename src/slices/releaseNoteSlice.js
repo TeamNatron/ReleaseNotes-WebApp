@@ -23,7 +23,7 @@ export const releaseNoteReducer = createReducer(
   { items: [] },
   {
     [getSuccess]: (state, action) => {
-      state.items = action.payload;
+      state.items = action.payload.data;
     },
     [saveSuccess]: (state, action) => {
       updateInArray(state, action);
@@ -57,7 +57,7 @@ export function fetchReleaseNotes(_query) {
     dispatch(getPending());
     return Axios.get("/releasenote" + query)
       .then(res => {
-        dispatch(getSuccess(res.data));
+        dispatch(getSuccess({ data: res.data }));
       })
       .catch(error => {
         getError(error);
