@@ -8,7 +8,13 @@ import { putReleaseById } from "../../slices/releaseSlice";
 const AdminExpansionPanelRoute = props => {
   const history = useHistory();
   const dispatch = useDispatch();
-
+  const {
+    createContentRoute,
+    editContentRoute,
+    onUpdate,
+    onDelete,
+    ...baseProps
+  } = props;
   const handleAction = (action, id, isPublic) => {
     switch (action) {
       case "CREATE":
@@ -20,7 +26,10 @@ const AdminExpansionPanelRoute = props => {
         break;
 
       case "UPDATE":
-        dispatch(putReleaseById(id, {isPublic}));
+        dispatch(props.onUpdate(id, { isPublic }));
+        break;
+      case "DELETE":
+        dispatch(props.onDelete(id));
         break;
 
       default:
@@ -36,9 +45,10 @@ const AdminExpansionPanelRoute = props => {
     <React.Fragment>
       <AdminExpansionPanelBase
         onAction={handleAction}
-        edit={Boolean(props.editContentRoute)}
-        isPublic={true}
-        {...props}
+        edit={Boolean(editContentRoute)}
+        delete={Boolean(onDelete)}
+        isPublic={Boolean(onUpdate)}
+        {...baseProps}
       />
     </React.Fragment>
   );
@@ -51,5 +61,6 @@ AdminExpansionPanelRoute.propTypes = {
   rows: PropTypes.array,
   icon: PropTypes.element,
   createContentRoute: PropTypes.string,
-  editContentRoute: PropTypes.string
+  editContentRoute: PropTypes.string,
+  onUpdate: PropTypes.func
 };

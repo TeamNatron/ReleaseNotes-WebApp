@@ -16,28 +16,38 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import styled from "styled-components";
-import { Edit } from "@material-ui/icons";
+import { Edit, Delete } from "@material-ui/icons";
+import DeleteDialogButton from "./DeleteDialogButton";
 
 const AdminExpansionPanelBase = props => {
   const columns = [
     { id: "avatar", label: "", maxWidth: 20 },
-    { id: "name", label: "Name", minWidth: 100 },
-    props.isPublic
-      ? {
-          id: "isPublicSwitch",
-          label: "Publisert"
-        }
-      : {},
-    props.edit
-      ? {
-          id: "button",
-          label: "",
-          minWidth: 170,
-          align: "right",
-          format: value => value.toFixed(2)
-        }
-      : {}
+    { id: "name", label: "Name", minWidth: 100 }
   ];
+  if (props.isPublic) {
+    columns.push({
+      id: "isPublicSwitch",
+      label: "Publisert"
+    });
+  }
+  if (props.edit) {
+    columns.push({
+      id: "button",
+      label: "",
+      minWidth: 77,
+      align: "right",
+      format: value => value.toFixed(2)
+    });
+  }
+  if (props.delete) {
+    columns.push({
+      id: "deleteButton",
+      label: "",
+      minWidth: 77,
+      align: "right",
+      format: value => value.toFixed(2)
+    });
+  }
 
   return (
     <React.Fragment>
@@ -112,6 +122,17 @@ const AdminExpansionPanelBase = props => {
                                 }}
                               />
                             </StyledTableCell>
+                          );
+                        } else if (column.id === "deleteButton") {
+                          return props.edit ? (
+                            <StyledTableCell>
+                              <DeleteDialogButton
+                                onConfirm={() => props.onAction("DELETE", row.id)}
+                                entityName={row.name}
+                              />
+                            </StyledTableCell>
+                          ) : (
+                            <React.Fragment />
                           );
                         } else if (column.id === "button") {
                           return props.edit ? (
