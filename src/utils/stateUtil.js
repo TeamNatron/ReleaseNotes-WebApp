@@ -11,6 +11,6 @@ export const updateInArray = (state, action) => {
 export const deleteInArray = (state, action) => {
   let index = state.items.findIndex(obj => obj.id == action.payload.id);
   if (index !== -1) {
-    delete state.items[index];
+    state.items.splice(index, 1);
   }
 };
