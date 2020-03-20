@@ -14,9 +14,17 @@ import { fetchProducts } from "../../actions/productActions";
 import { useHistory } from "react-router";
 import AdminExpansionPanelModal from "../shared/AdminExpansionPanelModal";
 import AdminExpansionPanelRoute from "../shared/AdminExpansionPanelRoute";
-import { fetchReleases, putReleaseById } from "../../slices/releaseSlice";
+import {
+  fetchReleases,
+  putReleaseById,
+  deleteRelease
+} from "../../slices/releaseSlice";
 import { fetchUsers } from "../../slices/userSlice";
-import { fetchReleaseNotes, putReleaseNote } from "../../slices/releaseNoteSlice";
+import {
+  fetchReleaseNotes,
+  putReleaseNote,
+  deleteReleaseNote
+} from "../../slices/releaseNoteSlice";
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
@@ -86,8 +94,8 @@ const AdminScreen = () => {
           rows={releaseTitles}
           createContentRoute="/admin/releases/create"
           editContentRoute="/admin/releases/edit/:id"
-          onUpdate={putReleaseById} 
-          //onDelete={deleteRelease}
+          onUpdate={putReleaseById}
+          onDelete={deleteRelease}
         />
         <AdminExpansionPanelRoute
           label="Release notes"
@@ -95,8 +103,8 @@ const AdminScreen = () => {
           rows={releaseNoteRows}
           createContentRoute="/admin/releasenotes/create"
           editContentRoute="/admin/releasenotes/edit/:id"
-          onUpdate={putReleaseNote} 
-          //onDelete={deleteReleaseNote}
+          onUpdate={putReleaseNote}
+          onDelete={deleteReleaseNote}
         />
       </Container>
     </PageContainer>

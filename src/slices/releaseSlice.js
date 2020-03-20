@@ -1,5 +1,6 @@
 import { createReducer, createAction } from "@reduxjs/toolkit";
 import Axios from "axios";
+import { updateInArray, deleteInArray } from "../utils/stateUtil";
 
 // ACTIONS
 export const name = "release/";
@@ -19,6 +20,10 @@ export const postPending = createAction(name + "postPending");
 export const postError = createAction(name + "postError");
 export const postSuccess = createAction(name + "postSuccess");
 
+export const deletePending = createAction(name + "deletePending");
+export const deleteError = createAction(name + "deleteError");
+export const deleteSuccess = createAction(name + "deleteSuccess");
+
 // REDUCER
 const initialState = {
   pending: false,
@@ -36,6 +41,9 @@ export const releaseReducer = createReducer(initialState, {
   [putByIdSuccess]: (state, action) => {
     updateInArray(state, action);
     state.successMsg = action.payload.response;
+  },
+  [deleteSuccess]: (state, action) => {
+    deleteInArray(state, action);
   },
   [postSuccess]: (state, action) => {
     state.successMsg = action.payload;
@@ -103,15 +111,20 @@ export function postRelease(releaseToCreate) {
   };
 }
 
-// UTIL
-const updateInArray = (state, action) => {
-  let index = state.items.findIndex(obj => obj.id == action.payload.id);
-  if (index === -1) {
-    state.items.push(action.payload.data);
-  } else {
-    state.items[index] = action.payload.data;
-  }
-};
+export function deleteRelease(id) {
+  return dispatch => {
+    dispatch(deletePending());
+    return Axios.delete("/releases/" + id)
+      .then(response => {
+        console.log(response)
+        dispatch(deleteSuccess({id}));
+      })
+      .catch(error => {
+        dispatch(deleteError(error));
+      });
+  };
+}
+
 // https://github.com/reduxjs/redux-toolkit/blob/master/docs/usage/usage-guide.md
 
 // SELECTORS
