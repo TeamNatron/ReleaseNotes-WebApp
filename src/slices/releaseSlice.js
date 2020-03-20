@@ -116,7 +116,6 @@ export function deleteRelease(id) {
     dispatch(deletePending());
     return Axios.delete("/releases/" + id)
       .then(response => {
-        console.log(response)
         dispatch(deleteSuccess({id}));
       })
       .catch(error => {

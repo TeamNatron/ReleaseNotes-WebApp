@@ -90,14 +90,11 @@ export function postReleaseNote(note) {
       });
   };
 }
-
 export function deleteReleaseNote(id) {
   return dispatch => {
     dispatch(deletePending());
     return Axios.delete("/releasenote/" + id)
       .then(response => {
-        console.log(response);
-        console.log("hello")
         dispatch(deleteSuccess({ id }));
       })
       .catch(error => {
