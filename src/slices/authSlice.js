@@ -1,5 +1,9 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
-import { setAuthToken, getAuthToken } from "../handlers/cookieHandler";
+import {
+  setAuthToken,
+  getAuthToken,
+  removeAuthToken
+} from "../handlers/cookieHandler";
 import Axios from "axios";
 
 const name = "auth/";
@@ -10,6 +14,10 @@ const postSuccess = createAction(name + "postSuccess");
 const checkLoggedInPending = createAction(name + "checkLoggedInPending");
 const checkLoggedInError = createAction(name + "checkLoggedInError");
 const checkLoggedInSuccess = createAction(name + "checkLoggedInSuccess");
+
+const logoutPending = createAction(name + "logoutPending");
+const logoutError = createAction(name + "logoutError");
+const logoutSuccess = createAction(name + "logoutSuccess");
 
 export const authReducer = createReducer(
   { isLogged: false, sucessMsg: "" },
@@ -23,6 +31,9 @@ export const authReducer = createReducer(
       state.isLogged = true;
     },
     [checkLoggedInError]: state => {
+      state.isLogged = false;
+    },
+    [logoutSuccess]: state => {
       state.isLogged = false;
     }
   }
@@ -50,6 +61,17 @@ export const login = (paramEmail, paramPassword) => async dispatch => {
     .catch(err => {
       dispatch(postError(err));
     });
+};
+
+export const logout = () => async dispatch => {
+  dispatch(logoutPending);
+
+  try {
+    removeAuthToken();
+    dispatch(logoutSuccess());
+  } catch (err) {
+    dispatch(logoutError(err));
+  }
 };
 
 export const checkLoggedIn = () => async dispatch => {
