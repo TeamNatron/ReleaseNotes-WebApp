@@ -1,11 +1,9 @@
 import React from "react";
-import { mount, shallow } from "enzyme";
 import { Provider } from "react-redux";
 import { useHistory } from "react-router";
 import { store } from "../../setupStore";
 import { Router } from "@material-ui/icons";
-
-jest.mock("react-router");
+import { renderWithProdiders } from "../../setupTests";
 
 /**
  * Tests things that are common for every screen
@@ -19,17 +17,6 @@ export const testScreenConformance = screenToTest => {
   }
 
   it("Renders without crash", () => {
-    useHistory.mockImplementation(() => jest.fn());
-    const attachTo = document.createElement("div");
-    const wrapper = shallow(
-      <Provider store={store}>
-        <Router>{screenToTest}</Router>
-      </Provider>,
-      attachTo
-    );
-    const screen = wrapper.find(screenToTest.type);
-
-    expect(wrapper.exists()).toBe(true);
-    expect(screen.exists()).toBe(true);
+    const rendered = renderWithProdiders(screenToTest);
   });
 };
