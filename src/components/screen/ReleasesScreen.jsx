@@ -90,7 +90,7 @@ const ReleasesScreen = props => {
         </StyledToolbar>
         <StyledList>
           {articles.map(article => (
-            <li>
+            <li key={article.id}>
               <ListItem alignItems="flex-start">
                 <ListItemText
                   primary={
