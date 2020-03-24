@@ -8,13 +8,9 @@ import PropTypes from "prop-types";
  */
 const HtmlWrapper = props => {
   return (
-    <React.Fragment key={props.key}>
+    <React.Fragment>
       {props.strip ? (
-        <Typography
-          variant={props.variant}
-          component={props.component}
-          key={props.key}
-        >
+        <Typography variant={props.variant} component={props.component}>
           {stripText(props.html)}
         </Typography>
       ) : (

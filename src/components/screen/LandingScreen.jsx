@@ -27,20 +27,21 @@ const LandingScreen = props => {
       </WelcomeContainer>
       <PageContainer>
         <ProductDisplay>
-            <React.Fragment>
-              {products.error ? (
-                <p>ERROR: {[products.error.toString()]}</p>
-              ) : (
-                products.items.map(item => (
-                  <ListItem>
-                    <Product
-                      img="https://constructionaccidentlawfirms.com/files/2019/08/AdobeStock_192077668.jpg"
-                      item={item}
-                      loading={products.loading}
-                    />
-                  </ListItem>
-              )))}
-            </React.Fragment>
+          <React.Fragment>
+            {products.error ? (
+              <p>ERROR: {[products.error.toString()]}</p>
+            ) : (
+              products.items.map(item => (
+                <ListItem key={item.id}>
+                  <Product
+                    img="https://constructionaccidentlawfirms.com/files/2019/08/AdobeStock_192077668.jpg"
+                    item={item}
+                    loading={products.loading}
+                  />
+                </ListItem>
+              ))
+            )}
+          </React.Fragment>
         </ProductDisplay>
       </PageContainer>
     </React.Fragment>
