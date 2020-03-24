@@ -92,7 +92,7 @@ const AdminExpansionPanelBase = props => {
                       {columns.map(column => {
                         if (column.id === "avatar") {
                           return (
-                            <StyledTableCell>
+                            <StyledTableCell key={column.id}>
                               {props.icon ? (
                                 React.cloneElement(props.icon, {
                                   color: "disabled",
@@ -105,7 +105,7 @@ const AdminExpansionPanelBase = props => {
                           );
                         } else if (column.id === "isPublicSwitch") {
                           return (
-                            <StyledTableCell>
+                            <StyledTableCell key={column.id}>
                               <Switch
                                 color="primary"
                                 value={row.isPublic}
@@ -124,27 +124,29 @@ const AdminExpansionPanelBase = props => {
                             </StyledTableCell>
                           );
                         } else if (column.id === "deleteButton") {
-                          return props.edit ? (
-                            <StyledTableCell>
-                              <DeleteDialogButton
-                                onConfirm={() => props.onAction("DELETE", row.id)}
-                                entityName={row.name}
-                              />
-                            </StyledTableCell>
-                          ) : (
-                            <React.Fragment />
+                          return (
+                            props.edit && (
+                              <StyledTableCell key={column.id}>
+                                <DeleteDialogButton
+                                  onConfirm={() =>
+                                    props.onAction("DELETE", row.id)
+                                  }
+                                  entityName={row.name}
+                                />
+                              </StyledTableCell>
+                            )
                           );
                         } else if (column.id === "button") {
-                          return props.edit ? (
-                            <StyledTableCell>
-                              <IconButton
-                                onClick={() => props.onAction("EDIT", row.id)}
-                              >
-                                <EditButton fontSize="small" />
-                              </IconButton>
-                            </StyledTableCell>
-                          ) : (
-                            <React.Fragment />
+                          return (
+                            props.edit && (
+                              <StyledTableCell key={column.id}>
+                                <IconButton
+                                  onClick={() => props.onAction("EDIT", row.id)}
+                                >
+                                  <EditButton fontSize="small" />
+                                </IconButton>
+                              </StyledTableCell>
+                            )
                           );
                         } else {
                           const value = row[column.id];
