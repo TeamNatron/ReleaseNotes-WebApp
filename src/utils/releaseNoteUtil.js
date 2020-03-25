@@ -7,7 +7,7 @@ export const classifyReleaseNote = note => {
   ];
 
   if (!hasDescription) return; // there should always be a description
-  if (hasDescription && !hasIngress && !hasTitle) {
+  if (!hasIngress && !hasTitle) {
     return "DENSE";
   } else return "FULL";
 };

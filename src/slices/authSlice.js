@@ -51,7 +51,7 @@ export const login = (paramEmail, paramPassword) => async dispatch => {
     {
       withCredentials: false,
       headers: {
-        ["Access-Control-Request-Headers"]: "Content-Type"
+        "Access-Control-Request-Headers": "Content-Type"
       }
     }
   )

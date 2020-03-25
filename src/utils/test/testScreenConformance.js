@@ -1,8 +1,4 @@
 import React from "react";
-import { Provider } from "react-redux";
-import { useHistory } from "react-router";
-import { store } from "../../setupStore";
-import { Router } from "@material-ui/icons";
 import { renderWithProdiders } from "../../setupTests";
 
 /**
@@ -17,6 +13,6 @@ export const testScreenConformance = screenToTest => {
   }
 
   it("Renders without crash", () => {
-    const rendered = renderWithProdiders(screenToTest);
+    renderWithProdiders(screenToTest);
   });
 };

@@ -5,7 +5,6 @@ import Button from "@material-ui/core/Button";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import styled from "styled-components";
 import { ListItem, Input, Paper } from "@material-ui/core";
-import { login } from "../../slices/authSlice";
 
 class Login extends Component {
   constructor() {

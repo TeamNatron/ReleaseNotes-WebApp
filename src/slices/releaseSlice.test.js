@@ -1,8 +1,6 @@
 import {
   releaseReducer,
-  getPending,
   getSuccess,
-  getError,
   putByIdSuccess,
   fetchReleaseById,
   fetchReleases,
@@ -11,6 +9,7 @@ import {
   deleteRelease
 } from "./releaseSlice";
 import { testThunkConformance } from "../utils/test/testThunkConformance";
+
 describe("releaseNotes Thunks", () => {
   testThunkConformance(fetchReleaseById);
   testThunkConformance(fetchReleases);
@@ -18,6 +17,7 @@ describe("releaseNotes Thunks", () => {
   testThunkConformance(postRelease);
   testThunkConformance(deleteRelease);
 });
+
 describe("releases reducer", () => {
   it("should handle initial state", () => {
     expect(releaseReducer(undefined, {})).toEqual(initialStateWithoutItems);

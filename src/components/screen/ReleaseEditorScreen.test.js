@@ -11,8 +11,5 @@ import { testScreenConformance } from "../../utils/test/testScreenConformance";
 jest.mock("react-router");
 
 describe("<ReleaseEditorScreen /> ", () => {
-  const props = {
-    match: { params: { id: 0 } } // Router props
-  };
   testScreenConformance(<ReleaseEditorScreen />);
 });

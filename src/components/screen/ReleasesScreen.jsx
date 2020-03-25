@@ -30,7 +30,6 @@ const ReleasesScreen = props => {
   let query = useQuery();
   const dispatch = useDispatch();
   const productId = query.get("product");
-  const history = useHistory();
 
   // https://blog.bitsrc.io/using-react-redux-hooks-97654aff01e4
   // Query trick https://reacttraining.com/react-router/web/example/query-parameters

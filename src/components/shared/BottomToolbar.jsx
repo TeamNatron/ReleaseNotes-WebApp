@@ -1,5 +1,5 @@
 import React from "react";
-import { Fade, LinearProgress, AppBar, Toolbar } from "@material-ui/core";
+import { Fade, LinearProgress, AppBar } from "@material-ui/core";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import ToolbarBase from "./ToolbarBase";

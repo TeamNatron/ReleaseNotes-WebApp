@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { Paper, Divider, IconButton, Box } from "@material-ui/core";
 import styled from "styled-components";

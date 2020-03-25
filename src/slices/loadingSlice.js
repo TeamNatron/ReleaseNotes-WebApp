@@ -1,5 +1,3 @@
-import { createSelector } from "@reduxjs/toolkit";
-
 //medium.com/stashaway-engineering/react-redux-tips-better-way-to-handle-loading-flags-in-your-reducers-afda42a804c6
 /**
  * Reducer to handle all loading flags

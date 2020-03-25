@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Container, Button } from "@material-ui/core";
+import { Container } from "@material-ui/core";
 import { PermIdentity, DesktopWindows, Description } from "@material-ui/icons";
 import PageContainer from "../shared/PageContainer";
 import Ingress from "../shared/Ingress";
@@ -28,7 +28,6 @@ import {
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
-  const history = useHistory();
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);

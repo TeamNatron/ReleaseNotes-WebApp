@@ -11,8 +11,8 @@ export function registerNewUser(paramEmail, paramPassword) {
     {
       withCredentials: false,
       headers: {
-        ["Access-Control-Request-Headers"]: "Content-Type",
-        ["Authorization"]: "Bearer " + getAuthToken()
+        "Access-Control-Request-Headers": "Content-Type",
+        Authorization: "Bearer " + getAuthToken()
       }
     }
   );
@@ -27,8 +27,8 @@ export function changePassword(paramPassword, id) {
     {
       withCredentials: false,
       headers: {
-        ["Access-Control-Request-Headers"]: "Content-Type",
-        ["Authorization"]: "Bearer " + getAuthToken()
+        "Access-Control-Request-Headers": "Content-Type",
+        Authorization: "Bearer " + getAuthToken()
       }
     }
   );

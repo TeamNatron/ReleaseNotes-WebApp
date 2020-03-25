@@ -19,20 +19,10 @@ export function fetchProducts() {
 }
 
 export function registerNewProduct(name, isPublic) {
-  return Axios.post(
-    "products",
-    {
-      name: name,
-      isPublic: isPublic
-    },
-    {
-      withCredentials: false,
-      headers: {
-        ["Access-Control-Request-Headers"]: "Content-Type",
-        ["Authorization"]: "Bearer " + getAuthToken()
-      }
-    }
-  );
+  return Axios.post("products", {
+    name: name,
+    isPublic: isPublic
+  });
 }
 
 export const actions = {

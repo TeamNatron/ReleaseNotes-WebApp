@@ -244,7 +244,7 @@ class ReleaseEditor extends Component {
   };
 
   validateReleaseNotes = () => {
-    if (!(this.state.allItems.release.list.length === 0)) {
+    if (this.state.allItems.release.list.length !== 0) {
       this.setState(
         { releaseNotesIsError: false, releaseNoteErrorMsg: "" },
         () => {
