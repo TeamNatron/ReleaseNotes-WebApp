@@ -49,7 +49,7 @@ class ChangePasswordForm extends Component {
           this.validateSubmit();
         }
       );
-    } else if (!(this.state.password === this.state.passwordConfirm)) {
+    } else if (this.state.password !== this.state.passwordConfirm) {
       this.setState(
         {
           pwdIsError: true,

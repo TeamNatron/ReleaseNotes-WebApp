@@ -27,7 +27,7 @@ const HtmlWrapper = props => {
 export default HtmlWrapper;
 
 HtmlWrapper.propTypes = {
-  stip: PropTypes.bool
+  strip: PropTypes.bool
 };
 const stripText = text => {
   if (!text) return null;

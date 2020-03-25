@@ -12,7 +12,7 @@ import {
   FormControlLabel
 } from "@material-ui/core";
 import styled from "styled-components";
-import { DesktopWindows, Public } from "@material-ui/icons";
+import { DesktopWindows } from "@material-ui/icons";
 import { registerNewProduct } from "../../actions/productActions";
 
 class AddProductForm extends Component {

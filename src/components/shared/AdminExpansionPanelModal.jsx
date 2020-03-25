@@ -4,7 +4,7 @@ import { Backdrop, DialogContent, Modal, Fade } from "@material-ui/core";
 import AdminExpansionPanelBase from "./AdminExpansionPanelBase";
 
 const AdminExpansionPanelModal = props => {
-  const [open, setOpen] = React.useState();
+  const [open, setOpen] = React.useState(false);
   const [componentToRender, setComponentToRender] = React.useState();
 
   const handleAction = (action, id) => {

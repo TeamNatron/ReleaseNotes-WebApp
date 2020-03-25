@@ -19,7 +19,7 @@ import styled from "styled-components";
 import { LocalOffer, CalendarToday, Sort } from "@material-ui/icons";
 import Ingress from "../shared/Ingress";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useHistory } from "react-router";
+import { useLocation } from "react-router";
 import articleParameters, { sortKeys } from "../../articleParameters";
 import { Link } from "react-router-dom";
 import { formatDate } from "../../utils/parser";
@@ -30,7 +30,6 @@ const ReleasesScreen = props => {
   let query = useQuery();
   const dispatch = useDispatch();
   const productId = query.get("product");
-  const history = useHistory();
 
   // https://blog.bitsrc.io/using-react-redux-hooks-97654aff01e4
   // Query trick https://reacttraining.com/react-router/web/example/query-parameters

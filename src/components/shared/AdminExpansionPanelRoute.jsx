@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import AdminExpansionPanelBase from "./AdminExpansionPanelBase";
 import { useHistory } from "react-router";
 import { useDispatch } from "react-redux";
-import { putReleaseById } from "../../slices/releaseSlice";
 
 const AdminExpansionPanelRoute = props => {
   const history = useHistory();

@@ -16,7 +16,7 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import styled from "styled-components";
-import { Edit, Delete } from "@material-ui/icons";
+import { Edit } from "@material-ui/icons";
 import DeleteDialogButton from "./DeleteDialogButton";
 
 const AdminExpansionPanelBase = props => {

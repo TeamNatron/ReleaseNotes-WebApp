@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Container, Button } from "@material-ui/core";
+import { Container } from "@material-ui/core";
 import { PermIdentity, DesktopWindows, Description } from "@material-ui/icons";
 import PageContainer from "../shared/PageContainer";
 import Ingress from "../shared/Ingress";
@@ -11,7 +11,6 @@ import ChangePasswordForm from "../adminpanel/ChangePasswordForm";
 import AdminExpansionPanel from "../shared/AdminExpansionPanelModal";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProducts } from "../../actions/productActions";
-import { useHistory } from "react-router";
 import AdminExpansionPanelModal from "../shared/AdminExpansionPanelModal";
 import AdminExpansionPanelRoute from "../shared/AdminExpansionPanelRoute";
 import {
@@ -28,7 +27,6 @@ import {
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
-  const history = useHistory();
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
