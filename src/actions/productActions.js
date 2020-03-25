@@ -1,6 +1,4 @@
 import Axios from "axios";
-import { getAuthToken } from "../handlers/cookieHandler";
-
 export const FETCH_PRODUCTS_PENDING = "fetchProductsPending";
 export const FETCH_PRODUCTS_SUCCESS = "fetchProductsSuccess";
 export const FETCH_PRODUCTS_ERROR = "fetchProductsError";

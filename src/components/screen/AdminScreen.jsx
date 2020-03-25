@@ -11,7 +11,6 @@ import ChangePasswordForm from "../adminpanel/ChangePasswordForm";
 import AdminExpansionPanel from "../shared/AdminExpansionPanelModal";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProducts } from "../../actions/productActions";
-import { useHistory } from "react-router";
 import AdminExpansionPanelModal from "../shared/AdminExpansionPanelModal";
 import AdminExpansionPanelRoute from "../shared/AdminExpansionPanelRoute";
 import {
