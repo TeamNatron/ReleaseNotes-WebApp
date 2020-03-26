@@ -51,7 +51,7 @@ const AdminExpansionPanelBase = props => {
 
   return (
     <React.Fragment>
-      <ExpansionPanel>
+      <ExpansionPanel defaultExpanded={props.expanded ? true : false}>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -183,7 +183,8 @@ AdminExpansionPanelBase.propTypes = {
   label: PropTypes.string,
   rows: PropTypes.array,
   icon: PropTypes.element,
-  onAction: PropTypes.func
+  onAction: PropTypes.func,
+  expanded: PropTypes.bool
 };
 
 const AddButton = styled(Button)`
