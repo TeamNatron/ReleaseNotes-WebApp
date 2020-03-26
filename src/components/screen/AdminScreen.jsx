@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Container } from "@material-ui/core";
+import { Container, Button, Tabs, Tab, AppBar } from "@material-ui/core";
 import { PermIdentity, DesktopWindows, Description } from "@material-ui/icons";
 import PageContainer from "../shared/PageContainer";
 import Ingress from "../shared/Ingress";
@@ -24,9 +24,11 @@ import {
   putReleaseNote,
   deleteReleaseNote
 } from "../../slices/releaseNoteSlice";
+import { useState } from "react";
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
+  const [value, setValue] = useState();
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
@@ -66,12 +68,26 @@ const AdminScreen = () => {
     })
   );
 
+  const handleChange = newValue => {
+    setValue(newValue);
+  };
+
   return (
     <PageContainer>
       <ScreenTitle>ADMINPANEL</ScreenTitle>
       <Ingress gutterBottom>Behandle produkter og brukere.</Ingress>
       <SpacedDivider />
-      <Container>
+      <AppBar position="static">
+        <Tabs value={value} onChange={handleChange}>
+          <Tab label="Release Notes System" />
+          <Tab label="Azure Devops" />
+        </Tabs>
+      </AppBar>
+      <Container value={value} index={0}>
+        <h1>Hello!</h1>
+      </Container>
+
+      <Container value={value} index={0}>
         <AdminExpansionPanel
           label="Produkter"
           icon={<DesktopWindows />}
