@@ -1,6 +1,8 @@
 import React from "react";
 import { Description } from "@material-ui/icons";
 import AdminExpansionPanelBase from "../shared/AdminExpansionPanelBase";
+import { Select, MenuItem } from "@material-ui/core";
+import ProjectSelector from "./ProjectSelector";
 
 // EXAMPLE COMPONENT USED TO CONTAIN AZURE DEVOPS TOOLS
 // CAN BE MODYFIED OR REMOVED
@@ -24,7 +26,6 @@ const AzureDevopsView = () => {
     { id: 201, title: "Azure Release 6.2" },
     { id: 99, title: "Azure Release 5.2" }
   ];
-
   const getDummyProjects = () => {
     var projects = [];
     dummyProjects.map(p => {
@@ -57,7 +58,7 @@ const AzureDevopsView = () => {
       <AdminExpansionPanelBase
         expanded
         label="Azure Devops Releases"
-        selector={getDummyProjects}
+        summaryComponent={<ProjectSelector projects={getDummyProjects()} />}
         icon={<Description />}
         rows={getDummyReleases()}
         onAction={handleAction}
