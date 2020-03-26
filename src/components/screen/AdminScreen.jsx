@@ -25,7 +25,7 @@ import {
 } from "../../slices/releaseNoteSlice";
 import { useState } from "react";
 import styled from "styled-components";
-import AzureDevopsView from "../adminpanel/AzureDevopsView";
+import AzureDevOpsView from "../adminpanel/AzureDevOpsView";
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
@@ -117,7 +117,7 @@ const AdminScreen = () => {
           icon={<DesktopWindows />}
           rows={productTitles}
           createContentComponent={<AddProductForm />}
-          //editContentComponent={<AddProductForm />}
+        //editContentComponent={<AddProductForm />}
         />
         <AdminExpansionPanelModal
           label="Brukere"
@@ -146,7 +146,7 @@ const AdminScreen = () => {
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <AzureDevopsView></AzureDevopsView>
+        <AzureDevOpsView></AzureDevOpsView>
       </TabPanel>
     </PageContainer>
   );
