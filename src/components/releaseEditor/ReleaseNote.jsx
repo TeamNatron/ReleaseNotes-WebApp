@@ -4,6 +4,7 @@ import { Paper, Divider, IconButton, Box } from "@material-ui/core";
 import styled from "styled-components";
 import { Delete } from "@material-ui/icons";
 import ReleaseNotePreview from "../shared/ReleaseNotePreview";
+import ReleaseNoteEditorModal from "../releaseNoteEditor/ReleaseNoteEditorModal";
 
 const ReleaseNote = props => {
   return (
@@ -22,6 +23,11 @@ const ReleaseNote = props => {
             <Box>
               {props.isRelease && (
                 <React.Fragment>
+                  <ReleaseNoteEditorModal
+                    note={props.releaseNote}
+                    onSave={props.onSave}
+                  />
+
                   <StyledIconButton
                     onClick={() => props.handleRemoveReleaseNote(props.index)}
                   >

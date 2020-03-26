@@ -15,7 +15,10 @@ import {
   getSuccesMessage
 } from "../../slices/releaseSlice";
 import { loadingSelector } from "../../slices/loadingSlice";
-import { fetchReleaseNotes } from "../../slices/releaseNoteSlice";
+import {
+  fetchReleaseNotes,
+  putReleaseNote
+} from "../../slices/releaseNoteSlice";
 import {
   initReleaseEditorReleaseNotes,
   findReleaseById
@@ -49,6 +52,10 @@ const ReleaseEditorScreen = props => {
     }
   };
 
+  const handleSaveReleaseNote = (id, objectToSave) => {
+    dispatch(putReleaseNote(id, objectToSave));
+  };
+
   const handleFilter = query => {
     dispatch(fetchReleaseNotes(query));
   };
@@ -78,6 +85,7 @@ const ReleaseEditorScreen = props => {
         onCancel={handleCancel}
         onSave={handleSave}
         onFilter={handleFilter}
+        onSaveReleaseNote={handleSaveReleaseNote}
         loading={loading}
       />
       <ResponseSnackbar error={error} success={success} />

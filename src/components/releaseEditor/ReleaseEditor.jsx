@@ -195,6 +195,8 @@ class ReleaseEditor extends Component {
     this.props.onSave(release);
   };
 
+  handleEditReleaseNote = () => {};
+
   handleOnChangeProductVersion = event => {
     const newProductVersionId = event.currentTarget.id;
     const newProductVersionLabel = event.target.value;
@@ -366,7 +368,7 @@ class ReleaseEditor extends Component {
               label="Publisert"
             />,
             <SaveButton
-              key="cancelBtn"
+              key="saveBtn"
               disabled={this.state.submitDisabled}
               variant="contained"
               onClick={this.handleSave}
@@ -459,6 +461,7 @@ class ReleaseEditor extends Component {
                   releaseNotes={this.state.allItems.release.list}
                   noteWidth={this.state.noteWidth}
                   handleRemoveReleaseNote={this.handleRemoveReleaseNote}
+                  onSaveReleaseNote={this.props.onSaveReleaseNote}
                 />
               </ReleaseContainer>
               <VerticalDivider orientation={"vertical"} />
@@ -495,7 +498,9 @@ ReleaseEditor.propTypes = {
 
   onCancel: PropTypes.func,
   onSave: PropTypes.func,
-  onFilter: PropTypes.func
+  onFilter: PropTypes.func,
+
+  onSaveReleaseNote: PropTypes.func
 };
 
 const ErrorMsgContainer = styled.div`
