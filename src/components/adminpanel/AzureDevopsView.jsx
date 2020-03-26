@@ -1,14 +1,14 @@
 import React from "react";
+import DevOpsForm from "./DevOpsForm";
 
-// EXAMPLE COMPONENT USED TO CONTAIN AZURE DEVOPS TOOLS
-// CAN BE MODYFIED OR REMOVED
-const AzureDevopsView = () => {
+const AzureDevOpsView = props => {
+
+
   return (
     <React.Fragment>
-      <h1>Hello</h1>
-      <p>Welcome to Azure Devops Import/Export services!</p>
+      <DevOpsForm></DevOpsForm>
     </React.Fragment>
   );
 };
 
-export default AzureDevopsView;
+export default AzureDevOpsView;
