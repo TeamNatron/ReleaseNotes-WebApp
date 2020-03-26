@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { Grid } from "@material-ui/core";
@@ -7,7 +7,6 @@ import { useState } from "react";
 
 
 const DevOpsForm = props => {
-    const dispatch = useDispatch();
     const [name, setName] = useState("");
     const [PAT, setPAT] = useState("");
     const [org, setOrg] = useState("");
