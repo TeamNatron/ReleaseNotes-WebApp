@@ -196,8 +196,8 @@ class ReleaseEditor extends Component {
   };
 
   handleSaveReleaseNote = (releaseNoteId, releaseNote) => {
-    // save editor state locally
-    console.log(releaseNote);
+    // save editor state locally, then save release note
+
     const release = {
       id: this.props.release.id,
       productVersion: this.props.productVersionsResource.items.find(
