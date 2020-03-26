@@ -69,6 +69,11 @@ const AdminExpansionPanelBase = props => {
           <Typography>{props.label}</Typography>
         </ExpansionPanelSummary>
         <TablePanel>
+          {props.summaryComponent
+            ? React.cloneElement(props.summaryComponent, {
+                style: { border: "1px solid red" }
+              })
+            : React.Fragment}
           {props.createContentComponent ? (
             <AddButton
               onClick={() => props.onAction("CREATE")}
