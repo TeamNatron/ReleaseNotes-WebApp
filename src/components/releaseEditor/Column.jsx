@@ -19,6 +19,7 @@ const Column = props => {
                 handleRemoveReleaseNote={
                   props.isRelease ? props.handleRemoveReleaseNote : undefined
                 }
+                onSave={props.onSaveReleaseNote}
               />
             ))}
             {provided.placeholder}

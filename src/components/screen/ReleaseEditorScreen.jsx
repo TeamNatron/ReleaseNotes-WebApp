@@ -12,10 +12,14 @@ import {
   fetchReleaseById,
   putReleaseById,
   postRelease,
-  getSuccesMessage
+  getSuccesMessage,
+  putByIdSuccess
 } from "../../slices/releaseSlice";
 import { loadingSelector } from "../../slices/loadingSlice";
-import { fetchReleaseNotes } from "../../slices/releaseNoteSlice";
+import {
+  fetchReleaseNotes,
+  putReleaseNote
+} from "../../slices/releaseNoteSlice";
 import {
   initReleaseEditorReleaseNotes,
   findReleaseById
@@ -42,11 +46,20 @@ const ReleaseEditorScreen = props => {
   const handleSave = objectToSave => {
     // if screen has an id, a release is being updated
     // otherwise, a release is being created
+    console.log(objectToSave);
     if (id) {
       dispatch(putReleaseById(id, objectToSave));
     } else {
       dispatch(postRelease(objectToSave));
     }
+  };
+
+  const handleSaveReleaseNote = (id, objectToSave) => {
+    dispatch(putReleaseNote(id, objectToSave));
+  };
+
+  const handleSaveEditorState = release => {
+    dispatch(putByIdSuccess({ data: release, id }));
   };
 
   const handleFilter = query => {
@@ -78,6 +91,8 @@ const ReleaseEditorScreen = props => {
         onCancel={handleCancel}
         onSave={handleSave}
         onFilter={handleFilter}
+        onSaveEditorState={handleSaveEditorState}
+        onSaveReleaseNote={handleSaveReleaseNote}
         loading={loading}
       />
       <ResponseSnackbar error={error} success={success} />

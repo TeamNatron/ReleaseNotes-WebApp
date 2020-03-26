@@ -195,6 +195,22 @@ class ReleaseEditor extends Component {
     this.props.onSave(release);
   };
 
+  handleSaveReleaseNote = (releaseNoteId, releaseNote) => {
+    // save editor state locally, then save release note
+
+    const release = {
+      id: this.props.release.id,
+      productVersion: this.props.productVersionsResource.items.find(
+        item => item.id == this.state.selectedProductVersionId
+      ),
+      title: this.state.title,
+      isPublic: this.state.isPublic,
+      releaseNotes: this.state.allItems.release.list
+    };
+    this.props.onSaveEditorState(release);
+    this.props.onSaveReleaseNote(releaseNoteId, releaseNote);
+  };
+
   handleOnChangeProductVersion = event => {
     const newProductVersionId = event.currentTarget.id;
     const newProductVersionLabel = event.target.value;
@@ -366,7 +382,7 @@ class ReleaseEditor extends Component {
               label="Publisert"
             />,
             <SaveButton
-              key="cancelBtn"
+              key="saveBtn"
               disabled={this.state.submitDisabled}
               variant="contained"
               onClick={this.handleSave}
@@ -459,6 +475,7 @@ class ReleaseEditor extends Component {
                   releaseNotes={this.state.allItems.release.list}
                   noteWidth={this.state.noteWidth}
                   handleRemoveReleaseNote={this.handleRemoveReleaseNote}
+                  onSaveReleaseNote={this.handleSaveReleaseNote}
                 />
               </ReleaseContainer>
               <VerticalDivider orientation={"vertical"} />
@@ -495,7 +512,9 @@ ReleaseEditor.propTypes = {
 
   onCancel: PropTypes.func,
   onSave: PropTypes.func,
-  onFilter: PropTypes.func
+  onFilter: PropTypes.func,
+
+  onSaveReleaseNote: PropTypes.func
 };
 
 const ErrorMsgContainer = styled.div`

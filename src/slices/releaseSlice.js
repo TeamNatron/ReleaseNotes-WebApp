@@ -1,6 +1,7 @@
 import { createReducer, createAction } from "@reduxjs/toolkit";
 import Axios from "axios";
 import { updateInArray, deleteInArray } from "../utils/stateUtil";
+import { saveSuccess as saveReleaseNoteSuccess } from "./releaseNoteSlice";
 
 // ACTIONS
 export const name = "release/";
@@ -42,6 +43,18 @@ export const releaseReducer = createReducer(initialState, {
     updateInArray(state, action);
     state.successMsg = action.payload.response;
   },
+  [saveReleaseNoteSuccess]: (state, action) => {
+    // release note updated, update affected releases
+    state.items.forEach(release => {
+      const index = release.releaseNotes.findIndex(
+        obj => obj.id == action.payload.id
+      );
+      if (index !== -1) {
+        release.releaseNotes[index] = action.payload.data;
+      }
+    });
+  },
+
   [deleteSuccess]: (state, action) => {
     deleteInArray(state, action);
   },
@@ -110,7 +123,7 @@ export function deleteRelease(id) {
     dispatch(deletePending());
     return Axios.delete("/releases/" + id)
       .then(response => {
-        dispatch(deleteSuccess({id}));
+        dispatch(deleteSuccess({ id }));
       })
       .catch(error => {
         dispatch(deleteError(error));
