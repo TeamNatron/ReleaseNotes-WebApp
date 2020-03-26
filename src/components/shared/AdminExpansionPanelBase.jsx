@@ -87,12 +87,7 @@ const AdminExpansionPanelBase = props => {
               <TableBody>
                 {props.rows.map(row => {
                   return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={row.code}
-                    >
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                       {columns.map(column => {
                         if (column.id === "avatar") {
                           return (
