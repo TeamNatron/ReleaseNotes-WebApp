@@ -16,7 +16,7 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import styled from "styled-components";
-import { Edit } from "@material-ui/icons";
+import { Edit, Add } from "@material-ui/icons";
 import DeleteDialogButton from "./DeleteDialogButton";
 
 const AdminExpansionPanelBase = props => {
@@ -45,6 +45,15 @@ const AdminExpansionPanelBase = props => {
       label: "",
       minWidth: 77,
       align: "right",
+      format: value => value.toFixed(2)
+    });
+  }
+  if (props.import) {
+    columns.push({
+      id: "importButton",
+      label: "Import",
+      minWidth: 77,
+      align: "center",
       format: value => value.toFixed(2)
     });
   }
@@ -146,6 +155,19 @@ const AdminExpansionPanelBase = props => {
                                 </IconButton>
                               </StyledTableCell>
                             )
+                          );
+                        } else if (column.id === "importButton") {
+                          return (
+                            <StyledTableCell
+                              label={column.label}
+                              key={column.id}
+                            >
+                              <IconButton
+                                onClick={() => props.onAction("IMPORT", row.id)}
+                              >
+                                <Add fontSize="small" />
+                              </IconButton>
+                            </StyledTableCell>
                           );
                         } else {
                           const value = row[column.id];
