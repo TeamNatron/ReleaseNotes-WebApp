@@ -1,5 +1,12 @@
 import React, { useEffect } from "react";
-import { Container, Button, Tabs, Tab, AppBar } from "@material-ui/core";
+import {
+  Container,
+  Tabs,
+  Tab,
+  AppBar,
+  Typography,
+  Divider
+} from "@material-ui/core";
 import { PermIdentity, DesktopWindows, Description } from "@material-ui/icons";
 import PageContainer from "../shared/PageContainer";
 import Ingress from "../shared/Ingress";
@@ -25,10 +32,14 @@ import {
   deleteReleaseNote
 } from "../../slices/releaseNoteSlice";
 import { useState } from "react";
+import styled from "styled-components";
+import AzureDevopsView from "../adminpanel/AzureDevopsView";
 
 const AdminScreen = () => {
+  const RELEASE_NOTE_SYSTEM = 0;
+  const AZURE_DEVOPS = 1;
   const dispatch = useDispatch();
-  const [value, setValue] = useState();
+  const [value, setValue] = useState(0);
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
@@ -68,26 +79,59 @@ const AdminScreen = () => {
     })
   );
 
-  const handleChange = newValue => {
+  const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  const a11yProps = index => {
+    return {
+      id: `simple-tab-${index}`,
+      "aria-controls": `simple-tabpanel-${index}`
+    };
+  };
+
+  const TabPanel = props => {
+    const { children, value, index, ...other } = props;
+
+    return (
+      <Typography
+        component="div"
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        {...other}
+      >
+        {value === index && <Container>{children}</Container>}
+      </Typography>
+    );
+  };
+
+  const ingressText = () => {
+    switch (value) {
+      case RELEASE_NOTE_SYSTEM:
+        return "Behandle produkter og brukere.";
+
+      case AZURE_DEVOPS:
+        return "Importer det du vil, når du vil";
+    }
   };
 
   return (
     <PageContainer>
       <ScreenTitle>ADMINPANEL</ScreenTitle>
-      <Ingress gutterBottom>Behandle produkter og brukere.</Ingress>
-      <SpacedDivider />
-      <AppBar position="static">
-        <Tabs value={value} onChange={handleChange}>
-          <Tab label="Release Notes System" />
-          <Tab label="Azure Devops" />
-        </Tabs>
-      </AppBar>
-      <Container value={value} index={0}>
-        <h1>Hello!</h1>
-      </Container>
+      <Ingress gutterBottom>
+        Her kan du gjøre administrative oppgaver for systemet.
+      </Ingress>
 
-      <Container value={value} index={0}>
+      <TurboDivider />
+      <StyledAppBar color="transparent" position="static">
+        <Tabs value={value} onChange={handleChange}>
+          <Tab label="Release Notes System" {...a11yProps(0)} />
+          <Tab label="Azure Devops" {...a11yProps(1)} />
+        </Tabs>
+      </StyledAppBar>
+
+      <TabPanel value={value} index={0}>
         <AdminExpansionPanel
           label="Produkter"
           icon={<DesktopWindows />}
@@ -120,9 +164,29 @@ const AdminScreen = () => {
           onUpdate={putReleaseNote}
           onDelete={deleteReleaseNote}
         />
-      </Container>
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <AzureDevopsView></AzureDevopsView>
+      </TabPanel>
     </PageContainer>
   );
 };
 
 export default AdminScreen;
+
+const TurboDivider = styled(Divider)`
+  && {
+    margin-top: 32px;
+    margin-bottom: 0;
+  }
+`;
+
+const StyledAppBar = styled.div`
+  && {
+    border: 1px solid #80808047;
+    z-index: 10;
+    width: inherit;
+    margin-bottom: 34px;
+    background-color: white;
+  }
+`;
