@@ -1,7 +1,6 @@
 import React from "react";
 import { Description } from "@material-ui/icons";
 import AdminExpansionPanelBase from "../shared/AdminExpansionPanelBase";
-import { Select, MenuItem } from "@material-ui/core";
 import ProjectSelector from "./ProjectSelector";
 
 // EXAMPLE COMPONENT USED TO CONTAIN AZURE DEVOPS TOOLS
