@@ -176,10 +176,10 @@ const ReleaseNoteEditor = props => {
                 />
               </Tooltip>
             ) : (
-              <Tooltip title="Endringene er lagret">
-                <Check style={{ color: green[500] }} />
-              </Tooltip>
-            )}
+                  <Tooltip title="Endringene er lagret">
+                    <Check style={{ color: green[500] }} />
+                  </Tooltip>
+                )}
           </IconButton>
         ]}
       />
@@ -220,8 +220,8 @@ const ReleaseNoteEditor = props => {
                     }}
                   />
                 ) : (
-                  <div></div>
-                )}
+                    <div></div>
+                  )}
               </Box>
             </Paper>
           </div>
