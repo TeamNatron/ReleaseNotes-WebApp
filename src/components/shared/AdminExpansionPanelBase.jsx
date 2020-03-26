@@ -60,13 +60,17 @@ const AdminExpansionPanelBase = props => {
           <Typography>{props.label}</Typography>
         </ExpansionPanelSummary>
         <TablePanel>
-          <AddButton
-            onClick={() => props.onAction("CREATE")}
-            color="primary"
-            variant="contained"
-          >
-            Legg til
-          </AddButton>
+          {props.createContentComponent ? (
+            <AddButton
+              onClick={() => props.onAction("CREATE")}
+              color="primary"
+              variant="contained"
+            >
+              Legg til
+            </AddButton>
+          ) : (
+            React.Fragment
+          )}
         </TablePanel>
         {props.rows && props.rows.length > 0 ? (
           <TableContainer>
