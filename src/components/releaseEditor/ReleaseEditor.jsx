@@ -195,7 +195,21 @@ class ReleaseEditor extends Component {
     this.props.onSave(release);
   };
 
-  handleEditReleaseNote = () => {};
+  handleSaveReleaseNote = (releaseNoteId, releaseNote) => {
+    // save editor state locally
+    console.log(releaseNote);
+    const release = {
+      id: this.props.release.id,
+      productVersion: this.props.productVersionsResource.items.find(
+        item => item.id == this.state.selectedProductVersionId
+      ),
+      title: this.state.title,
+      isPublic: this.state.isPublic,
+      releaseNotes: this.state.allItems.release.list
+    };
+    this.props.onSaveEditorState(release);
+    this.props.onSaveReleaseNote(releaseNoteId, releaseNote);
+  };
 
   handleOnChangeProductVersion = event => {
     const newProductVersionId = event.currentTarget.id;
@@ -461,7 +475,7 @@ class ReleaseEditor extends Component {
                   releaseNotes={this.state.allItems.release.list}
                   noteWidth={this.state.noteWidth}
                   handleRemoveReleaseNote={this.handleRemoveReleaseNote}
-                  onSaveReleaseNote={this.props.onSaveReleaseNote}
+                  onSaveReleaseNote={this.handleSaveReleaseNote}
                 />
               </ReleaseContainer>
               <VerticalDivider orientation={"vertical"} />
