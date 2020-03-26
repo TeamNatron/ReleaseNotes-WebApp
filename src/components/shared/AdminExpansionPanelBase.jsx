@@ -100,7 +100,7 @@ const AdminExpansionPanelBase = props => {
                               {props.icon ? (
                                 React.cloneElement(props.icon, {
                                   color: "disabled",
-                                  fontSize: "medium"
+                                  fontSize: "small"
                                 })
                               ) : (
                                 <React.Fragment />
