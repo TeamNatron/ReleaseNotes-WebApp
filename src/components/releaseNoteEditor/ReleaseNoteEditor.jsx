@@ -137,7 +137,8 @@ const ReleaseNoteEditor = props => {
       <BottomToolbar
         loading={props.note.pending}
         left={[
-          <CancelButton color="secondary" onClick={props.onCancel}>
+          <CancelButton color="secondary" onClick={props.onCancel}
+            key={CancelButton.id}>
             Tilbake
           </CancelButton>
         ]}
@@ -157,6 +158,7 @@ const ReleaseNoteEditor = props => {
             label="Klar for release"
           />,
           <SaveButton
+            key={SaveButton.id}
             onClick={handleSave}
             disabled={canSave()}
             startIcon={<Save />}
