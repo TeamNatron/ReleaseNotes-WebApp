@@ -107,7 +107,7 @@ const AdminScreen = () => {
       <StyledAppBar color="transparent" position="static">
         <Tabs value={value} onChange={handleChange}>
           <Tab label="Release Notes System" {...tabProps(0)} />
-          <Tab label="Azure Devops" {...tabProps(1)} />
+          <Tab label="Azure DevOps" {...tabProps(1)} />
         </Tabs>
       </StyledAppBar>
 
