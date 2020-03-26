@@ -1,17 +1,9 @@
 import React, { useEffect } from "react";
-import {
-  Container,
-  Tabs,
-  Tab,
-  AppBar,
-  Typography,
-  Divider
-} from "@material-ui/core";
+import { Container, Tabs, Tab, Typography, Divider } from "@material-ui/core";
 import { PermIdentity, DesktopWindows, Description } from "@material-ui/icons";
 import PageContainer from "../shared/PageContainer";
 import Ingress from "../shared/Ingress";
 import ScreenTitle from "../shared/ScreenTitle";
-import SpacedDivider from "../shared/SpacedDivider";
 import AddUserForm from "../adminpanel/AddUserForm";
 import AddProductForm from "../adminpanel/AddProductForm";
 import ChangePasswordForm from "../adminpanel/ChangePasswordForm";
@@ -104,16 +96,6 @@ const AdminScreen = () => {
         {value === index && <Container>{children}</Container>}
       </Typography>
     );
-  };
-
-  const ingressText = () => {
-    switch (value) {
-      case RELEASE_NOTE_SYSTEM:
-        return "Behandle produkter og brukere.";
-
-      case AZURE_DEVOPS:
-        return "Importer det du vil, når du vil";
-    }
   };
 
   return (
