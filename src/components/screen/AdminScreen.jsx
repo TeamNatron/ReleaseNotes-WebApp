@@ -73,7 +73,7 @@ const AdminScreen = () => {
     setValue(newValue);
   };
 
-  const a11yProps = index => {
+  const tabProps = index => {
     return {
       id: `simple-tab-${index}`,
       "aria-controls": `simple-tabpanel-${index}`
@@ -106,8 +106,8 @@ const AdminScreen = () => {
       <TurboDivider />
       <StyledAppBar color="transparent" position="static">
         <Tabs value={value} onChange={handleChange}>
-          <Tab label="Release Notes System" {...a11yProps(0)} />
-          <Tab label="Azure Devops" {...a11yProps(1)} />
+          <Tab label="Release Notes System" {...tabProps(0)} />
+          <Tab label="Azure Devops" {...tabProps(1)} />
         </Tabs>
       </StyledAppBar>
 
