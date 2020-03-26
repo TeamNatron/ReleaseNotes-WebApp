@@ -52,8 +52,9 @@ const ReleaseNoteEditorModal = props => {
 export default ReleaseNoteEditorModal;
 
 ReleaseNoteEditorModal.propTypes = {
-  icon: PropTypes.element,
-  modalContent: PropTypes.element
+  note: PropTypes.object,
+  onSave: PropTypes.func,
+  onCancel: PropTypes.func
 };
 
 const Background = styled.div`

@@ -23,10 +23,12 @@ const ReleaseNote = props => {
             <Box>
               {props.isRelease && (
                 <React.Fragment>
-                  <ReleaseNoteEditorModal
-                    note={props.releaseNote}
-                    onSave={props.onSave}
-                  />
+                  <FlexEnd>
+                    <ReleaseNoteEditorModal
+                      note={props.releaseNote}
+                      onSave={props.onSave}
+                    />
+                  </FlexEnd>
 
                   <StyledIconButton
                     onClick={() => props.handleRemoveReleaseNote(props.index)}
@@ -51,6 +53,11 @@ const StyledIconButton = styled(IconButton)`
     margin-left: auto;
     display: flex-end;
   }
+`;
+
+const FlexEnd = styled.div`
+  margin-left: auto;
+  display: flex-end;
 `;
 
 const StyledContainer = styled(Paper)`
