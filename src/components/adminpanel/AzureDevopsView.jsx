@@ -12,7 +12,7 @@ const AzureDevopsView = () => {
 
   const getDummyReleases = () => {
     var releasesRows = [];
-    dummyReleases.map(r => {
+    dummyReleases.forEach(r => {
       releasesRows.push(createData(r.title, r.id));
     });
     return releasesRows;
@@ -27,7 +27,7 @@ const AzureDevopsView = () => {
   ];
   const getDummyProjects = () => {
     var projects = [];
-    dummyProjects.map(p => {
+    dummyProjects.forEach(p => {
       projects.push(p.title);
     });
     return projects;
