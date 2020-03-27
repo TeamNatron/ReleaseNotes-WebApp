@@ -1,4 +1,4 @@
-import { createAction, createReducer } from "@reduxjs/toolkit";
+import { createAction, createReducer, createSelector } from "@reduxjs/toolkit";
 import {
   setAuthToken,
   getAuthToken,
@@ -119,4 +119,19 @@ export const updateAzureInfo = () => async dispatch => {
 // SELECTORS
 export const loggedInSelector = state => {
   return state.auth.isLogged;
+};
+
+export const azureApiSelector = createSelector(
+  state => state.auth.currentUser.azureInformation,
+  azureInfo => {
+    console.log(azureInfo);
+    return {
+      organization: azureInfo.organization,
+      authToken: createAuthToken(azureInfo)
+    };
+  }
+);
+
+const createAuthToken = azureInfo => {
+  return btoa(unescape(encodeURIComponent(azureInfo.userid + azureInfo.pat)));
 };
