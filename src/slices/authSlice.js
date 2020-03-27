@@ -120,3 +120,7 @@ export const updateAzureInfo = () => async dispatch => {
 export const loggedInSelector = state => {
   return state.auth.isLogged;
 };
+
+export const organizationSelector = state => {
+  return state.auth.organization;
+};
