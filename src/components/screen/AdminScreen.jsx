@@ -146,7 +146,7 @@ const AdminScreen = () => {
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <AzureDevOpsView></AzureDevOpsView>
+        <AzureDevOpsView />
       </TabPanel>
     </PageContainer>
   );
