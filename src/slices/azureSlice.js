@@ -15,7 +15,7 @@ const Pat = "GET THIS FROM USER"; // TODO
 const authHeader = userId + Pat; // TODO convert to base64
 
 // azure axios instance
-const Axios = GlobalAxios.create({
+export const AzureAxios = GlobalAxios.create({
   baseURL: "https://" + instance + "/_apis/",
   timeout: 1000,
   headers: { authorization: authHeader }
@@ -46,7 +46,7 @@ export const azureReducer = createReducer(
 //thunks
 export const fetchProjects = dispatch => {
   dispatch(getProjectsPending());
-  Axios.get("projects")
+  AzureAxios.get("projects")
     .then(res => {
       dispatch(getProjectsSuccess(res.data));
     })
@@ -55,19 +55,17 @@ export const fetchProjects = dispatch => {
     });
 };
 
-export const fetchReleases = async (dispatch, project, organization) => {
+export const fetchReleases = (project, organization) => async dispatch => {
   dispatch(getReleasesPending());
-  Axios.get(
-    "https://vsrm.dev.azure.com/" +
-      organization +
-      "/" +
-      project +
-      "/_apis/release/releases?api-version=5.1"
-  ).then(res => {
-    dispatch(
-      getReleasesSuccess({ data: res.data, statusText: res.statusText })
-    ).catch(err => {
+  AzureAxios.get(
+    "https://vsrm.dev.azure.com/ReleaseNotesSystem/Release%20Notes%20System/_apis/release/releases?api-version=5.1"
+  )
+    .then(res => {
+      dispatch(
+        getReleasesSuccess({ data: res.data, statusText: res.statusText })
+      );
+    })
+    .catch(err => {
       getReleasesError(err);
     });
-  });
 };
