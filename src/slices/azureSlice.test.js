@@ -5,7 +5,8 @@ import {
   getProjectsPending,
   getProjectsError,
   getProjectsSuccess,
-  azureReducer
+  azureReducer,
+  fetchProjects
 } from "./azureSlice";
 import { testThunkConformance } from "../utils/test/testThunkConformance";
 import { fetchReleases } from "./azureSlice";
@@ -33,6 +34,10 @@ describe("azureReducer", () => {
   });
 
   describe("azure Thunks", () => {
+    testThunkConformance(
+      () => fetchProjects({ authToken: "SKRRTSKRRT", organization: "someOrg" }),
+      AzureAxios
+    );
     testThunkConformance(fetchReleases, AzureAxios);
   });
 });

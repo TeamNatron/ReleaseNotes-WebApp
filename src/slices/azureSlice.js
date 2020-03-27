@@ -1,24 +1,9 @@
 import { createReducer, createAction } from "@reduxjs/toolkit";
 import GlobalAxios from "axios";
 
-/**
- * The request URI, in the following form: VERB https://{instance}[/{team-project}]/_apis[/{area}]/{resource}?api-version={version}
- */
-
-// request url parameters
-const organization = "ReleaseNoteSystem";
-const instance = "dev.azure.com/" + organization;
-
-// auth parameters
-const userId = "GET THIS FROM USER"; // TODO
-const Pat = "GET THIS FROM USER"; // TODO
-const authHeader = userId + Pat; // TODO convert to base64
-
 // azure axios instance
 export const AzureAxios = GlobalAxios.create({
-  baseURL: "https://" + instance + "/_apis/",
-  timeout: 1000,
-  headers: { authorization: authHeader }
+  timeout: 1000
 });
 
 // actions
@@ -43,10 +28,18 @@ export const azureReducer = createReducer(
   }
 );
 
-//thunks
-export const fetchProjects = dispatch => {
+// azure api url format
+// https://{instance}[/{team-project}]/_apis[/{area}]/{resource}?api-version={version}
+
+// thunks
+export const fetchProjects = params => async dispatch => {
+  // create request url
+  const instance = "dev.azure.com/" + params.organization;
+  const url = "https://" + instance + "/_apis/projects";
+
+  //dispatch
   dispatch(getProjectsPending());
-  AzureAxios.get("projects")
+  AzureAxios.get(url, authHeader(params.authToken))
     .then(res => {
       dispatch(getProjectsSuccess(res.data));
     })
@@ -68,4 +61,12 @@ export const fetchReleases = (project, organization) => async dispatch => {
     .catch(err => {
       getReleasesError(err);
     });
+};
+
+const authHeader = authToken => {
+  return {
+    headers: {
+      Authorization: "Basic " + authToken
+    }
+  };
 };
