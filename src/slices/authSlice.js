@@ -135,3 +135,7 @@ export const azureApiSelector = createSelector(
 const createAuthToken = azureInfo => {
   return btoa(unescape(encodeURIComponent(azureInfo.userid + azureInfo.pat)));
 };
+
+export const organizationSelector = state => {
+  return state.auth.organization;
+};
