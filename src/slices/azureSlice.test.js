@@ -1,13 +1,4 @@
-import {
-  getReleasesPending,
-  getReleasesError,
-  getReleasesSuccess,
-  getProjectsPending,
-  getProjectsError,
-  getProjectsSuccess,
-  azureReducer,
-  fetchProjects
-} from "./azureSlice";
+import { getReleasesSuccess, azureReducer, fetchProjects } from "./azureSlice";
 import { testThunkConformance } from "../utils/test/testThunkConformance";
 import { fetchReleases } from "./azureSlice";
 import { AzureAxios } from "./azureSlice";
