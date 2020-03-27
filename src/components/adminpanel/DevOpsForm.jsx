@@ -1,8 +1,10 @@
 import React from "react";
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { Grid } from "@material-ui/core";
+import { Grid, Paper } from "@material-ui/core";
+import styled from "styled-components";
 import { useState } from "react";
+import Typography from '@material-ui/core/Typography';
 
 
 const DevOpsForm = props => {
@@ -18,31 +20,54 @@ const DevOpsForm = props => {
 
     return (
         <React.Fragment>
-            <h1>Azure Integrasjon</h1>
-            <Grid container spacing={3} justify="center" alignItems="center" direction="column">
-                <Grid item>
-                    <TextField id="standard-basic DevOpsName"
-                        label="DevOps Brukernavn"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)} />
-                </Grid>
-                <Grid item>
-                    <TextField id="standard-basic DevOpsPAT" label="Personal Access Token"
-                        value={PAT}
-                        onChange={(e) => setPAT(e.target.value)} />
-                </Grid>
-                <Grid item>
-                    <TextField id="standard-basic DevOpsOrg" label="DevOps Organisasjon"
-                        value={org}
-                        onChange={(e) => setOrg(e.target.value)} />
-                </Grid>
-                <Grid item>
-                    <Button variant="contained" color="primary"
-                        id="sendDataBtn" onClick={handleSubmit}>SEND</Button>
-                </Grid>
-            </Grid>
+            <MyPaper>
+                <Typography gutterBottom variant="h4">Azure Integrasjon</Typography>
+                <MyGrid container spacing={0} direction="column" justify="center" alignContent="space-between">
+                    <Grid item >
+                        <TextField id="standard-basic DevOpsName"
+                            label="DevOps Brukernavn"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)} />
+                    </Grid>
+                    <Grid item>
+                        <TextField id="standard-basic DevOpsPAT" label="Personal Access Token"
+                            value={PAT}
+                            onChange={(e) => setPAT(e.target.value)} />
+                    </Grid>
+                    <Grid item>
+                        <TextField id="standard-basic DevOpsOrg" label="DevOps Organisasjon"
+                            value={org}
+                            onChange={(e) => setOrg(e.target.value)} />
+                    </Grid>
+                    <Grid item>
+                        <MyButton variant="contained" color="primary"
+                            id="sendDataBtn" onClick={handleSubmit}>SEND</MyButton>
+                    </Grid>
+                </MyGrid>
+            </MyPaper>
         </React.Fragment>
     );
 };
 
 export default DevOpsForm;
+
+const MyButton = styled(Button)`
+&& {
+    display: box;
+    float: left;
+    margin: 1vh 0 0 0;
+}
+`;
+
+const MyGrid = styled(Grid)`
+&& {
+    margin: 0 1vh;
+}
+`;
+
+const MyPaper = styled(Paper)`
+&& {
+    margin: 1vh 0;
+    padding: 1.2em;
+}
+`;
