@@ -22,5 +22,12 @@ export const azureReducer = createReducer(
 
 //thunks
 export const fetchProjects = dispatch => {
-  throw Error("NOT IMPLEMENTED");
+  dispatch(getProjectsPending());
+  Axios.get("projects")
+    .then(res => {
+      dispatch(getProjectsSuccess(res.data));
+    })
+    .catch(error => {
+      dispatch(getProjectsError(error));
+    });
 };
