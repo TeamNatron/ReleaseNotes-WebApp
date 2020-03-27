@@ -31,7 +31,21 @@ export const azureReducer = createReducer(
 // azure api url format
 // https://{instance}[/{team-project}]/_apis[/{area}]/{resource}?api-version={version}
 
+// devops api doc
+// https://docs.microsoft.com/en-us/rest/api/azure/devops/?view=azure-devops-rest-5.1
+
 // thunks
+
+/**
+ *
+ * @param {Object} params Object of required parameters
+ * @param {String} params.organization The organization
+ * @param {String} params.authToken The authenication token
+ *
+ * @example
+ *          const params = useSelector(azureApiSelector)
+ *          useDispatch(fetchProjects(params))
+ */
 export const fetchProjects = params => async dispatch => {
   // create request url
   const instance = "dev.azure.com/" + params.organization;
@@ -63,6 +77,10 @@ export const fetchReleases = (project, organization) => async dispatch => {
     });
 };
 
+/**
+ * @param {String} authToken
+ * @example Axios.get(url, authHeader("9u0fu8u94utgj03=="))
+ */
 const authHeader = authToken => {
   return {
     headers: {
