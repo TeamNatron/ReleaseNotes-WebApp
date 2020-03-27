@@ -8,6 +8,18 @@ var axios = Axios;
 /**
  * Test an async function doing a network call, and using the
  * pending - success - error pattern
+ *
+ * @example
+ *        // use global axios instance
+ *        testThunkConformance(fetchDingos)
+ *
+ * @example
+ *        // use custom axios instance
+ *        testThunkConformance(fetchDingos, someAxiosInstance)
+ *
+ * @example
+ *        // use with custom parameters
+ *        testThunkConformance(() => fetchDingos("africa"))
  */
 export function testThunkConformance(functionToTest, axiosInstance) {
   if (axiosInstance) {
