@@ -16,7 +16,7 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import styled from "styled-components";
-import { Edit } from "@material-ui/icons";
+import { Edit, Add } from "@material-ui/icons";
 import DeleteDialogButton from "./DeleteDialogButton";
 
 const AdminExpansionPanelBase = props => {
@@ -48,10 +48,19 @@ const AdminExpansionPanelBase = props => {
       format: value => value.toFixed(2)
     });
   }
+  if (props.import) {
+    columns.push({
+      id: "importButton",
+      label: "Import",
+      minWidth: 77,
+      align: "center",
+      format: value => value.toFixed(2)
+    });
+  }
 
   return (
     <React.Fragment>
-      <ExpansionPanel>
+      <ExpansionPanel defaultExpanded={props.expanded ? true : false}>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -60,13 +69,22 @@ const AdminExpansionPanelBase = props => {
           <Typography>{props.label}</Typography>
         </ExpansionPanelSummary>
         <TablePanel>
-          <AddButton
-            onClick={() => props.onAction("CREATE")}
-            color="primary"
-            variant="contained"
-          >
-            Legg til
-          </AddButton>
+          {props.summaryComponent
+            ? React.cloneElement(props.summaryComponent, {
+              style: { border: "1px solid red" }
+            })
+            : React.Fragment}
+          {props.createContentComponent ? (
+            <AddButton
+              onClick={() => props.onAction("CREATE")}
+              color="primary"
+              variant="contained"
+            >
+              Legg til
+            </AddButton>
+          ) : (
+              React.Fragment
+            )}
         </TablePanel>
         {props.rows && props.rows.length > 0 ? (
           <TableContainer>
@@ -83,12 +101,7 @@ const AdminExpansionPanelBase = props => {
               <TableBody>
                 {props.rows.map(row => {
                   return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={row.code}
-                    >
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                       {columns.map(column => {
                         if (column.id === "avatar") {
                           return (
@@ -96,11 +109,11 @@ const AdminExpansionPanelBase = props => {
                               {props.icon ? (
                                 React.cloneElement(props.icon, {
                                   color: "disabled",
-                                  fontSize: "medium"
+                                  fontSize: "small"
                                 })
                               ) : (
-                                <React.Fragment />
-                              )}
+                                  <React.Fragment />
+                                )}
                             </StyledTableCell>
                           );
                         } else if (column.id === "isPublicSwitch") {
@@ -148,6 +161,19 @@ const AdminExpansionPanelBase = props => {
                               </StyledTableCell>
                             )
                           );
+                        } else if (column.id === "importButton") {
+                          return (
+                            <StyledTableCell
+                              label={column.label}
+                              key={column.id}
+                            >
+                              <IconButton
+                                onClick={() => props.onAction("IMPORT", row.id)}
+                              >
+                                <Add fontSize="small" />
+                              </IconButton>
+                            </StyledTableCell>
+                          );
                         } else {
                           const value = row[column.id];
                           return (
@@ -166,8 +192,8 @@ const AdminExpansionPanelBase = props => {
             </Table>
           </TableContainer>
         ) : (
-          <ErrorLabel>Ingen innhold funnet</ErrorLabel>
-        )}
+            <ErrorLabel>Ingen innhold funnet</ErrorLabel>
+          )}
       </ExpansionPanel>
     </React.Fragment>
   );
@@ -179,7 +205,8 @@ AdminExpansionPanelBase.propTypes = {
   label: PropTypes.string,
   rows: PropTypes.array,
   icon: PropTypes.element,
-  onAction: PropTypes.func
+  onAction: PropTypes.func,
+  expanded: PropTypes.bool
 };
 
 const AddButton = styled(Button)`
