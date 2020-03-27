@@ -25,7 +25,7 @@ import {
 } from "../../slices/releaseNoteSlice";
 import { useState } from "react";
 import styled from "styled-components";
-import AzureDevopsView from "../adminpanel/AzureDevopsView";
+import AzureDevOpsView from "../adminpanel/AzureDevOpsView";
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
@@ -107,7 +107,7 @@ const AdminScreen = () => {
       <StyledAppBar color="transparent" position="static">
         <Tabs value={value} onChange={handleChange}>
           <Tab label="Release Notes System" {...tabProps(0)} />
-          <Tab label="Azure Devops" {...tabProps(1)} />
+          <Tab label="Azure DevOps" {...tabProps(1)} />
         </Tabs>
       </StyledAppBar>
 
@@ -146,7 +146,7 @@ const AdminScreen = () => {
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <AzureDevopsView></AzureDevopsView>
+        <AzureDevOpsView />
       </TabPanel>
     </PageContainer>
   );
