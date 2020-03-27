@@ -1,9 +1,13 @@
 import { createReducer, createAction } from "@reduxjs/toolkit";
 import GlobalAxios from "axios";
 
+const userId = "GET THIS FROM USER"; // TODO
+const Pat = "GET THIS FROM USER"; // TODO
+const authHeader = userId + Pat; // TODO convert to base64
 const Axios = GlobalAxios.create({
   baseURL: "https://dev.azure.com/ReleaseNoteSystem/_apis/",
-  timeout: 1000
+  timeout: 1000,
+  headers: { authorization: authHeader }
 });
 
 // actions
