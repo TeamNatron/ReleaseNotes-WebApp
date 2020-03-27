@@ -117,7 +117,7 @@ const AdminScreen = () => {
           icon={<DesktopWindows />}
           rows={productTitles}
           createContentComponent={<AddProductForm />}
-        //editContentComponent={<AddProductForm />}
+          //editContentComponent={<AddProductForm />}
         />
         <AdminExpansionPanelModal
           label="Brukere"
@@ -146,7 +146,7 @@ const AdminScreen = () => {
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <AzureDevOpsView></AzureDevOpsView>
+        <AzureDevOpsView />
       </TabPanel>
     </PageContainer>
   );
