@@ -3,7 +3,6 @@ import DevOpsForm from "./DevOpsForm";
 import { Description } from "@material-ui/icons";
 import AdminExpansionPanelBase from "../shared/AdminExpansionPanelBase";
 import ProjectSelector from "./ProjectSelector";
-import Divider from '@material-ui/core/Divider';
 
 // EXAMPLE COMPONENT USED TO CONTAIN AZURE DEVOPS TOOLS
 // CAN BE MODYFIED OR REMOVED
