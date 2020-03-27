@@ -1,11 +1,22 @@
 import { createReducer, createAction } from "@reduxjs/toolkit";
 import GlobalAxios from "axios";
 
+/**
+ * The request URI, in the following form: VERB https://{instance}[/{team-project}]/_apis[/{area}]/{resource}?api-version={version}
+ */
+
+// request url parameters
+const organization = "ReleaseNoteSystem";
+const instance = "dev.azure.com/" + organization;
+
+// auth parameters
 const userId = "GET THIS FROM USER"; // TODO
 const Pat = "GET THIS FROM USER"; // TODO
 const authHeader = userId + Pat; // TODO convert to base64
+
+// azure axios instance
 const Axios = GlobalAxios.create({
-  baseURL: "https://dev.azure.com/ReleaseNoteSystem/_apis/",
+  baseURL: "https://" + instance + "/_apis/",
   timeout: 1000,
   headers: { authorization: authHeader }
 });
