@@ -29,9 +29,13 @@ const initialState = {
   currentUser: {
     id: -1,
     email: "",
-    AzureUserId: "",
-    AzurePat: "",
-    AzureOrganization: ""
+    roles: [],
+    azureInformation: {
+      id: -1,
+      userid: "",
+      pat: "",
+      organization: ""
+    }
   }
 };
 
@@ -51,11 +55,7 @@ export const authReducer = createReducer(initialState, {
     state.isLogged = false;
   },
   [putSuccess]: (state, action) => {
-    state.currentUser.id = action.payload.data.id;
-    state.currentUser.email = action.payload.data.email;
-    state.currentUser.AzureUserId = action.payload.data.UserId;
-    state.currentUser.AzurePat = action.payload.data.Pat;
-    state.currentUser.AzureOrganization = action.payload.data.Organization;
+    state.currentUser = action.payload.data;
     state.sucessMsg = action.payload.statusText;
   }
 });

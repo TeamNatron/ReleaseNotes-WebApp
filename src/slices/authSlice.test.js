@@ -13,9 +13,13 @@ describe("Auth reducer", () => {
       currentUser: {
         id: -1,
         email: "",
-        AzureUserId: "",
-        AzurePat: "",
-        AzureOrganization: ""
+        roles: [],
+        azureInformation: {
+          id: -1,
+          userid: "",
+          pat: "",
+          organization: ""
+        }
       }
     });
   });
@@ -25,9 +29,9 @@ describe("putSuccess", () => {
   it("should fill all currentUsers fields", () => {
     const updatedState = authReducer(
       undefined,
-      putSuccess({ data: dummyUserIN })
+      putSuccess({ data: dummyUser })
     );
-    expect(updatedState.currentUser).toEqual(dummyUserOUT);
+    expect(updatedState.currentUser).toEqual(dummyUser);
   });
 });
 
@@ -73,18 +77,14 @@ describe("Auth Thunks", () => {
   testCheckLoggedinConformancer();
 });
 
-const dummyUserIN = {
+const dummyUser = {
   id: 1,
   email: "admin@ungspiller.no",
-  UserId: "admin@azure.no",
-  Pat: "AASDA12312EWWERWER",
-  Organization: "ReleaseNotesSystem"
-};
-
-const dummyUserOUT = {
-  id: 1,
-  email: "admin@ungspiller.no",
-  AzureUserId: "admin@azure.no",
-  AzurePat: "AASDA12312EWWERWER",
-  AzureOrganization: "ReleaseNotesSystem"
+  roles: ["Administrator"],
+  azureInformation: {
+    id: -1,
+    userid: "admin@azure.no",
+    pat: "AASDA12312EWWERWER",
+    organization: "ReleaseNotesSystem"
+  }
 };
