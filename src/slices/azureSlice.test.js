@@ -22,6 +22,16 @@ describe("azureReducer", () => {
     expect(azureReducer(undefined, {})).toEqual(initialState);
   });
 
+  describe("getReleasesSuccess", () => {
+    it("should fill all releases", () => {
+      const updatedState = azureReducer(
+        undefined,
+        getReleasesSuccess({ data: dummyReleases })
+      );
+      expect(updatedState.releases).toEqual(dummyReleases);
+    });
+  });
+
   describe("azure Thunks", () => {
     testThunkConformance(fetchReleases, AzureAxios);
   });
