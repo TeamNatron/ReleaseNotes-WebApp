@@ -3,11 +3,28 @@ import thunk from "redux-thunk";
 import expect from "expect"; // You can use any testing library
 import Axios from "axios";
 
+var axios = Axios;
+
 /**
  * Test an async function doing a network call, and using the
  * pending - success - error pattern
+ *
+ * @example
+ *        // use global axios instance
+ *        testThunkConformance(fetchDingos)
+ *
+ * @example
+ *        // use custom axios instance
+ *        testThunkConformance(fetchDingos, someAxiosInstance)
+ *
+ * @example
+ *        // use with custom parameters
+ *        testThunkConformance(() => fetchDingos("africa"))
  */
-export function testThunkConformance(functionToTest, axiosMethod) {
+export function testThunkConformance(functionToTest, axiosInstance) {
+  if (axiosInstance) {
+    axios = axiosInstance;
+  }
   const middlewares = [thunk];
   const mockStore = configureMockStore(middlewares);
   var store;
@@ -57,8 +74,8 @@ function mockResolve() {
 }
 function doMockAxiosRequests(promiseFn) {
   const mockFn = jest.fn(url => promiseFn());
-  Axios.get = mockFn;
-  Axios.put = mockFn;
-  Axios.post = mockFn;
-  Axios.delete = mockFn;
+  axios.get = mockFn;
+  axios.put = mockFn;
+  axios.post = mockFn;
+  axios.delete = mockFn;
 }

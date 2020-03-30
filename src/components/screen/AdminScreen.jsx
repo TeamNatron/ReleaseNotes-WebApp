@@ -23,13 +23,18 @@ import {
   putReleaseNote,
   deleteReleaseNote
 } from "../../slices/releaseNoteSlice";
+import { fetchReleases as fetchAzureReleases } from "../../slices/azureSlice";
 import { useState } from "react";
 import styled from "styled-components";
+import { fetchProjects } from "../../slices/azureSlice";
+import { azureApiSelector } from "../../slices/authSlice";
 import AzureDevOpsView from "../adminpanel/AzureDevOpsView";
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
   const [value, setValue] = useState(0);
+  const [selected, setSelected] = useState("");
+
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
@@ -42,13 +47,35 @@ const AdminScreen = () => {
     dispatch(fetchReleaseNotes());
   }, [dispatch]);
 
+  const azureProps = useSelector(azureApiSelector);
+  useEffect(() => {
+    dispatch(fetchProjects(azureProps));
+  }, [dispatch, azureProps]);
+
   useEffect(() => dispatch(fetchUsers()), [dispatch]);
   const createData = (name, id, isPublic) => {
     return { name, id, isPublic };
   };
 
+  // Fetches all releases based on selected Project
+  // todo implement real project in param
+  // todo implement real PAT
+  useEffect(() => {
+    const params = {
+      organization: "ReleaseNoteSystem",
+      project: selected,
+      authToken: ""
+    };
+    if (params.project !== "") dispatch(fetchAzureReleases(params));
+  }, [dispatch, selected]);
+
   const releaseTitles = useSelector(state =>
     state.releases.items.map(r => createData(r.title, r.id, r.isPublic))
+  );
+
+  const azureProjects = useSelector(state => state.azure.projects);
+  const azureReleases = useSelector(state =>
+    state.azure.releases.map(r => createData(r.name, r.id))
   );
 
   const productTitles = useSelector(state =>
@@ -68,6 +95,10 @@ const AdminScreen = () => {
       );
     })
   );
+
+  const handleSelectedProject = event => {
+    setSelected(event.target.value);
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -146,7 +177,12 @@ const AdminScreen = () => {
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <AzureDevOpsView />
+        <AzureDevOpsView
+          azureReleases={azureReleases}
+          azureProjects={azureProjects}
+          selected={selected}
+          handleSelectedProject={handleSelectedProject}
+        />
       </TabPanel>
     </PageContainer>
   );
