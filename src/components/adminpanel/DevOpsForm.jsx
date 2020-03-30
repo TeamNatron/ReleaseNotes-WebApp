@@ -16,27 +16,31 @@ const DevOpsForm = props => {
     const dispatch = useDispatch();
 
     const handleSubmit = () => {
-        dispatch(updateAzureInfo(name, PAT, org))
-    }
+        // see if the fields have beeen filled out
+        if (name === "" || PAT === "" || org === "") {
+            alert("felt mangler innhold")
+        } else
+            dispatch(updateAzureInfo(name, PAT, org))
+    };
 
     return (
         <React.Fragment>
             <MyPaper>
                 <Typography gutterBottom variant="h4">Azure Integrasjon</Typography>
                 <MyGrid container spacing={0} direction="column" justify="center" alignContent="space-between">
-                    <Grid item >
-                        <TextField id="standard-basic DevOpsName"
+                    <Grid item>
+                        <TextField id="standard-required DevOpsName"
                             label="DevOps Brukernavn"
                             value={name}
                             onChange={(e) => setName(e.target.value)} />
                     </Grid>
                     <Grid item>
-                        <TextField id="standard-basic DevOpsPAT" label="Personal Access Token"
+                        <TextField id="standard-required DevOpsPAT" label="Personal Access Token"
                             value={PAT}
                             onChange={(e) => setPAT(e.target.value)} />
                     </Grid>
                     <Grid item>
-                        <TextField id="standard-basic DevOpsOrg" label="DevOps Organisasjon"
+                        <TextField id="standard-required DevOpsOrg" label="DevOps Organisasjon"
                             value={org}
                             onChange={(e) => setOrg(e.target.value)} />
                     </Grid>
