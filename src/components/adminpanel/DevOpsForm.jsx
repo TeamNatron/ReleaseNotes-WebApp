@@ -5,17 +5,18 @@ import { Grid, Paper } from "@material-ui/core";
 import styled from "styled-components";
 import { useState } from "react";
 import Typography from '@material-ui/core/Typography';
+import { updateAzureInfo } from "../../slices/authSlice";
+import { useDispatch } from "react-redux";
 
 
 const DevOpsForm = props => {
     const [name, setName] = useState("");
     const [PAT, setPAT] = useState("");
     const [org, setOrg] = useState("");
-    // TODO: useEffect to get azure info AND project releases
+    const dispatch = useDispatch();
 
     const handleSubmit = () => {
-        // TODO: send the info to azure
-        alert(name + PAT + org);
+        dispatch(updateAzureInfo(name, PAT, org))
     }
 
     return (
