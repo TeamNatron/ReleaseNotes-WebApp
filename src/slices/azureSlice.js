@@ -1,5 +1,6 @@
 import { createReducer, createAction } from "@reduxjs/toolkit";
 import GlobalAxios from "axios";
+import { formatAzurePAT } from "../handlers/tokenFormatter";
 
 // azure axios instance
 export const AzureAxios = GlobalAxios.create({
@@ -62,11 +63,26 @@ export const fetchProjects = params => async dispatch => {
     });
 };
 
-export const fetchReleases = (project, organization) => async dispatch => {
+/**
+ * Fetches releases related to specified project and organization
+ *
+ * @param {Object} params Object of required parameters
+ * @param {String} params.organization The organization
+ * @param {String} params.project The project
+ * @param {String} params.authToken The authenication token
+ *
+ */
+
+export const fetchReleases = params => async dispatch => {
+  // create request url
+  const instance =
+    "vsrm.dev.azure.com/" + params.organization + "/" + params.project;
+  const url = "https://" + instance + "/_apis/release/releases?api-version=5.1";
+  const authToken = formatAzurePAT(params.authToken);
+
+  //dispatch
   dispatch(getReleasesPending());
-  AzureAxios.get(
-    "https://vsrm.dev.azure.com/ReleaseNotesSystem/Release%20Notes%20System/_apis/release/releases?api-version=5.1"
-  )
+  AzureAxios.get(url, authHeader(authToken))
     .then(res => {
       dispatch(
         getReleasesSuccess({ data: res.data, statusText: res.statusText })

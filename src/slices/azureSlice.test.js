@@ -29,7 +29,15 @@ describe("azureReducer", () => {
       () => fetchProjects({ authToken: "SKRRTSKRRT", organization: "someOrg" }),
       AzureAxios
     );
-    testThunkConformance(fetchReleases, AzureAxios);
+    testThunkConformance(
+      () =>
+        fetchReleases({
+          authToken: "Rattatattata",
+          organization: "some0rg",
+          project: "project_01"
+        }),
+      AzureAxios
+    );
   });
 });
 
