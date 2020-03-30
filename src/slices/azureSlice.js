@@ -1,6 +1,5 @@
 import { createReducer, createAction } from "@reduxjs/toolkit";
 import GlobalAxios from "axios";
-import { formatAzurePAT } from "../handlers/tokenFormatter";
 
 // azure axios instance
 export const AzureAxios = GlobalAxios.create({
@@ -80,7 +79,7 @@ export const fetchReleases = params => async dispatch => {
   const instance =
     "vsrm.dev.azure.com/" + params.organization + "/" + params.project;
   const url = "https://" + instance + "/_apis/release/releases?api-version=5.1";
-  const authToken = formatAzurePAT(params.authToken);
+  const authToken = params.authToken;
 
   if (params.organization && params.project && params.authToken !== null) {
     //dispatch
