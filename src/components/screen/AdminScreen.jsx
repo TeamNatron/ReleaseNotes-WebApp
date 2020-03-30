@@ -23,6 +23,7 @@ import {
   putReleaseNote,
   deleteReleaseNote
 } from "../../slices/releaseNoteSlice";
+import { fetchReleases as fetchAzureReleases } from "../../slices/azureSlice";
 import { useState } from "react";
 import styled from "styled-components";
 import AzureDevopsView from "../adminpanel/AzureDevopsView";
@@ -30,6 +31,8 @@ import AzureDevopsView from "../adminpanel/AzureDevopsView";
 const AdminScreen = () => {
   const dispatch = useDispatch();
   const [value, setValue] = useState(0);
+  const [selected, setSelected] = useState("");
+
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
@@ -47,8 +50,24 @@ const AdminScreen = () => {
     return { name, id, isPublic };
   };
 
+  // Fetches all releases based on selected Project
+  // todo implement real project in param
+  // todo implement real PAT
+  useEffect(() => {
+    const params = {
+      organization: "ReleaseNoteSystem",
+      project: selected,
+      authToken: ""
+    };
+    if (params.project !== "") dispatch(fetchAzureReleases(params));
+  }, [dispatch, selected]);
+
   const releaseTitles = useSelector(state =>
     state.releases.items.map(r => createData(r.title, r.id, r.isPublic))
+  );
+
+  const azureReleases = useSelector(state =>
+    state.azure.releases.map(r => createData(r.name, r.id))
   );
 
   const productTitles = useSelector(state =>
@@ -68,6 +87,10 @@ const AdminScreen = () => {
       );
     })
   );
+
+  const handleSelectedProject = event => {
+    setSelected(event.target.value);
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -146,7 +169,11 @@ const AdminScreen = () => {
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <AzureDevopsView></AzureDevopsView>
+        <AzureDevopsView
+          azureReleases={azureReleases}
+          selected={selected}
+          handleSelectedProject={handleSelectedProject}
+        ></AzureDevopsView>
       </TabPanel>
     </PageContainer>
   );
