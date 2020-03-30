@@ -59,6 +59,10 @@ class ChangePasswordForm extends Component {
           this.validateSubmit();
         }
       );
+    } else if (this.state.password.length <= 5 || this.state.passwordConfirm.length <= 5) {
+      this.setState({ pwdIsError: true, pwdErrorMsg: "Passordet må være lengre enn 4 karakterer" }, () => {
+        this.validateSubmit();
+      });
     } else {
       this.setState({ pwdIsError: false, pwdErrorMsg: "" }, () => {
         this.validateSubmit();
