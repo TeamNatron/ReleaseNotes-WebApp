@@ -4,7 +4,7 @@ import { formatAzurePAT } from "../handlers/tokenFormatter";
 
 // azure axios instance
 export const AzureAxios = GlobalAxios.create({
-  timeout: 1000
+  timeout: 5000
 });
 
 // actions
@@ -58,7 +58,7 @@ export const fetchProjects = params => async dispatch => {
   dispatch(getProjectsPending());
   AzureAxios.get(url, authHeader(params.authToken))
     .then(res => {
-      dispatch(getProjectsSuccess(res.data));
+      dispatch(getProjectsSuccess({ data: res.data }));
     })
     .catch(error => {
       dispatch(getProjectsError(error));

@@ -26,6 +26,8 @@ import {
 import { useState } from "react";
 import styled from "styled-components";
 import AzureDevopsView from "../adminpanel/AzureDevopsView";
+import { fetchProjects } from "../../slices/azureSlice";
+import { azureApiSelector } from "../../slices/authSlice";
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
@@ -42,11 +44,17 @@ const AdminScreen = () => {
     dispatch(fetchReleaseNotes());
   }, [dispatch]);
 
+  const azureProps = useSelector(azureApiSelector);
+  useEffect(() => {
+    dispatch(fetchProjects(azureProps));
+  }, [dispatch, azureProps]);
+
   useEffect(() => dispatch(fetchUsers()), [dispatch]);
   const createData = (name, id, isPublic) => {
     return { name, id, isPublic };
   };
 
+  const azureProjects = useSelector(state => state.azure.projects);
   const releaseTitles = useSelector(state =>
     state.releases.items.map(r => createData(r.title, r.id, r.isPublic))
   );
@@ -146,7 +154,7 @@ const AdminScreen = () => {
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <AzureDevopsView></AzureDevopsView>
+        <AzureDevopsView projects={azureProjects} />
       </TabPanel>
     </PageContainer>
   );

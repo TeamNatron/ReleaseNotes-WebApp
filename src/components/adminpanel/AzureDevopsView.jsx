@@ -5,7 +5,7 @@ import ProjectSelector from "./ProjectSelector";
 
 // EXAMPLE COMPONENT USED TO CONTAIN AZURE DEVOPS TOOLS
 // CAN BE MODYFIED OR REMOVED
-const AzureDevopsView = () => {
+const AzureDevopsView = props => {
   const createData = (name, id, isPublic) => {
     return { name, id, isPublic };
   };
@@ -19,21 +19,6 @@ const AzureDevopsView = () => {
   };
 
   const dummyReleases = [
-    { id: 200, title: "Azure Release 2.2" },
-    { id: 20, title: "Azure Release 3.2" },
-    { id: 202, title: "Azure Release 2.3" },
-    { id: 201, title: "Azure Release 6.2" },
-    { id: 99, title: "Azure Release 5.2" }
-  ];
-  const getDummyProjects = () => {
-    var projects = [];
-    dummyProjects.forEach(p => {
-      projects.push(p.title);
-    });
-    return projects;
-  };
-
-  const dummyProjects = [
     { id: 200, title: "Azure Release 2.2" },
     { id: 20, title: "Azure Release 3.2" },
     { id: 202, title: "Azure Release 2.3" },
@@ -57,7 +42,7 @@ const AzureDevopsView = () => {
       <AdminExpansionPanelBase
         expanded
         label="Azure Devops Releases"
-        summaryComponent={<ProjectSelector projects={getDummyProjects()} />}
+        summaryComponent={<ProjectSelector projects={props.projects} />}
         icon={<Description />}
         rows={getDummyReleases()}
         onAction={handleAction}
