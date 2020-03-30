@@ -73,6 +73,7 @@ const AdminScreen = () => {
     state.releases.items.map(r => createData(r.title, r.id, r.isPublic))
   );
 
+  const azureProjects = useSelector(state => state.azure.projects);
   const azureReleases = useSelector(state =>
     state.azure.releases.map(r => createData(r.name, r.id))
   );
@@ -178,6 +179,7 @@ const AdminScreen = () => {
       <TabPanel value={value} index={1}>
         <AzureDevopsView
           azureReleases={azureReleases}
+          azureProjects={azureProjects}
           selected={selected}
           handleSelectedProject={handleSelectedProject}
         ></AzureDevopsView>
