@@ -60,7 +60,7 @@ export const authReducer = createReducer(initialState, {
   }
 });
 
-// THUNKS
+// THUNKS.
 export const login = (paramEmail, paramPassword) => async dispatch => {
   dispatch(postPending());
   Axios.post(
