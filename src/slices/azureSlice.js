@@ -24,7 +24,7 @@ export const azureReducer = createReducer(
     [getProjectsSuccess]: (state, action) => {},
     [getReleasesSuccess]: (state, action) => {
       state.sucessMsg = action.payload.statusText;
-      state.releases = action.payload.data;
+      state.releases = action.payload.data.value;
     }
   }
 );
@@ -81,17 +81,18 @@ export const fetchReleases = params => async dispatch => {
   const authToken = formatAzurePAT(params.authToken);
 
   if (params.organization && params.project && params.authToken !== null) {
-  //dispatch
-  dispatch(getReleasesPending());
-  AzureAxios.get(url, authHeader(authToken))
-    .then(res => {
-      dispatch(
-        getReleasesSuccess({ data: res.data, statusText: res.statusText })
-      );
-    })
-    .catch(err => {
-      getReleasesError(err);
-    });
+    //dispatch
+    dispatch(getReleasesPending());
+    AzureAxios.get(url, authHeader(authToken))
+      .then(res => {
+        dispatch(
+          getReleasesSuccess({ data: res.data, statusText: res.statusText })
+        );
+      })
+      .catch(err => {
+        getReleasesError(err);
+      });
+  }
 };
 
 /**
