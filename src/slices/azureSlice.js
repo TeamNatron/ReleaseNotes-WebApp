@@ -80,6 +80,7 @@ export const fetchReleases = params => async dispatch => {
   const url = "https://" + instance + "/_apis/release/releases?api-version=5.1";
   const authToken = formatAzurePAT(params.authToken);
 
+  if (params.organization && params.project && params.authToken !== null) {
   //dispatch
   dispatch(getReleasesPending());
   AzureAxios.get(url, authHeader(authToken))
