@@ -5,37 +5,42 @@ import { Grid, Paper } from "@material-ui/core";
 import styled from "styled-components";
 import { useState } from "react";
 import Typography from '@material-ui/core/Typography';
+import { updateAzureInfo } from "../../slices/authSlice";
+import { useDispatch } from "react-redux";
 
 
 const DevOpsForm = props => {
     const [name, setName] = useState("");
     const [PAT, setPAT] = useState("");
     const [org, setOrg] = useState("");
-    // TODO: useEffect to get azure info AND project releases
+    const dispatch = useDispatch();
 
     const handleSubmit = () => {
-        // TODO: send the info to azure
-        alert(name + PAT + org);
-    }
+        // see if the fields have beeen filled out
+        if (name === "" || PAT === "" || org === "") {
+            alert("felt mangler innhold")
+        } else
+            dispatch(updateAzureInfo(name, PAT, org))
+    };
 
     return (
         <React.Fragment>
             <MyPaper>
                 <Typography gutterBottom variant="h4">Azure Integrasjon</Typography>
                 <MyGrid container spacing={0} direction="column" justify="center" alignContent="space-between">
-                    <Grid item >
-                        <TextField id="standard-basic DevOpsName"
+                    <Grid item>
+                        <TextField id="standard-required DevOpsName"
                             label="DevOps Brukernavn"
                             value={name}
                             onChange={(e) => setName(e.target.value)} />
                     </Grid>
                     <Grid item>
-                        <TextField id="standard-basic DevOpsPAT" label="Personal Access Token"
+                        <TextField id="standard-required DevOpsPAT" label="Personal Access Token"
                             value={PAT}
                             onChange={(e) => setPAT(e.target.value)} />
                     </Grid>
                     <Grid item>
-                        <TextField id="standard-basic DevOpsOrg" label="DevOps Organisasjon"
+                        <TextField id="standard-required DevOpsOrg" label="DevOps Organisasjon"
                             value={org}
                             onChange={(e) => setOrg(e.target.value)} />
                     </Grid>
