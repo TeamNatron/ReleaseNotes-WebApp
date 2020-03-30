@@ -6,46 +6,21 @@ import ProjectSelector from "./ProjectSelector";
 
 // EXAMPLE COMPONENT USED TO CONTAIN AZURE DEVOPS TOOLS
 // CAN BE MODYFIED OR REMOVED
-const AzureDevOpsView = () => {
-  const createData = (name, id, isPublic) => {
-    return { name, id, isPublic };
-  };
-
-  const getDummyReleases = () => {
-    var releasesRows = [];
-    dummyReleases.forEach(r => {
-      releasesRows.push(createData(r.title, r.id));
-    });
-    return releasesRows;
-  };
-
-  const dummyReleases = [
-    { id: 200, title: "Azure Release 2.2" },
-    { id: 20, title: "Azure Release 3.2" },
-    { id: 202, title: "Azure Release 2.3" },
-    { id: 201, title: "Azure Release 6.2" },
-    { id: 99, title: "Azure Release 5.2" }
-  ];
-  const getDummyProjects = () => {
-    var projects = [];
-    dummyProjects.forEach(p => {
-      projects.push(p.title);
-    });
-    return projects;
-  };
-
-  const dummyProjects = [
-    { id: 200, title: "Azure Release 2.2" },
-    { id: 20, title: "Azure Release 3.2" },
-    { id: 202, title: "Azure Release 2.3" },
-    { id: 201, title: "Azure Release 6.2" },
-    { id: 99, title: "Azure Release 5.2" }
-  ];
+const AzureDevOpsView = props => {
+  const {
+    azureReleases,
+    azureProjects,
+    handleSelectedProject,
+    selected
+  } = props;
 
   const handleAction = (action, id) => {
     switch (action) {
       case "IMPORT":
         postReleaseById();
+        break;
+      default:
+        break;
     }
   };
 
@@ -59,9 +34,15 @@ const AzureDevOpsView = () => {
       <AdminExpansionPanelBase
         expanded
         label="Azure Devops Releases"
-        summaryComponent={<ProjectSelector projects={getDummyProjects()} />}
+        summaryComponent={
+          <ProjectSelector
+            projects={azureProjects}
+            selected={selected}
+            handleChange={handleSelectedProject}
+          />
+        }
         icon={<Description />}
-        rows={getDummyReleases()}
+        rows={azureReleases}
         onAction={handleAction}
         import={true}
       ></AdminExpansionPanelBase>

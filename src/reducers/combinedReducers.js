@@ -7,6 +7,7 @@ import { releaseNoteReducer } from "../slices/releaseNoteSlice";
 import { errorReducer } from "../slices/errorSlice";
 import { authReducer } from "../slices/authSlice";
 import { userReducer } from "../slices/userSlice";
+import { azureReducer } from "../slices/azureSlice";
 
 export default combineReducers({
   products: productsReducer,
@@ -16,5 +17,6 @@ export default combineReducers({
   loading: loadingReducer,
   error: errorReducer,
   auth: authReducer,
-  users: userReducer
+  users: userReducer,
+  azure: azureReducer
 });

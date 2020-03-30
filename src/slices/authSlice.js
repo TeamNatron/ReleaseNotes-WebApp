@@ -1,4 +1,4 @@
-import { createAction, createReducer } from "@reduxjs/toolkit";
+import { createAction, createReducer, createSelector } from "@reduxjs/toolkit";
 import {
   setAuthToken,
   getAuthToken,
@@ -60,7 +60,7 @@ export const authReducer = createReducer(initialState, {
   }
 });
 
-// THUNKS
+// THUNKS.
 export const login = (paramEmail, paramPassword) => async dispatch => {
   dispatch(postPending());
   Axios.post(
@@ -127,4 +127,22 @@ export const updateAzureInfo = (name, PAT, org) => async dispatch => {
 // SELECTORS
 export const loggedInSelector = state => {
   return state.auth.isLogged;
+};
+
+export const azureApiSelector = createSelector(
+  state => state.auth.currentUser.azureInformation,
+  azureInfo => {
+    return {
+      organization: azureInfo.organization,
+      authToken: createAuthToken(azureInfo)
+    };
+  }
+);
+
+const createAuthToken = azureInfo => {
+  return btoa(azureInfo.userid + ":" + azureInfo.pat);
+};
+
+export const organizationSelector = state => {
+  return state.auth.organization;
 };

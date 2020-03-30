@@ -1,4 +1,4 @@
-import { authReducer } from "./authSlice";
+import { authReducer, azureApiSelector } from "./authSlice";
 import { testThunkConformance } from "../utils/test/testThunkConformance";
 import { putSuccess, checkLoggedIn, updateAzureInfo, login } from "./authSlice";
 import thunk from "redux-thunk";
@@ -71,11 +71,38 @@ const testCheckLoggedinConformancer = () => {
   });
 };
 
+describe("Selectors", () => {
+  describe("azureApiSelector()", () => {
+    it("creates an auth token", () => {
+      const expectedOrg =
+        dummyState.auth.currentUser.azureInformation.organization;
+      const result = azureApiSelector(dummyState);
+      expect(result.organization).toEqual(expectedOrg);
+      expect(isBase64(result.authToken)).toEqual(true);
+    });
+  });
+});
+
 describe("Auth Thunks", () => {
   testThunkConformance(login);
   testThunkConformance(updateAzureInfo);
   testCheckLoggedinConformancer();
 });
+
+// https://stackoverflow.com/questions/7860392/determine-if-string-is-in-base64-using-javascript
+const notBase64 = /[^A-Z0-9+\/=]/i;
+export default function isBase64(str) {
+  const len = str.length;
+  if (!len || len % 4 !== 0 || notBase64.test(str)) {
+    return false;
+  }
+  const firstPaddingChar = str.indexOf("=");
+  return (
+    firstPaddingChar === -1 ||
+    firstPaddingChar === len - 1 ||
+    (firstPaddingChar === len - 2 && str[len - 1] === "=")
+  );
+}
 
 const dummyUser = {
   id: 1,
@@ -86,5 +113,11 @@ const dummyUser = {
     userid: "admin@azure.no",
     pat: "AASDA12312EWWERWER",
     organization: "ReleaseNotesSystem"
+  }
+};
+
+const dummyState = {
+  auth: {
+    currentUser: dummyUser
   }
 };

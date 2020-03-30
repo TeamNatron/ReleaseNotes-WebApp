@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Select,
   MenuItem,
@@ -9,12 +9,7 @@ import { DomainPropTypes } from "@material-ui/pickers/constants/prop-types";
 import styled from "styled-components";
 
 const ProjectSelector = props => {
-  const { projects } = props;
-  const [selected, setSelected] = useState("");
-
-  const handleChange = event => {
-    setSelected(event.target.value);
-  };
+  const { projects, selected, handleChange } = props;
 
   return (
     <StyledFormControl>
