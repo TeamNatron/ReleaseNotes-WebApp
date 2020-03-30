@@ -1,4 +1,9 @@
-import { getReleasesSuccess, azureReducer, fetchProjects } from "./azureSlice";
+import {
+  getReleasesSuccess,
+  azureReducer,
+  fetchProjects,
+  getProjectsSuccess
+} from "./azureSlice";
 import { testThunkConformance } from "../utils/test/testThunkConformance";
 import { fetchReleases } from "./azureSlice";
 import { AzureAxios } from "./azureSlice";
@@ -21,6 +26,20 @@ describe("azureReducer", () => {
         getReleasesSuccess({ data: dummyReleases })
       );
       expect(updatedState.releases).toEqual(dummyReleases);
+    });
+  });
+
+  describe("getProjectsSuccess", () => {
+    it("should fill all projects", () => {
+      const expectedLength = dummyProjects.value.length;
+      const updatedState = azureReducer(
+        undefined,
+        getProjectsSuccess({ data: dummyProjects })
+      );
+      expect(updatedState.projects.length).toEqual(expectedLength);
+      expect(updatedState.projects).toEqual(
+        expect.arrayContaining(["Dummy project"])
+      );
     });
   });
 
@@ -154,6 +173,23 @@ const dummyReleases = {
           }
         }
       }
+    }
+  ]
+};
+
+const dummyProjects = {
+  count: 1,
+  value: [
+    {
+      id: "kkkkceeeexxx-9999-ffff-bbbb-kkkkceeeexxx",
+      name: "Dummy project",
+      description: "dummy",
+      url:
+        "https://dev.azure.com/ReleaseNoteSystem/_apis/projects/kkkkceeeexxx-9999-ffff-bbbb-kkkkceeeexxx",
+      state: "wellFormed",
+      revision: 20,
+      visibility: "public",
+      lastUpdateTime: "2020-01-15T14:02:56.87Z"
     }
   ]
 };

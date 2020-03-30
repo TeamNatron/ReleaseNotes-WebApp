@@ -21,7 +21,9 @@ export const getReleasesSuccess = createAction(name + "getReleasesSuccess");
 export const azureReducer = createReducer(
   { sucessMsg: "", projects: [], releases: [] },
   {
-    [getProjectsSuccess]: (state, action) => {},
+    [getProjectsSuccess]: (state, action) => {
+      state.projects = action.payload.data.value.map(proj => proj.name);
+    },
     [getReleasesSuccess]: (state, action) => {
       state.sucessMsg = action.payload.statusText;
       state.releases = action.payload.data;
