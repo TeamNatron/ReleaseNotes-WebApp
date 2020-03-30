@@ -20,7 +20,7 @@ describe("azureReducer", () => {
         undefined,
         getReleasesSuccess({ data: dummyReleases })
       );
-      expect(updatedState.releases).toEqual(dummyReleases);
+      expect(updatedState.releases).toEqual(dummyReleases.value);
     });
   });
 
