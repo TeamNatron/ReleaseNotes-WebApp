@@ -124,7 +124,6 @@ export const loggedInSelector = state => {
 export const azureApiSelector = createSelector(
   state => state.auth.currentUser.azureInformation,
   azureInfo => {
-    console.log(azureInfo);
     return {
       organization: azureInfo.organization,
       authToken: createAuthToken(azureInfo)
@@ -133,9 +132,7 @@ export const azureApiSelector = createSelector(
 );
 
 const createAuthToken = azureInfo => {
-  return btoa(
-    unescape(encodeURIComponent(azureInfo.userid + ":" + azureInfo.pat))
-  );
+  return btoa(azureInfo.userid + ":" + azureInfo.pat);
 };
 
 export const organizationSelector = state => {

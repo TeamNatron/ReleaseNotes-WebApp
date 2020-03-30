@@ -27,6 +27,8 @@ import { fetchReleases as fetchAzureReleases } from "../../slices/azureSlice";
 import { useState } from "react";
 import styled from "styled-components";
 import AzureDevopsView from "../adminpanel/AzureDevopsView";
+import { fetchProjects } from "../../slices/azureSlice";
+import { azureApiSelector } from "../../slices/authSlice";
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
@@ -44,6 +46,11 @@ const AdminScreen = () => {
   useEffect(() => {
     dispatch(fetchReleaseNotes());
   }, [dispatch]);
+
+  const azureProps = useSelector(azureApiSelector);
+  useEffect(() => {
+    dispatch(fetchProjects(azureProps));
+  }, [dispatch, azureProps]);
 
   useEffect(() => dispatch(fetchUsers()), [dispatch]);
   const createData = (name, id, isPublic) => {
