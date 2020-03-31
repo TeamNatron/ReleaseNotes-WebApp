@@ -1,7 +1,7 @@
 // Utils for manipulating redux state with immer
 
 export const updateItems = (state, action) => {
-  updateInArray(state.item, action.payload.id, action.payload.data);
+  updateInArray(state.items, action.payload.id, action.payload.data);
 };
 
 export const deleteItem = (state, action) => {
