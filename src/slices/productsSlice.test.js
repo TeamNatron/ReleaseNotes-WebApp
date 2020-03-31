@@ -1,4 +1,9 @@
-import { productsReducer, fetchProductsSuccess } from "./productsSlice";
+import {
+  productsReducer,
+  fetchProductsSuccess,
+  fetchProducts
+} from "./productsSlice";
+import { testThunkConformance } from "../utils/test/testThunkConformance";
 
 describe("products reducer", () => {
   it("should handle fetching products", () => {
@@ -11,4 +16,8 @@ describe("products reducer", () => {
       items: [{ name: "test-product" }]
     });
   });
+});
+
+describe("products thunks", () => {
+  testThunkConformance(fetchProducts);
 });

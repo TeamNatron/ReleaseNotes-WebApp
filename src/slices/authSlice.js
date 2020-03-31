@@ -105,9 +105,17 @@ export const checkLoggedIn = () => async dispatch => {
 };
 
 // Thunk for update azure info
-export const updateAzureInfo = () => async dispatch => {
+export const updateAzureInfo = (name, PAT, org) => async dispatch => {
   dispatch(putPending());
-  Axios.put("/users")
+  Axios.put("/users",
+    {
+      AzureInformation: {
+        userId: name,
+        pat: PAT,
+        Organization: org
+      }
+    }
+  )
     .then(res => {
       dispatch(putSuccess({ data: res.data, statusText: res.statusText }));
     })

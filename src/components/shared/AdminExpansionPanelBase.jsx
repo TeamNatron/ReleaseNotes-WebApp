@@ -69,11 +69,13 @@ const AdminExpansionPanelBase = props => {
           <Typography>{props.label}</Typography>
         </ExpansionPanelSummary>
         <TablePanel>
-          {props.summaryComponent
-            ? React.cloneElement(props.summaryComponent, {
-                style: { border: "1px solid red" }
-              })
-            : React.Fragment}
+          {props.summaryComponent ? (
+            React.cloneElement(props.summaryComponent, {
+              style: { border: "1px solid red" }
+            })
+          ) : (
+            <React.Fragment />
+          )}
           {props.createContentComponent ? (
             <AddButton
               onClick={() => props.onAction("CREATE")}
@@ -83,7 +85,7 @@ const AdminExpansionPanelBase = props => {
               Legg til
             </AddButton>
           ) : (
-            React.Fragment
+            <React.Fragment />
           )}
         </TablePanel>
         {props.rows && props.rows.length > 0 ? (
@@ -168,7 +170,9 @@ const AdminExpansionPanelBase = props => {
                               key={column.id}
                             >
                               <IconButton
-                                onClick={() => props.onAction("IMPORT", row.id)}
+                                onClick={() =>
+                                  props.onAction("IMPORT", row.id, row.name)
+                                }
                               >
                                 <Add fontSize="small" />
                               </IconButton>
