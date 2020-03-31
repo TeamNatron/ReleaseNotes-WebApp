@@ -1,10 +1,15 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
+import { getAuthToken } from "../handlers/cookieHandler";
 import Axios from "axios";
 
 export const name = "user/";
 export const getPending = createAction(name + "getPending");
 export const getSuccess = createAction(name + "getSuccess");
 export const getError = createAction(name + "getError");
+
+export const putPending = createAction(name + "putPending");
+export const putSuccess = createAction(name + "putSuccess");
+export const putError = createAction(name + "putError");
 
 // REDUCER
 const initialState = {
@@ -25,5 +30,29 @@ export const fetchUsers = () => dispatch => {
     })
     .catch(error => {
       dispatch(getError(error));
+    });
+};
+
+export const changePassword = (paramPassword, id) => async dispatch => {
+  dispatch(putPending());
+
+  Axios.put(
+    "users/" + id,
+    {
+      password: paramPassword
+    },
+    {
+      withCredentials: false,
+      headers: {
+        "Access-Control-Request-Headers": "Content-Type",
+        Authorization: "Bearer " + getAuthToken()
+      }
+    }
+  )
+    .then(() => {
+      dispatch(putSuccess());
+    })
+    .catch(err => {
+      dispatch(putError());
     });
 };
