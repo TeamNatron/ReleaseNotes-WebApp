@@ -1,16 +1,25 @@
 // Utils for manipulating redux state with immer
 
-export const updateInArray = (state, action) => {
-  let index = state.items.findIndex(obj => obj.id == action.payload.id);
-  if (index === -1) {
-    state.items.push(action.payload.data);
-  } else {
-    state.items[index] = action.payload.data;
+export const updateItems = (state, action) => {
+  updateInArray(state.item, action.payload.id, action.payload.data);
+};
+
+export const deleteItem = (state, action) => {
+  deleteInArray(state.items, action.payload.id);
+};
+
+export const deleteInArray = (arr, id) => {
+  let index = arr.findIndex(obj => obj.id == id);
+  if (index !== -1) {
+    arr.splice(index, 1);
   }
 };
-export const deleteInArray = (state, action) => {
-  let index = state.items.findIndex(obj => obj.id == action.payload.id);
-  if (index !== -1) {
-    state.items.splice(index, 1);
+
+export const updateInArray = (arr, id, data) => {
+  let index = arr.findIndex(obj => obj.id == id);
+  if (index === -1) {
+    arr.push(data);
+  } else {
+    arr[index] = data;
   }
 };
