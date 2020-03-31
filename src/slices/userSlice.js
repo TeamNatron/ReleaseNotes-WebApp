@@ -53,6 +53,6 @@ export const changePassword = (paramPassword, id) => async dispatch => {
       dispatch(putSuccess());
     })
     .catch(err => {
-      dispatch(putError());
+      dispatch(putError(err));
     });
 };
