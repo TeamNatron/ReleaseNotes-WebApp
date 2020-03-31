@@ -1,6 +1,5 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
 import Axios from "axios";
-import { updateInArray } from "../utils/stateUtil";
 
 const name = "products/";
 export const fetchProductsPending = createAction(name + "getPending");
