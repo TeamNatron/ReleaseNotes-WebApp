@@ -1,10 +1,14 @@
 import { createReducer, createAction } from "@reduxjs/toolkit";
 import GlobalAxios from "axios";
+import Axios from "axios";
+import { postRelease } from "./releaseSlice";
 
 // azure axios instance
 export const AzureAxios = GlobalAxios.create({
   timeout: 5000
 });
+
+const API_VERSION = "&api-version=5.1";
 
 // actions
 const name = "azure/";
@@ -15,6 +19,10 @@ export const getProjectsSuccess = createAction(name + "getProjectsSuccess");
 export const getReleasesPending = createAction(name + "getReleasesPending");
 export const getReleasesError = createAction(name + "getReleasesError");
 export const getReleasesSuccess = createAction(name + "getReleasesSuccess");
+
+export const importReleasePending = createAction(name + "importReleasePending");
+export const importReleaseError = createAction(name + "importReleaseError");
+export const importReleaseSuccess = createAction(name + "importReleaseSuccess");
 
 // reducer
 export const azureReducer = createReducer(
@@ -105,5 +113,112 @@ const authHeader = authToken => {
     headers: {
       Authorization: "Basic " + authToken
     }
+  };
+};
+
+/**
+ *
+ * @param {*} project The project
+ * @param {Object} params Object of required parameters
+ * @param {String} params.organization The organization
+ * @param {String} params.authToken The authenication token
+ * @param {*} id Release id
+ */
+export const fetchWorkItemIds = async (project, params, id) => {
+  // create request url
+  const instance =
+    "vsrm.dev.azure.com/" +
+    params.organization +
+    "/" +
+    project.replace(/ /g, "%20");
+  const url =
+    "https://" + instance + "/_apis/release/releases/" + id + "/workitems";
+  const authToken = params.authToken;
+
+  return AzureAxios.get(url, authHeader(authToken));
+};
+
+/**
+ *
+ * @param {*} project The Project
+ * @param {Object} params Object of required parameters
+ * @param {String} params.organization The organization
+ * @param {String} params.authToken The authenication token
+ * @param {*} ids
+ */
+export const fetchWorkItems = async (project, params, ids) => {
+  // https://dev.azure.com/{organization}/{project}/_apis/wit/workitems?ids={ids}&api-version=5.1
+  // create request url
+  const fields =
+    "&fields=System.CreatedBy,System.CreatedDate,System.Description,System.Title";
+  const instance =
+    "dev.azure.com/" + params.organization + "/" + project.replace(/ /g, "%20");
+  const url =
+    "https://" +
+    instance +
+    "/_apis/wit/workitems?ids=" +
+    ids +
+    API_VERSION +
+    fields;
+  const authToken = params.authToken;
+
+  return AzureAxios.get(url, authHeader(authToken));
+};
+
+/**
+ *
+ * @param {*} project The project
+ * @param {Object} params Object of required parameters
+ * @param {String} params.organization The organization
+ * @param {String} params.authToken The authenication token
+ * @param {*} id The id of the release
+ * @param {*} title The title of the Release
+ */
+export const importRelease = (project, params, id, title) => async dispatch => {
+  dispatch(importReleasePending());
+  try {
+    // Get Ids of work items
+    fetchWorkItemIds(project, params, id).then(res => {
+      console.log(res);
+      var ids = res.data.value.map(({ id }) => id);
+
+      // Get data of each work item
+      fetchWorkItems(project, params, ids).then(res => {
+        console.log(res);
+
+        var rawWorkItems = res.data.value;
+        var workItems = [];
+
+        // Format and filter each work item
+        rawWorkItems.forEach(wi => {
+          workItems.push(createWorkItem(wi));
+        });
+
+        // Create new release and post
+        const release = {
+          title: title,
+          isPublic: false,
+          releaseNotes: workItems
+        };
+
+        // Post release
+        dispatch(postRelease(release));
+        dispatch(importReleaseSuccess());
+      });
+    });
+  } catch (err) {
+    dispatch(importReleaseError(err));
+  }
+};
+
+// util
+export const createWorkItem = item => {
+  return {
+    WorkItemId: item.id,
+    WorkItemTitle: item.fields["System.Title"],
+    ClosedDate: item.fields["System.CreatedDate"],
+    WorkItemDescriptionHtml: item.fields["System.Description"],
+    AuthorName: item.fields["System.CreatedBy"]["displayName"],
+    AuthorEmail: item.fields["System.CreatedBy"]["uniqueName"]
   };
 };
