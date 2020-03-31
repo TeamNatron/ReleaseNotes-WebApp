@@ -178,13 +178,10 @@ export const importRelease = (project, params, id, title) => async dispatch => {
   try {
     // Get Ids of work items
     fetchWorkItemIds(project, params, id).then(res => {
-      console.log(res);
       var ids = res.data.value.map(({ id }) => id);
 
       // Get data of each work item
       fetchWorkItems(project, params, ids).then(res => {
-        console.log(res);
-
         var rawWorkItems = res.data.value;
         var workItems = [];
 
