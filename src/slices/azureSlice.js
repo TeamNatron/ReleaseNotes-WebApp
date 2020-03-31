@@ -1,6 +1,5 @@
 import { createReducer, createAction } from "@reduxjs/toolkit";
 import GlobalAxios from "axios";
-import Axios from "axios";
 import { postRelease } from "./releaseSlice";
 
 // azure axios instance
