@@ -22,12 +22,15 @@ import {
   putReleaseNote,
   deleteReleaseNote
 } from "../../slices/releaseNoteSlice";
-import { fetchReleases as fetchAzureReleases } from "../../slices/azureSlice";
+import {
+  fetchReleases as fetchAzureReleases,
+  importRelease
+} from "../../slices/azureSlice";
 import { useState } from "react";
 import styled from "styled-components";
-import AzureDevopsView from "../adminpanel/AzureDevopsView";
 import { fetchProjects } from "../../slices/azureSlice";
 import { azureApiSelector } from "../../slices/authSlice";
+import AzureDevOpsView from "../adminpanel/AzureDevOpsView";
 import { fetchProducts } from "../../slices/productsSlice";
 
 const AdminScreen = () => {
@@ -100,6 +103,10 @@ const AdminScreen = () => {
     setSelected(event.target.value);
   };
 
+  const handleImport = (id, title) => {
+    dispatch(importRelease(selected, azureProps, id, title));
+  };
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -138,7 +145,7 @@ const AdminScreen = () => {
       <StyledAppBar color="transparent" position="static">
         <Tabs value={value} onChange={handleChange}>
           <Tab label="Release Notes System" {...tabProps(0)} />
-          <Tab label="Azure Devops" {...tabProps(1)} />
+          <Tab label="Azure DevOps" {...tabProps(1)} />
         </Tabs>
       </StyledAppBar>
 
@@ -177,12 +184,14 @@ const AdminScreen = () => {
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <AzureDevopsView
+        <AzureDevOpsView
           azureReleases={azureReleases}
           azureProjects={azureProjects}
+          azureProps={azureProps}
           selected={selected}
           handleSelectedProject={handleSelectedProject}
-        ></AzureDevopsView>
+          handleImport={handleImport}
+        />
       </TabPanel>
     </PageContainer>
   );

@@ -18,7 +18,7 @@ const LandingScreen = props => {
 
   return (
     <React.Fragment>
-      <WelcomeContainer maxWidth="false">
+      <WelcomeContainer maxWidth={false}>
         <div>
           <h1>Velkommen til Release Notes System</h1>
           <p>Her kan du finne ut hva som er nytt med ditt produkt!</p>
@@ -31,16 +31,16 @@ const LandingScreen = props => {
             {products.error ? (
               <p>ERROR: {[products.error.toString()]}</p>
             ) : (
-              products.items.map(item => (
-                <ListItem key={item.id}>
-                  <Product
-                    img="https://constructionaccidentlawfirms.com/files/2019/08/AdobeStock_192077668.jpg"
-                    item={item}
-                    loading={products.loading}
-                  />
-                </ListItem>
-              ))
-            )}
+                products.items.map(item => (
+                  <ListItem key={item.id}>
+                    <Product
+                      img="https://constructionaccidentlawfirms.com/files/2019/08/AdobeStock_192077668.jpg"
+                      item={item}
+                      loading={products.loading}
+                    />
+                  </ListItem>
+                ))
+              )}
           </React.Fragment>
         </ProductDisplay>
       </PageContainer>
