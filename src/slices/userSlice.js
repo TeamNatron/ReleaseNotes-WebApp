@@ -49,8 +49,8 @@ export const changePassword = (paramPassword, id) => async dispatch => {
       }
     }
   )
-    .then(() => {
-      dispatch(putSuccess());
+    .then(res => {
+      dispatch(putSuccess({ successMsg: res.data }));
     })
     .catch(err => {
       dispatch(putError(err));
