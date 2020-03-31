@@ -170,7 +170,9 @@ const AdminExpansionPanelBase = props => {
                               key={column.id}
                             >
                               <IconButton
-                                onClick={() => props.onAction("IMPORT", row.id)}
+                                onClick={() =>
+                                  props.onAction("IMPORT", row.id, row.name)
+                                }
                               >
                                 <Add fontSize="small" />
                               </IconButton>

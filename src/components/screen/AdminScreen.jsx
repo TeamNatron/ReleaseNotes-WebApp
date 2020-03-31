@@ -23,7 +23,10 @@ import {
   putReleaseNote,
   deleteReleaseNote
 } from "../../slices/releaseNoteSlice";
-import { fetchReleases as fetchAzureReleases } from "../../slices/azureSlice";
+import {
+  fetchReleases as fetchAzureReleases,
+  importRelease
+} from "../../slices/azureSlice";
 import { useState } from "react";
 import styled from "styled-components";
 import { fetchProjects } from "../../slices/azureSlice";
@@ -98,6 +101,10 @@ const AdminScreen = () => {
 
   const handleSelectedProject = event => {
     setSelected(event.target.value);
+  };
+
+  const handleImport = (id, title) => {
+    dispatch(importRelease(selected, azureProps, id, title));
   };
 
   const handleChange = (event, newValue) => {
@@ -180,8 +187,10 @@ const AdminScreen = () => {
         <AzureDevOpsView
           azureReleases={azureReleases}
           azureProjects={azureProjects}
+          azureProps={azureProps}
           selected={selected}
           handleSelectedProject={handleSelectedProject}
+          handleImport={handleImport}
         />
       </TabPanel>
     </PageContainer>

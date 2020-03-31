@@ -3,6 +3,11 @@ import DevOpsForm from "./DevOpsForm";
 import { Description } from "@material-ui/icons";
 import AdminExpansionPanelBase from "../shared/AdminExpansionPanelBase";
 import ProjectSelector from "./ProjectSelector";
+import {
+  fetchWorkItems,
+  fetchWorkItemIds,
+  createWorkItem
+} from "../../slices/azureSlice";
 
 // EXAMPLE COMPONENT USED TO CONTAIN AZURE DEVOPS TOOLS
 // CAN BE MODYFIED OR REMOVED
@@ -11,21 +16,18 @@ const AzureDevOpsView = props => {
     azureReleases,
     azureProjects,
     handleSelectedProject,
-    selected
+    selected,
+    handleImport
   } = props;
 
-  const handleAction = (action, id) => {
+  const handleAction = (action, id, data) => {
     switch (action) {
       case "IMPORT":
-        postReleaseById();
+        handleImport(id, data);
         break;
       default:
         break;
     }
-  };
-
-  const postReleaseById = () => {
-    console.log("Yes, da lag vi den!");
   };
 
   return (
