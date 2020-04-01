@@ -4,7 +4,12 @@ import { Description } from "@material-ui/icons";
 import AdminExpansionPanelBase from "../shared/AdminExpansionPanelBase";
 import { Grid } from "@material-ui/core";
 import GeneralSelector from "../shared/GeneralSelector";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import {
+  getAllProductVersionsSelector,
+  fetchProducts
+} from "../../slices/productsSlice";
 
 // EXAMPLE COMPONENT USED TO CONTAIN AZURE DEVOPS TOOLS
 // CAN BE MODYFIED OR REMOVED
@@ -18,8 +23,13 @@ const AzureDevOpsView = props => {
     selectedProductVersion,
     handleSelectedProductVersion
   } = props;
+  const dispatch = useDispatch();
 
-  const productVersions = useSelector(state => state.productVersions.items);
+  const productVersions = useSelector(getAllProductVersionsSelector);
+
+  useEffect(() => {
+    dispatch(fetchProducts);
+  }, [dispatch]);
 
   const handleAction = (action, id, data) => {
     switch (action) {
@@ -33,7 +43,7 @@ const AzureDevOpsView = props => {
 
   return (
     <React.Fragment>
-      <DevOpsForm></DevOpsForm>
+      <DevOpsForm />
       <AdminExpansionPanelBase
         expanded
         label="Azure Devops Releases"
@@ -54,7 +64,7 @@ const AzureDevOpsView = props => {
                 selected={selectedProductVersion}
                 handleChange={handleSelectedProductVersion}
                 label="Produkt"
-                helperText="Velg et produkt"
+                helperText="Velg et produkt å importere til"
               />
             </Grid>
           </Grid>
