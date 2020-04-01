@@ -34,6 +34,7 @@ import { fetchProducts } from "../../slices/productsSlice";
 import EditProductForm from "../adminpanel/EditProductForm";
 import { createSelector } from "@reduxjs/toolkit";
 import useTraceUpdate from "../../utils/useTraceUpdate";
+import { createData } from "../shared/AdminTableRow";
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
@@ -202,9 +203,6 @@ const StyledAppBar = styled.div`
   }
 `;
 
-const createData = (data, name, id, isPublic) => {
-  return { data, name, id, isPublic };
-};
 const releaseTitlesSelector = createSelector(
   state => state.releases.items,
   items => items.map(r => createData(r, r.title, r.id, r.isPublic))

@@ -8,14 +8,13 @@ const AdminExpansionPanelModal = props => {
   const [componentToRender, setComponentToRender] = React.useState();
 
   const handleAction = (action, rowData) => {
-    const { id } = rowData;
     switch (action) {
       case actions.CREATE:
         setComponentToRender(props.createContentComponent);
         break;
       case actions.EDIT:
-        if (id) {
-          setComponentToRender(setComponentId(id));
+        if (rowData?.id) {
+          setComponentToRender(setComponentProps(rowData));
         } else {
           setComponentToRender(props.editContentComponent);
         }
@@ -29,9 +28,9 @@ const AdminExpansionPanelModal = props => {
     setOpen(true);
   };
 
-  const setComponentId = id => {
+  const setComponentProps = rowData => {
     return React.Children.map(props.editContentComponent, child =>
-      React.cloneElement(child, { id: id })
+      React.cloneElement(child, { id: rowData.id, value: rowData.data })
     )[0];
   };
 
