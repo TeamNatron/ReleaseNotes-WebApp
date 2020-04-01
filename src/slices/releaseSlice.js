@@ -1,6 +1,6 @@
 import { createReducer, createAction } from "@reduxjs/toolkit";
 import Axios from "axios";
-import { updateInArray, deleteItem, updateItems } from "../utils/stateUtil";
+import { updateInArray, deleteInArray } from "../utils/stateUtil";
 import { saveSuccess as saveReleaseNoteSuccess } from "./releaseNoteSlice";
 
 // ACTIONS
@@ -37,10 +37,10 @@ export const releaseReducer = createReducer(initialState, {
     state.items = action.payload;
   },
   [getByIdSuccess]: (state, action) => {
-    updateItems(state, action);
+    updateInArray(state, action);
   },
   [putByIdSuccess]: (state, action) => {
-    updateItems(state, action);
+    updateInArray(state, action);
     state.successMsg = action.payload.response;
   },
   [saveReleaseNoteSuccess]: (state, action) => {
@@ -56,7 +56,7 @@ export const releaseReducer = createReducer(initialState, {
   },
 
   [deleteSuccess]: (state, action) => {
-    deleteItem(state, action);
+    deleteInArray(state, action);
   },
   [postSuccess]: (state, action) => {
     state.successMsg = action.payload;
