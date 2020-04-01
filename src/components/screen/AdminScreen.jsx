@@ -107,7 +107,15 @@ const AdminScreen = () => {
   };
 
   const handleImport = (id, title) => {
-    dispatch(importRelease(selectedProject, azureProps, id, title));
+    dispatch(
+      importRelease(
+        selectedProductVersion.id,
+        selectedProject,
+        azureProps,
+        id,
+        title
+      )
+    );
   };
 
   const handleChange = (event, newValue) => {
