@@ -69,11 +69,13 @@ const AdminExpansionPanelBase = props => {
           <Typography>{props.label}</Typography>
         </ExpansionPanelSummary>
         <TablePanel>
-          {props.summaryComponent
-            ? React.cloneElement(props.summaryComponent, {
+          {props.summaryComponent ? (
+            React.cloneElement(props.summaryComponent, {
               style: { border: "1px solid red" }
             })
-            : <React.Fragment />}
+          ) : (
+            <React.Fragment />
+          )}
           {props.createContentComponent ? (
             <AddButton
               onClick={() => props.onAction("CREATE")}
@@ -83,8 +85,8 @@ const AdminExpansionPanelBase = props => {
               Legg til
             </AddButton>
           ) : (
-              <React.Fragment />)
-          })}
+            <React.Fragment />
+          )}
         </TablePanel>
         {props.rows && props.rows.length > 0 ? (
           <TableContainer>
@@ -112,8 +114,8 @@ const AdminExpansionPanelBase = props => {
                                   fontSize: "small"
                                 })
                               ) : (
-                                  <React.Fragment />
-                                )}
+                                <React.Fragment />
+                              )}
                             </StyledTableCell>
                           );
                         } else if (column.id === "isPublicSwitch") {
@@ -168,7 +170,9 @@ const AdminExpansionPanelBase = props => {
                               key={column.id}
                             >
                               <IconButton
-                                onClick={() => props.onAction("IMPORT", row.id)}
+                                onClick={() =>
+                                  props.onAction("IMPORT", row.id, row.name)
+                                }
                               >
                                 <Add fontSize="small" />
                               </IconButton>
@@ -192,8 +196,8 @@ const AdminExpansionPanelBase = props => {
             </Table>
           </TableContainer>
         ) : (
-            <ErrorLabel>Ingen innhold funnet</ErrorLabel>
-          )}
+          <ErrorLabel>Ingen innhold funnet</ErrorLabel>
+        )}
       </ExpansionPanel>
     </React.Fragment>
   );

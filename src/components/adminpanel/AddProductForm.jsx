@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import styled from "styled-components";
 import { DesktopWindows } from "@material-ui/icons";
-import { registerNewProduct } from "../../actions/productActions";
+import { registerNewProduct } from "../../slices/productsSlice";
 
 class AddProductForm extends Component {
   constructor() {

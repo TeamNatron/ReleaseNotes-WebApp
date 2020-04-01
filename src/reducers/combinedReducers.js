@@ -1,5 +1,4 @@
 import { combineReducers } from "redux";
-import { productsReducer } from "./productsReducer";
 import { productVersionsReducer } from "./productVersionsReducer";
 import { loadingReducer } from "../slices/loadingSlice";
 import { releaseReducer } from "../slices/releaseSlice";
@@ -8,6 +7,7 @@ import { errorReducer } from "../slices/errorSlice";
 import { authReducer } from "../slices/authSlice";
 import { userReducer } from "../slices/userSlice";
 import { azureReducer } from "../slices/azureSlice";
+import { productsReducer } from "../slices/productsSlice";
 
 export default combineReducers({
   products: productsReducer,
