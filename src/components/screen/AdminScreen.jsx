@@ -7,7 +7,6 @@ import ScreenTitle from "../shared/ScreenTitle";
 import AddUserForm from "../adminpanel/AddUserForm";
 import AddProductForm from "../adminpanel/AddProductForm";
 import ChangePasswordForm from "../adminpanel/ChangePasswordForm";
-import AdminExpansionPanel from "../shared/AdminExpansionPanelModal";
 import { useSelector, useDispatch } from "react-redux";
 import AdminExpansionPanelModal from "../shared/AdminExpansionPanelModal";
 import AdminExpansionPanelRoute from "../shared/AdminExpansionPanelRoute";
@@ -32,6 +31,9 @@ import { fetchProjects } from "../../slices/azureSlice";
 import { azureApiSelector } from "../../slices/authSlice";
 import AzureDevOpsView from "../adminpanel/AzureDevOpsView";
 import { fetchProducts } from "../../slices/productsSlice";
+import EditProductForm from "../adminpanel/EditProductForm";
+import { createSelector } from "@reduxjs/toolkit";
+import useTraceUpdate from "../../utils/useTraceUpdate";
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
@@ -56,9 +58,6 @@ const AdminScreen = () => {
   }, [dispatch, azureProps]);
 
   useEffect(() => dispatch(fetchUsers()), [dispatch]);
-  const createData = (name, id, isPublic) => {
-    return { name, id, isPublic };
-  };
 
   // Fetches all releases based on selected Project
   // todo implement real project in param
@@ -72,32 +71,19 @@ const AdminScreen = () => {
     if (params.project !== "") dispatch(fetchAzureReleases(params));
   }, [dispatch, selected]);
 
-  const releaseTitles = useSelector(state =>
-    state.releases.items.map(r => createData(r.title, r.id, r.isPublic))
-  );
-
   const azureProjects = useSelector(state => state.azure.projects);
-  const azureReleases = useSelector(state =>
-    state.azure.releases.map(r => createData(r.name, r.id))
-  );
+  const releaseTitles = useSelector(releaseTitlesSelector);
+  const azureReleases = useSelector(azureReleasesSelector);
+  const productTitles = useSelector(productTitlesSelector);
+  const userRows = useSelector(userRowsSelector);
+  const releaseNoteRows = useSelector(releaseNoteRowsSelector);
 
-  const productTitles = useSelector(state =>
-    state.products.items.map(p => createData(p.name, p.id))
-  );
-
-  const userRows = useSelector(state =>
-    state.users.items.map(u => createData(u.email, u.id))
-  );
-
-  const releaseNoteRows = useSelector(state =>
-    state.releaseNotes.items.map(r => {
-      return createData(
-        r.title === "" ? "Release note #" + r.id : r.title,
-        r.id,
-        r.isPublic
-      );
-    })
-  );
+  useTraceUpdate(azureProjects);
+  useTraceUpdate(releaseTitles);
+  useTraceUpdate(azureReleases);
+  useTraceUpdate(productTitles);
+  useTraceUpdate(userRows);
+  useTraceUpdate(releaseNoteRows);
 
   const handleSelectedProject = event => {
     setSelected(event.target.value);
@@ -150,12 +136,12 @@ const AdminScreen = () => {
       </StyledAppBar>
 
       <TabPanel value={value} index={0}>
-        <AdminExpansionPanel
+        <AdminExpansionPanelModal
           label="Produkter"
           icon={<DesktopWindows />}
           rows={productTitles}
           createContentComponent={<AddProductForm />}
-          //editContentComponent={<AddProductForm />}
+          editContentComponent={<EditProductForm />}
         />
         <AdminExpansionPanelModal
           label="Brukere"
@@ -215,3 +201,39 @@ const StyledAppBar = styled.div`
     background-color: white;
   }
 `;
+
+const createData = (data, name, id, isPublic) => {
+  return { data, name, id, isPublic };
+};
+const releaseTitlesSelector = createSelector(
+  state => state.releases.items,
+  items => items.map(r => createData(r, r.title, r.id, r.isPublic))
+);
+
+const azureReleasesSelector = createSelector(
+  state => state.azure.releases,
+  releases => releases.map(r => createData(r, r.name, r.id))
+);
+
+const productTitlesSelector = createSelector(
+  state => state.products.items,
+  items => items.map(p => createData(p, p.name, p.id))
+);
+
+const userRowsSelector = createSelector(
+  state => state.users.items,
+  items => items.map(u => createData(u, u.email, u.id))
+);
+
+const releaseNoteRowsSelector = createSelector(
+  state => state.releaseNotes.items,
+  items =>
+    items.map(r => {
+      return createData(
+        r,
+        r.title === "" ? "Release note #" + r.id : r.title,
+        r.id,
+        r.isPublic
+      );
+    })
+);
