@@ -8,6 +8,10 @@ import {
 import { PropTypes } from "prop-types";
 import styled from "styled-components";
 
+/**
+ *
+ * @param {*} props.items Must be an array with objects containing id and value
+ */
 const GeneralSelector = props => {
   const { items, selected, handleChange, helperText, label } = props;
 
@@ -15,8 +19,8 @@ const GeneralSelector = props => {
     <StyledFormControl>
       <Select label={label} value={selected} onChange={handleChange}>
         {items.map(obj => (
-          <MenuItem key={obj} value={obj}>
-            {obj}
+          <MenuItem key={obj.id} value={obj.value}>
+            {obj.value}
           </MenuItem>
         ))}
       </Select>
