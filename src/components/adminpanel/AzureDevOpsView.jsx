@@ -11,21 +11,18 @@ const AzureDevOpsView = props => {
     azureReleases,
     azureProjects,
     handleSelectedProject,
-    selected
+    selected,
+    handleImport
   } = props;
 
-  const handleAction = (action, id) => {
+  const handleAction = (action, id, data) => {
     switch (action) {
       case "IMPORT":
-        postReleaseById();
+        handleImport(id, data);
         break;
       default:
         break;
     }
-  };
-
-  const postReleaseById = () => {
-    console.log("Yes, da lag vi den!");
   };
 
   return (

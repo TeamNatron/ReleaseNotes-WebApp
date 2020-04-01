@@ -9,7 +9,6 @@ import AddProductForm from "../adminpanel/AddProductForm";
 import ChangePasswordForm from "../adminpanel/ChangePasswordForm";
 import AdminExpansionPanel from "../shared/AdminExpansionPanelModal";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchProducts } from "../../actions/productActions";
 import AdminExpansionPanelModal from "../shared/AdminExpansionPanelModal";
 import AdminExpansionPanelRoute from "../shared/AdminExpansionPanelRoute";
 import {
@@ -23,12 +22,16 @@ import {
   putReleaseNote,
   deleteReleaseNote
 } from "../../slices/releaseNoteSlice";
-import { fetchReleases as fetchAzureReleases } from "../../slices/azureSlice";
+import {
+  fetchReleases as fetchAzureReleases,
+  importRelease
+} from "../../slices/azureSlice";
 import { useState } from "react";
 import styled from "styled-components";
 import { fetchProjects } from "../../slices/azureSlice";
 import { azureApiSelector } from "../../slices/authSlice";
 import AzureDevOpsView from "../adminpanel/AzureDevOpsView";
+import { fetchProducts } from "../../slices/productsSlice";
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
@@ -98,6 +101,10 @@ const AdminScreen = () => {
 
   const handleSelectedProject = event => {
     setSelected(event.target.value);
+  };
+
+  const handleImport = (id, title) => {
+    dispatch(importRelease(selected, azureProps, id, title));
   };
 
   const handleChange = (event, newValue) => {
@@ -180,8 +187,10 @@ const AdminScreen = () => {
         <AzureDevOpsView
           azureReleases={azureReleases}
           azureProjects={azureProjects}
+          azureProps={azureProps}
           selected={selected}
           handleSelectedProject={handleSelectedProject}
+          handleImport={handleImport}
         />
       </TabPanel>
     </PageContainer>

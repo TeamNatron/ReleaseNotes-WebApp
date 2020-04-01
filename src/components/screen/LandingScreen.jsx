@@ -5,7 +5,7 @@ import Product from "../product/Product";
 import List from "@material-ui/core/List";
 import { ListItem, Container } from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchProducts } from "../../actions/productActions";
+import { fetchProducts } from "../../slices/productsSlice";
 
 const LandingScreen = props => {
   const products = useSelector(state => state.products);
