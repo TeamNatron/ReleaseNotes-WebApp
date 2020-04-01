@@ -168,6 +168,7 @@ class AddProductForm extends Component {
             <span id="successMessage"></span>
           </ListItem>
         </List>
+        {this.props.children}
       </TurboPaper>
     );
   }
