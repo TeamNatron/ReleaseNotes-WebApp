@@ -1,9 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
-import AdminExpansionPanelBase from "./AdminExpansionPanelBase";
+import AdminExpansionPanelBase, {
+  actions,
+  basePropTypes
+} from "./AdminExpansionPanelBase";
 import { useHistory } from "react-router";
 import { useDispatch } from "react-redux";
-
 const AdminExpansionPanelRoute = props => {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -14,20 +16,21 @@ const AdminExpansionPanelRoute = props => {
     onDelete,
     ...baseProps
   } = props;
-  const handleAction = (action, id, isPublic) => {
+  const handleAction = (action, rowData) => {
+    const { id, isPublic } = rowData;
+    console.log(rowData);
     switch (action) {
-      case "CREATE":
+      case actions.CREATE:
         history.push(props.createContentRoute);
         break;
 
-      case "EDIT":
+      case actions.EDIT:
         history.push(props.editContentRoute.replace(":id", id));
         break;
-
-      case "UPDATE":
+      case actions.UPDATE:
         dispatch(props.onUpdate(id, { isPublic }));
         break;
-      case "DELETE":
+      case actions.DELETE:
         dispatch(props.onDelete(id));
         break;
 
@@ -55,11 +58,9 @@ const AdminExpansionPanelRoute = props => {
 };
 
 export default AdminExpansionPanelRoute;
-
+const { onAction, expanded, ...exposedPropTypes } = basePropTypes;
 AdminExpansionPanelRoute.propTypes = {
-  label: PropTypes.string,
-  rows: PropTypes.array,
-  icon: PropTypes.element,
+  ...exposedPropTypes,
   createContentRoute: PropTypes.string,
   editContentRoute: PropTypes.string,
   onUpdate: PropTypes.func

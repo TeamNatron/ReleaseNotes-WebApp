@@ -20,6 +20,7 @@ import { Edit, Add } from "@material-ui/icons";
 import DeleteDialogButton from "./DeleteDialogButton";
 
 const AdminExpansionPanelBase = props => {
+  const [expanded, setExpanded] = React.useState(false);
   const columns = [
     { id: "avatar", label: "", maxWidth: 20 },
     { id: "name", label: "Name", minWidth: 100 }
@@ -58,9 +59,95 @@ const AdminExpansionPanelBase = props => {
     });
   }
 
+  const createRow = row => {
+    return (
+      <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+        {columns.map(column => {
+          if (column.id === "avatar") {
+            return (
+              <StyledTableCell key={column.id}>
+                {props.icon ? (
+                  React.cloneElement(props.icon, {
+                    color: "disabled",
+                    fontSize: "small"
+                  })
+                ) : (
+                  <React.Fragment />
+                )}
+              </StyledTableCell>
+            );
+          } else if (column.id === "isPublicSwitch") {
+            return (
+              <StyledTableCell key={column.id}>
+                <Switch
+                  color="primary"
+                  value={row.isPublic}
+                  checked={row.isPublic}
+                  onChange={() => {
+                    row.isPublic = !row.isPublic;
+                    return props.onAction(actions.UPDATE, { ...row });
+                  }}
+                  inputProps={{
+                    "aria-label": "primary checkbox"
+                  }}
+                />
+              </StyledTableCell>
+            );
+          } else if (column.id === "deleteButton") {
+            return (
+              props.edit && (
+                <StyledTableCell key={column.id}>
+                  <DeleteDialogButton
+                    onConfirm={() => props.onAction(actions.DELETE, { ...row })}
+                    entityName={row.name}
+                  />
+                </StyledTableCell>
+              )
+            );
+          } else if (column.id === "button") {
+            return (
+              props.edit && (
+                <StyledTableCell key={column.id}>
+                  <IconButton
+                    onClick={() => props.onAction(actions.EDIT, { ...row })}
+                  >
+                    <EditButton fontSize="small" />
+                  </IconButton>
+                </StyledTableCell>
+              )
+            );
+          } else if (column.id === "importButton") {
+            return (
+              <StyledTableCell label={column.label} key={column.id}>
+                <IconButton
+                  onClick={() => props.onAction(actions.IMPORT, { ...row })}
+                >
+                  <Add fontSize="small" />
+                </IconButton>
+              </StyledTableCell>
+            );
+          } else {
+            const value = row[column.id];
+            return (
+              <TableCell key={column.id} align={column.align}>
+                {column.format && typeof value === "number"
+                  ? column.format(value)
+                  : value}
+              </TableCell>
+            );
+          }
+        })}
+      </TableRow>
+    );
+  };
+
   return (
     <React.Fragment>
-      <ExpansionPanel defaultExpanded={props.expanded ? true : false}>
+      <ExpansionPanel
+        defaultExpanded={props.defaultExpanded}
+        expanded={expanded}
+        onChange={ev => setExpanded(!expanded)}
+      >
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -78,7 +165,7 @@ const AdminExpansionPanelBase = props => {
           )}
           {props.createContentComponent ? (
             <AddButton
-              onClick={() => props.onAction("CREATE")}
+              onClick={() => props.onAction(actions.CREATE)}
               color="primary"
               variant="contained"
             >
@@ -102,95 +189,7 @@ const AdminExpansionPanelBase = props => {
               </TableHead>
               <TableBody>
                 {props.rows.map(row => {
-                  return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                      {columns.map(column => {
-                        if (column.id === "avatar") {
-                          return (
-                            <StyledTableCell key={column.id}>
-                              {props.icon ? (
-                                React.cloneElement(props.icon, {
-                                  color: "disabled",
-                                  fontSize: "small"
-                                })
-                              ) : (
-                                <React.Fragment />
-                              )}
-                            </StyledTableCell>
-                          );
-                        } else if (column.id === "isPublicSwitch") {
-                          return (
-                            <StyledTableCell key={column.id}>
-                              <Switch
-                                color="primary"
-                                value={row.isPublic}
-                                checked={row.isPublic}
-                                onChange={() =>
-                                  props.onAction(
-                                    "UPDATE",
-                                    row.id,
-                                    !row.isPublic
-                                  )
-                                }
-                                inputProps={{
-                                  "aria-label": "primary checkbox"
-                                }}
-                              />
-                            </StyledTableCell>
-                          );
-                        } else if (column.id === "deleteButton") {
-                          return (
-                            props.edit && (
-                              <StyledTableCell key={column.id}>
-                                <DeleteDialogButton
-                                  onConfirm={() =>
-                                    props.onAction("DELETE", row.id)
-                                  }
-                                  entityName={row.name}
-                                />
-                              </StyledTableCell>
-                            )
-                          );
-                        } else if (column.id === "button") {
-                          return (
-                            props.edit && (
-                              <StyledTableCell key={column.id}>
-                                <IconButton
-                                  onClick={() => props.onAction("EDIT", row.id)}
-                                >
-                                  <EditButton fontSize="small" />
-                                </IconButton>
-                              </StyledTableCell>
-                            )
-                          );
-                        } else if (column.id === "importButton") {
-                          return (
-                            <StyledTableCell
-                              label={column.label}
-                              key={column.id}
-                            >
-                              <IconButton
-                                onClick={() =>
-                                  props.onAction("IMPORT", row.id, row.name)
-                                }
-                              >
-                                <Add fontSize="small" />
-                              </IconButton>
-                            </StyledTableCell>
-                          );
-                        } else {
-                          const value = row[column.id];
-                          return (
-                            <TableCell key={column.id} align={column.align}>
-                              {column.format && typeof value === "number"
-                                ? column.format(value)
-                                : value}
-                            </TableCell>
-                          );
-                        }
-                      })}
-                    </TableRow>
-                  );
+                  return createRow(row);
                 })}
               </TableBody>
             </Table>
@@ -205,13 +204,40 @@ const AdminExpansionPanelBase = props => {
 
 export default AdminExpansionPanelBase;
 
-AdminExpansionPanelBase.propTypes = {
-  label: PropTypes.string,
-  rows: PropTypes.array,
-  icon: PropTypes.element,
-  onAction: PropTypes.func,
-  expanded: PropTypes.bool
+/**
+ * @enum {string}
+ */
+export const actions = {
+  EDIT: "EDIT",
+  CREATE: "CREATE",
+  UPDATE: "UPDATE",
+  DELETE: "DELETE",
+  IMPORT: "IMPORT"
 };
+
+export const basePropTypes = {
+  label: PropTypes.string,
+  /**
+   * Row data used to render each row
+   * @typedef {Object} row
+   * @property {string} name
+   * @property {number} id
+   *
+   * @param {row}
+   */
+  rows: PropTypes.array.isRequired,
+  icon: PropTypes.element,
+
+  /**
+   * Returns the action performed as a string
+   * @param {actions} action
+   * @param {Object} {id, rowData, value}
+   */
+  onAction: PropTypes.func,
+
+  defaultExpanded: PropTypes.bool
+};
+AdminExpansionPanelBase.propTypes = basePropTypes;
 
 const AddButton = styled(Button)`
   && {
