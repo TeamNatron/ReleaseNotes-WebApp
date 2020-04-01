@@ -27,11 +27,7 @@ export const productsReducer = createReducer(
       const product = state.items.find(
         p => p.id == action.payload.data.productId
       );
-      updateInArray(
-        product.versions,
-        action.payload.data.id,
-        action.payload.data
-      );
+      product.versions.push(action.payload.data);
     }
   }
 );
