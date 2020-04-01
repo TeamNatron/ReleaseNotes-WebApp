@@ -15,6 +15,10 @@ export const putPending = createAction(name + "putPending");
 export const putSuccess = createAction(name + "putSuccess");
 export const putError = createAction(name + "putError");
 
+export const getPending = createAction(name + "getPending");
+export const getSuccess = createAction(name + "getSuccess");
+export const getError = createAction(name + "getError");
+
 export const checkLoggedInPending = createAction(name + "checkLoggedInPending");
 export const checkLoggedInError = createAction(name + "checkLoggedInError");
 export const checkLoggedInSuccess = createAction(name + "checkLoggedInSuccess");
@@ -57,6 +61,9 @@ export const authReducer = createReducer(initialState, {
   [putSuccess]: (state, action) => {
     state.currentUser = action.payload.data;
     state.sucessMsg = action.payload.statusText;
+  },
+  [getSuccess]: (state, action) => {
+    state.currentUser = action.payload.data;
   }
 });
 
@@ -102,6 +109,18 @@ export const checkLoggedIn = () => async dispatch => {
     return;
   }
   dispatch(checkLoggedInError());
+};
+
+// Thunk for getting azure info
+export const fetchAzureInfo = () => async dispatch => {
+  dispatch(getPending());
+  Axios.get("users/azure")
+    .then(res => {
+      dispatch(getSuccess({ data: res.data, statusText: res.statusText }));
+    })
+    .catch(err => {
+      dispatch(getError(err));
+    });
 };
 
 // Thunk for update azure info
