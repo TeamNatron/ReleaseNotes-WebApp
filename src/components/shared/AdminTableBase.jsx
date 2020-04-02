@@ -55,7 +55,9 @@ const AdminTableBase = props => {
     <React.Fragment>
       <TablePanel>
         {props.summaryComponent ? (
-          React.cloneElement(props.summaryComponent, {})
+          React.cloneElement(props.summaryComponent, {
+            style: { border: "1px solid red" }
+          })
         ) : (
             <React.Fragment />
           )}
