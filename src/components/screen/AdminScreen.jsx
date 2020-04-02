@@ -7,7 +7,6 @@ import ScreenTitle from "../shared/ScreenTitle";
 import AddUserForm from "../adminpanel/AddUserForm";
 import AddProductForm from "../adminpanel/AddProductForm";
 import ChangePasswordForm from "../adminpanel/ChangePasswordForm";
-import AdminExpansionPanel from "../shared/AdminExpansionPanelModal";
 import { useSelector, useDispatch } from "react-redux";
 import AdminExpansionPanelModal from "../shared/AdminExpansionPanelModal";
 import AdminExpansionPanelRoute from "../shared/AdminExpansionPanelRoute";
@@ -32,6 +31,8 @@ import { fetchProjects } from "../../slices/azureSlice";
 import { azureApiSelector } from "../../slices/authSlice";
 import AzureDevOpsView from "../adminpanel/AzureDevOpsView";
 import { fetchProducts } from "../../slices/productsSlice";
+import EditProductForm from "../adminpanel/EditProductForm";
+import { createData } from "../shared/AdminTableRow";
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
@@ -57,9 +58,6 @@ const AdminScreen = () => {
   }, [dispatch, azureProps]);
 
   useEffect(() => dispatch(fetchUsers()), [dispatch]);
-  const createData = (name, id, isPublic) => {
-    return { name, id, isPublic };
-  };
 
   // Fetches all releases based on selected Project
   useEffect(() => {
@@ -69,28 +67,29 @@ const AdminScreen = () => {
       authToken: azureProps.authToken
     };
     if (params.project !== "") dispatch(fetchAzureReleases(params));
-  }, [dispatch, selectedProject]);
+  }, [dispatch, azureProps, selectedProject]);
 
   const releaseTitles = useSelector(state =>
-    state.releases.items.map(r => createData(r.title, r.id, r.isPublic))
+    state.releases.items.map(r => createData(r, r.title, r.id, r.isPublic))
   );
 
   const azureProjects = useSelector(state => state.azure.projects);
   const azureReleases = useSelector(state =>
-    state.azure.releases.map(r => createData(r.name, r.id))
+    state.azure.releases.map(r => createData(r, r.name, r.id))
   );
 
   const productTitles = useSelector(state =>
-    state.products.items.map(p => createData(p.name, p.id))
+    state.products.items.map(p => createData(p, p.name, p.id))
   );
 
   const userRows = useSelector(state =>
-    state.users.items.map(u => createData(u.email, u.id))
+    state.users.items.map(u => createData(u, u.email, u.id))
   );
 
   const releaseNoteRows = useSelector(state =>
     state.releaseNotes.items.map(r => {
       return createData(
+        r,
         r.title === "" ? "Release note #" + r.id : r.title,
         r.id,
         r.isPublic
@@ -161,12 +160,12 @@ const AdminScreen = () => {
       </StyledAppBar>
 
       <TabPanel value={value} index={0}>
-        <AdminExpansionPanel
+        <AdminExpansionPanelModal
           label="Produkter"
           icon={<DesktopWindows />}
           rows={productTitles}
           createContentComponent={<AddProductForm />}
-          //editContentComponent={<AddProductForm />}
+          editContentComponent={<EditProductForm />}
         />
         <AdminExpansionPanelModal
           label="Brukere"
