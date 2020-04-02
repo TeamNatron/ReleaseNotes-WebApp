@@ -8,7 +8,7 @@ import AddUserForm from "../adminpanel/AddUserForm";
 import AddProductForm from "../adminpanel/AddProductForm";
 import ChangePasswordForm from "../adminpanel/ChangePasswordForm";
 import { useSelector, useDispatch } from "react-redux";
-import AdminExpansionPanel from "../shared/AdminExpansionPanelModal";
+import AdminExpansionPanelModal from "../shared/AdminExpansionPanelModal";
 import AdminExpansionPanelRoute from "../shared/AdminExpansionPanelRoute";
 import {
   fetchReleases,
@@ -127,7 +127,7 @@ const AdminScreen = () => {
       </StyledAppBar>
 
       <TabPanel value={value} index={0}>
-        <AdminExpansionPanel
+        <AdminExpansionPanelModal
           label="Produkter"
           icon={<DesktopWindows />}
           rows={productTitles}
