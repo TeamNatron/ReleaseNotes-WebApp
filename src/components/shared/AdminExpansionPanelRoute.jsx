@@ -15,21 +15,18 @@ const AdminExpansionPanelRoute = props => {
     ...baseProps
   } = props;
   const handleAction = (action, rowData) => {
-    const { id, isPublic } = rowData;
-    console.log(rowData);
     switch (action) {
       case actions.CREATE:
         history.push(props.createContentRoute);
         break;
-
       case actions.EDIT:
-        history.push(props.editContentRoute.replace(":id", id));
+        history.push(props.editContentRoute.replace(":id", rowData.id));
         break;
       case actions.UPDATE:
-        dispatch(props.onUpdate(id, { isPublic }));
+        dispatch(props.onUpdate(rowData.id, { isPublic: rowData.isPublic }));
         break;
       case actions.DELETE:
-        dispatch(props.onDelete(id));
+        dispatch(props.onDelete(rowData.id));
         break;
 
       default:
