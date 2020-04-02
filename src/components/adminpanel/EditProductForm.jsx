@@ -23,7 +23,6 @@ import { useDispatch } from "react-redux";
 const EditProductForm = props => {
   const dispatch = useDispatch();
   const versionRows = useMemo(() => {
-    console.log(props);
     return props.value.versions.map(version => {
       return {
         versionobj: version,
@@ -38,7 +37,7 @@ const EditProductForm = props => {
     columns: [
       { title: "Versjon", field: "version" },
       { title: "Publisert", field: "isPublic", type: "boolean" },
-      { title: "Full navn", field: "fullName", readonly: true }
+      { title: "Full navn", field: "fullName", editable: false, readonly: true }
     ],
     data: versionRows
   });
