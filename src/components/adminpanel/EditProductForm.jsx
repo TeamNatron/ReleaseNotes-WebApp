@@ -1,6 +1,4 @@
 import React, { useMemo } from "react";
-import AddProductForm from "./AddProductForm";
-import SpacedDivider from "../shared/SpacedDivider";
 import PropTypes from "prop-types";
 import AdminTableBase from "../shared/AdminTableBase";
 import { createData } from "../shared/AdminTableRow";

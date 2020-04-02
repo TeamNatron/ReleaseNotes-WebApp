@@ -23,13 +23,14 @@ class ChangePasswordForm extends Component {
       pwdErrorMsg: "",
       submitDisabled: true
     };
-
-    this.onChangePwd.bind(this);
-    this.onChangePwdConfirm.bind(this);
   }
 
   componentDidMount() {
     document.addEventListener("keydown", this.enterFunction, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.enterFunction, false);
   }
 
   enterFunction = event => {
