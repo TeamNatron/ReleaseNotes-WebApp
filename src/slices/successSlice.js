@@ -14,12 +14,22 @@ export const successReducer = (state = {}, action) => {
     ":" +
     today.getTime();
 
-  if (matches && payload)
-    if (payload.successMsg)
-      return {
-        text: payload.successMsg,
-        occured: date
-      };
+  console.log("payload");
+  console.log(payload);
+  console.log("matches");
+  console.log(matches);
+  if (matches && payload) {
+    var message;
+    if (payload.successMsg) message = payload.successMsg;
+    else {
+      message = payload.statusText;
+    }
+    console.log(message ? message : "Something went wrong");
+    return {
+      text: message,
+      occured: date
+    };
+  }
 
   return state;
 };
