@@ -19,8 +19,8 @@ const AdminTableRow = props => {
                   fontSize: "small"
                 })
               ) : (
-                <React.Fragment />
-              )}
+                  <React.Fragment />
+                )}
             </StyledTableCell>
           );
         } else if (column.id === "isPublicSwitch") {

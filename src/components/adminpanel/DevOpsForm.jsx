@@ -8,11 +8,13 @@ import Typography from '@material-ui/core/Typography';
 import { updateAzureInfo, fetchAzureInfo, getAzureInfo } from "../../slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 
-const DevOpsForm = props => {
+const DevOpsForm = () => {
     const [name, setName] = useState("");
     const [PAT, setPAT] = useState("");
     const [org, setOrg] = useState("");
     const dispatch = useDispatch();
+
+    /*
 
 
     useEffect(() => { dispatch(fetchAzureInfo()) }, [dispatch]);
@@ -23,9 +25,10 @@ const DevOpsForm = props => {
         setPAT(props.PAT || "");
         setOrg(props.org || "");
     }, [dispatch]);
-    */
+
 
     const azureInfo = useSelector(state => state.auth.currentUser.AzureInformation);
+    */
 
 
     const handleSubmit = () => {

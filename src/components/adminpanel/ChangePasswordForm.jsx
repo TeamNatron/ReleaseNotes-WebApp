@@ -37,37 +37,11 @@ const ChangePasswordForm = props => {
 
   const validatePwd = input => {
     if (input === "") {
-<<<<<<< HEAD
-      this.setState(
-        {
-          pwdIsError: true,
-          pwdErrorMsg: "Felt kan ikke være tomt"
-        },
-        () => {
-          this.validateSubmit();
-        }
-      );
-    } else if (this.state.password !== this.state.passwordConfirm) {
-      this.setState(
-        {
-          pwdIsError: true,
-          pwdErrorMsg: "Passordet er ikke det samme"
-        },
-        () => {
-          this.validateSubmit();
-        }
-      );
-    } else if (this.state.password.length <= 5 || this.state.passwordConfirm.length <= 5) {
-      this.setState({ pwdIsError: true, pwdErrorMsg: "Passordet må være lengre enn 4 karakterer" }, () => {
-        this.validateSubmit();
-      });
-=======
       setPwdIsError(true);
       setPwdErrorMsg("Felt kan ikke være tomt");
     } else if (password !== passwordConfirm) {
       setPwdIsError(true);
       setPwdErrorMsg("Passordet er ikke det samme");
->>>>>>> cc23c743221c9215b51f22a485b9a1f83110a221
     } else {
       setPwdIsError(false);
       setPwdErrorMsg("");

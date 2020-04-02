@@ -6,12 +6,8 @@ import AdminExpansionPanelBase from "../shared/AdminExpansionPanelBase";
 import { useDispatch, useSelector } from "react-redux";
 import ProjectSelector from "./ProjectSelector";
 import { updateAzureInfo, fetchAzureInfo, getAzureInfo } from "../../slices/authSlice";
-
-
 import { Grid } from "@material-ui/core";
 import GeneralSelector from "../shared/GeneralSelector";
-import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
 import {
   getAllProductVersionsSelector,
   fetchProducts
@@ -33,11 +29,12 @@ const AzureDevOpsView = props => {
 
 
   useEffect(() => {
-    dispatch(getAzureInfo());
+    dispatch(fetchAzureInfo());
   }, [dispatch]);
 
 
   const azureInfo = useSelector(state => state.auth.currentUser.AzureInformation);
+  console.log(azureInfo);
 
   // remember to pass the data to the component
   // adminscreem method, see users and userRow

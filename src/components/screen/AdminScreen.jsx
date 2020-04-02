@@ -28,7 +28,7 @@ import {
 import { useState } from "react";
 import styled from "styled-components";
 import { fetchProjects } from "../../slices/azureSlice";
-import { azureApiSelector } from "../../slices/authSlice";
+import { azureApiSelector, fetchAzureInfo } from "../../slices/authSlice";
 import AzureDevOpsView from "../adminpanel/AzureDevOpsView";
 import { fetchProducts } from "../../slices/productsSlice";
 import EditProductForm from "../adminpanel/EditProductForm";
@@ -39,6 +39,15 @@ const AdminScreen = () => {
   const [value, setValue] = useState(0);
   const [selectedProject, setSelectedProject] = useState("");
   const [selectedProductVersion, setSelectedProductVersion] = useState("");
+
+  // test
+  useEffect(() => {
+    dispatch(fetchAzureInfo());
+  }, [dispatch]);
+
+
+  const azureInfo = useSelector(state => state.auth.currentUser.AzureInformation);
+  console.log(azureInfo);
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -165,11 +174,7 @@ const AdminScreen = () => {
           icon={<DesktopWindows />}
           rows={productTitles}
           createContentComponent={<AddProductForm />}
-<<<<<<< HEAD
         //editContentComponent={<AddProductForm />}
-=======
-          editContentComponent={<EditProductForm />}
->>>>>>> cc23c743221c9215b51f22a485b9a1f83110a221
         />
         <AdminExpansionPanelModal
           label="Brukere"
