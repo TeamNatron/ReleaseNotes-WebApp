@@ -18,6 +18,9 @@ import {
 } from "../../slices/authSlice";
 import { loadingSelector } from "../../slices/loadingSlice";
 import AccountMenu from "./AccountMenu";
+import ResponseSnackBar from "../shared/ResponseSnackbar";
+import { errorSelector } from "../../slices/errorSlice";
+import { successSelector } from "../../slices/successSlice";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -29,6 +32,8 @@ const Navbar = () => {
   }, [dispatch, isLogged]);
 
   const loading = useSelector(loadingSelector);
+  const success = useSelector(successSelector);
+  const error = useSelector(errorSelector);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -62,6 +67,12 @@ const Navbar = () => {
           ""
         )}
       </StyledToolbar>
+      <ResponseSnackBar
+        errorOccured={error.occured}
+        errorText={error.text}
+        successOccured={success.occured}
+        successText={success.text}
+      />
       <Fade
         in={loading}
         style={{
