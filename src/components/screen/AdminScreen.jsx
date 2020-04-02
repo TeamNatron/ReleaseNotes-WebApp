@@ -32,11 +32,14 @@ import { azureApiSelector } from "../../slices/authSlice";
 import AzureDevOpsView from "../adminpanel/AzureDevOpsView";
 import { fetchProducts } from "../../slices/productsSlice";
 import { createSelector } from "@reduxjs/toolkit";
+import EditProductForm from "../adminpanel/EditProductForm";
+import { createData } from "../shared/AdminTableRow";
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
   const [value, setValue] = useState(0);
-  const [selected, setSelected] = useState("");
+  const [selectedProject, setSelectedProject] = useState("");
+  const [selectedProductVersion, setSelectedProductVersion] = useState("");
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -58,16 +61,14 @@ const AdminScreen = () => {
   useEffect(() => dispatch(fetchUsers()), [dispatch]);
 
   // Fetches all releases based on selected Project
-  // todo implement real project in param
-  // todo implement real PAT
   useEffect(() => {
     const params = {
-      organization: "ReleaseNoteSystem",
-      project: selected,
-      authToken: ""
+      organization: azureProps.organization,
+      project: selectedProject,
+      authToken: azureProps.authToken
     };
     if (params.project !== "") dispatch(fetchAzureReleases(params));
-  }, [dispatch, selected]);
+  }, [dispatch, azureProps, selectedProject]);
 
   const azureProjects = useSelector(state => state.azure.projects);
   const releaseTitles = useSelector(releaseTitlesSelector);
@@ -77,11 +78,23 @@ const AdminScreen = () => {
   const releaseNoteRows = useSelector(releaseNoteRowsSelector);
 
   const handleSelectedProject = event => {
-    setSelected(event.target.value);
+    setSelectedProject(event.target.value);
+  };
+
+  const handleSelectedProductVersion = event => {
+    setSelectedProductVersion(event.target.value);
   };
 
   const handleImport = (id, title) => {
-    dispatch(importRelease(selected, azureProps, id, title));
+    dispatch(
+      importRelease(
+        selectedProductVersion.id,
+        selectedProject,
+        azureProps,
+        id,
+        title
+      )
+    );
   };
 
   const handleChange = (event, newValue) => {
@@ -132,7 +145,7 @@ const AdminScreen = () => {
           icon={<DesktopWindows />}
           rows={productTitles}
           createContentComponent={<AddProductForm />}
-          //editContentComponent={<AddProductForm />}
+          editContentComponent={<EditProductForm />}
         />
         <AdminExpansionPanelModal
           label="Brukere"
@@ -165,8 +178,10 @@ const AdminScreen = () => {
           azureReleases={azureReleases}
           azureProjects={azureProjects}
           azureProps={azureProps}
-          selected={selected}
+          selectedProject={selectedProject}
+          selectedProductVersion={selectedProductVersion}
           handleSelectedProject={handleSelectedProject}
+          handleSelectedProductVersion={handleSelectedProductVersion}
           handleImport={handleImport}
         />
       </TabPanel>
@@ -193,9 +208,7 @@ const StyledAppBar = styled.div`
   }
 `;
 
-const createData = (data, name, id, isPublic) => {
-  return { data, name, id, isPublic };
-};
+// selectors
 const releaseTitlesSelector = createSelector(
   state => state.releases.items,
   items => items.map(r => createData(r, r.title, r.id, r.isPublic))

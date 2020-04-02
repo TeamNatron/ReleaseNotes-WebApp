@@ -137,13 +137,17 @@ const ReleaseNoteEditor = props => {
       <BottomToolbar
         loading={props.note.pending}
         left={[
-          <CancelButton color="secondary" onClick={props.onCancel}
-            key={CancelButton.id}>
+          <CancelButton
+            key="backBtn"
+            color="secondary"
+            onClick={props.onCancel}
+          >
             Tilbake
           </CancelButton>
         ]}
         right={[
           <StyledFormControlLabel
+            key="readyLabel"
             edge="end"
             control={
               <Switch
@@ -158,14 +162,14 @@ const ReleaseNoteEditor = props => {
             label="Klar for release"
           />,
           <SaveButton
-            key={SaveButton.id}
+            key="saveBtn"
             onClick={handleSave}
             disabled={canSave()}
             startIcon={<Save />}
           >
             Lagre
           </SaveButton>,
-          <IconButton disableRipple>
+          <IconButton key="iconBtn" disableRipple>
             {props.note.error ? (
               <Tooltip title="En feil oppstod når du prøvde å lagre endringene">
                 <Error />
@@ -178,10 +182,10 @@ const ReleaseNoteEditor = props => {
                 />
               </Tooltip>
             ) : (
-                  <Tooltip title="Endringene er lagret">
-                    <Check style={{ color: green[500] }} />
-                  </Tooltip>
-                )}
+              <Tooltip title="Endringene er lagret">
+                <Check style={{ color: green[500] }} />
+              </Tooltip>
+            )}
           </IconButton>
         ]}
       />
@@ -222,8 +226,8 @@ const ReleaseNoteEditor = props => {
                     }}
                   />
                 ) : (
-                    <div></div>
-                  )}
+                  <div></div>
+                )}
               </Box>
             </Paper>
           </div>
