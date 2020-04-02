@@ -36,7 +36,8 @@ import EditProductForm from "../adminpanel/EditProductForm";
 const AdminScreen = () => {
   const dispatch = useDispatch();
   const [value, setValue] = useState(0);
-  const [selected, setSelected] = useState("");
+  const [selectedProject, setSelectedProject] = useState("");
+  const [selectedProductVersion, setSelectedProductVersion] = useState("");
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -61,16 +62,14 @@ const AdminScreen = () => {
   };
 
   // Fetches all releases based on selected Project
-  // todo implement real project in param
-  // todo implement real PAT
   useEffect(() => {
     const params = {
-      organization: "ReleaseNoteSystem",
-      project: selected,
-      authToken: ""
+      organization: azureProps.organization,
+      project: selectedProject,
+      authToken: azureProps.authToken
     };
     if (params.project !== "") dispatch(fetchAzureReleases(params));
-  }, [dispatch, selected]);
+  }, [dispatch, selectedProject]);
 
   const releaseTitles = useSelector(state =>
     state.releases.items.map(r => createData(r.title, r.id, r.isPublic))
@@ -100,11 +99,23 @@ const AdminScreen = () => {
   );
 
   const handleSelectedProject = event => {
-    setSelected(event.target.value);
+    setSelectedProject(event.target.value);
+  };
+
+  const handleSelectedProductVersion = event => {
+    setSelectedProductVersion(event.target.value);
   };
 
   const handleImport = (id, title) => {
-    dispatch(importRelease(selected, azureProps, id, title));
+    dispatch(
+      importRelease(
+        selectedProductVersion.id,
+        selectedProject,
+        azureProps,
+        id,
+        title
+      )
+    );
   };
 
   const handleChange = (event, newValue) => {
@@ -188,8 +199,10 @@ const AdminScreen = () => {
           azureReleases={azureReleases}
           azureProjects={azureProjects}
           azureProps={azureProps}
-          selected={selected}
+          selectedProject={selectedProject}
+          selectedProductVersion={selectedProductVersion}
           handleSelectedProject={handleSelectedProject}
+          handleSelectedProductVersion={handleSelectedProductVersion}
           handleImport={handleImport}
         />
       </TabPanel>
