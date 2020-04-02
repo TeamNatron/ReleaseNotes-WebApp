@@ -17,19 +17,3 @@ export function registerNewUser(paramEmail, paramPassword) {
     }
   );
 }
-
-export function changePassword(paramPassword, id) {
-  return Axios.put(
-    "users/" + id,
-    {
-      password: paramPassword
-    },
-    {
-      withCredentials: false,
-      headers: {
-        "Access-Control-Request-Headers": "Content-Type",
-        Authorization: "Bearer " + getAuthToken()
-      }
-    }
-  );
-}
