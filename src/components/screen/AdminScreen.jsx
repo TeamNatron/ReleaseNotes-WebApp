@@ -31,6 +31,7 @@ import { fetchProjects } from "../../slices/azureSlice";
 import { azureApiSelector } from "../../slices/authSlice";
 import AzureDevOpsView from "../adminpanel/AzureDevOpsView";
 import { fetchProducts } from "../../slices/productsSlice";
+import { createSelector } from "@reduxjs/toolkit";
 import EditProductForm from "../adminpanel/EditProductForm";
 import { createData } from "../shared/AdminTableRow";
 
@@ -69,33 +70,12 @@ const AdminScreen = () => {
     if (params.project !== "") dispatch(fetchAzureReleases(params));
   }, [dispatch, azureProps, selectedProject]);
 
-  const releaseTitles = useSelector(state =>
-    state.releases.items.map(r => createData(r, r.title, r.id, r.isPublic))
-  );
-
   const azureProjects = useSelector(state => state.azure.projects);
-  const azureReleases = useSelector(state =>
-    state.azure.releases.map(r => createData(r, r.name, r.id))
-  );
-
-  const productTitles = useSelector(state =>
-    state.products.items.map(p => createData(p, p.name, p.id))
-  );
-
-  const userRows = useSelector(state =>
-    state.users.items.map(u => createData(u, u.email, u.id))
-  );
-
-  const releaseNoteRows = useSelector(state =>
-    state.releaseNotes.items.map(r => {
-      return createData(
-        r,
-        r.title === "" ? "Release note #" + r.id : r.title,
-        r.id,
-        r.isPublic
-      );
-    })
-  );
+  const releaseTitles = useSelector(releaseTitlesSelector);
+  const azureReleases = useSelector(azureReleasesSelector);
+  const productTitles = useSelector(productTitlesSelector);
+  const userRows = useSelector(userRowsSelector);
+  const releaseNoteRows = useSelector(releaseNoteRowsSelector);
 
   const handleSelectedProject = event => {
     setSelectedProject(event.target.value);
@@ -227,3 +207,37 @@ const StyledAppBar = styled.div`
     background-color: white;
   }
 `;
+
+// selectors
+const releaseTitlesSelector = createSelector(
+  state => state.releases.items,
+  items => items.map(r => createData(r, r.title, r.id, r.isPublic))
+);
+
+const azureReleasesSelector = createSelector(
+  state => state.azure.releases,
+  releases => releases.map(r => createData(r, r.name, r.id))
+);
+
+const productTitlesSelector = createSelector(
+  state => state.products.items,
+  items => items.map(p => createData(p, p.name, p.id))
+);
+
+const userRowsSelector = createSelector(
+  state => state.users.items,
+  items => items.map(u => createData(u, u.email, u.id))
+);
+
+const releaseNoteRowsSelector = createSelector(
+  state => state.releaseNotes.items,
+  items =>
+    items.map(r => {
+      return createData(
+        r,
+        r.title === "" ? "Release note #" + r.id : r.title,
+        r.id,
+        r.isPublic
+      );
+    })
+);
