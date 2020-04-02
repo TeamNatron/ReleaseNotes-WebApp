@@ -8,7 +8,7 @@ import AddUserForm from "../adminpanel/AddUserForm";
 import AddProductForm from "../adminpanel/AddProductForm";
 import ChangePasswordForm from "../adminpanel/ChangePasswordForm";
 import { useSelector, useDispatch } from "react-redux";
-import AdminExpansionPanelModal from "../shared/AdminExpansionPanelModal";
+import AdminExpansionPanel from "../shared/AdminExpansionPanelModal";
 import AdminExpansionPanelRoute from "../shared/AdminExpansionPanelRoute";
 import {
   fetchReleases,
@@ -31,9 +31,7 @@ import { fetchProjects } from "../../slices/azureSlice";
 import { azureApiSelector } from "../../slices/authSlice";
 import AzureDevOpsView from "../adminpanel/AzureDevOpsView";
 import { fetchProducts } from "../../slices/productsSlice";
-import EditProductForm from "../adminpanel/EditProductForm";
 import { createSelector } from "@reduxjs/toolkit";
-import useTraceUpdate from "../../utils/useTraceUpdate";
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
@@ -77,13 +75,6 @@ const AdminScreen = () => {
   const productTitles = useSelector(productTitlesSelector);
   const userRows = useSelector(userRowsSelector);
   const releaseNoteRows = useSelector(releaseNoteRowsSelector);
-
-  useTraceUpdate(azureProjects);
-  useTraceUpdate(releaseTitles);
-  useTraceUpdate(azureReleases);
-  useTraceUpdate(productTitles);
-  useTraceUpdate(userRows);
-  useTraceUpdate(releaseNoteRows);
 
   const handleSelectedProject = event => {
     setSelected(event.target.value);
@@ -136,14 +127,14 @@ const AdminScreen = () => {
       </StyledAppBar>
 
       <TabPanel value={value} index={0}>
-        <AdminExpansionPanelModal
+        <AdminExpansionPanel
           label="Produkter"
           icon={<DesktopWindows />}
           rows={productTitles}
           createContentComponent={<AddProductForm />}
-          editContentComponent={<EditProductForm />}
+          //editContentComponent={<AddProductForm />}
         />
-        <AdminExpansionPanelModal
+        <AdminExpansionPanel
           label="Brukere"
           icon={<PermIdentity />}
           rows={userRows}
