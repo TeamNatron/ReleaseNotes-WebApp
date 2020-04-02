@@ -71,7 +71,7 @@ const AdminExpansionPanelBase = props => {
         <TablePanel>
           {props.summaryComponent ? (
             React.cloneElement(props.summaryComponent, {
-              style: { border: "1px solid red" }
+              style: {}
             })
           ) : (
             <React.Fragment />

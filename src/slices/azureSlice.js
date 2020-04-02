@@ -173,7 +173,13 @@ export const fetchWorkItems = async (project, params, ids) => {
  * @param {*} id The id of the release
  * @param {*} title The title of the Release
  */
-export const importRelease = (project, params, id, title) => async dispatch => {
+export const importRelease = (
+  productVersionId,
+  project,
+  params,
+  id,
+  title
+) => async dispatch => {
   dispatch(importReleasePending());
   try {
     // Get Ids of work items
@@ -194,6 +200,7 @@ export const importRelease = (project, params, id, title) => async dispatch => {
         const release = {
           title: title,
           isPublic: false,
+          productVersionId: productVersionId,
           releaseNotes: workItems
         };
 
