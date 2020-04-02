@@ -11,10 +11,6 @@ import styled from "styled-components";
 const AdminScreen = () => {
   const location = useLocation();
 
-  useEffect(() => {
-    console.log(location);
-  }, [location]);
-
   return (
     <PageContainer>
       <ScreenTitle>ADMINPANEL</ScreenTitle>
