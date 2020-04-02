@@ -45,8 +45,7 @@ const ChangePasswordForm = props => {
     } else if (password !== passwordConfirm) {
       setPwdIsError(true);
       setPwdErrorMsg("Passordet er ikke det samme");
-    }
-    else {
+    } else {
       setPwdIsError(false);
       setPwdErrorMsg("");
     }
