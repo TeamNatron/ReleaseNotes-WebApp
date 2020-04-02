@@ -17,24 +17,28 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
+import { postProductVersion } from "../../slices/productsSlice";
+import { useDispatch } from "react-redux";
 
 const EditProductForm = props => {
-  const versionRows = useMemo(
-    () =>
-      props.value.versions.map(version => {
-        return {
-          version: version,
-          fullName: version.fullName,
-          isPubli: version.isPublic
-        };
-      }),
-    [props]
-  );
+  const dispatch = useDispatch();
+  const versionRows = useMemo(() => {
+    console.log(props);
+    return props.value.versions.map(version => {
+      return {
+        versionobj: version,
+        version: version.version,
+        fullName: version.fullName,
+        isPublic: version.isPublic
+      };
+    });
+  }, [props]);
 
   const [state, setState] = React.useState({
     columns: [
-      { title: "Versjon", field: "fullName" },
-      { title: "Publisert", field: "isPublic", type: "boolean" }
+      { title: "Versjon", field: "version" },
+      { title: "Publisert", field: "isPublic", type: "boolean" },
+      { title: "Full navn", field: "fullName", readonly: true }
     ],
     data: versionRows
   });
@@ -44,10 +48,10 @@ const EditProductForm = props => {
       <Paper>
         <Box px={5} py={3}>
           <h2>{props.value.name}</h2>
-          <h3>Versjoner</h3>
+          <h3>Editer produkt</h3>
           <MaterialTable
             icons={tableIcons}
-            title="Editable Example"
+            title={"Alle versjoner av " + props.value.name}
             columns={state.columns}
             data={state.data}
             options={{
@@ -60,6 +64,12 @@ const EditProductForm = props => {
                 new Promise(resolve => {
                   setTimeout(() => {
                     resolve();
+                    dispatch(
+                      postProductVersion(props.id, {
+                        version: newData.version,
+                        isPublic: newData.isPublic
+                      })
+                    );
                     setState(prevState => {
                       const data = [...prevState.data];
                       data.push(newData);
