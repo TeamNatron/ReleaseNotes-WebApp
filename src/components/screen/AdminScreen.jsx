@@ -7,7 +7,6 @@ import ScreenTitle from "../shared/ScreenTitle";
 import AddUserForm from "../adminpanel/AddUserForm";
 import AddProductForm from "../adminpanel/AddProductForm";
 import ChangePasswordForm from "../adminpanel/ChangePasswordForm";
-import AdminExpansionPanel from "../shared/AdminExpansionPanelModal";
 import { useSelector, useDispatch } from "react-redux";
 import AdminExpansionPanelModal from "../shared/AdminExpansionPanelModal";
 import AdminExpansionPanelRoute from "../shared/AdminExpansionPanelRoute";
@@ -32,6 +31,7 @@ import { fetchProjects } from "../../slices/azureSlice";
 import { azureApiSelector } from "../../slices/authSlice";
 import AzureDevOpsView from "../adminpanel/AzureDevOpsView";
 import { fetchProducts } from "../../slices/productsSlice";
+import EditProductForm from "../adminpanel/EditProductForm";
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
@@ -150,12 +150,13 @@ const AdminScreen = () => {
       </StyledAppBar>
 
       <TabPanel value={value} index={0}>
-        <AdminExpansionPanel
+        <AdminExpansionPanelModal
           label="Produkter"
           icon={<DesktopWindows />}
           rows={productTitles}
           createContentComponent={<AddProductForm />}
-          //editContentComponent={<AddProductForm />}
+          editContentComponent={<EditProductForm />}
+        />
         />
         <AdminExpansionPanelModal
           label="Brukere"
