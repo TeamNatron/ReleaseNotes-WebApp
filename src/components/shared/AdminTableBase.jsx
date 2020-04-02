@@ -87,7 +87,12 @@ const AdminTableBase = props => {
             </TableHead>
             <TableBody>
               {props.rows.map(row => (
-                <AdminTableRow row={row} columns={columns} {...props} />
+                <AdminTableRow
+                  row={row}
+                  columns={columns}
+                  {...props}
+                  key={row.id}
+                />
               ))}
             </TableBody>
           </Table>

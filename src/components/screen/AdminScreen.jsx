@@ -157,7 +157,6 @@ const AdminScreen = () => {
           createContentComponent={<AddProductForm />}
           editContentComponent={<EditProductForm />}
         />
-        />
         <AdminExpansionPanelModal
           label="Brukere"
           icon={<PermIdentity />}
