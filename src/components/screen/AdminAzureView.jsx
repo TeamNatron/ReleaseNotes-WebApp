@@ -4,7 +4,7 @@ import { createSelector } from "@reduxjs/toolkit";
 import { createData } from "../shared/AdminTableRow";
 import { importRelease } from "../../slices/azureSlice";
 import AzureDevOpsView from "../adminpanel/AzureDevOpsView";
-import { azureApiSelector, fetchAzureInfo } from "../../slices/authSlice";
+import { azureApiSelector } from "../../slices/authSlice";
 import { useLocation } from "react-router";
 
 const AdminAzureView = () => {
@@ -46,10 +46,6 @@ const AdminAzureView = () => {
       )
     );
   };
-
-  useEffect(() => {
-    dispatch(fetchAzureInfo());
-  }, [dispatch]);
 
   return (
     <AzureDevOpsView
