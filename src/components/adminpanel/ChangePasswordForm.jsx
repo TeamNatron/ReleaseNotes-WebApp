@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   List,
   ListItem,
@@ -39,14 +39,14 @@ const ChangePasswordForm = props => {
     if (input === "") {
       setPwdIsError(true);
       setPwdErrorMsg("Felt kan ikke være tomt");
+    } else if (password.length <= 5) {
+      setPwdIsError(true);
+      setPwdErrorMsg("Passordet må være minst 5 karakterer langt");
     } else if (password !== passwordConfirm) {
       setPwdIsError(true);
       setPwdErrorMsg("Passordet er ikke det samme");
     }
-    else if (password.length <= 5) {
-      setPwdIsError(true);
-      setPwdErrorMsg("Passordet må være minst 5 karakterer langt");
-    } else {
+    else {
       setPwdIsError(false);
       setPwdErrorMsg("");
     }
