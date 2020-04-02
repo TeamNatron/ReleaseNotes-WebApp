@@ -25,7 +25,7 @@ import {
   findReleaseById
 } from "../../selectors/releaseEditorSelector";
 import ResponseSnackbar from "../shared/ResponseSnackbar";
-import { errorMessageSelector } from "../../slices/errorSlice";
+import { errorSelector } from "../../slices/errorSlice";
 
 const ReleaseEditorScreen = props => {
   const id = props.match.params.id;
@@ -70,7 +70,7 @@ const ReleaseEditorScreen = props => {
   const releaseNotes = useSelector(initReleaseEditorReleaseNotes(id));
   const loadedRelease = useSelector(findReleaseById(id));
   const loading = useSelector(loadingSelector);
-  const error = useSelector(errorMessageSelector);
+  const error = useSelector(errorSelector);
   const success = useSelector(getSuccesMessage);
 
   const history = useHistory();

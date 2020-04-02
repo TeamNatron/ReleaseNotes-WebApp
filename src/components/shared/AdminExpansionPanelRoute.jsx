@@ -44,6 +44,7 @@ const AdminExpansionPanelRoute = props => {
     <React.Fragment>
       <AdminExpansionPanelBase
         onAction={handleAction}
+        createContentComponent={Boolean(createContentRoute)}
         edit={Boolean(editContentRoute)}
         delete={Boolean(onDelete)}
         isPublic={Boolean(onUpdate)}

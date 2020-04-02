@@ -2,19 +2,35 @@ import {
   productsReducer,
   fetchProductsSuccess,
   fetchProducts,
-  getProductVersions
+  getProductVersions,
+  postProductVersionSuccess
 } from "./productsSlice";
 import { testThunkConformance } from "../utils/test/testThunkConformance";
 
 describe("products reducer", () => {
-  it("should handle fetching products", () => {
-    expect(
-      productsReducer(
-        undefined,
-        fetchProductsSuccess({ data: [{ name: "test-product" }] })
-      )
-    ).toEqual({
-      items: [{ name: "test-product" }]
+  describe("fetchProductsSuccess", () => {
+    it("should handle fetching products", () => {
+      expect(
+        productsReducer(
+          undefined,
+          fetchProductsSuccess({ data: [{ name: "test-product" }] })
+        )
+      ).toEqual({
+        items: [{ name: "test-product" }]
+      });
+    });
+  });
+  describe("postProductVersionSuccess", () => {
+    it("adds new version to productVersions array in the correct product", () => {
+      const dummyItem = dummyProducts[1];
+      const initalLength = dummyItem.versions.length;
+      const updatedState = productsReducer(
+        { items: dummyProducts },
+        postProductVersionSuccess({
+          data: { productId: dummyItem.id, id: 999 }
+        })
+      );
+      expect(updatedState.items[1].versions).toHaveLength(initalLength + 1);
     });
   });
 });
