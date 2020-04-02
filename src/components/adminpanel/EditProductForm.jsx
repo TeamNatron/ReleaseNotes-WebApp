@@ -4,6 +4,7 @@ import SpacedDivider from "../shared/SpacedDivider";
 import PropTypes from "prop-types";
 import AdminTableBase from "../shared/AdminTableBase";
 import { createData } from "../shared/AdminTableRow";
+import { Box, Paper } from "@material-ui/core";
 const EditProductForm = props => {
   const versionRows = useMemo(
     () =>
@@ -21,11 +22,13 @@ const EditProductForm = props => {
   const handleAction = (action, rowData) => {};
   return (
     <React.Fragment>
-      <AddProductForm>
-        <SpacedDivider />
-        <h3>Versjoner</h3>
-        <AdminTableBase rows={versionRows} onAction={handleAction} />
-      </AddProductForm>
+      <Paper>
+        <Box px={5} py={3}>
+          <h2>{props.value.name}</h2>
+          <h3>Versjoner</h3>
+          <AdminTableBase rows={versionRows} onAction={handleAction} />
+        </Box>
+      </Paper>
     </React.Fragment>
   );
 };
