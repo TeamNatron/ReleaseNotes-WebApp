@@ -1,6 +1,5 @@
 import { createAction, createReducer, createSelector } from "@reduxjs/toolkit";
 import Axios from "axios";
-import util from "util";
 
 const name = "products/";
 export const fetchProductsPending = createAction(name + "getPending");
