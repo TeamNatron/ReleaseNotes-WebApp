@@ -1,5 +1,10 @@
 import { useRef, useEffect } from "react";
 
+/**
+ * @author Miklos Jakab
+ * @see https://stackoverflow.com/questions/41004631/trace-why-a-react-component-is-re-rendering
+ * @param {*} props
+ */
 export default function useTraceUpdate(props) {
   const prev = useRef(props);
   useEffect(() => {
