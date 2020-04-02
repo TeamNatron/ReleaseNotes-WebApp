@@ -10,48 +10,48 @@ import { useDispatch } from "react-redux";
 
 
 const DevOpsForm = props => {
-  const [name, setName] = useState("");
-  const [PAT, setPAT] = useState("");
-  const [org, setOrg] = useState("");
-  const dispatch = useDispatch();
+    const [name, setName] = useState("");
+    const [PAT, setPAT] = useState("");
+    const [org, setOrg] = useState("");
+    const dispatch = useDispatch();
 
-  const handleSubmit = () => {
-    // see if the fields have beeen filled out
-    if (name === "" || PAT === "" || org === "") {
-      alert("felt mangler innhold")
-    } else
-      dispatch(updateAzureInfo(name, PAT, org))
-  };
+    const handleSubmit = () => {
+        // see if the fields have beeen filled out
+        if (name === "" || PAT === "" || org === "") {
+            alert("felt mangler innhold")
+        } else
+            dispatch(updateAzureInfo(name, PAT, org))
+    };
 
-  return (
-    <React.Fragment>
-      <MyPaper>
-        <Typography gutterBottom variant="h4">Azure Integrasjon</Typography>
-        <MyGrid container spacing={0} direction="column" justify="center" alignContent="space-between">
-          <Grid item>
-            <TextField id="standard-required DevOpsName"
-              label="DevOps Brukernavn"
-              value={name}
-              onChange={(e) => setName(e.target.value)} />
-          </Grid>
-          <Grid item>
-            <TextField id="standard-required DevOpsPAT" label="Personal Access Token"
-              value={PAT}
-              onChange={(e) => setPAT(e.target.value)} />
-          </Grid>
-          <Grid item>
-            <TextField id="standard-required DevOpsOrg" label="DevOps Organisasjon"
-              value={org}
-              onChange={(e) => setOrg(e.target.value)} />
-          </Grid>
-          <Grid item>
-            <MyButton variant="contained" color="primary"
-              id="sendDataBtn" onClick={handleSubmit}>SEND</MyButton>
-          </Grid>
-        </MyGrid>
-      </MyPaper>
-    </React.Fragment>
-  );
+    return (
+        <React.Fragment>
+            <MyPaper>
+                <Typography gutterBottom variant="h4">Azure Integrasjon</Typography>
+                <MyGrid container spacing={0} direction="column" justify="center" alignContent="space-between">
+                    <Grid item>
+                        <TextField id="standard-required DevOpsName"
+                            label="DevOps Brukernavn"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)} />
+                    </Grid>
+                    <Grid item>
+                        <TextField id="standard-required DevOpsPAT" label="Personal Access Token"
+                            value={PAT}
+                            onChange={(e) => setPAT(e.target.value)} />
+                    </Grid>
+                    <Grid item>
+                        <TextField id="standard-required DevOpsOrg" label="DevOps Organisasjon"
+                            value={org}
+                            onChange={(e) => setOrg(e.target.value)} />
+                    </Grid>
+                    <Grid item>
+                        <MyButton variant="contained" color="primary"
+                            id="sendDataBtn" onClick={handleSubmit}>SEND</MyButton>
+                    </Grid>
+                </MyGrid>
+            </MyPaper>
+        </React.Fragment>
+    );
 };
 
 export default DevOpsForm;
