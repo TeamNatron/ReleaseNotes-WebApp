@@ -155,7 +155,7 @@ const AdminScreen = () => {
           icon={<DesktopWindows />}
           rows={productTitles}
           createContentComponent={<AddProductForm />}
-          //editContentComponent={<AddProductForm />}
+        //editContentComponent={<AddProductForm />}
         />
         <AdminExpansionPanelModal
           label="Brukere"

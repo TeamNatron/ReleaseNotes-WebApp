@@ -1,8 +1,13 @@
 import React from "react";
 import DevOpsForm from "./DevOpsForm";
+import { useState, useEffect } from "react";
 import { Description } from "@material-ui/icons";
 import AdminExpansionPanelBase from "../shared/AdminExpansionPanelBase";
+import { useDispatch, useSelector } from "react-redux";
 import ProjectSelector from "./ProjectSelector";
+import { updateAzureInfo, fetchAzureInfo, getAzureInfo } from "../../slices/authSlice";
+
+
 
 // EXAMPLE COMPONENT USED TO CONTAIN AZURE DEVOPS TOOLS
 // CAN BE MODYFIED OR REMOVED
@@ -14,6 +19,18 @@ const AzureDevOpsView = props => {
     selected,
     handleImport
   } = props;
+  const dispatch = useDispatch();
+
+
+  useEffect(() => {
+    dispatch(getAzureInfo());
+  }, [dispatch]);
+
+
+  const azureInfo = useSelector(state => state.auth.currentUser.AzureInformation);
+
+  // remember to pass the data to the component
+  // adminscreem method, see users and userRow
 
   const handleAction = (action, id, data) => {
     switch (action) {
@@ -27,7 +44,8 @@ const AzureDevOpsView = props => {
 
   return (
     <React.Fragment>
-      <DevOpsForm></DevOpsForm>
+      <DevOpsForm
+        azureInfo={azureInfo} />
       <AdminExpansionPanelBase
         expanded
         label="Azure Devops Releases"

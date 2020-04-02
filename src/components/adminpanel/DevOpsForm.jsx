@@ -5,9 +5,8 @@ import { Grid, Paper } from "@material-ui/core";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import Typography from '@material-ui/core/Typography';
-import { updateAzureInfo, fetchAzureInfo } from "../../slices/authSlice";
+import { updateAzureInfo, fetchAzureInfo, getAzureInfo } from "../../slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-
 
 const DevOpsForm = props => {
     const [name, setName] = useState("");
@@ -15,18 +14,19 @@ const DevOpsForm = props => {
     const [org, setOrg] = useState("");
     const dispatch = useDispatch();
 
-    // get the azureInfo
-    useEffect(() => dispatch(fetchAzureInfo()), [dispatch]);
 
-    const azureInfo = useSelector(state => state.auth.currentUser);
+    useEffect(() => { dispatch(fetchAzureInfo()) }, [dispatch]);
 
+    /*
     useEffect(() => {
-        console.log("yes hello");
-        setName(azureInfo.userId);
-        setPAT(azureInfo.pat);
-        setOrg(azureInfo.organization)
-        console.log(azureInfo);
-    }, [azureInfo]);
+        setName(props.name || "");
+        setPAT(props.PAT || "");
+        setOrg(props.org || "");
+    }, [dispatch]);
+    */
+
+    const azureInfo = useSelector(state => state.auth.currentUser.AzureInformation);
+
 
     const handleSubmit = () => {
         // see if the fields have beeen filled out
@@ -37,33 +37,31 @@ const DevOpsForm = props => {
     };
 
     return (
-        <React.Fragment>
-            <MyPaper>
-                <Typography gutterBottom variant="h4">Azure Integrasjon</Typography>
-                <MyGrid container spacing={0} direction="column" justify="center" alignContent="space-between">
-                    <Grid item>
-                        <TextField id="standard-required DevOpsName"
-                            label="DevOps Brukernavn"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)} />
-                    </Grid>
-                    <Grid item>
-                        <TextField id="standard-required DevOpsPAT" label="Personal Access Token"
-                            value={PAT}
-                            onChange={(e) => setPAT(e.target.value)} />
-                    </Grid>
-                    <Grid item>
-                        <TextField id="standard-required DevOpsOrg" label="DevOps Organisasjon"
-                            value={org}
-                            onChange={(e) => setOrg(e.target.value)} />
-                    </Grid>
-                    <Grid item>
-                        <MyButton variant="contained" color="primary"
-                            id="sendDataBtn" onClick={handleSubmit}>SEND</MyButton>
-                    </Grid>
-                </MyGrid>
-            </MyPaper>
-        </React.Fragment>
+        <MyPaper>
+            <Typography gutterBottom variant="h4">Azure Integrasjon</Typography>
+            <MyGrid container spacing={0} direction="column" justify="center" alignContent="space-between">
+                <Grid item>
+                    <TextField id="standard-required DevOpsName"
+                        label="DevOps Brukernavn"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)} />
+                </Grid>
+                <Grid item>
+                    <TextField id="standard-required DevOpsPAT" label="Personal Access Token"
+                        value={PAT}
+                        onChange={(e) => setPAT(e.target.value)} />
+                </Grid>
+                <Grid item>
+                    <TextField id="standard-required DevOpsOrg" label="DevOps Organisasjon"
+                        value={org}
+                        onChange={(e) => setOrg(e.target.value)} />
+                </Grid>
+                <Grid item>
+                    <MyButton variant="contained" color="primary"
+                        id="sendDataBtn" onClick={handleSubmit}>SEND</MyButton>
+                </Grid>
+            </MyGrid>
+        </MyPaper>
     );
 };
 
