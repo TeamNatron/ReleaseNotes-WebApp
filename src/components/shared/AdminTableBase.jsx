@@ -55,12 +55,10 @@ const AdminTableBase = props => {
     <React.Fragment>
       <TablePanel>
         {props.summaryComponent ? (
-          React.cloneElement(props.summaryComponent, {
-            style: { border: "1px solid red" }
-          })
+          React.cloneElement(props.summaryComponent, {})
         ) : (
-          <React.Fragment />
-        )}
+            <React.Fragment />
+          )}
         {props.createContentComponent ? (
           <AddButton
             onClick={() => props.onAction(actions.CREATE)}
@@ -70,8 +68,8 @@ const AdminTableBase = props => {
             Legg til
           </AddButton>
         ) : (
-          <React.Fragment />
-        )}
+            <React.Fragment />
+          )}
       </TablePanel>
       {props.rows && props.rows.length > 0 ? (
         <TableContainer>
@@ -98,8 +96,8 @@ const AdminTableBase = props => {
           </Table>
         </TableContainer>
       ) : (
-        <ErrorLabel>Ingen innhold funnet</ErrorLabel>
-      )}
+          <ErrorLabel>Ingen innhold funnet</ErrorLabel>
+        )}
     </React.Fragment>
   );
 };
