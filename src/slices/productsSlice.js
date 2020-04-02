@@ -1,5 +1,6 @@
 import { createAction, createReducer, createSelector } from "@reduxjs/toolkit";
 import Axios from "axios";
+import util from "util";
 
 const name = "products/";
 export const fetchProductsPending = createAction(name + "getPending");
@@ -23,9 +24,7 @@ export const productsReducer = createReducer(
       state.items = action.payload.data;
     },
     [postProductVersionSuccess]: (state, action) => {
-      const product = state.items.find(
-        p => p.id == action.payload.data.productId
-      );
+      const product = state.items.find(p => p.id === action.payload.id);
       product.versions.push(action.payload.data);
     }
   }
@@ -35,9 +34,9 @@ export const postProductVersion = (id, productVersion) => async dispatch => {
   dispatch(postProductVersionPending());
   Axios.post("products/" + id + "/version", productVersion)
     .then(res => {
-      dispatch(postProductVersionSuccess({ data: res.data, id: res.data.id }));
+      dispatch(postProductVersionSuccess({ data: res.data, id: id }));
     })
-    .then(error => {
+    .catch(error => {
       dispatch(postProductVersionError(error));
     });
 };
