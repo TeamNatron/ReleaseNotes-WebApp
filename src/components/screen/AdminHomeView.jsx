@@ -26,6 +26,7 @@ import { fetchUsers } from "../../slices/userSlice";
 
 const AdminHomeView = props => {
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Tabs, Tab, Divider } from "@material-ui/core";
 import PageContainer from "../shared/PageContainer";
 import Ingress from "../shared/Ingress";

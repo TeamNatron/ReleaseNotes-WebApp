@@ -2,21 +2,20 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "@reduxjs/toolkit";
 import { createData } from "../shared/AdminTableRow";
-import { importRelease } from "../../slices/azureSlice";
+import { importRelease, fetchProjects } from "../../slices/azureSlice";
 import AzureDevOpsView from "../adminpanel/AzureDevOpsView";
 import { azureApiSelector } from "../../slices/authSlice";
-import { useLocation } from "react-router";
+import { fetchReleases as fetchAzureReleases } from "../../slices/azureSlice";
 
 const AdminAzureView = () => {
-  const location = useLocation();
-  console.log(location);
   const dispatch = useDispatch();
-  const azureProjects = useSelector(state => state.azure.projects);
-  const azureReleases = useSelector(azureReleasesSelector);
-
   const [selectedProject, setSelectedProject] = useState("");
   const [selectedProductVersion, setSelectedProductVersion] = useState("");
+
   const azureProps = useSelector(azureApiSelector);
+  useEffect(() => {
+    dispatch(fetchProjects(azureProps));
+  }, [dispatch, azureProps]);
 
   // Fetches all releases based on selected Project
   useEffect(() => {
@@ -25,12 +24,16 @@ const AdminAzureView = () => {
       project: selectedProject,
       authToken: azureProps.authToken
     };
-    //if (params.project !== "") dispatch(fetchAzureReleases(params));
+    if (params.project !== "") dispatch(fetchAzureReleases(params));
   }, [dispatch, azureProps, selectedProject]);
+
+  const azureProjects = useSelector(state => state.azure.projects);
+  const azureReleases = useSelector(azureReleasesSelector);
 
   const handleSelectedProject = event => {
     setSelectedProject(event.target.value);
   };
+
   const handleSelectedProductVersion = event => {
     setSelectedProductVersion(event.target.value);
   };
