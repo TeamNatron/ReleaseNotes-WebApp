@@ -134,7 +134,7 @@ const AdminScreen = () => {
           createContentComponent={<AddProductForm />}
           //editContentComponent={<AddProductForm />}
         />
-        <AdminExpansionPanel
+        <AdminExpansionPanelModal
           label="Brukere"
           icon={<PermIdentity />}
           rows={userRows}
