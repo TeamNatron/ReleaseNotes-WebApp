@@ -7,22 +7,25 @@ import PropTypes from "prop-types";
   in a SnackBar at the bottom of the screen viewport.*/
 const ResponseSnackbar = props => {
   const [open, setOpen] = useState();
+  const [displayText, setDisplayText] = useState("");
   const [severity, setSeverity] = useState("info");
 
   const { errorOccured, errorText, successOccured, successText } = props;
   useEffect(() => {
     if (errorText) {
       setOpen(true);
+      setDisplayText(errorText);
       setSeverity("error");
     }
-  }, [errorOccured]);
+  }, [setDisplayText, errorText, errorOccured]);
 
   useEffect(() => {
     if (successText) {
       setOpen(true);
+      setDisplayText(successText);
       setSeverity("success");
     }
-  }, [successOccured]);
+  }, [setDisplayText, successText, successOccured]);
 
   const handleClose = (event, reason) => {
     // If the user presses anywhere on the screen,
@@ -42,7 +45,7 @@ const ResponseSnackbar = props => {
         elevation={6}
         variant="filled"
       >
-        {props.errorText ? props.errorText : props.successText}
+        {displayText}
       </MuiAlert>
     </Snackbar>
   );
