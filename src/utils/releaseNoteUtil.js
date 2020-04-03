@@ -22,7 +22,6 @@ const hasText = str => {
 
   var hasText = false;
   aux.childNodes.forEach(child => {
-    console.log(child);
     if (child.innerHTML?.trim().length > 0) {
       hasText = true;
     }
