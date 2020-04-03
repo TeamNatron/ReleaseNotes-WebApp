@@ -85,14 +85,14 @@ const AdminScreen = () => {
     setSelectedProductVersion(event.target.value);
   };
 
-  const handleImport = (id, title) => {
+  const handleImport = data => {
     dispatch(
       importRelease(
         selectedProductVersion.id,
         selectedProject,
         azureProps,
-        id,
-        title
+        data.id,
+        data.name
       )
     );
   };
