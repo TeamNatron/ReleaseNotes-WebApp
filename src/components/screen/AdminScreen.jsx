@@ -10,7 +10,6 @@ import styled from "styled-components";
 
 const AdminScreen = () => {
   const location = useLocation();
-
   return (
     <PageContainer>
       <ScreenTitle>ADMINPANEL</ScreenTitle>

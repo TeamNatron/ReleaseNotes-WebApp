@@ -27,7 +27,8 @@ describe("products reducer", () => {
       const updatedState = productsReducer(
         { items: dummyProducts },
         postProductVersionSuccess({
-          data: { productId: dummyItem.id, id: 999 }
+          id: dummyItem.id,
+          data: { id: 999 }
         })
       );
       expect(updatedState.items[1].versions).toHaveLength(initalLength + 1);

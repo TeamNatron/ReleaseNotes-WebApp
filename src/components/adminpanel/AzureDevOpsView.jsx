@@ -31,10 +31,10 @@ const AzureDevOpsView = props => {
     dispatch(fetchProducts);
   }, [dispatch]);
 
-  const handleAction = (action, id, data) => {
+  const handleAction = (action, data) => {
     switch (action) {
       case "IMPORT":
-        handleImport(id, data);
+        handleImport(data);
         break;
       default:
         break;

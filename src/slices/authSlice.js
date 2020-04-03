@@ -63,7 +63,7 @@ export const authReducer = createReducer(initialState, {
 // THUNKS.
 export const login = (paramEmail, paramPassword) => async dispatch => {
   dispatch(postPending());
-  Axios.post(
+  return await Axios.post(
     "login",
     {
       email: paramEmail,
@@ -78,9 +78,12 @@ export const login = (paramEmail, paramPassword) => async dispatch => {
   )
     .then(res => {
       dispatch(postSuccess({ data: res.data, statusText: res.statusText }));
+      return true;
     })
     .catch(err => {
+      console.log(err);
       dispatch(postError(err));
+      return false;
     });
 };
 
@@ -107,15 +110,13 @@ export const checkLoggedIn = () => async dispatch => {
 // Thunk for update azure info
 export const updateAzureInfo = (name, PAT, org) => async dispatch => {
   dispatch(putPending());
-  Axios.put("/users",
-    {
-      AzureInformation: {
-        userId: name,
-        pat: PAT,
-        Organization: org
-      }
+  Axios.put("/users", {
+    AzureInformation: {
+      userId: name,
+      pat: PAT,
+      Organization: org
     }
-  )
+  })
     .then(res => {
       dispatch(putSuccess({ data: res.data, statusText: res.statusText }));
     })
