@@ -5,21 +5,31 @@
 import "@testing-library/jest-dom/extend-expect";
 import React from "react";
 import { Provider } from "react-redux";
-import { Router, Route } from "react-router";
+import { Router, Route } from "react-router-dom";
 import { store } from "./setupStore";
 import { createMemoryHistory } from "history";
 import { render } from "@testing-library/react";
-const AllTheProviders = ( 
+const AllTheProviders = (
   { children },
   {
-    route = "/",
+    route = "/test-route",
     history = createMemoryHistory({ initialEntries: [route] })
   } = {}
 ) => {
+  if (!route) throw new Error("Uninstansiated route");
+  const mockRoute = route;
+  jest.mock("react-router-dom", () => ({
+    ...jest.requireActual("react-router-dom"), // use actual for all non-hook parts
+    useLocation: () => ({ pathname: mockRoute })
+  }));
   return (
     <Provider store={store}>
       <Router history={history}>
-        <Route exact path="/" component={React.Children.only(children).type} />
+        <Route
+          exact
+          path={mockRoute}
+          component={React.Children.only(children).type}
+        />
       </Router>
     </Provider>
   );
