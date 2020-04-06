@@ -16,8 +16,8 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 
 const ChangePasswordForm = props => {
-  const [password, setPassword] = useState();
-  const [passwordConfirm, setPasswordConfirm] = useState();
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
   const [pwdIsError, setPwdIsError] = useState();
   const [pwdErrorMsg, setPwdErrorMsg] = useState();
   const [submitDisabled, setSubmitDisabled] = useState();
@@ -39,6 +39,9 @@ const ChangePasswordForm = props => {
     if (input === "") {
       setPwdIsError(true);
       setPwdErrorMsg("Felt kan ikke være tomt");
+    } else if (password.length <= 5) {
+      setPwdIsError(true);
+      setPwdErrorMsg("Passordet må inneholde minst 5 tegn");
     } else if (password !== passwordConfirm) {
       setPwdIsError(true);
       setPwdErrorMsg("Passordet er ikke det samme");
