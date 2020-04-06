@@ -18,12 +18,10 @@ export default function DeleteDialogButton(props) {
 
   const fetchData = async () => {
     var releaseNote = await getReleaseNoteWithReleases(props.id);
-    console.log(releaseNote);
     setReleases(releaseNote.releases);
   };
 
   const handleClickOpen = () => {
-    console.log(props);
     fetchData();
     setOpen(true);
   };
