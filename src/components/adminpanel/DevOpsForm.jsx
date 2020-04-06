@@ -3,17 +3,28 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { Grid, Paper } from "@material-ui/core";
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Typography from '@material-ui/core/Typography';
-import { updateAzureInfo } from "../../slices/authSlice";
-import { useDispatch } from "react-redux";
+import { updateAzureInfo, fetchAzureInfo } from "../../slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-
-const DevOpsForm = props => {
+const DevOpsForm = () => {
     const [name, setName] = useState("");
     const [PAT, setPAT] = useState("");
     const [org, setOrg] = useState("");
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchAzureInfo())
+    }, [dispatch])
+
+    const azureInfo = useSelector(state => state.auth.currentUser.azureInformation);
+
+    useEffect(() => {
+        setName(azureInfo.userId);
+        setPAT(azureInfo.pat);
+        setOrg(azureInfo.organization);
+    }, [azureInfo])
 
     const handleSubmit = () => {
         // see if the fields have beeen filled out
