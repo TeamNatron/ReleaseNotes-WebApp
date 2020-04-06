@@ -8,11 +8,23 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import PropTypes from "prop-types";
 import { IconButton } from "@material-ui/core";
 import { Delete } from "@material-ui/icons";
+import { getReleaseNoteWithReleases } from "../../slices/releaseNoteSlice";
+import { useState } from "react";
+import styled from "styled-components";
 
 export default function DeleteDialogButton(props) {
   const [open, setOpen] = React.useState(false);
+  const [releases, setReleases] = useState([]);
+
+  const fetchData = async () => {
+    var releaseNote = await getReleaseNoteWithReleases(props.id);
+    console.log(releaseNote);
+    setReleases(releaseNote.releases);
+  };
 
   const handleClickOpen = () => {
+    console.log(props);
+    fetchData();
     setOpen(true);
   };
 
@@ -44,6 +56,18 @@ export default function DeleteDialogButton(props) {
             Er du sikker på du vil slette denne entiteten? Den vil bli fjernet
             fra systemet for all evighet.
           </DialogContentText>
+          {releases ? (
+            <DialogContentText id="alert-dialog-description">
+              {"Denne ReleaseNoten er benyttet av: "}
+              <BoldText>
+                {releases.map((r, i) => {
+                  return releases[i + 1] ? r.title + ", " : r.title;
+                })}
+              </BoldText>
+            </DialogContentText>
+          ) : (
+            ""
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
@@ -67,5 +91,14 @@ DeleteDialogButton.propTypes = {
   /**
    * Name of the entity to be deleted, e.g. "ReleaseNote" or "Product"
    */
-  entityName: PropTypes.string
+  entityName: PropTypes.string,
+
+  /**
+   * ID of the entity to be deleted
+   */
+  id: PropTypes.number.isRequired,
 };
+
+const BoldText = styled.div`
+  font-weight: bold;
+`;
