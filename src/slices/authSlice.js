@@ -7,9 +7,14 @@ import {
 import Axios from "axios";
 
 const name = "auth/";
+const azureName = "users/azure/";
 export const postPending = createAction(name + "postPending");
 export const postError = createAction(name + "postError");
 export const postSuccess = createAction(name + "postSuccess");
+
+export const getPending = createAction(azureName + "getPending");
+export const getSuccess = createAction(azureName + "getSuccess");
+export const getError = createAction(azureName + "getError");
 
 export const putPending = createAction(name + "putPending");
 export const putSuccess = createAction(name + "putSuccess");
@@ -32,7 +37,7 @@ const initialState = {
     roles: [],
     azureInformation: {
       id: -1,
-      userid: "",
+      userId: "",
       pat: "",
       organization: ""
     }
@@ -57,6 +62,9 @@ export const authReducer = createReducer(initialState, {
   [putSuccess]: (state, action) => {
     state.currentUser = action.payload.data;
     state.sucessMsg = action.payload.statusText;
+  },
+  [getSuccess]: (state, action) => {
+    state.currentUser.azureInformation = action.payload.data;
   }
 });
 
@@ -106,6 +114,18 @@ export const checkLoggedIn = () => async dispatch => {
   }
   dispatch(checkLoggedInError());
 };
+
+// thunk for fetching azure info
+export const fetchAzureInfo = () => async dispatch => {
+  dispatch(getPending());
+  Axios.get("/users/azure")
+    .then(res => {
+      dispatch(getSuccess({ data: res.data }));
+    })
+    .catch(err => {
+      dispatch(getError(err));
+    });
+}
 
 // Thunk for update azure info
 export const updateAzureInfo = (name, PAT, org) => async dispatch => {
