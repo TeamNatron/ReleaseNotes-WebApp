@@ -16,7 +16,7 @@ describe("Auth reducer", () => {
         roles: [],
         azureInformation: {
           id: -1,
-          userid: "",
+          userId: "",
           pat: "",
           organization: ""
         }
