@@ -4,19 +4,19 @@ import { TableCell, TableRow, IconButton, Switch } from "@material-ui/core";
 import { Edit, Add } from "@material-ui/icons";
 import DeleteDialogButton from "./DeleteDialogButton";
 import { actions } from "./AdminExpansionPanelBase";
-const AdminTableRow = props => {
+const AdminTableRow = (props) => {
   const { row, columns } = props;
 
   return (
     <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-      {columns.map(column => {
+      {columns.map((column) => {
         if (column.id === "avatar") {
           return (
             <StyledTableCell key={column.id}>
               {props.icon ? (
                 React.cloneElement(props.icon, {
                   color: "disabled",
-                  fontSize: "small"
+                  fontSize: "small",
                 })
               ) : (
                 <React.Fragment />
@@ -35,7 +35,7 @@ const AdminTableRow = props => {
                   return props.onAction(actions.UPDATE, { ...row });
                 }}
                 inputProps={{
-                  "aria-label": "primary checkbox"
+                  "aria-label": "primary checkbox",
                 }}
               />
             </StyledTableCell>
@@ -46,6 +46,7 @@ const AdminTableRow = props => {
               <StyledTableCell key={column.id}>
                 <DeleteDialogButton
                   onConfirm={() => props.onAction(actions.DELETE, { ...row })}
+                  id={row.id}
                   entityName={row.name}
                 />
               </StyledTableCell>
