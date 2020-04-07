@@ -22,30 +22,30 @@ const AdminAzureView = () => {
     const params = {
       organization: azureProps.organization,
       project: selectedProject,
-      authToken: azureProps.authToken
+      authToken: azureProps.authToken,
     };
     if (params.project !== "") dispatch(fetchAzureReleases(params));
   }, [dispatch, azureProps, selectedProject]);
 
-  const azureProjects = useSelector(state => state.azure.projects);
+  const azureProjects = useSelector((state) => state.azure.projects);
   const azureReleases = useSelector(azureReleasesSelector);
 
-  const handleSelectedProject = event => {
+  const handleSelectedProject = (event) => {
     setSelectedProject(event.target.value);
   };
 
-  const handleSelectedProductVersion = event => {
+  const handleSelectedProductVersion = (event) => {
     setSelectedProductVersion(event.target.value);
   };
 
-  const handleImport = (id, title) => {
+  const handleImport = (data) => {
     dispatch(
       importRelease(
         selectedProductVersion.id,
         selectedProject,
         azureProps,
-        id,
-        title
+        data.id,
+        data.title
       )
     );
   };
@@ -68,6 +68,6 @@ export default AdminAzureView;
 
 // selectors
 const azureReleasesSelector = createSelector(
-  state => state.azure.releases,
-  releases => releases.map(r => createData(r, r.name, r.id))
+  (state) => state.azure.releases,
+  (releases) => releases.map((r) => createData(r, r.name, r.id))
 );
