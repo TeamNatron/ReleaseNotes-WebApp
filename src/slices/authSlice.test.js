@@ -1,6 +1,6 @@
 import { authReducer, azureApiSelector } from "./authSlice";
 import { testThunkConformance } from "../utils/test/testThunkConformance";
-import { putSuccess, checkLoggedIn, updateAzureInfo, login } from "./authSlice";
+import { putSuccess, checkLoggedIn, fetchAzureInfo, updateAzureInfo, login } from "./authSlice";
 import thunk from "redux-thunk";
 import configureMockStore from "redux-mock-store";
 import { setAuthToken } from "../handlers/cookieHandler";
@@ -16,7 +16,7 @@ describe("Auth reducer", () => {
         roles: [],
         azureInformation: {
           id: -1,
-          userid: "",
+          userId: "",
           pat: "",
           organization: ""
         }
@@ -85,6 +85,7 @@ describe("Selectors", () => {
 
 describe("Auth Thunks", () => {
   testThunkConformance(login);
+  testThunkConformance(fetchAzureInfo);
   testThunkConformance(updateAzureInfo);
   testCheckLoggedinConformancer();
 });
