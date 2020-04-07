@@ -17,7 +17,7 @@ import Routes from "./components/Routes";
 
 // https://github.com/axios/axios
 Axios.defaults.baseURL = process.env.REACT_APP_APP_URL + "/api/";
-Axios.interceptors.request.use(request => {
+Axios.interceptors.request.use((request) => {
   const token = getAuthToken();
   if (token) {
     request.headers.Authorization = `Bearer ${token}`;
@@ -32,11 +32,11 @@ const App = () => {
       <CssBaseline />
       <Router>
         <ThemeProvider theme={theme}>
-          <Navbar />
           <MainContent>
+            <Navbar />
             <Routes />
+            <Footer />
           </MainContent>
-          <Footer />
         </ThemeProvider>
       </Router>
     </Provider>
@@ -46,5 +46,7 @@ const App = () => {
 export default App;
 
 const MainContent = styled.div`
-  min-height: 90vw;
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: 250px; /* height of your footer */
 `;
