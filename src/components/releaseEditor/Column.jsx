@@ -3,11 +3,11 @@ import ReleaseNote from "./ReleaseNote";
 import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 
-const Column = (props) => {
+const Column = props => {
   return (
     <StyledPaper style={props.styleSheet}>
       <Droppable droppableId={props.id}>
-        {(provided) => (
+        {provided => (
           <TaskList ref={provided.innerRef} {...provided.droppableProps}>
             {props.releaseNotes.map((releaseNote, index) => (
               <ReleaseNote
@@ -39,5 +39,4 @@ const StyledPaper = styled.div`
 
 const TaskList = styled.div`
   background-color: #fff;
-  min-height: 55vh;
 `;
