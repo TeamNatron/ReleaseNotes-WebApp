@@ -33,19 +33,19 @@ export const releaseNoteReducer = createReducer(
     },
     [deleteSuccess]: (state, action) => {
       deleteInArray(state, action);
-    }
+    },
   }
 );
 
 // THUNKS
 export function fetchReleaseNoteById(id) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(getByIdPending({ id }));
     return Axios.get("/releasenote/" + id)
-      .then(response => {
+      .then((response) => {
         dispatch(getByIdSuccess({ data: response.data, id }));
       })
-      .catch(error => {
+      .catch((error) => {
         getByIdError({ error, id });
       });
   };
@@ -53,51 +53,62 @@ export function fetchReleaseNoteById(id) {
 
 export function fetchReleaseNotes(_query) {
   const query = _query ? _query : "";
-  return dispatch => {
+  return (dispatch) => {
     dispatch(getPending());
     return Axios.get("/releasenote" + query)
-      .then(res => {
+      .then((res) => {
         dispatch(getSuccess({ data: res.data }));
       })
-      .catch(error => {
+      .catch((error) => {
         getError(error);
       });
   };
 }
 
 export function putReleaseNote(id, note) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(savePending({ id }));
     return Axios.put("/releasenote/" + id, note)
-      .then(response => {
+      .then((response) => {
         dispatch(saveSuccess({ data: response.data, id }));
       })
-      .catch(error => {
+      .catch((error) => {
         saveError({ error, id });
       });
   };
 }
 
 export function postReleaseNote(note) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(savePending());
     return Axios.post("/releasenote/", note)
-      .then(response => {
+      .then((response) => {
         dispatch(saveSuccess({ data: response.data, id: response.data.id }));
       })
-      .catch(error => {
+      .catch((error) => {
         saveError({ error });
       });
   };
 }
+
+export const getReleaseNoteWithReleases = async (id) => {
+  return await Axios.get("releasenote/" + id + "?includeReleases")
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      return "";
+    });
+};
+
 export function deleteReleaseNote(id) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(deletePending());
     return Axios.delete("/releasenote/" + id)
-      .then(response => {
+      .then((response) => {
         dispatch(deleteSuccess({ id }));
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(deleteError(error));
       });
   };
