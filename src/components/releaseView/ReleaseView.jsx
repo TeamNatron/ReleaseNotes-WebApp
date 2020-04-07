@@ -8,7 +8,7 @@ import {
   Table,
   Typography,
   Paper,
-  Box
+  Box,
 } from "@material-ui/core";
 import styled from "styled-components";
 import ReleaseH1 from "../shared/ReleaseH1";
@@ -22,7 +22,7 @@ import { classifyReleaseNote } from "../../utils/releaseNoteUtil";
  * release "article"
  * @param {*} props
  */
-const ReleaseView = props => {
+const ReleaseView = (props) => {
   const [fullNotes, setFullNotes] = useState([]);
   const [denseNotes, setDenseNotes] = useState([]);
   const [formattedDate, setFormattedDate] = useState("");
@@ -30,7 +30,7 @@ const ReleaseView = props => {
   useMemo(() => {
     const newDenseNotes = [];
     const newFullNotes = [];
-    props.release.releaseNotes.forEach(note => {
+    props.release.releaseNotes.forEach((note) => {
       const type = classifyReleaseNote(note);
       switch (type) {
         case "DENSE":
@@ -61,19 +61,22 @@ const ReleaseView = props => {
       </Typography>
       <Box my={4}>{fullNotes}</Box>
 
-      <Typography component={ReleaseH2}>Andre endringer</Typography>
-
-      <Box mt={2}>
-        <TablePaper elevation={0} variant="outlined">
-          <Table size="small">
-            <TableBody>
-              {denseNotes.map(denseNote => (
-                <TableRow key={denseNote.key}>{denseNote}</TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TablePaper>
-      </Box>
+      {denseNotes.length > 0 && (
+        <>
+          <Typography component={ReleaseH2}>Andre endringer</Typography>
+          <Box mt={2}>
+            <TablePaper elevation={0} variant="outlined">
+              <Table size="small">
+                <TableBody>
+                  {denseNotes.map((denseNote) => (
+                    <TableRow key={denseNote.key}>{denseNote}</TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TablePaper>
+          </Box>
+        </>
+      )}
     </React.Fragment>
   );
 };
@@ -95,7 +98,7 @@ ReleaseView.propTypes = {
       productVersion: PropTypes.object
     })
   )*/
-  release: PropTypes.object
+  release: PropTypes.object,
 };
 
 ReleaseView.defaultProps = {
@@ -107,13 +110,13 @@ ReleaseView.defaultProps = {
       product: {
         id: "",
         name: "",
-        isPublic: false
+        isPublic: false,
       },
       version: "",
-      isPublic: false
+      isPublic: false,
     },
     title: "",
     isPublic: false,
-    releaseNotes: []
-  }
+    releaseNotes: [],
+  },
 };
