@@ -45,7 +45,7 @@ const AdminAzureView = () => {
         selectedProject,
         azureProps,
         data.id,
-        data.title
+        data.name
       )
     );
   };
