@@ -8,12 +8,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import {
   getAllProductVersionsSelector,
-  fetchProducts
+  fetchProducts,
 } from "../../slices/productsSlice";
 
 // EXAMPLE COMPONENT USED TO CONTAIN AZURE DEVOPS TOOLS
 // CAN BE MODYFIED OR REMOVED
-const AzureDevOpsView = props => {
+const AzureDevOpsView = (props) => {
   const {
     azureReleases,
     azureProjects,
@@ -21,14 +21,14 @@ const AzureDevOpsView = props => {
     selectedProject,
     handleImport,
     selectedProductVersion,
-    handleSelectedProductVersion
+    handleSelectedProductVersion,
   } = props;
   const dispatch = useDispatch();
 
   const productVersions = useSelector(getAllProductVersionsSelector);
 
   useEffect(() => {
-    dispatch(fetchProducts);
+    dispatch(fetchProducts());
   }, [dispatch]);
 
   const handleAction = (action, data) => {
