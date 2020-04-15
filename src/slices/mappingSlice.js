@@ -1,4 +1,5 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
+import Axios from "axios";
 
 /*
     RNS == Release Note System
@@ -6,7 +7,7 @@ import { createAction, createReducer } from "@reduxjs/toolkit";
 */
 const NAME = "mappable/";
 
-const RNS_MAPPABLE = NAME + "RNSMappable/";
+const RNS_MAPPABLE = NAME + "RNS/";
 export const fetchRNSMappablePending = createAction(
   RNS_MAPPABLE + "getPending"
 );
@@ -15,7 +16,7 @@ export const fetchRNSMappableSuccess = createAction(
   RNS_MAPPABLE + "getSuccess"
 );
 
-const AZD_MAPPABLE = NAME + "RNSMappable/";
+const AZD_MAPPABLE = NAME + "AZD/";
 export const fetchAZDMappablePending = createAction(
   AZD_MAPPABLE + "getPending"
 );
@@ -47,10 +48,21 @@ export const mappingReducer = createReducer(initialState, {
   [fetchRNSMappableSuccess]: (state, action) => {
     state.RNSMappable = action.payload.data;
   },
-  [fetchAZDMappablePending]: (state, action) => {
+  [fetchAZDMappableSuccess]: (state, action) => {
     state.AZDMappable = action.payload.data;
   },
   [fetchRNSMappingsSuccess]: (state, action) => {
     state.RNSMappings = action.payload.data;
   },
 });
+
+export const fetchRNSMappable = () => async (dispatch) => {
+  dispatch(fetchRNSMappablePending());
+  Axios.get("mappablefields/")
+    .then((res) => {
+      dispatch(fetchRNSMappableSuccess({ data: res.data.entity }));
+    })
+    .catch((error) => {
+      dispatch(fetchRNSMappableError(error));
+    });
+};
