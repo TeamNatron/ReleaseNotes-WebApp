@@ -9,6 +9,7 @@ import { userReducer } from "../slices/userSlice";
 import { azureReducer } from "../slices/azureSlice";
 import { successReducer } from "../slices/successSlice";
 import { productsReducer } from "../slices/productsSlice";
+import { mappingReducer } from "../slices/mappingSlice";
 
 export default combineReducers({
   products: productsReducer,
@@ -20,5 +21,6 @@ export default combineReducers({
   auth: authReducer,
   users: userReducer,
   azure: azureReducer,
-  success: successReducer
+  success: successReducer,
+  mapping: mappingReducer,
 });
