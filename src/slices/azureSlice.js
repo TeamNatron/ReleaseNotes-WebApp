@@ -205,12 +205,12 @@ export const importRelease = (
           };
         })
         .then((release) => {
-          // post new release
+          // all requests to azure api are successful
           dispatch(importReleaseSuccess());
           return release;
         })
         .then((release) => {
-          //success
+          // post the new release
           return dispatch(postRelease(release));
         })
         .catch((err) => {
