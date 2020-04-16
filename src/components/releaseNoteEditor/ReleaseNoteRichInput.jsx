@@ -1,23 +1,31 @@
-import React from 'react';
+import React from "react";
 import { FormControl, Divider } from "@material-ui/core";
 import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { uploadImage } from "../../slices/imageSlice";
 
-const ReleaseNoteRichInput = props => {
+const ReleaseNoteRichInput = (props) => {
   let editor = React.createRef();
+  const dispatch = useDispatch();
 
   const focusEditor = () => {
     editor.current.focusEditor();
   };
 
-  const onEditorChange = editorState => {
+  const onEditorChange = (editorState) => {
     props.onChange(editorState);
   };
 
-  const handleImageUpload = image => {
+  const handleImageUpload = (image) => {
     return new Promise((resolve, reject) => {
-      resolve({ data: { link: URL.createObjectURL(image) } });
+      dispatch(
+        uploadImage(
+          image,
+          (url) => resolve({ data: { link: url } }),
+          (err) => reject()
+        )
+      );
     });
   };
 
@@ -32,7 +40,7 @@ const ReleaseNoteRichInput = props => {
             editorState={props.editorState}
             onEditorStateChange={onEditorChange}
             editorStyle={{
-              padding: "14px 18.5px"
+              padding: "14px 18.5px",
             }}
             editorClassName={"editor"}
             toolbarClassName={"toolbar"}
@@ -48,12 +56,12 @@ const ReleaseNoteRichInput = props => {
                 "embedded",
                 "image",
                 "remove",
-                "history"
+                "history",
               ],
               image: {
                 urlEnabled: true,
                 uploadEnabled: true,
-                alignmentEnabled: true,
+                alignmentEnabled: false,
                 uploadCallback: handleImageUpload,
                 previewImage: true,
                 inputAccept:
@@ -61,9 +69,9 @@ const ReleaseNoteRichInput = props => {
                 alt: { present: false, mandatory: false },
                 defaultSize: {
                   height: "auto",
-                  width: "auto"
-                }
-              }
+                  width: "auto",
+                },
+              },
             }}
           />
         </EditorInner>
