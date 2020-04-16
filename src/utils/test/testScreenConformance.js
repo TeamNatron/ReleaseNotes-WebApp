@@ -6,7 +6,7 @@ import { renderWithProdiders } from "../../setupTests";
  * Returns the Enzyme Wrapper of the screen
  * @param {React component} screenToTest
  */
-export const testScreenConformance = screenToTest => {
+export const testScreenConformance = (screenToTest) => {
   if (!React.isValidElement(screenToTest)) {
     console.log("Parameter need to be a valid react element");
     return;

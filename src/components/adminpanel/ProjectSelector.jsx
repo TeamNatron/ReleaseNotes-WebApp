@@ -3,18 +3,18 @@ import {
   Select,
   MenuItem,
   FormHelperText,
-  FormControl
+  FormControl,
 } from "@material-ui/core";
 import { DomainPropTypes } from "@material-ui/pickers/constants/prop-types";
 import styled from "styled-components";
 
-const ProjectSelector = props => {
+const ProjectSelector = (props) => {
   const { projects, selected, handleChange } = props;
 
   return (
     <StyledFormControl>
       <Select label="Project" value={selected} onChange={handleChange}>
-        {projects.map(obj => (
+        {projects.map((obj) => (
           <MenuItem key={obj} value={obj}>
             {obj}
           </MenuItem>
@@ -26,7 +26,7 @@ const ProjectSelector = props => {
 };
 
 ProjectSelector.prototype = {
-  projects: DomainPropTypes.array
+  projects: DomainPropTypes.array,
 };
 
 export default ProjectSelector;

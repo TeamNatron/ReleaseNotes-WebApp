@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Backdrop, DialogContent, Modal, Fade } from "@material-ui/core";
 import AdminExpansionPanelBase, { actions } from "./AdminExpansionPanelBase";
 
-const AdminExpansionPanelModal = props => {
+const AdminExpansionPanelModal = (props) => {
   const [open, setOpen] = React.useState(false);
   const [componentToRender, setComponentToRender] = React.useState();
 
@@ -28,8 +28,8 @@ const AdminExpansionPanelModal = props => {
     setOpen(true);
   };
 
-  const setComponentProps = rowData => {
-    return React.Children.map(props.editContentComponent, child =>
+  const setComponentProps = (rowData) => {
+    return React.Children.map(props.editContentComponent, (child) =>
       React.cloneElement(child, { id: rowData.id, value: rowData.data })
     )[0];
   };
@@ -44,7 +44,7 @@ const AdminExpansionPanelModal = props => {
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
-          timeout: 500
+          timeout: 500,
         }}
       >
         <Fade in={open}>
@@ -67,5 +67,5 @@ AdminExpansionPanelModal.propTypes = {
   rows: PropTypes.array,
   icon: PropTypes.element,
   createContentComponent: PropTypes.element,
-  editContentComponent: PropTypes.element
+  editContentComponent: PropTypes.element,
 };

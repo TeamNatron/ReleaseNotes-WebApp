@@ -12,10 +12,10 @@ import ReleaseNoteEditorScreen from "./screen/ReleaseNoteEditorScreen";
 const Routes = () => {
   const history = useHistory();
   Axios.interceptors.response.use(
-    response => {
+    (response) => {
       return response;
     },
-    error => {
+    (error) => {
       if (error.response) {
         if (error.response.status === 401) history.push("/login");
       } else {
@@ -37,7 +37,7 @@ const Routes = () => {
       <Route
         path="/releasenotes/edit/:id"
         exact
-        render={props => <ReleaseNoteEditorScreen {...props} />}
+        render={(props) => <ReleaseNoteEditorScreen {...props} />}
       />
       <Route
         path="/releasenotes/create"
@@ -47,7 +47,7 @@ const Routes = () => {
       <Route
         path="/release/:id"
         exact
-        render={props => <ReleaseScreen {...props} />}
+        render={(props) => <ReleaseScreen {...props} />}
       />
       <Route path="/login/" exact component={LoginScreen} />
       <Route path="/releases/create" exact component={ReleaseEditorScreen} />

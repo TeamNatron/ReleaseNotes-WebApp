@@ -7,7 +7,7 @@ import {
   InputAdornment,
   Button,
   FormHelperText,
-  FormControl
+  FormControl,
 } from "@material-ui/core";
 import styled from "styled-components";
 import { VpnKey } from "@material-ui/icons";
@@ -15,7 +15,7 @@ import { changePassword } from "../../slices/userSlice";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 
-const ChangePasswordForm = props => {
+const ChangePasswordForm = (props) => {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [pwdIsError, setPwdIsError] = useState();
@@ -35,7 +35,7 @@ const ChangePasswordForm = props => {
     validateSubmit();
   }, [pwdIsError]);
 
-  const validatePwd = input => {
+  const validatePwd = (input) => {
     if (input === "") {
       setPwdIsError(true);
       setPwdErrorMsg("Felt kan ikke være tomt");
@@ -59,12 +59,12 @@ const ChangePasswordForm = props => {
     }
   };
 
-  const onChangePwd = input => {
+  const onChangePwd = (input) => {
     const newValue = input.target.value;
     setPassword(newValue);
   };
 
-  const onChangePwdConfirm = input => {
+  const onChangePwdConfirm = (input) => {
     setPasswordConfirm(input.target.value);
   };
 
@@ -150,6 +150,6 @@ const TurboPaper = styled(Paper)`
 
 const TurboButton = styled(Button)`
   && {
-    background-color: ${props => props.theme.secondaryColor};
+    background-color: ${(props) => props.theme.secondaryColor};
   }
 `;

@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 /*Takes in prop values for success and error, and these messages
   in a SnackBar at the bottom of the screen viewport.*/
-const ResponseSnackbar = props => {
+const ResponseSnackbar = (props) => {
   const [open, setOpen] = useState();
   const [displayText, setDisplayText] = useState("");
   const [severity, setSeverity] = useState("info");
@@ -57,5 +57,5 @@ ResponseSnackbar.propTypes = {
   errorOccured: PropTypes.string,
   errorText: PropTypes.string,
   successOccured: PropTypes.string,
-  successText: PropTypes.string
+  successText: PropTypes.string,
 };

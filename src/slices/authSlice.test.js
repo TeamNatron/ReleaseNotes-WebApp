@@ -1,6 +1,12 @@
 import { authReducer, azureApiSelector } from "./authSlice";
 import { testThunkConformance } from "../utils/test/testThunkConformance";
-import { putSuccess, checkLoggedIn, fetchAzureInfo, updateAzureInfo, login } from "./authSlice";
+import {
+  putSuccess,
+  checkLoggedIn,
+  fetchAzureInfo,
+  updateAzureInfo,
+  login,
+} from "./authSlice";
 import thunk from "redux-thunk";
 import configureMockStore from "redux-mock-store";
 import { setAuthToken } from "../handlers/cookieHandler";
@@ -18,9 +24,9 @@ describe("Auth reducer", () => {
           id: -1,
           userId: "",
           pat: "",
-          organization: ""
-        }
-      }
+          organization: "",
+        },
+      },
     });
   });
 });
@@ -53,7 +59,7 @@ const testCheckLoggedinConformancer = () => {
   it("checkLoggedIn dispatches PENDING and ERROR actions", async () => {
     const store = mockStore({ items: [] });
 
-    return store.dispatch(checkLoggedIn()).catch(error => {
+    return store.dispatch(checkLoggedIn()).catch((error) => {
       const actions = store.getActions();
       expect(actions[0].type.toLowerCase()).toMatch("pending");
       expect(actions[1].type.toLowerCase()).toMatch("error");
@@ -113,12 +119,12 @@ const dummyUser = {
     id: -1,
     userid: "admin@azure.no",
     pat: "AASDA12312EWWERWER",
-    organization: "ReleaseNotesSystem"
-  }
+    organization: "ReleaseNotesSystem",
+  },
 };
 
 const dummyState = {
   auth: {
-    currentUser: dummyUser
-  }
+    currentUser: dummyUser,
+  },
 };

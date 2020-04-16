@@ -1,21 +1,21 @@
-import React from 'react';
+import React from "react";
 import { FormControl, Divider } from "@material-ui/core";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import styled from "styled-components";
 
-const ReleaseNoteRichInput = props => {
+const ReleaseNoteRichInput = (props) => {
   let editor = React.createRef();
 
   const focusEditor = () => {
     editor.current.focusEditor();
   };
 
-  const onEditorChange = editorState => {
+  const onEditorChange = (editorState) => {
     props.onChange(editorState);
   };
 
-  const handleImageUpload = image => {
+  const handleImageUpload = (image) => {
     return new Promise((resolve, reject) => {
       resolve({ data: { link: URL.createObjectURL(image) } });
     });
@@ -32,7 +32,7 @@ const ReleaseNoteRichInput = props => {
             editorState={props.editorState}
             onEditorStateChange={onEditorChange}
             editorStyle={{
-              padding: "14px 18.5px"
+              padding: "14px 18.5px",
             }}
             editorClassName={"editor"}
             toolbarClassName={"toolbar"}
@@ -48,7 +48,7 @@ const ReleaseNoteRichInput = props => {
                 "embedded",
                 "image",
                 "remove",
-                "history"
+                "history",
               ],
               image: {
                 urlEnabled: true,
@@ -61,9 +61,9 @@ const ReleaseNoteRichInput = props => {
                 alt: { present: false, mandatory: false },
                 defaultSize: {
                   height: "auto",
-                  width: "auto"
-                }
-              }
+                  width: "auto",
+                },
+              },
             }}
           />
         </EditorInner>

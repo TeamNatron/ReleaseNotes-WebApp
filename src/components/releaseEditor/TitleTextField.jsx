@@ -2,7 +2,7 @@ import React from "react";
 import { TextField } from "@material-ui/core";
 import styled from "styled-components";
 
-const TitleTextField = props => {
+const TitleTextField = (props) => {
   return (
     <React.Fragment>
       <StyledTextField
