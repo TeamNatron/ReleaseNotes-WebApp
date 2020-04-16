@@ -160,8 +160,9 @@ export const azureApiSelector = createSelector(
   }
 );
 
-const createAuthToken = azureInfo => {
-  return btoa(azureInfo.userid + ":" + azureInfo.pat);
+const createAuthToken = (azureInfo) => {
+  var authToken = btoa(azureInfo.userId + ":" + azureInfo.pat);
+  return authToken;
 };
 
 export const organizationSelector = state => {
