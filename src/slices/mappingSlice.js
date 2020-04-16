@@ -1,5 +1,12 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
+import GlobalAxios from "axios";
 import Axios from "axios";
+import { authHeader } from "../utils/azureUtils";
+
+// azure axios instance
+export const AzureAxios = GlobalAxios.create({
+  timeout: 5000,
+});
 
 /*
     RNS == Release Note System
@@ -65,4 +72,50 @@ export const fetchRNSMappable = () => async (dispatch) => {
     .catch((error) => {
       dispatch(fetchRNSMappableError(error));
     });
+};
+
+export const fetchAZDMappable = (authToken, project, org, itemType) => async (
+  dispatch
+) => {
+  const url = buildWorkitemTypeURL(project, org, itemType);
+
+  dispatch(fetchAZDMappablePending());
+
+  AzureAxios.get(url, authHeader(authToken))
+    .then((res) => {
+      fetchFieldsOfWorkItem(res.data, authToken, dispatch);
+    })
+    .catch((error) => {
+      var errMsg = error;
+      if (error.payload?.message) errMsg = error.payload.message;
+      dispatch(fetchAZDMappableError(errMsg));
+    });
+};
+
+const fetchFieldsOfWorkItem = (data, authParams, dispatch) => {
+  AzureAxios.get(data._links.workItemType.href, authHeader(authParams))
+    .then((res) => {
+      var fields = parseFieldsWorkItem(res.data);
+      if (!fields) throw new Error("No fields for given Work Item");
+      dispatch(fetchAZDMappableSuccess({ data: fields }));
+    })
+    .catch((err) => {
+      throw new Error(err.message);
+    });
+};
+
+const parseFieldsWorkItem = (data) => {
+  return data.fields.map((field) => field.name);
+};
+
+const buildWorkitemTypeURL = (project, org, itemType) => {
+  return (
+    "https://dev.azure.com/" +
+    org +
+    "/" +
+    project +
+    "/_apis/wit/workitems/$" +
+    itemType +
+    "?api-version=5.1"
+  );
 };

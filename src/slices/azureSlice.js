@@ -1,10 +1,11 @@
 import { createReducer, createAction } from "@reduxjs/toolkit";
 import GlobalAxios from "axios";
 import { postRelease } from "./releaseSlice";
+import { authHeader } from "../utils/azureUtils";
 
 // azure axios instance
 export const AzureAxios = GlobalAxios.create({
-  timeout: 5000
+  timeout: 5000,
 });
 
 const API_VERSION = "&api-version=5.1";
@@ -28,12 +29,12 @@ export const azureReducer = createReducer(
   { sucessMsg: "", projects: [], releases: [] },
   {
     [getProjectsSuccess]: (state, action) => {
-      state.projects = action.payload.data.value.map(proj => proj.name);
+      state.projects = action.payload.data.value.map((proj) => proj.name);
     },
     [getReleasesSuccess]: (state, action) => {
       state.sucessMsg = action.payload.statusText;
       state.releases = action.payload.data.value;
-    }
+    },
   }
 );
 
@@ -55,7 +56,7 @@ export const azureReducer = createReducer(
  *          const params = useSelector(azureApiSelector)
  *          useDispatch(fetchProjects(params))
  */
-export const fetchProjects = params => async dispatch => {
+export const fetchProjects = (params) => async (dispatch) => {
   // create request url
   const instance = "dev.azure.com/" + params.organization;
   const url = "https://" + instance + "/_apis/projects";
@@ -63,10 +64,10 @@ export const fetchProjects = params => async dispatch => {
   //dispatch
   dispatch(getProjectsPending());
   AzureAxios.get(url, authHeader(params.authToken))
-    .then(res => {
+    .then((res) => {
       dispatch(getProjectsSuccess({ data: res.data }));
     })
-    .catch(error => {
+    .catch((error) => {
       dispatch(getProjectsError(error));
     });
 };
@@ -81,7 +82,7 @@ export const fetchProjects = params => async dispatch => {
  *
  */
 
-export const fetchReleases = params => async dispatch => {
+export const fetchReleases = (params) => async (dispatch) => {
   // create request url
   const instance =
     "vsrm.dev.azure.com/" + params.organization + "/" + params.project;
@@ -92,27 +93,15 @@ export const fetchReleases = params => async dispatch => {
     //dispatch
     dispatch(getReleasesPending());
     AzureAxios.get(url, authHeader(authToken))
-      .then(res => {
+      .then((res) => {
         dispatch(
           getReleasesSuccess({ data: res.data, statusText: res.statusText })
         );
       })
-      .catch(err => {
+      .catch((err) => {
         getReleasesError(err);
       });
   }
-};
-
-/**
- * @param {String} authToken
- * @example Axios.get(url, authHeader("9u0fu8u94utgj03=="))
- */
-const authHeader = authToken => {
-  return {
-    headers: {
-      Authorization: "Basic " + authToken
-    }
-  };
 };
 
 /**
@@ -179,20 +168,20 @@ export const importRelease = (
   params,
   id,
   title
-) => async dispatch => {
+) => async (dispatch) => {
   dispatch(importReleasePending());
   try {
     // Get Ids of work items
-    fetchWorkItemIds(project, params, id).then(res => {
+    fetchWorkItemIds(project, params, id).then((res) => {
       var ids = res.data.value.map(({ id }) => id);
 
       // Get data of each work item
-      fetchWorkItems(project, params, ids).then(res => {
+      fetchWorkItems(project, params, ids).then((res) => {
         var rawWorkItems = res.data.value;
         var workItems = [];
 
         // Format and filter each work item
-        rawWorkItems.forEach(wi => {
+        rawWorkItems.forEach((wi) => {
           workItems.push(createWorkItem(wi));
         });
 
@@ -201,7 +190,7 @@ export const importRelease = (
           title: title,
           isPublic: false,
           productVersionId: productVersionId,
-          releaseNotes: workItems
+          releaseNotes: workItems,
         };
 
         // Post release
@@ -215,13 +204,13 @@ export const importRelease = (
 };
 
 // util
-export const createWorkItem = item => {
+export const createWorkItem = (item) => {
   return {
     WorkItemId: item.id,
     WorkItemTitle: item.fields["System.Title"],
     ClosedDate: item.fields["System.CreatedDate"],
     WorkItemDescriptionHtml: item.fields["System.Description"],
     AuthorName: item.fields["System.CreatedBy"]["displayName"],
-    AuthorEmail: item.fields["System.CreatedBy"]["uniqueName"]
+    AuthorEmail: item.fields["System.CreatedBy"]["uniqueName"],
   };
 };
