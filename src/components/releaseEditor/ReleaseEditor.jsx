@@ -7,13 +7,13 @@ import {
   Button,
   MenuItem,
   Switch,
-  FormControlLabel,
   Select,
   FormControl,
   InputLabel,
   FormHelperText,
   IconButton,
-  Collapse
+  Collapse,
+  FormControlLabel,
 } from "@material-ui/core";
 import TitleTextField from "./TitleTextField";
 import PropTypes from "prop-types";
@@ -22,6 +22,8 @@ import shortid from "shortid";
 import ToolbarBase from "../shared/ToolbarBase";
 import { FilterListRounded } from "@material-ui/icons";
 import FilterToolbar from "./FilterToolbar";
+import ModalButton from "../shared/ModalButton";
+import ReleaseView from "../releaseView/ReleaseView";
 
 class ReleaseEditor extends Component {
   constructor(props) {
@@ -48,14 +50,14 @@ class ReleaseEditor extends Component {
         release: {
           id: "release",
           name: "Release",
-          list: []
+          list: [],
         },
         releaseNotes: {
           id: "releaseNotes",
           name: "Release Notes",
-          list: props.releaseNotesResource ? props.releaseNotesResource : []
-        }
-      }
+          list: props.releaseNotesResource ? props.releaseNotesResource : [],
+        },
+      },
     };
   }
 
@@ -66,7 +68,7 @@ class ReleaseEditor extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.release !== this.props.release && this.props.release) {
       this.setState(
-        prevState => {
+        (prevState) => {
           const newAllItems = prevState.allItems;
           newAllItems.release.list = this.props.release.releaseNotes;
           const selectedVersion =
@@ -78,7 +80,7 @@ class ReleaseEditor extends Component {
             allItems: newAllItems,
             isPublic: this.props.release.isPublic,
             selectedProductVersionLabel: selectedVersion,
-            selectedProductVersionId: this.props.release.productVersion?.id
+            selectedProductVersionId: this.props.release.productVersion?.id,
           };
         },
         () => {
@@ -92,11 +94,11 @@ class ReleaseEditor extends Component {
       this.props.releaseNotesResource
     ) {
       this.setState(
-        prevState => {
+        (prevState) => {
           const newAllItems = prevState.allItems;
           newAllItems.releaseNotes.list = this.props.releaseNotesResource;
           return {
-            allItems: newAllItems
+            allItems: newAllItems,
           };
         },
         () => this.validateReleaseNotes()
@@ -107,7 +109,7 @@ class ReleaseEditor extends Component {
     }
   }
 
-  onDragEnd = result => {
+  onDragEnd = (result) => {
     const { destination, source } = result;
 
     // Return if destination is the same or nothing
@@ -178,7 +180,7 @@ class ReleaseEditor extends Component {
 
   releaseNoteStyle = {
     minWidth: "20rem",
-    flexBasis: "20%"
+    flexBasis: "20%",
   };
 
   handleRemoveReleaseNote(srcIndex) {
@@ -190,34 +192,38 @@ class ReleaseEditor extends Component {
       productVersionId: this.state.selectedProductVersionId,
       title: this.state.title,
       isPublic: this.state.isPublic,
-      releaseNotesId: this.state.allItems.release.list.map(rn => rn.id)
+      releaseNotesId: this.state.allItems.release.list.map((rn) => rn.id),
     };
     this.props.onSave(release);
   };
 
+  getCurrentReleaseState = () => {
+    if (this.props.release) {
+      return {
+        id: this.props.release.id,
+        productVersion: this.props.productVersionsResource.items.find(
+          (item) => item.id == this.state.selectedProductVersionId
+        ),
+        title: this.state.title,
+        isPublic: this.state.isPublic,
+        releaseNotes: this.state.allItems.release.list,
+      };
+    }
+  };
   handleSaveReleaseNote = (releaseNoteId, releaseNote) => {
     // save editor state locally, then save release note
-
-    const release = {
-      id: this.props.release.id,
-      productVersion: this.props.productVersionsResource.items.find(
-        item => item.id == this.state.selectedProductVersionId
-      ),
-      title: this.state.title,
-      isPublic: this.state.isPublic,
-      releaseNotes: this.state.allItems.release.list
-    };
+    const release = this.getCurrentReleaseState();
     this.props.onSaveEditorState(release);
     this.props.onSaveReleaseNote(releaseNoteId, releaseNote);
   };
 
-  handleOnChangeProductVersion = event => {
+  handleOnChangeProductVersion = (event) => {
     const newProductVersionId = event.currentTarget.id;
     const newProductVersionLabel = event.target.value;
     this.setState(
       {
         selectedProductVersionId: newProductVersionId,
-        selectedProductVersionLabel: newProductVersionLabel
+        selectedProductVersionLabel: newProductVersionLabel,
       },
       () => this.validateProductVersion()
     );
@@ -231,7 +237,7 @@ class ReleaseEditor extends Component {
     this.setState({ open: true });
   };
 
-  handleOnChangeTitle = result => {
+  handleOnChangeTitle = (result) => {
     const newTitle = result.target.value;
     this.setState({ title: newTitle }, () => {
       this.validateTitle();
@@ -271,7 +277,7 @@ class ReleaseEditor extends Component {
       this.setState(
         {
           releaseNotesIsError: true,
-          releaseNoteErrorMsg: "Du må i hvert fall velge en Release Note"
+          releaseNoteErrorMsg: "Du må i hvert fall velge en Release Note",
         },
         () => {
           this.validateSubmit();
@@ -292,7 +298,7 @@ class ReleaseEditor extends Component {
       this.setState(
         {
           productVersionIsError: true,
-          productVersionErrorMsg: "Du må velge et produkt"
+          productVersionErrorMsg: "Du må velge et produkt",
         },
         () => {
           this.validateSubmit();
@@ -316,17 +322,17 @@ class ReleaseEditor extends Component {
   };
 
   toggleFilter = () => {
-    this.setState(state => ({ filterOpen: !state.filterOpen }));
+    this.setState((state) => ({ filterOpen: !state.filterOpen }));
   };
 
   /**
    * update query string based on properties in received object
    */
-  handleFilter = object => {
-    this.setState(state => {
+  handleFilter = (object) => {
+    this.setState((state) => {
       var query = state.filterQuery;
 
-      Object.entries(object).forEach(e => {
+      Object.entries(object).forEach((e) => {
         // e[0] = property name
         // e[1] = property value
 
@@ -364,9 +370,12 @@ class ReleaseEditor extends Component {
               onClick={this.props.onCancel}
             >
               Avbryt
-            </Button>
+            </Button>,
           ]}
           right={[
+            <ModalButton label="Forhåndsvis">
+              <ReleaseView release={this.getCurrentReleaseState()} />
+            </ModalButton>,
             <FormControlLabel
               key="isPublicSwitch"
               style={{ marginLeft: "15px" }}
@@ -388,12 +397,12 @@ class ReleaseEditor extends Component {
               onClick={this.handleSave}
             >
               Lagre
-            </SaveButton>
+            </SaveButton>,
           ]}
           middle={[
             <ErrorMsgContainer key="errorMsgContainer">
               <span>{this.state.releaseNoteErrorMsg}</span>
-            </ErrorMsgContainer>
+            </ErrorMsgContainer>,
           ]}
         />
 
@@ -418,7 +427,7 @@ class ReleaseEditor extends Component {
                   >
                     {!this.props.loading &&
                       this.props.productVersionsResource.items.map(
-                        productVersion => (
+                        (productVersion) => (
                           <MenuItem
                             id={productVersion.id}
                             key={shortid.generate()}
@@ -514,7 +523,7 @@ ReleaseEditor.propTypes = {
   onSave: PropTypes.func,
   onFilter: PropTypes.func,
 
-  onSaveReleaseNote: PropTypes.func
+  onSaveReleaseNote: PropTypes.func,
 };
 
 const ErrorMsgContainer = styled.div`
@@ -535,7 +544,7 @@ const StyledFormControl = styled(FormControl)`
 
 const SaveButton = styled(Button)`
   && {
-    background-color: ${props => props.theme.secondaryColor};
+    background-color: ${(props) => props.theme.secondaryColor};
     color: white;
     margin-left: 1rem;
   }
