@@ -13,21 +13,21 @@ import {
   putReleaseById,
   postRelease,
   getSuccesMessage,
-  putByIdSuccess
+  putByIdSuccess,
 } from "../../slices/releaseSlice";
 import { loadingSelector } from "../../slices/loadingSlice";
 import {
   fetchReleaseNotes,
-  putReleaseNote
+  putReleaseNote,
 } from "../../slices/releaseNoteSlice";
 import {
   initReleaseEditorReleaseNotes,
-  findReleaseById
+  findReleaseById,
 } from "../../selectors/releaseEditorSelector";
 import ResponseSnackbar from "../shared/ResponseSnackbar";
 import { errorSelector } from "../../slices/errorSlice";
 
-const ReleaseEditorScreen = props => {
+const ReleaseEditorScreen = (props) => {
   const id = props.match.params.id;
   const dispatch = useDispatch();
 
@@ -43,7 +43,7 @@ const ReleaseEditorScreen = props => {
     if (id) dispatch(fetchReleaseById(id));
   }, [dispatch, id]);
 
-  const handleSave = objectToSave => {
+  const handleSave = (objectToSave) => {
     // if screen has an id, a release is being updated
     // otherwise, a release is being created
     console.log(objectToSave);
@@ -58,15 +58,15 @@ const ReleaseEditorScreen = props => {
     dispatch(putReleaseNote(id, objectToSave));
   };
 
-  const handleSaveEditorState = release => {
+  const handleSaveEditorState = (release) => {
     dispatch(putByIdSuccess({ data: release, id }));
   };
 
-  const handleFilter = query => {
+  const handleFilter = (query) => {
     dispatch(fetchReleaseNotes(query));
   };
 
-  const productVersionsResource = useSelector(state => state.productVersions);
+  const productVersionsResource = useSelector((state) => state.productVersions);
   const releaseNotes = useSelector(initReleaseEditorReleaseNotes(id));
   const loadedRelease = useSelector(findReleaseById(id));
   const loading = useSelector(loadingSelector);

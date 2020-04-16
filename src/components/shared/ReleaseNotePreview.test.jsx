@@ -8,7 +8,7 @@ describe("ReleaseNotePreview", () => {
       title: "TEST ME",
       ingress: "INGRESS",
       description:
-        '<p>Release note med bildre</p><p></p><img src="blob:http://localhost:3000/09558ba1-b879-4e15-8b1c-209387fb3d3e" alt="undefined" style="height: auto;width: auto"/><p></p>'
+        '<p>Release note med bildre</p><p></p><img src="blob:http://localhost:3000/09558ba1-b879-4e15-8b1c-209387fb3d3e" alt="undefined" style="height: auto;width: auto"/><p></p>',
     };
     const rendered = render(<ReleaseNotePreview note={note} />);
     rendered.getByText(note.title);
@@ -19,7 +19,7 @@ describe("ReleaseNotePreview", () => {
       title: "",
       ingress: "",
       description:
-        '<p>Release note med bildre</p><p></p><img src="blob:http://localhost:3000/09558ba1-b879-4e15-8b1c-209387fb3d3e" alt="undefined" style="height: auto;width: auto"/><p></p>'
+        '<p>Release note med bildre</p><p></p><img src="blob:http://localhost:3000/09558ba1-b879-4e15-8b1c-209387fb3d3e" alt="undefined" style="height: auto;width: auto"/><p></p>',
     };
     const rendered = render(<ReleaseNotePreview note={note} />);
     rendered.getByText("Release note med bildre");
@@ -28,7 +28,7 @@ describe("ReleaseNotePreview", () => {
     const note = {
       title: "",
       ingress: "",
-      description: "Beveren er det eneste pattedyret som legger egg"
+      description: "Beveren er det eneste pattedyret som legger egg",
     };
     const rendered = render(<ReleaseNotePreview note={note} />);
     rendered.getByText(note.description);

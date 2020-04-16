@@ -6,22 +6,22 @@ import {
   Table,
   TableHead,
   TableRow,
-  TableBody
+  TableBody,
 } from "@material-ui/core";
 import AdminTableRow from "./AdminTableRow";
 import styled from "styled-components";
 import { actions } from "./AdminExpansionPanelBase";
 import PropTypes from "prop-types";
 
-const AdminTableBase = props => {
+const AdminTableBase = (props) => {
   const columns = [
     { id: "avatar", label: "", maxWidth: 20 },
-    { id: "name", label: "Name", minWidth: 100 }
+    { id: "name", label: "Name", minWidth: 100 },
   ];
   if (props.isPublic) {
     columns.push({
       id: "isPublicSwitch",
-      label: "Publisert"
+      label: "Publisert",
     });
   }
   if (props.edit) {
@@ -30,7 +30,7 @@ const AdminTableBase = props => {
       label: "",
       minWidth: 77,
       align: "right",
-      format: value => value.toFixed(2)
+      format: (value) => value.toFixed(2),
     });
   }
   if (props.delete) {
@@ -39,7 +39,7 @@ const AdminTableBase = props => {
       label: "",
       minWidth: 77,
       align: "right",
-      format: value => value.toFixed(2)
+      format: (value) => value.toFixed(2),
     });
   }
   if (props.import) {
@@ -48,7 +48,7 @@ const AdminTableBase = props => {
       label: "Import",
       minWidth: 77,
       align: "center",
-      format: value => value.toFixed(2)
+      format: (value) => value.toFixed(2),
     });
   }
   return (
@@ -76,7 +76,7 @@ const AdminTableBase = props => {
           <Table>
             <TableHead>
               <TableRow>
-                {columns.map(column => (
+                {columns.map((column) => (
                   <TableCell key={column.id} align={column.align}>
                     {column.label}
                   </TableCell>
@@ -84,7 +84,7 @@ const AdminTableBase = props => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {props.rows.map(row => (
+              {props.rows.map((row) => (
                 <AdminTableRow
                   row={row}
                   columns={columns}
@@ -121,7 +121,7 @@ export const basePropTypes = {
    * @param {Object} {id, rowData, value}
    */
   onAction: PropTypes.func,
-  icon: PropTypes.element
+  icon: PropTypes.element,
 };
 const AddButton = styled(Button)`
   && {

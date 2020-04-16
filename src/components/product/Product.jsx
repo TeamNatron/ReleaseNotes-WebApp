@@ -6,14 +6,14 @@ import {
   Grid,
   Paper,
   CardActionArea,
-  Grow
+  Grow,
 } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router";
 
-const Product = props => {
+const Product = (props) => {
   const history = useHistory();
 
   function handleClick() {
@@ -58,16 +58,16 @@ const Product = props => {
 export default Product;
 
 Product.propTypes = {
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
 };
 
 Product.defaultProps = {
-  loading: false
+  loading: false,
 };
 
 const ProductPaper = styled(Paper)`
   margin: auto;
-  background-color: ${props => props.theme.mainColor} !important;
+  background-color: ${(props) => props.theme.mainColor} !important;
   height: 250px;
   width: 100%;
 `;

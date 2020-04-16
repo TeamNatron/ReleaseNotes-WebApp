@@ -13,7 +13,7 @@ import {
   Container,
   Box,
   Menu,
-  MenuItem
+  MenuItem,
 } from "@material-ui/core";
 import styled from "styled-components";
 import { LocalOffer, CalendarToday, Sort } from "@material-ui/icons";
@@ -25,7 +25,7 @@ import { Link } from "react-router-dom";
 import { formatDate } from "../../utils/parser";
 import { fetchReleases } from "../../slices/releaseSlice";
 
-const ReleasesScreen = props => {
+const ReleasesScreen = (props) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   let query = useQuery();
   const dispatch = useDispatch();
@@ -47,7 +47,7 @@ const ReleasesScreen = props => {
     handleSortMenuClose();
   }
 
-  const handleSortBtnClick = event => {
+  const handleSortBtnClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -55,7 +55,7 @@ const ReleasesScreen = props => {
     setAnchorEl(null);
   };
 
-  const articles = useSelector(state => state.releases.items);
+  const articles = useSelector((state) => state.releases.items);
 
   return (
     <PageContainer>
@@ -88,7 +88,7 @@ const ReleasesScreen = props => {
           </Toolbar>
         </StyledToolbar>
         <StyledList>
-          {articles.map(article => (
+          {articles.map((article) => (
             <li key={article.id}>
               <ListItem alignItems="flex-start">
                 <ListItemText
@@ -171,7 +171,7 @@ const SpacedDivider = styled(Divider)`
 const StyledToolbar = styled(Box)`
   && {
     padding: 4px 0;
-    background-color: ${props => props.theme.sectionColorDark};
+    background-color: ${(props) => props.theme.sectionColorDark};
     border-radius: 6px;
   }
 `;

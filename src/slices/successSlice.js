@@ -22,14 +22,14 @@ export const successReducer = (state = {}, action) => {
     }
     return {
       text: message,
-      occured: date
+      occured: date,
     };
   }
 
   return state;
 };
 
-export const successSelector = state => {
+export const successSelector = (state) => {
   if (!state.success) {
     return "";
   }

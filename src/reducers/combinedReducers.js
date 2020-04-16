@@ -20,5 +20,5 @@ export default combineReducers({
   auth: authReducer,
   users: userReducer,
   azure: azureReducer,
-  success: successReducer
+  success: successReducer,
 });

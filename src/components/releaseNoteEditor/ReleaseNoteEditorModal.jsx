@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { Edit } from "@material-ui/icons";
 import PageContainer from "../shared/PageContainer";
 import ReleaseNoteEditor from "./ReleaseNoteEditor";
-const ReleaseNoteEditorModal = props => {
+const ReleaseNoteEditorModal = (props) => {
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
@@ -17,7 +17,7 @@ const ReleaseNoteEditorModal = props => {
     setOpen(false);
   };
 
-  const handleSave = objectToSave => {
+  const handleSave = (objectToSave) => {
     props.onSave(props.note.id, objectToSave);
     handleClose();
   };
@@ -54,7 +54,7 @@ export default ReleaseNoteEditorModal;
 ReleaseNoteEditorModal.propTypes = {
   note: PropTypes.object,
   onSave: PropTypes.func,
-  onCancel: PropTypes.func
+  onCancel: PropTypes.func,
 };
 
 const Background = styled.div`

@@ -8,14 +8,14 @@ export function saveRelease(release) {
       ProductVersionId: release.productVersionId,
       Title: release.title,
       IsPublic: release.isPublic,
-      ReleaseNotesId: release.releaseNotesIds
+      ReleaseNotesId: release.releaseNotesIds,
     },
     {
       withCredentials: false,
       headers: {
         ["Access-Control-Request-Headers"]: "Content-Type",
-        ["Authorization"]: "Bearer " + getAuthToken()
-      }
+        ["Authorization"]: "Bearer " + getAuthToken(),
+      },
     }
   );
 }

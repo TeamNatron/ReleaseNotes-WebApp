@@ -1,4 +1,4 @@
-export const formatDate = dateString => {
+export const formatDate = (dateString) => {
   const date = new Date(dateString);
 
   const languageCode = "no-NB";
@@ -7,13 +7,13 @@ export const formatDate = dateString => {
     date
   );
   const dayOfMonth = new Intl.DateTimeFormat(languageCode, {
-    day: "numeric"
+    day: "numeric",
   }).format(date);
   const month = new Intl.DateTimeFormat(languageCode, { month: "long" }).format(
     date
   );
   const year = new Intl.DateTimeFormat(languageCode, {
-    year: "numeric"
+    year: "numeric",
   }).format(date);
 
   return stringWordsToUpperCase(
@@ -21,8 +21,8 @@ export const formatDate = dateString => {
   );
 };
 
-const stringWordsToUpperCase = str => {
-  return str.replace(/\w\S*/g, function(txt) {
+const stringWordsToUpperCase = (str) => {
+  return str.replace(/\w\S*/g, function (txt) {
     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
   });
 };

@@ -9,7 +9,7 @@ import {
   FormHelperText,
   FormControl,
   Checkbox,
-  FormControlLabel
+  FormControlLabel,
 } from "@material-ui/core";
 import styled from "styled-components";
 import { DesktopWindows } from "@material-ui/icons";
@@ -25,7 +25,7 @@ class AddProductForm extends Component {
       nameErrorMsg: "",
       isPublicIsError: true,
       isPublicErrorMsg: "",
-      submitDisabled: true
+      submitDisabled: true,
     };
 
     this.onChangeName.bind(this);
@@ -36,13 +36,13 @@ class AddProductForm extends Component {
     document.addEventListener("keydown", this.enterFunction, false);
   }
 
-  enterFunction = event => {
+  enterFunction = (event) => {
     if (event.keyCode === 13) {
       this.handleSubmit();
     }
   };
 
-  validateName = input => {
+  validateName = (input) => {
     // prettier-ignore
     if (input === "") {
       this.setState(
@@ -66,14 +66,14 @@ class AddProductForm extends Component {
     }
   };
 
-  onChangeName = input => {
+  onChangeName = (input) => {
     const newValue = input.target.value;
     this.setState({ name: newValue }, () => {
       this.validateName(newValue);
     });
   };
 
-  onChangeIsPublic = input => {
+  onChangeIsPublic = (input) => {
     const newValue = input.target.checked;
     this.setState({ isPublic: newValue }, () => {
       this.validateSubmit();
@@ -84,7 +84,7 @@ class AddProductForm extends Component {
     let promise = registerNewProduct(this.state.name, this.state.isPublic);
     promise
       .then(
-        response => (
+        (response) => (
           (document.getElementById("successMessage").hidden = false),
           (document.getElementById("successMessage").innerHTML =
             "Registering av " + response.data.name + " er velykket!"),
@@ -92,7 +92,7 @@ class AddProductForm extends Component {
             "color: green;")
         )
       )
-      .catch(error => {
+      .catch((error) => {
         document.getElementById("successMessage").hidden = false;
         var message;
         if (error.response.data === "") {
@@ -183,6 +183,6 @@ const TurboPaper = styled(Paper)`
 
 const TurboButton = styled(Button)`
   && {
-    background-color: ${props => props.theme.secondaryColor};
+    background-color: ${(props) => props.theme.secondaryColor};
   }
 `;

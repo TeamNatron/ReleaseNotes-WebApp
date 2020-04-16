@@ -30,22 +30,22 @@ export const errorReducer = (state = {}, action) => {
     }
     return {
       text: payload.response ? payload.response.data : payload.error,
-      occured: date
+      occured: date,
     };
   }
   return state;
 };
 
-export const errorSelector = state => {
+export const errorSelector = (state) => {
   if (!state.error) {
     return "";
   }
   return state.error;
 };
 
-const arrayToString = array => {
+const arrayToString = (array) => {
   var result = "";
-  array.forEach(element => {
+  array.forEach((element) => {
     result += element.toString();
   });
   return result;

@@ -13,14 +13,14 @@ const AllTheProviders = (
   { children },
   {
     route = "/test-route",
-    history = createMemoryHistory({ initialEntries: [route] })
+    history = createMemoryHistory({ initialEntries: [route] }),
   } = {}
 ) => {
   if (!route) throw new Error("Uninstansiated route");
   const mockRoute = route;
   jest.mock("react-router-dom", () => ({
     ...jest.requireActual("react-router-dom"), // use actual for all non-hook parts
-    useLocation: () => ({ pathname: mockRoute })
+    useLocation: () => ({ pathname: mockRoute }),
   }));
   return (
     <Provider store={store}>

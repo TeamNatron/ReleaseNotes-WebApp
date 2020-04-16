@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Toolbar } from "@material-ui/core";
 
-const ToolbarBase = props => {
+const ToolbarBase = (props) => {
   return (
     <StyledToolbar disableGutters variant="dense">
       <div>{props.left}</div>

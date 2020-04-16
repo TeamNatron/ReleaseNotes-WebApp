@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Divider } from "@material-ui/core";
 
-const SpacedDivider = props => {
+const SpacedDivider = (props) => {
   return <StyledSpacedDivider />;
 };
 
