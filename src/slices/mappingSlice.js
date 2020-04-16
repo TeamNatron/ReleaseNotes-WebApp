@@ -83,6 +83,11 @@ export const fetchAZDMappable = (authToken, project, org, itemType) => async (
 
   AzureAxios.get(url, authHeader(authToken))
     .then((res) => {
+<<<<<<< HEAD
+=======
+      console.log(authHeader(authToken));
+      console.log(res);
+>>>>>>> aef6e9bc694a3a3eb4d845ae8a85474442875a44
       fetchFieldsOfWorkItem(res.data, authToken, dispatch);
     })
     .catch((error) => {
