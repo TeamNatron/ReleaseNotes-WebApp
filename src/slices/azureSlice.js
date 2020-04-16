@@ -197,21 +197,18 @@ export const importRelease = (
           });
 
           // Create new release
-          return {
+          const release = {
             title: title,
             isPublic: false,
             productVersionId: productVersionId,
             releaseNotes: workItems,
           };
-        })
-        .then((release) => {
+
           // all requests to azure api are successful
           dispatch(importReleaseSuccess());
-          return release;
-        })
-        .then((release) => {
+
           // post the new release
-          return dispatch(postRelease(release));
+          dispatch(postRelease(release));
         })
         .catch((err) => {
           throw err;
