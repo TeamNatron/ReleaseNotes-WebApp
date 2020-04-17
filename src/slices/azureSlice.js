@@ -1,6 +1,8 @@
 import { createReducer, createAction } from "@reduxjs/toolkit";
 import GlobalAxios from "axios";
 import { postRelease } from "./releaseSlice";
+const util = require('util')
+
 
 // azure axios instance
 export const AzureAxios = GlobalAxios.create({
@@ -194,15 +196,19 @@ export const importRelease = (
         // Format and filter each work item
         rawWorkItems.forEach((wi) => {
           workItems.push(createWorkItem(wi));
+          console.log("1: " + util.inspect(workItems, false, null, false));
         });
+
 
         // Create new release and post
         const release = {
           title: title,
           isPublic: false,
-          productVersionId: productVersionId,
-          releaseNotes: workItems,
+          ProductVersionId: productVersionId,
+          releaseNotes: workItems
         };
+        console.log("2: " + util.inspect(release, false, null, false))
+
 
         // Post release
         dispatch(postRelease(release));
@@ -223,5 +229,8 @@ export const createWorkItem = (item) => {
     WorkItemDescriptionHtml: item.fields["System.Description"],
     AuthorName: item.fields["System.CreatedBy"]["displayName"],
     AuthorEmail: item.fields["System.CreatedBy"]["uniqueName"],
+    title: item.fields["System.Title"],
+    ingress: "",
+    Description: item.fields["System.Description"]
   };
 };
