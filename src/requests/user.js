@@ -6,14 +6,14 @@ export function registerNewUser(paramEmail, paramPassword) {
     "users",
     {
       email: paramEmail,
-      password: paramPassword
+      password: paramPassword,
     },
     {
       withCredentials: false,
       headers: {
         "Access-Control-Request-Headers": "Content-Type",
-        Authorization: "Bearer " + getAuthToken()
-      }
+        Authorization: "Bearer " + getAuthToken(),
+      },
     }
   );
 }

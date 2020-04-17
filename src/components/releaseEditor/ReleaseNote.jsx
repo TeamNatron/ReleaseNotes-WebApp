@@ -6,10 +6,10 @@ import { Delete } from "@material-ui/icons";
 import ReleaseNotePreview from "../shared/ReleaseNotePreview";
 import ReleaseNoteEditorModal from "../releaseNoteEditor/ReleaseNoteEditorModal";
 
-const ReleaseNote = props => {
+const ReleaseNote = (props) => {
   return (
     <Draggable draggableId={"draggable-" + props.id} index={props.index}>
-      {provided => (
+      {(provided) => (
         <StyledContainer
           {...provided.draggableProps}
           {...provided.dragHandleProps}
@@ -63,10 +63,10 @@ const FlexEnd = styled.div`
 const StyledContainer = styled(Paper)`
   && {
     h3 {
-      /* color: ${props => props.theme.secondaryColor}; */
+      /* color: ${(props) => props.theme.secondaryColor}; */
       color: #6f6969
     }
-    width: ${props => (props.isRelease ? "100%" : "20rem")};
+    width: ${(props) => (props.isRelease ? "100%" : "20rem")};
     padding: 1rem;
     margin-top: 5px;
     border-style: solid;
@@ -81,7 +81,7 @@ const ReleaseNoteDivider = styled(Divider)`
   && {
     height: 7px;
     border-radius: 3px;
-    background-color: ${props => (props.isRelease ? "#05865a" : "#ffa900")};
+    background-color: ${(props) => (props.isRelease ? "#05865a" : "#ffa900")};
   }
   /* prettier-ignore-start */
 `;

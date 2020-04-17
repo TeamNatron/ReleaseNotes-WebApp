@@ -6,7 +6,7 @@ import {
   Fade,
   LinearProgress,
   Box,
-  Grid
+  Grid,
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import Settings from "@material-ui/icons/Settings";
@@ -14,7 +14,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   loggedInSelector,
   checkLoggedIn,
-  logout
+  logout,
 } from "../../slices/authSlice";
 import { loadingSelector } from "../../slices/loadingSlice";
 import AccountMenu from "./AccountMenu";
@@ -79,7 +79,7 @@ const Navbar = () => {
           transitionDelay: loading ? "800ms" : "0ms",
           position: "absolute",
           bottom: 0,
-          width: "100%"
+          width: "100%",
         }}
       >
         <LinearProgress />
@@ -102,7 +102,7 @@ const Header = styled(AppBar)`
   && {
     position: sticky;
     max-height: 62px;
-    background: ${props => props.theme.mainColor};
+    background: ${(props) => props.theme.mainColor};
     color: white;
   }
 `;
@@ -134,6 +134,6 @@ const StyledIcon = styled(Link)`
   color: white;
   transition: color 0.1s ease;
   :hover {
-    color: ${props => props.theme.secondaryColor};
+    color: ${(props) => props.theme.secondaryColor};
   }
 `;

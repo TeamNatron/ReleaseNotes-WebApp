@@ -11,7 +11,7 @@ class Login extends Component {
     super();
     this.state = {
       email: "",
-      password: ""
+      password: "",
     };
 
     this.onChangeEmail.bind(this);
@@ -22,18 +22,18 @@ class Login extends Component {
     document.addEventListener("keydown", this.enterFunction, false);
   }
 
-  enterFunction = event => {
+  enterFunction = (event) => {
     if (event.keyCode === 13) {
       this.props.handleSubmit(this.state.email, this.state.password);
     }
   };
 
-  onChangeEmail = input => {
+  onChangeEmail = (input) => {
     const newValue = input.target.value;
     this.setState({ email: newValue });
   };
 
-  onChangePwd = input => {
+  onChangePwd = (input) => {
     const newValue = input.target.value;
     this.setState({ password: newValue });
   };
@@ -118,13 +118,13 @@ const StatusPaper = styled(Paper)`
   && {
     color: green;
     span {
-      color: ${props => props.theme.secondaryColor};
+      color: ${(props) => props.theme.secondaryColor};
     }
   }
 `;
 
 const Title = styled.span`
-  color: ${props => props.theme.secondaryColor};
+  color: ${(props) => props.theme.secondaryColor};
   font-size: 2rem;
   font-weight: bolder;
   text-align: center;
@@ -150,7 +150,7 @@ const StyledForm = styled.form`
     font-size: 95%;
     font-weight: bolder;
     color: white;
-    background-color: ${props => props.theme.secondaryColor};
+    background-color: ${(props) => props.theme.secondaryColor};
   }
 `;
 

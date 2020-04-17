@@ -3,7 +3,7 @@ import HtmlWrapper from "./HtmlWrapper";
 import { Box } from "@material-ui/core";
 import ReleaseH2 from "../shared/ReleaseH2";
 
-const FullReleaseNote = props => {
+const FullReleaseNote = (props) => {
   return (
     <Box mb={1}>
       <HtmlWrapper

@@ -29,7 +29,7 @@ const AzureDevOpsView = (props) => {
   const productVersions = useSelector(getAllProductVersionsSelector);
 
   useEffect(() => {
-    dispatch(fetchProducts);
+    dispatch(fetchProducts());
   }, [dispatch]);
 
   const handleAction = (action, data) => {

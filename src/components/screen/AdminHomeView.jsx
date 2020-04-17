@@ -7,12 +7,12 @@ import { DesktopWindows, PermIdentity, Description } from "@material-ui/icons";
 import {
   putReleaseById,
   deleteRelease,
-  fetchReleases
+  fetchReleases,
 } from "../../slices/releaseSlice";
 import {
   putReleaseNote,
   deleteReleaseNote,
-  fetchReleaseNotes
+  fetchReleaseNotes,
 } from "../../slices/releaseNoteSlice";
 import { fetchProducts } from "../../slices/productsSlice";
 import { createSelector } from "@reduxjs/toolkit";
@@ -24,7 +24,7 @@ import AddUserForm from "../adminpanel/AddUserForm";
 import ChangePasswordForm from "../adminpanel/ChangePasswordForm";
 import { fetchUsers } from "../../slices/userSlice";
 
-const AdminHomeView = props => {
+const AdminHomeView = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -88,24 +88,24 @@ const AdminHomeView = props => {
 export default AdminHomeView;
 
 const releaseTitlesSelector = createSelector(
-  state => state.releases.items,
-  items => items.map(r => createData(r, r.title, r.id, r.isPublic))
+  (state) => state.releases.items,
+  (items) => items.map((r) => createData(r, r.title, r.id, r.isPublic))
 );
 
 const productTitlesSelector = createSelector(
-  state => state.products.items,
-  items => items.map(p => createData(p, p.name, p.id))
+  (state) => state.products.items,
+  (items) => items.map((p) => createData(p, p.name, p.id))
 );
 
 const userRowsSelector = createSelector(
-  state => state.users.items,
-  items => items.map(u => createData(u, u.email, u.id))
+  (state) => state.users.items,
+  (items) => items.map((u) => createData(u, u.email, u.id))
 );
 
 const releaseNoteRowsSelector = createSelector(
-  state => state.releaseNotes.items,
-  items =>
-    items.map(r => {
+  (state) => state.releaseNotes.items,
+  (items) =>
+    items.map((r) => {
       return createData(
         r,
         r.title === "" ? "Release note #" + r.id : r.title,

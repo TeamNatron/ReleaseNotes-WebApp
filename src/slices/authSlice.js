@@ -2,7 +2,7 @@ import { createAction, createReducer, createSelector } from "@reduxjs/toolkit";
 import {
   setAuthToken,
   getAuthToken,
-  removeAuthToken
+  removeAuthToken,
 } from "../handlers/cookieHandler";
 import Axios from "axios";
 
@@ -39,9 +39,9 @@ const initialState = {
       id: -1,
       userId: "",
       pat: "",
-      organization: ""
-    }
-  }
+      organization: "",
+    },
+  },
 };
 
 export const authReducer = createReducer(initialState, {
@@ -53,10 +53,10 @@ export const authReducer = createReducer(initialState, {
   [checkLoggedInSuccess]: (state, action) => {
     state.isLogged = true;
   },
-  [checkLoggedInError]: state => {
+  [checkLoggedInError]: (state) => {
     state.isLogged = false;
   },
-  [logoutSuccess]: state => {
+  [logoutSuccess]: (state) => {
     state.isLogged = false;
   },
   [putSuccess]: (state, action) => {
@@ -65,37 +65,37 @@ export const authReducer = createReducer(initialState, {
   },
   [getSuccess]: (state, action) => {
     state.currentUser.azureInformation = action.payload.data;
-  }
+  },
 });
 
 // THUNKS.
-export const login = (paramEmail, paramPassword) => async dispatch => {
+export const login = (paramEmail, paramPassword) => async (dispatch) => {
   dispatch(postPending());
   return await Axios.post(
     "login",
     {
       email: paramEmail,
-      password: paramPassword
+      password: paramPassword,
     },
     {
       withCredentials: false,
       headers: {
-        "Access-Control-Request-Headers": "Content-Type"
-      }
+        "Access-Control-Request-Headers": "Content-Type",
+      },
     }
   )
-    .then(res => {
+    .then((res) => {
       dispatch(postSuccess({ data: res.data, statusText: res.statusText }));
       return true;
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       dispatch(postError(err));
       return false;
     });
 };
 
-export const logout = () => async dispatch => {
+export const logout = () => async (dispatch) => {
   dispatch(logoutPending);
 
   try {
@@ -106,7 +106,7 @@ export const logout = () => async dispatch => {
   }
 };
 
-export const checkLoggedIn = () => async dispatch => {
+export const checkLoggedIn = () => async (dispatch) => {
   dispatch(checkLoggedInPending());
   if (getAuthToken()) {
     dispatch(checkLoggedInSuccess());
@@ -116,46 +116,46 @@ export const checkLoggedIn = () => async dispatch => {
 };
 
 // thunk for fetching azure info
-export const fetchAzureInfo = () => async dispatch => {
+export const fetchAzureInfo = () => async (dispatch) => {
   dispatch(getPending());
   Axios.get("/users/azure")
-    .then(res => {
+    .then((res) => {
       dispatch(getSuccess({ data: res.data }));
     })
-    .catch(err => {
+    .catch((err) => {
       dispatch(getError(err));
     });
-}
+};
 
 // Thunk for update azure info
-export const updateAzureInfo = (name, PAT, org) => async dispatch => {
+export const updateAzureInfo = (name, PAT, org) => async (dispatch) => {
   dispatch(putPending());
   Axios.put("/users", {
     AzureInformation: {
       userId: name,
       pat: PAT,
-      Organization: org
-    }
+      Organization: org,
+    },
   })
-    .then(res => {
+    .then((res) => {
       dispatch(putSuccess({ data: res.data, statusText: res.statusText }));
     })
-    .catch(err => {
+    .catch((err) => {
       dispatch(putError(err));
     });
 };
 
 // SELECTORS
-export const loggedInSelector = state => {
+export const loggedInSelector = (state) => {
   return state.auth.isLogged;
 };
 
 export const azureApiSelector = createSelector(
-  state => state.auth.currentUser.azureInformation,
-  azureInfo => {
+  (state) => state.auth.currentUser.azureInformation,
+  (azureInfo) => {
     return {
       organization: azureInfo.organization,
-      authToken: createAuthToken(azureInfo)
+      authToken: createAuthToken(azureInfo),
     };
   }
 );
@@ -165,6 +165,6 @@ const createAuthToken = (azureInfo) => {
   return authToken;
 };
 
-export const organizationSelector = state => {
+export const organizationSelector = (state) => {
   return state.auth.organization;
 };
