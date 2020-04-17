@@ -229,7 +229,7 @@ export const importRelease = (
 export const createWorkItem = (item) => {
   var desc = item.fields["System.Description"];
   if (isEmpty(desc)) {
-    desc = "Vennligst lag en description";
+    desc = "";
   }
   return {
     WorkItemId: item.id,
