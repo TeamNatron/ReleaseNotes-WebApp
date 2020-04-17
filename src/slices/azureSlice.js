@@ -231,7 +231,6 @@ export const createWorkItem = (item) => {
   if (isEmpty(desc)) {
     desc = "Vennligst lag en description";
   }
-
   return {
     WorkItemId: item.id,
     WorkItemTitle: item.fields["System.Title"],
