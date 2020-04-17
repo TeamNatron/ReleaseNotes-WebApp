@@ -72,7 +72,6 @@ const AzureMappingView = (props) => {
    * @param {Array of objects} arr
    */
   const deepCopyArray = (arr) => {
-    console.log(arr);
     if (arr.length === 0) return [];
     return arr.map((obj) => Object.create(obj));
   };
