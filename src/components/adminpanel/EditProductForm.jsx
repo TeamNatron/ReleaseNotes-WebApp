@@ -20,15 +20,15 @@ import ViewColumn from "@material-ui/icons/ViewColumn";
 import { postProductVersion } from "../../slices/productsSlice";
 import { useDispatch } from "react-redux";
 
-const EditProductForm = props => {
+const EditProductForm = (props) => {
   const dispatch = useDispatch();
   const versionRows = useMemo(() => {
-    return props.value.versions.map(version => {
+    return props.value.versions.map((version) => {
       return {
         versionobj: version,
         version: version.version,
         fullName: version.fullName,
-        isPublic: version.isPublic
+        isPublic: version.isPublic,
       };
     });
   }, [props]);
@@ -37,9 +37,14 @@ const EditProductForm = props => {
     columns: [
       { title: "Versjon", field: "version" },
       { title: "Publisert", field: "isPublic", type: "boolean" },
-      { title: "Full navn", field: "fullName", editable: false, readonly: true }
+      {
+        title: "Full navn",
+        field: "fullName",
+        editable: false,
+        readonly: true,
+      },
     ],
-    data: versionRows
+    data: versionRows,
   });
 
   return (
@@ -56,20 +61,20 @@ const EditProductForm = props => {
             options={{
               search: false,
               paging: false,
-              filtering: false
+              filtering: false,
             }}
             editable={{
-              onRowAdd: newData =>
-                new Promise(resolve => {
+              onRowAdd: (newData) =>
+                new Promise((resolve) => {
                   setTimeout(() => {
                     resolve();
                     dispatch(
                       postProductVersion(props.id, {
                         version: newData.version,
-                        isPublic: newData.isPublic
+                        isPublic: newData.isPublic,
                       })
                     );
-                    setState(prevState => {
+                    setState((prevState) => {
                       const data = [...prevState.data];
                       data.push(newData);
                       return { ...prevState, data };
@@ -77,18 +82,18 @@ const EditProductForm = props => {
                   }, 600);
                 }),
               onRowUpdate: (newData, oldData) =>
-                new Promise(resolve => {
+                new Promise((resolve) => {
                   setTimeout(() => {
                     resolve();
                     if (oldData) {
-                      setState(prevState => {
+                      setState((prevState) => {
                         const data = [...prevState.data];
                         data[data.indexOf(oldData)] = newData;
                         return { ...prevState, data };
                       });
                     }
                   }, 600);
-                })
+                }),
             }}
           />
         </Box>
@@ -121,12 +126,12 @@ const tableIcons = {
   Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
   SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
   ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
 export default EditProductForm;
 
 EditProductForm.propTypes = {
   id: PropTypes.number,
-  value: PropTypes.object
+  value: PropTypes.object,
 };

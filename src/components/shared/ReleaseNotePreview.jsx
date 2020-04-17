@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 
 const ReleaseNotePreview = React.memo(function MemoizedNote(props) {
   const type = classifyReleaseNote(props.note);
-  const renderedNote = type => {
+  const renderedNote = (type) => {
     switch (type) {
       case "DENSE":
         return <HtmlWrapper html={props.note.description} />;
@@ -27,7 +27,7 @@ const ReleaseNotePreview = React.memo(function MemoizedNote(props) {
 export default ReleaseNotePreview;
 
 ReleaseNotePreview.propTypes = {
-  note: PropTypes.object.isRequired
+  note: PropTypes.object.isRequired,
 };
 
 const Header = styled.div`

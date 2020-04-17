@@ -3,7 +3,7 @@ import HtmlWrapper from "./HtmlWrapper";
 import { TableCell } from "@material-ui/core";
 import styled from "styled-components";
 
-const DenseReleaseNoteRow = props => {
+const DenseReleaseNoteRow = (props) => {
   return (
     <HtmlWrapper
       align="right"

@@ -8,12 +8,12 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 moment.locale("nb");
 
-const DateRangePicker = props => {
+const DateRangePicker = (props) => {
   const { onChange, startDate, endDate, setStartDate, setEndDate } = props;
   useMemo(() => {
     onChange({
       startDate: startDate?.toJSON(),
-      endDate: endDate?.toJSON()
+      endDate: endDate?.toJSON(),
     });
   }, [startDate, endDate, onChange]);
 
@@ -42,7 +42,7 @@ const DateRangePicker = props => {
 export default DateRangePicker;
 
 DateRangePicker.propTypes = {
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
 };
 
 const FlexBox = styled.div`

@@ -7,7 +7,7 @@ import {
   InputAdornment,
   Button,
   FormHelperText,
-  FormControl
+  FormControl,
 } from "@material-ui/core";
 import styled from "styled-components";
 import { Email, VpnKey } from "@material-ui/icons";
@@ -24,7 +24,7 @@ class AddUserForm extends Component {
       emailErrorMsg: "",
       pwdIsError: true,
       pwdErrorMsg: "",
-      submitDisabled: true
+      submitDisabled: true,
     };
 
     this.onChangeEmail.bind(this);
@@ -36,13 +36,13 @@ class AddUserForm extends Component {
     document.addEventListener("keydown", this.enterFunction, false);
   }
 
-  enterFunction = event => {
+  enterFunction = (event) => {
     if (event.keyCode === 13) {
       this.handleSubmit();
     }
   };
 
-  validateEmail = input => {
+  validateEmail = (input) => {
     // prettier-ignore
     if (input === "") {
       this.setState(
@@ -63,12 +63,12 @@ class AddUserForm extends Component {
     }
   };
 
-  validatePwd = input => {
+  validatePwd = (input) => {
     if (input === "") {
       this.setState(
         {
           pwdIsError: true,
-          pwdErrorMsg: "Felt kan ikke være tomt"
+          pwdErrorMsg: "Felt kan ikke være tomt",
         },
         () => {
           this.validateSubmit();
@@ -78,7 +78,7 @@ class AddUserForm extends Component {
       this.setState(
         {
           pwdIsError: true,
-          pwdErrorMsg: "Passordet er ikke det samme"
+          pwdErrorMsg: "Passordet er ikke det samme",
         },
         () => {
           this.validateSubmit();
@@ -99,21 +99,21 @@ class AddUserForm extends Component {
     }
   };
 
-  onChangeEmail = input => {
+  onChangeEmail = (input) => {
     const newValue = input.target.value;
     this.setState({ email: newValue }, () => {
       this.validateEmail(newValue);
     });
   };
 
-  onChangePwd = input => {
+  onChangePwd = (input) => {
     const newValue = input.target.value;
     this.setState({ password: newValue }, () => {
       this.validatePwd(newValue);
     });
   };
 
-  onChangePwdConfirm = input => {
+  onChangePwdConfirm = (input) => {
     const newValue = input.target.value;
     this.setState({ passwordConfirm: newValue }, () => {
       this.validatePwd(input);
@@ -124,7 +124,7 @@ class AddUserForm extends Component {
     let promise = registerNewUser(this.state.email, this.state.password);
     promise
       .then(
-        response => (
+        (response) => (
           (document.getElementById("successMessage").hidden = false),
           (document.getElementById("successMessage").innerHTML =
             "Registering av " + response.data.email + " er velykket!"),
@@ -133,7 +133,7 @@ class AddUserForm extends Component {
         )
       )
       .catch(
-        error => (
+        (error) => (
           (document.getElementById("successMessage").hidden = false),
           (document.getElementById("successMessage").innerHTML =
             error.response.data),
@@ -245,6 +245,6 @@ const TurboPaper = styled(Paper)`
 
 const TurboButton = styled(Button)`
   && {
-    background-color: ${props => props.theme.secondaryColor};
+    background-color: ${(props) => props.theme.secondaryColor};
   }
 `;

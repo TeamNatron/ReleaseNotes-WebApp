@@ -6,7 +6,7 @@ import DateRangePicker from "../shared/DateRangePicker";
 import ToolbarBase from "../shared/ToolbarBase";
 import PropTypes from "prop-types";
 
-const FilterToolbar = props => {
+const FilterToolbar = (props) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(new Date());
 
@@ -32,7 +32,7 @@ const FilterToolbar = props => {
 export default FilterToolbar;
 
 FilterToolbar.propTypes = {
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
 };
 
 const StyledBox = styled(Box)`

@@ -5,14 +5,14 @@ export const FETCH_VERSIONS_PENDING = "FETCH_VERSIONS_PENDING";
 export const FETCH_VERSIONS_ERROR = "FETCH_VERSIONS_ERROR";
 
 export function fetchProductVersions() {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(actions.fetchProductVersionsPending());
     return Axios.get("productversions")
-      .then(response => {
+      .then((response) => {
         dispatch(actions.fetchProductVersionsSuccess(response.data));
       })
-      .catch(error => {
-        dispatch(actions.fetchProductVersionsError(error))
+      .catch((error) => {
+        dispatch(actions.fetchProductVersionsError(error));
       });
   };
 }
@@ -20,21 +20,21 @@ export function fetchProductVersions() {
 export const actions = {
   fetchProductVersionsPending() {
     return {
-      type: FETCH_VERSIONS_PENDING
+      type: FETCH_VERSIONS_PENDING,
     };
   },
 
   fetchProductVersionsSuccess(response) {
     return {
       type: FETCH_VERSIONS_SUCCESS,
-      payload: response
+      payload: response,
     };
   },
 
   fetchProductVersionsError(error) {
     return {
       type: FETCH_VERSIONS_ERROR,
-      payload: error
+      payload: error,
     };
-  }
+  },
 };

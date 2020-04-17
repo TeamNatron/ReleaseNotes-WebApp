@@ -13,14 +13,14 @@ export const loadingReducer = (state = {}, action) => {
   const [, requestName, requestState] = matches;
   return {
     ...state,
-    [requestName]: requestState === "Pending"
+    [requestName]: requestState === "Pending",
   };
 };
 
 /**
  * Selector that returns a bool telling if anything is currently loading
  */
-export const loadingSelector = state => {
+export const loadingSelector = (state) => {
   if (!state?.loading) return false;
   return Object.values(state.loading).includes(true);
 };

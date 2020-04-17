@@ -8,7 +8,7 @@ import ScreenTitle from "../shared/ScreenTitle";
 import Ingress from "../shared/Ingress";
 import SpacedDivider from "../shared/SpacedDivider";
 
-const ReleaseScreen = props => {
+const ReleaseScreen = (props) => {
   const dispatch = useDispatch();
   const id = props.match.params.id;
 

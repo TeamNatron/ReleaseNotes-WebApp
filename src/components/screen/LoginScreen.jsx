@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../../slices/authSlice";
 import { useHistory } from "react-router";
 
-const LoginScreen = props => {
+const LoginScreen = (props) => {
   const dispatch = useDispatch();
   const history = useHistory();
 

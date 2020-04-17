@@ -5,9 +5,8 @@ import { Editor } from "react-draft-wysiwyg";
 
 import styled from "styled-components";
 
-const ReleaseNoteInput = props => {
-
-  const onEditorChange = editorState => {
+const ReleaseNoteInput = (props) => {
+  const onEditorChange = (editorState) => {
     props.onChange(editorState);
   };
 
@@ -34,7 +33,7 @@ const ReleaseNoteInput = props => {
 export default ReleaseNoteInput;
 
 ReleaseNoteInput.defaultProps = {
-  editorState: EditorState.createEmpty()
+  editorState: EditorState.createEmpty(),
 };
 
 const EditorWrapper = styled.div`

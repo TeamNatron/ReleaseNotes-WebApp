@@ -13,46 +13,46 @@ export const putError = createAction(name + "putError");
 
 // REDUCER
 const initialState = {
-  items: []
+  items: [],
 };
 export const userReducer = createReducer(initialState, {
   [getSuccess]: (state, action) => {
     state.items = action.payload;
-  }
+  },
 });
 
 // Thunk for fetching
-export const fetchUsers = () => dispatch => {
+export const fetchUsers = () => (dispatch) => {
   dispatch(getPending());
   Axios.get("/users")
-    .then(res => {
+    .then((res) => {
       dispatch(getSuccess(res.data));
     })
-    .catch(error => {
+    .catch((error) => {
       dispatch(getError(error));
     });
 };
 
-export const changePassword = (paramPassword, id) => async dispatch => {
+export const changePassword = (paramPassword, id) => async (dispatch) => {
   dispatch(putPending());
 
   Axios.put(
     "users/" + id,
     {
-      password: paramPassword
+      password: paramPassword,
     },
     {
       withCredentials: false,
       headers: {
         "Access-Control-Request-Headers": "Content-Type",
-        Authorization: "Bearer " + getAuthToken()
-      }
+        Authorization: "Bearer " + getAuthToken(),
+      },
     }
   )
-    .then(res => {
+    .then((res) => {
       dispatch(putSuccess({ successMsg: res.data }));
     })
-    .catch(err => {
+    .catch((err) => {
       dispatch(putError(err));
     });
 };
