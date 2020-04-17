@@ -60,7 +60,12 @@ const AzureMappingView = (props) => {
     rnsTableRef.current && rnsTableRef.current.onQueryChange();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rnsFields, azdFields]);
+  }, [rnsFields]);
+  useEffect(() => {
+    azdTableRef.current && azdTableRef.current.onQueryChange();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [azdFields]);
 
   /**
    * Returns a deepcopy of an array
