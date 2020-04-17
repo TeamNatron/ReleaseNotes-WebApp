@@ -110,7 +110,9 @@ export function postRelease(releaseToCreate) {
     dispatch(postPending());
     return Axios.post("releases", releaseToCreate)
       .then((response) => {
-        dispatch(postSuccess(response.statusText));
+        dispatch(
+          postSuccess({ message: "Opprettelse av release var vellykket!" })
+        );
       })
       .catch((error) => {
         dispatch(postError(error));
