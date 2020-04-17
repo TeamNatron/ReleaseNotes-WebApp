@@ -19,7 +19,7 @@ const ModalButton = (props) => {
           <PageContainer>
             <Background>
               <AppBar position="relative">
-                <Toolbar variant="dense">Rediger release note</Toolbar>
+                <Toolbar variant="dense">{props.modalLabel}</Toolbar>
               </AppBar>
               <Box px={3} py={3}>
                 {props.children}
@@ -28,7 +28,9 @@ const ModalButton = (props) => {
           </PageContainer>
         </ModalContainer>
       </Modal>
-      <Button onClick={handleOpen}>{props.label}</Button>
+      <Button {...props.buttonProps} onClick={handleOpen}>
+        {props.label}
+      </Button>
     </>
   );
 };
