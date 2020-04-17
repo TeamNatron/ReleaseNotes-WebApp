@@ -82,21 +82,21 @@ const mappedWorkitem = {
   AuthorEmail: "markuran@ntnu.no",
   ingress: "",
   title: "Som en administrator kan jeg legge til Autentiserings-informasjon til Azure Devops.",
-  Description": "<div>Wireframe:</div> <div><a href=\"https://confluence.uials.no/pages/viewpage.action?pageId=57378685\">https://confluence.uials.no/pages/viewpage.action?pageId=57378685</a></div> <div><br></div><div>ERD:</div><div><a href=\"https://confluence.uials.no/pages/viewpage.action?pageId=57377417\">https://confluence.uials.no/pages/viewpage.action?pageId=57377417</a><br></div>",
+  Description: "<div>Wireframe:</div> <div><a href=\"https://confluence.uials.no/pages/viewpage.action?pageId=57378685\">https://confluence.uials.no/pages/viewpage.action?pageId=57378685</a></div> <div><br></div><div>ERD:</div><div><a href=\"https://confluence.uials.no/pages/viewpage.action?pageId=57377417\">https://confluence.uials.no/pages/viewpage.action?pageId=57377417</a><br></div>",
 };
 
 const dummyWorkItemRaw = {
-      id: 224,
+  id: 224,
   rev: 10,
   fields: {
-      "System.CreatedDate": "2020-03-25T16:22:24.503Z",
+    "System.CreatedDate": "2020-03-25T16:22:24.503Z",
     "System.CreatedBy": {
       displayName: "Markus Randa",
       url:
         "https://spsprodweu1.vssps.visualstudio.com/A025f0995-ba99-4e30-998a-739dc40106c6/_apis/Identities/daab4d46-973a-64b4-9795-742508e96bfc",
       _links: {
-      avatar: {
-      href:
+        avatar: {
+          href:
             "https://dev.azure.com/ReleaseNoteSystem/_apis/GraphProfile/MemberAvatars/aad.ZGFhYjRkNDYtOTczYS03NGI0LTk3OTUtNzQyNTA4ZTk2YmZj",
         },
       },
@@ -115,10 +115,10 @@ const dummyWorkItemRaw = {
 };
 
 const dummyReleases = {
-        count: 17,
+  count: 17,
   value: [
     {
-        id: 18,
+      id: 18,
       name: "Release-18",
       status: "abandoned",
       createdOn: "2017-06-16T01:36:20.397Z",
@@ -149,12 +149,12 @@ const dummyReleases = {
         url:
           "https://vsrm.dev.azure.com/fabrikam/d07908bc-118f-47d2-8a13-ff75601a6b1a/_apis/Release/definitions/1",
         _links: {
-        self: {
-        href:
+          self: {
+            href:
               "https://vsrm.dev.azure.com/fabrikam/d07908bc-118f-47d2-8a13-ff75601a6b1a/_apis/Release/definitions/1",
           },
           web: {
-        href:
+            href:
               "https://dev.azure.com/fabrikam/d07908bc-118f-47d2-8a13-ff75601a6b1a/_release?definitionId=1",
           },
         },
@@ -170,11 +170,11 @@ const dummyReleases = {
         "https://vsrm.dev.azure.com/fabrikam/d07908bc-118f-47d2-8a13-ff75601a6b1a/_apis/Release/releases/18",
       _links: {
         self: {
-        href:
+          href:
             "https://vsrm.dev.azure.com/fabrikam/d07908bc-118f-47d2-8a13-ff75601a6b1a/_apis/Release/releases/18",
         },
         web: {
-        href:
+          href:
             "https://dev.azure.com/fabrikam/d07908bc-118f-47d2-8a13-ff75601a6b1a/_release?releaseId=18&_a=release-summary",
         },
       },
@@ -186,7 +186,7 @@ const dummyReleases = {
       properties: {},
     },
     {
-        id: 17,
+      id: 17,
       name: "Release-17",
       status: "active",
       createdOn: "2017-06-16T01:36:19.35Z",
@@ -217,12 +217,12 @@ const dummyReleases = {
         url:
           "https://vsrm.dev.azure.com/fabrikam/d07908bc-118f-47d2-8a13-ff75601a6b1a/_apis/Release/definitions/1",
         _links: {
-        self: {
-        href:
+          self: {
+            href:
               "https://vsrm.dev.azure.com/fabrikam/d07908bc-118f-47d2-8a13-ff75601a6b1a/_apis/Release/definitions/1",
           },
           web: {
-        href:
+            href:
               "https://dev.azure.com/fabrikam/d07908bc-118f-47d2-8a13-ff75601a6b1a/_release?definitionId=1",
           },
         },
@@ -232,10 +232,10 @@ const dummyReleases = {
 };
 
 const dummyProjects = {
-        count: 1,
+  count: 1,
   value: [
     {
-        id: "kkkkceeeexxx-9999-ffff-bbbb-kkkkceeeexxx",
+      id: "kkkkceeeexxx-9999-ffff-bbbb-kkkkceeeexxx",
       name: "Dummy project",
       description: "dummy",
       url:
