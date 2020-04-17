@@ -6,7 +6,7 @@ describe("releaseNoteUtil", () => {
       title: "TEST ME",
       ingress: "",
       description:
-        '<p>Release note med bildre</p><p></p><img src="blob:http://localhost:3000/09558ba1-b879-4e15-8b1c-209387fb3d3e" alt="undefined" style="height: auto;width: auto"/><p></p>'
+        '<p>Release note med bildre</p><p></p><img src="blob:http://localhost:3000/09558ba1-b879-4e15-8b1c-209387fb3d3e" alt="undefined" style="height: auto;width: auto"/><p></p>',
     };
     const result = classifyReleaseNote(note);
     expect(result).toEqual("FULL");
@@ -16,7 +16,7 @@ describe("releaseNoteUtil", () => {
       title: "TEST ME",
       ingress: "",
       description:
-        '<p></p><p></p><img src="blob:http://localhost:3000/09558ba1-b879-4e15-8b1c-209387fb3d3e" alt="undefined" style="height: auto;width: auto"/><p></p>'
+        '<p></p><p></p><img src="blob:http://localhost:3000/09558ba1-b879-4e15-8b1c-209387fb3d3e" alt="undefined" style="height: auto;width: auto"/><p></p>',
     };
     const result = classifyReleaseNote(note);
     expect(result).toEqual("FULL");
@@ -26,7 +26,7 @@ describe("releaseNoteUtil", () => {
       title: "TEST ME",
       ingress: "",
       description:
-        '<img src="blob:http://localhost:3000/09558ba1-b879-4e15-8b1c-209387fb3d3e" alt="undefined" style="height: auto;width: auto"/>'
+        '<img src="blob:http://localhost:3000/09558ba1-b879-4e15-8b1c-209387fb3d3e" alt="undefined" style="height: auto;width: auto"/>',
     };
     const result = classifyReleaseNote(note);
     expect(result).toEqual("FULL");
@@ -35,7 +35,7 @@ describe("releaseNoteUtil", () => {
     const note = {
       title: "",
       ingress: "",
-      description: "<p></p><p></p><p></p>"
+      description: "<p></p><p></p><p></p>",
     };
     const result = classifyReleaseNote(note);
     expect(result).toEqual("NO-DESCRIPTION");
@@ -45,7 +45,7 @@ describe("releaseNoteUtil", () => {
     const note = {
       title: "TEST ME",
       ingress: "",
-      description: "<p>Hello world </p><p></p><p></p>"
+      description: "<p>Hello world </p><p></p><p></p>",
     };
     const result = classifyReleaseNote(note);
     expect(result).toEqual("FULL");
@@ -54,7 +54,7 @@ describe("releaseNoteUtil", () => {
     const note = {
       title: undefined,
       ingress: undefined,
-      description: undefined
+      description: undefined,
     };
     const result = classifyReleaseNote(note);
     expect(result).toEqual("NO-DESCRIPTION");
@@ -63,7 +63,7 @@ describe("releaseNoteUtil", () => {
     const note = {
       title: undefined,
       ingress: undefined,
-      description: "<p>Compelling description</p>"
+      description: "<p>Compelling description</p>",
     };
     const result = classifyReleaseNote(note);
     expect(result).toEqual("DENSE");
@@ -72,7 +72,7 @@ describe("releaseNoteUtil", () => {
     const note = {
       title: "Newest release note",
       ingress: "Interesting ingress",
-      description: "<p>Compelling description</p>"
+      description: "<p>Compelling description</p>",
     };
     const noteCopy = JSON.parse(JSON.stringify(note));
     classifyReleaseNote(note);
@@ -83,7 +83,7 @@ describe("releaseNoteUtil", () => {
     const note = {
       title: "Newest release note",
       ingress: "Interesting ingress",
-      description: "Compelling description"
+      description: "Compelling description",
     };
     const result = classifyReleaseNote(note);
     expect(result).toEqual("FULL");

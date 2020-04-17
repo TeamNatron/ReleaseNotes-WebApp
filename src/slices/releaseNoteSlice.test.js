@@ -6,7 +6,7 @@ import {
   postReleaseNote,
   deleteReleaseNote,
   getSuccess,
-  saveSuccess
+  saveSuccess,
 } from "./releaseNoteSlice";
 import { testThunkConformance } from "../utils/test/testThunkConformance";
 import { deleteSuccess } from "./releaseNoteSlice";

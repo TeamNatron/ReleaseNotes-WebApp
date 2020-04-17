@@ -4,7 +4,7 @@ import AdminExpansionPanelBase, { actions } from "./AdminExpansionPanelBase";
 import { useHistory } from "react-router";
 import { useDispatch } from "react-redux";
 import { basePropTypes } from "./AdminTableBase";
-const AdminExpansionPanelRoute = props => {
+const AdminExpansionPanelRoute = (props) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const {
@@ -60,5 +60,5 @@ AdminExpansionPanelRoute.propTypes = {
   ...exposedPropTypes,
   createContentRoute: PropTypes.string,
   editContentRoute: PropTypes.string,
-  onUpdate: PropTypes.func
+  onUpdate: PropTypes.func,
 };

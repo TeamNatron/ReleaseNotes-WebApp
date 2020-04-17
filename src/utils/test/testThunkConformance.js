@@ -51,7 +51,7 @@ export function testThunkConformance(functionToTest, axiosInstance) {
       mockReject();
       const store = mockStore({ items: [] });
 
-      return store.dispatch(functionToTest()).catch(error => {
+      return store.dispatch(functionToTest()).catch((error) => {
         const actions = store.getActions();
         expect(actions[0].type.toLowerCase()).toMatch("pending");
         expect(actions[1].type.toLowerCase()).toMatch("error");
@@ -68,12 +68,12 @@ function mockReject() {
 function mockResolve() {
   const response = {
     status: 200,
-    data: { text: "Succesful request", id: 1 }
+    data: { text: "Succesful request", id: 1 },
   };
   doMockAxiosRequests(() => Promise.resolve(response));
 }
 function doMockAxiosRequests(promiseFn) {
-  const mockFn = jest.fn(url => promiseFn());
+  const mockFn = jest.fn((url) => promiseFn());
   axios.get = mockFn;
   axios.put = mockFn;
   axios.post = mockFn;

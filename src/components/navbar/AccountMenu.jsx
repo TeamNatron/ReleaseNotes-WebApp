@@ -5,16 +5,16 @@ import {
   Link,
   ClickAwayListener,
   Paper,
-  Button
+  Button,
 } from "@material-ui/core";
 import styled from "styled-components";
 
-const AccountMenu = props => {
+const AccountMenu = (props) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const { handleLogout } = props;
 
-  const handleClick = event => {
+  const handleClick = (event) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
@@ -51,7 +51,7 @@ export default AccountMenu;
 
 const StyledAccountCircle = styled(AccountCircle)`
   :hover {
-    fill: ${props => props.theme.secondaryColor};
+    fill: ${(props) => props.theme.secondaryColor};
   }
   color: white;
   cursor: pointer;

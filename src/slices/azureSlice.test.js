@@ -2,7 +2,7 @@ import {
   getReleasesSuccess,
   azureReducer,
   fetchProjects,
-  getProjectsSuccess
+  getProjectsSuccess,
 } from "./azureSlice";
 import { testThunkConformance } from "../utils/test/testThunkConformance";
 import { fetchReleases, createWorkItem } from "./azureSlice";
@@ -11,7 +11,7 @@ import { AzureAxios } from "./azureSlice";
 const initialState = {
   sucessMsg: "",
   projects: [],
-  releases: []
+  releases: [],
 };
 
 describe("azureReducer", () => {
@@ -54,7 +54,7 @@ describe("azure Thunks", () => {
       fetchReleases({
         authToken: "Rattatattata",
         organization: "some0rg",
-        project: "project_01"
+        project: "project_01",
       }),
     AzureAxios
   );
@@ -79,7 +79,7 @@ const mappedWorkitem = {
   WorkItemDescriptionHtml:
     '<div>Wireframe:</div><div><a href="https://confluence.uials.no/pages/viewpage.action?pageId=57378685">https://confluence.uials.no/pages/viewpage.action?pageId=57378685</a></div><div><br></div><div>ERD:</div><div><a href="https://confluence.uials.no/pages/viewpage.action?pageId=57377417">https://confluence.uials.no/pages/viewpage.action?pageId=57377417</a><br></div>',
   AuthorName: "Markus Randa",
-  AuthorEmail: "markuran@ntnu.no"
+  AuthorEmail: "markuran@ntnu.no",
 };
 
 const dummyWorkItemRaw = {
@@ -94,21 +94,21 @@ const dummyWorkItemRaw = {
       _links: {
         avatar: {
           href:
-            "https://dev.azure.com/ReleaseNoteSystem/_apis/GraphProfile/MemberAvatars/aad.ZGFhYjRkNDYtOTczYS03NGI0LTk3OTUtNzQyNTA4ZTk2YmZj"
-        }
+            "https://dev.azure.com/ReleaseNoteSystem/_apis/GraphProfile/MemberAvatars/aad.ZGFhYjRkNDYtOTczYS03NGI0LTk3OTUtNzQyNTA4ZTk2YmZj",
+        },
       },
       id: "daab4d46-973a-64b4-9795-742508e96bfc",
       uniqueName: "markuran@ntnu.no",
       imageUrl:
         "https://dev.azure.com/ReleaseNoteSystem/_apis/GraphProfile/MemberAvatars/aad.ZGFhYjRkNDYtOTczYS03NGI0LTk3OTUtNzQyNTA4ZTk2YmZj",
-      descriptor: "aad.ZGFhYjRkNDYtOTczYS03NGI0LTk3OTUtNzQyNTA4ZTk2YmZj"
+      descriptor: "aad.ZGFhYjRkNDYtOTczYS03NGI0LTk3OTUtNzQyNTA4ZTk2YmZj",
     },
     "System.Title":
       "Som en administrator kan jeg legge til Autentiserings-informasjon til Azure Devops.",
     "System.Description":
-      '<div>Wireframe:</div><div><a href="https://confluence.uials.no/pages/viewpage.action?pageId=57378685">https://confluence.uials.no/pages/viewpage.action?pageId=57378685</a></div><div><br></div><div>ERD:</div><div><a href="https://confluence.uials.no/pages/viewpage.action?pageId=57377417">https://confluence.uials.no/pages/viewpage.action?pageId=57377417</a><br></div>'
+      '<div>Wireframe:</div><div><a href="https://confluence.uials.no/pages/viewpage.action?pageId=57378685">https://confluence.uials.no/pages/viewpage.action?pageId=57378685</a></div><div><br></div><div>ERD:</div><div><a href="https://confluence.uials.no/pages/viewpage.action?pageId=57377417">https://confluence.uials.no/pages/viewpage.action?pageId=57377417</a><br></div>',
   },
-  url: "https://dev.azure.com/ReleaseNoteSystem/_apis/wit/workItems/224"
+  url: "https://dev.azure.com/ReleaseNoteSystem/_apis/wit/workItems/224",
 };
 
 const dummyReleases = {
@@ -127,7 +127,7 @@ const dummyReleases = {
         url:
           "https://vssps.dev.azure.com/fabrikam/_apis/Identities/4adb1680-0eac-6149-b5ee-fc8b4f6ca227",
         imageUrl:
-          "https://dev.azure.com/fabrikam/_api/_common/identityImage?id=4adb1680-0eac-6149-b5ee-fc8b4f6ca227"
+          "https://dev.azure.com/fabrikam/_api/_common/identityImage?id=4adb1680-0eac-6149-b5ee-fc8b4f6ca227",
       },
       createdBy: {
         id: "4adb1680-0eac-6149-b5ee-fc8b4f6ca227",
@@ -136,7 +136,7 @@ const dummyReleases = {
         url:
           "https://vssps.dev.azure.com/fabrikam/_apis/Identities/4adb1680-0eac-6149-b5ee-fc8b4f6ca227",
         imageUrl:
-          "https://dev.azure.com/fabrikam/_api/_common/identityImage?id=4adb1680-0eac-6149-b5ee-fc8b4f6ca227"
+          "https://dev.azure.com/fabrikam/_api/_common/identityImage?id=4adb1680-0eac-6149-b5ee-fc8b4f6ca227",
       },
       variables: {},
       variableGroups: [],
@@ -148,13 +148,13 @@ const dummyReleases = {
         _links: {
           self: {
             href:
-              "https://vsrm.dev.azure.com/fabrikam/d07908bc-118f-47d2-8a13-ff75601a6b1a/_apis/Release/definitions/1"
+              "https://vsrm.dev.azure.com/fabrikam/d07908bc-118f-47d2-8a13-ff75601a6b1a/_apis/Release/definitions/1",
           },
           web: {
             href:
-              "https://dev.azure.com/fabrikam/d07908bc-118f-47d2-8a13-ff75601a6b1a/_release?definitionId=1"
-          }
-        }
+              "https://dev.azure.com/fabrikam/d07908bc-118f-47d2-8a13-ff75601a6b1a/_release?definitionId=1",
+          },
+        },
       },
       description: "Creating Sample release",
       reason: "manual",
@@ -168,19 +168,19 @@ const dummyReleases = {
       _links: {
         self: {
           href:
-            "https://vsrm.dev.azure.com/fabrikam/d07908bc-118f-47d2-8a13-ff75601a6b1a/_apis/Release/releases/18"
+            "https://vsrm.dev.azure.com/fabrikam/d07908bc-118f-47d2-8a13-ff75601a6b1a/_apis/Release/releases/18",
         },
         web: {
           href:
-            "https://dev.azure.com/fabrikam/d07908bc-118f-47d2-8a13-ff75601a6b1a/_release?releaseId=18&_a=release-summary"
-        }
+            "https://dev.azure.com/fabrikam/d07908bc-118f-47d2-8a13-ff75601a6b1a/_release?releaseId=18&_a=release-summary",
+        },
       },
       tags: [],
       projectReference: {
         id: "d07908bc-118f-47d2-8a13-ff75601a6b1a",
-        name: "MyFirstProject"
+        name: "MyFirstProject",
       },
-      properties: {}
+      properties: {},
     },
     {
       id: 17,
@@ -195,7 +195,7 @@ const dummyReleases = {
         url:
           "https://vssps.dev.azure.com/fabrikam/_apis/Identities/4adb1680-0eac-6149-b5ee-fc8b4f6ca227",
         imageUrl:
-          "https://dev.azure.com/fabrikam/_api/_common/identityImage?id=4adb1680-0eac-6149-b5ee-fc8b4f6ca227"
+          "https://dev.azure.com/fabrikam/_api/_common/identityImage?id=4adb1680-0eac-6149-b5ee-fc8b4f6ca227",
       },
       createdBy: {
         id: "4adb1680-0eac-6149-b5ee-fc8b4f6ca227",
@@ -204,7 +204,7 @@ const dummyReleases = {
         url:
           "https://vssps.dev.azure.com/fabrikam/_apis/Identities/4adb1680-0eac-6149-b5ee-fc8b4f6ca227",
         imageUrl:
-          "https://dev.azure.com/fabrikam/_api/_common/identityImage?id=4adb1680-0eac-6149-b5ee-fc8b4f6ca227"
+          "https://dev.azure.com/fabrikam/_api/_common/identityImage?id=4adb1680-0eac-6149-b5ee-fc8b4f6ca227",
       },
       variables: {},
       variableGroups: [],
@@ -216,16 +216,16 @@ const dummyReleases = {
         _links: {
           self: {
             href:
-              "https://vsrm.dev.azure.com/fabrikam/d07908bc-118f-47d2-8a13-ff75601a6b1a/_apis/Release/definitions/1"
+              "https://vsrm.dev.azure.com/fabrikam/d07908bc-118f-47d2-8a13-ff75601a6b1a/_apis/Release/definitions/1",
           },
           web: {
             href:
-              "https://dev.azure.com/fabrikam/d07908bc-118f-47d2-8a13-ff75601a6b1a/_release?definitionId=1"
-          }
-        }
-      }
-    }
-  ]
+              "https://dev.azure.com/fabrikam/d07908bc-118f-47d2-8a13-ff75601a6b1a/_release?definitionId=1",
+          },
+        },
+      },
+    },
+  ],
 };
 
 const dummyProjects = {
@@ -240,7 +240,7 @@ const dummyProjects = {
       state: "wellFormed",
       revision: 20,
       visibility: "public",
-      lastUpdateTime: "2020-01-15T14:02:56.87Z"
-    }
-  ]
+      lastUpdateTime: "2020-01-15T14:02:56.87Z",
+    },
+  ],
 };

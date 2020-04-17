@@ -7,8 +7,8 @@ import { ListItem, Container } from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProducts } from "../../slices/productsSlice";
 
-const LandingScreen = props => {
-  const products = useSelector(state => state.products);
+const LandingScreen = (props) => {
+  const products = useSelector((state) => state.products);
   const dispatch = useDispatch();
 
   // https://blog.bitsrc.io/using-react-redux-hooks-97654aff01e4
@@ -31,16 +31,16 @@ const LandingScreen = props => {
             {products.error ? (
               <p>ERROR: {[products.error.toString()]}</p>
             ) : (
-                products.items.map(item => (
-                  <ListItem key={item.id}>
-                    <Product
-                      img="https://constructionaccidentlawfirms.com/files/2019/08/AdobeStock_192077668.jpg"
-                      item={item}
-                      loading={products.loading}
-                    />
-                  </ListItem>
-                ))
-              )}
+              products.items.map((item) => (
+                <ListItem key={item.id}>
+                  <Product
+                    img="https://constructionaccidentlawfirms.com/files/2019/08/AdobeStock_192077668.jpg"
+                    item={item}
+                    loading={products.loading}
+                  />
+                </ListItem>
+              ))
+            )}
           </React.Fragment>
         </ProductDisplay>
       </PageContainer>
@@ -54,7 +54,7 @@ const WelcomeContainer = styled(Container)`
   margin: 0 0 6vw 0;
   padding: 2vw 0 2vw 0;
   height: 100%;
-  background-color: ${props => props.theme.secondaryColor};
+  background-color: ${(props) => props.theme.secondaryColor};
   text-align: center;
   color: white;
   display: flex;

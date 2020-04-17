@@ -6,10 +6,10 @@ import { ExpandMore } from "@material-ui/icons";
  *
  * @param {*} props
  */
-const PopperButton = props => {
+const PopperButton = (props) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleClick = event => {
+  const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -34,11 +34,11 @@ const PopperButton = props => {
         onClose={handleClose}
         anchorOrigin={{
           vertical: "bottom",
-          horizontal: "center"
+          horizontal: "center",
         }}
         transformOrigin={{
           vertical: "top",
-          horizontal: "center"
+          horizontal: "center",
         }}
       >
         <Paper>
