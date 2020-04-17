@@ -142,8 +142,10 @@ export const AZDFieldSelector = createSelector(
   }
 );
 
-  RNSFieldsSelector,
-  (fields) => {
-    return fields.map((field) => field.name);
-  }
+export const AZDTableFieldSelector = createSelector(
+  AZDFieldSelector,
+  (fields) =>
+    fields.map((obj) => {
+      return { name: obj };
+    })
 );
