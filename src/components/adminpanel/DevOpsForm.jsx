@@ -36,55 +36,51 @@ const DevOpsForm = () => {
   };
 
   return (
-    <React.Fragment>
-      <MyPaper>
-        <Typography gutterBottom variant="h4">
-          Azure Integrasjon
-        </Typography>
-        <MyGrid
-          container
-          spacing={0}
-          direction="column"
-          justify="center"
-          alignContent="space-between"
-        >
-          <Grid item>
-            <TextField
-              id="standard-required DevOpsName"
-              label="DevOps Brukernavn"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </Grid>
-          <Grid item>
-            <TextField
-              id="standard-required DevOpsPAT"
-              label="Personal Access Token"
-              value={PAT}
-              onChange={(e) => setPAT(e.target.value)}
-            />
-          </Grid>
-          <Grid item>
-            <TextField
-              id="standard-required DevOpsOrg"
-              label="DevOps Organisasjon"
-              value={org}
-              onChange={(e) => setOrg(e.target.value)}
-            />
-          </Grid>
-          <Grid item>
-            <MyButton
-              variant="contained"
-              color="primary"
-              id="sendDataBtn"
-              onClick={handleSubmit}
-            >
-              SEND
-            </MyButton>
-          </Grid>
-        </MyGrid>
-      </MyPaper>
-    </React.Fragment>
+    <MyPaper>
+      <MyGrid container spacing={1} direction="column" justify="center">
+        <Grid item>
+          <Typography variant="body1" style={{ marginBottom: "1.2em" }}>
+            Azure Integrasjon
+          </Typography>
+        </Grid>
+        <Grid item>
+          <TextField
+            id="standard-required DevOpsName"
+            label="DevOps Brukernavn"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </Grid>
+        <Grid item>
+          <TextField
+            id="standard-required DevOpsOrg"
+            label="DevOps Organisasjon"
+            value={org}
+            onChange={(e) => setOrg(e.target.value)}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            id="standard-required DevOpsPAT"
+            label="Personal Access Token"
+            value={PAT}
+            onChange={(e) => setPAT(e.target.value)}
+          />
+        </Grid>
+        <Grid>
+          <MyButton
+            variant="contained"
+            color="primary"
+            id="sendDataBtn"
+            onClick={handleSubmit}
+          >
+            Lagre
+          </MyButton>
+        </Grid>
+      </MyGrid>
+    </MyPaper>
+
   );
 };
 
@@ -100,6 +96,7 @@ const MyButton = styled(Button)`
 
 const MyGrid = styled(Grid)`
   && {
+    max-width: 500px;
     margin: 0 1vh;
   }
 `;

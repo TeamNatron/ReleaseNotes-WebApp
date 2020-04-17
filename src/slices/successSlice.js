@@ -15,11 +15,8 @@ export const successReducer = (state = {}, action) => {
     today.getTime();
 
   if (matches && payload) {
-    var message;
-    if (payload.successMsg) message = payload.successMsg;
-    else {
-      message = payload.statusText;
-    }
+    var message = payload.successMsg || payload.message || payload.statusText;
+
     return {
       text: message,
       occured: date,

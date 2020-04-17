@@ -93,9 +93,7 @@ export const fetchReleases = (params) => async (dispatch) => {
     dispatch(getReleasesPending());
     AzureAxios.get(url, authHeader(authToken))
       .then((res) => {
-        dispatch(
-          getReleasesSuccess({ data: res.data, statusText: res.statusText })
-        );
+        dispatch(getReleasesSuccess({ data: res.data }));
       })
       .catch((err) => {
         getReleasesError(err);
@@ -181,37 +179,50 @@ export const importRelease = (
   title
 ) => async (dispatch) => {
   dispatch(importReleasePending());
-  try {
-    // Get Ids of work items
-    fetchWorkItemIds(project, params, id).then((res) => {
+
+  // Get Ids of work items
+  fetchWorkItemIds(project, params, id)
+    .then((res) => {
       var ids = res.data.value.map(({ id }) => id);
 
       // Get data of each work item
-      fetchWorkItems(project, params, ids).then((res) => {
-        var rawWorkItems = res.data.value;
-        var workItems = [];
+      fetchWorkItems(project, params, ids)
+        .then((res) => {
+          var rawWorkItems = res.data.value;
+          var workItems = [];
 
-        // Format and filter each work item
-        rawWorkItems.forEach((wi) => {
-          workItems.push(createWorkItem(wi));
+          // Format and filter each work item
+          rawWorkItems.forEach((wi) => {
+            workItems.push(createWorkItem(wi));
+          });
+
+          // Create new release
+          const release = {
+            title: title,
+            isPublic: false,
+            productVersionId: productVersionId,
+            releaseNotes: workItems,
+          };
+
+          // all requests to azure api are successful
+          dispatch(importReleaseSuccess());
+
+          // post the new release
+          dispatch(postRelease(release));
+        })
+        .catch((err) => {
+          throw err;
         });
-
-        // Create new release and post
-        const release = {
-          title: title,
-          isPublic: false,
-          productVersionId: productVersionId,
-          releaseNotes: workItems,
-        };
-
-        // Post release
-        dispatch(postRelease(release));
-        dispatch(importReleaseSuccess());
-      });
-    });
-  } catch (err) {
-    dispatch(importReleaseError(err));
-  }
+    })
+    .catch((err) =>
+      dispatch(
+        importReleaseError({
+          message:
+            "En feil oppstod ved innhenting av release fra azure: " +
+            err.message,
+        })
+      )
+    );
 };
 
 // util
