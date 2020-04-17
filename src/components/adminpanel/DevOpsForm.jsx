@@ -7,8 +7,10 @@ import { useState, useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
 import { updateAzureInfo, fetchAzureInfo } from "../../slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
+import GeneralSelector from "../shared/GeneralSelector";
 
-const DevOpsForm = () => {
+const DevOpsForm = (props) => {
+  const { azureProjects, handleSelectedProject, selectedProject } = props;
   const [name, setName] = useState("");
   const [PAT, setPAT] = useState("");
   const [org, setOrg] = useState("");
@@ -37,50 +39,72 @@ const DevOpsForm = () => {
 
   return (
     <MyPaper>
-      <MyGrid container spacing={1} direction="column" justify="center">
+      <Grid container spacing={7} direction="row">
         <Grid item>
-          <Typography variant="body1" style={{ marginBottom: "1.2em" }}>
+          <MyGrid container spacing={1} direction="column" justify="center">
+            <Grid item>
+              <Typography variant="body1" style={{ marginBottom: "1.2em" }}>
                 Azure Pålogging
-          </Typography>
+              </Typography>
+            </Grid>
+            <Grid item>
+              <TextField
+                id="standard-required DevOpsName"
+                label="DevOps Brukernavn"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </Grid>
+            <Grid item>
+              <TextField
+                id="standard-required DevOpsOrg"
+                label="DevOps Organisasjon"
+                value={org}
+                onChange={(e) => setOrg(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                id="standard-required DevOpsPAT"
+                label="Personal Access Token"
+                value={PAT}
+                onChange={(e) => setPAT(e.target.value)}
+              />
+            </Grid>
+            <Grid>
+              <MyButton
+                variant="contained"
+                color="primary"
+                id="sendDataBtn"
+                onClick={handleSubmit}
+              >
+                Lagre
+              </MyButton>
+            </Grid>
+          </MyGrid>
         </Grid>
         <Grid item>
-          <TextField
-            id="standard-required DevOpsName"
-            label="DevOps Brukernavn"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+          <MyGrid container spacing={1} direction="column" justify="center">
+            <Grid item>
+              {/* Don't touch marginBottom, it's perfect */}
+              <Typography variant="body1" style={{ marginBottom: "13px" }}>
+                Azure Prosjekt
+              </Typography>
+            </Grid>
+            <Grid item>
+              <GeneralSelector
+                items={azureProjects}
+                selected={selectedProject}
+                handleChange={handleSelectedProject}
+                label="Prosjekt"
+                helperText="Velg et prosjekt"
+              />
+            </Grid>
+          </MyGrid>
         </Grid>
-        <Grid item>
-          <TextField
-            id="standard-required DevOpsOrg"
-            label="DevOps Organisasjon"
-            value={org}
-            onChange={(e) => setOrg(e.target.value)}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            id="standard-required DevOpsPAT"
-            label="Personal Access Token"
-            value={PAT}
-            onChange={(e) => setPAT(e.target.value)}
-          />
-        </Grid>
-        <Grid>
-          <MyButton
-            variant="contained"
-            color="primary"
-            id="sendDataBtn"
-            onClick={handleSubmit}
-          >
-            Lagre
-          </MyButton>
-        </Grid>
-      </MyGrid>
+      </Grid>
     </MyPaper>
-
   );
 };
 

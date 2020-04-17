@@ -16,9 +16,6 @@ import {
 const AzureDevOpsView = (props) => {
   const {
     azureReleases,
-    azureProjects,
-    handleSelectedProject,
-    selectedProject,
     handleImport,
     selectedProductVersion,
     handleSelectedProductVersion,
@@ -43,7 +40,7 @@ const AzureDevOpsView = (props) => {
 
   return (
     <React.Fragment>
-      <DevOpsForm />
+      <DevOpsForm {...props} />
       <AdminExpansionPanelBase
         expanded
         label="Azure Devops Releases"
@@ -51,20 +48,12 @@ const AzureDevOpsView = (props) => {
           <Grid container>
             <Grid item>
               <GeneralSelector
-                items={azureProjects}
-                selected={selectedProject}
-                handleChange={handleSelectedProject}
-                label="Prosjekt"
-                helperText="Velg et prosjekt"
-              />
-            </Grid>
-            <Grid item>
-              <GeneralSelector
                 items={productVersions}
                 selected={selectedProductVersion}
                 handleChange={handleSelectedProductVersion}
                 label="Produkt"
                 helperText="Velg et produkt å importere til"
+                ml={25}
               />
             </Grid>
           </Grid>
