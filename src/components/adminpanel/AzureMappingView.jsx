@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import {
   ExpansionPanel,
   ExpansionPanelSummary,
@@ -22,27 +22,37 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
+import { useSelector, useDispatch } from "react-redux";
+import { RNSFieldsSelector, fetchRNSMappable } from "../../slices/mappingSlice";
+import { Refresh } from "@material-ui/icons";
 
-const AzureMappingView = () => {
+const AzureMappingView = (props) => {
   // To add more fields to the table, create new objects in the array
   // Each object needs the properties 'title' and 'field'.
   const columns = [{ title: "Felt", field: "name" }];
 
-  // Use the setReleaseNoteFields method to update data in the table
-  const [releaseNoteFields, setReleaseNoteFields] = React.useState([
-    { id: 1, name: "Created" },
-    { id: 1, name: "Title" },
-    { id: 1, name: "Description" },
-    { id: 1, name: "This is test data" },
-  ]);
-
   // Use the setAzureDevOpsFields method to update data in the table
-  const [azureDevOpsFields, setAzureDevOpsFields] = React.useState([
+  const [azureDevOpsFieldsState, setAzureDevOpsFieldsState] = useState([
     { id: 1, name: "Created" },
     { id: 1, name: "WorkItemTitle" },
     { id: 1, name: "Description" },
     { id: 1, name: "Remember that this is test data" },
   ]);
+
+  const tableRef = React.createRef();
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchRNSMappable());
+  }, [dispatch]);
+
+  const RNSFields = useSelector(RNSFieldsSelector);
+
+  // Updates the fields on selector change
+  useEffect(() => {
+    tableRef.current && tableRef.current.onQueryChange();
+  }, [RNSFields]);
 
   return (
     <ExpansionPanel>
@@ -57,9 +67,30 @@ const AzureMappingView = () => {
         <Grid item xs={6}>
           <MaterialTable
             icons={tableIcons}
+            tableRef={tableRef}
             title={"Release Note System fields"}
             columns={columns}
-            data={releaseNoteFields}
+            data={(query) =>
+              new Promise((resolve, reject) => {
+                // Creates a new array which clones each object it contains.
+                // This was done to make the objects mutable.
+                var newArray = RNSFields.map((obj) => Object.create(obj));
+                resolve({
+                  data: newArray,
+                  page: 0,
+                  totalCount: newArray.length,
+                });
+              })
+            }
+            actions={[
+              {
+                icon: "refresh",
+                tooltip: "Refresh Data",
+                isFreeAction: true,
+                onClick: () =>
+                  tableRef.current && tableRef.current.onQueryChange(),
+              },
+            ]}
             options={{
               search: false,
               paging: false,
@@ -72,7 +103,7 @@ const AzureMappingView = () => {
             icons={tableIcons}
             title={"Azure DevOps fields"}
             columns={columns}
-            data={azureDevOpsFields}
+            data={azureDevOpsFieldsState}
             options={{
               search: false,
               paging: false,
