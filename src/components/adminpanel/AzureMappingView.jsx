@@ -22,6 +22,7 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
+import Refresh from "@material-ui/icons/Refresh";
 import { useSelector, useDispatch } from "react-redux";
 import {
   RNSFieldsSelector,
@@ -99,20 +100,8 @@ const AzureMappingView = (props) => {
                 });
               })
             }
-            actions={[
-              {
-                icon: "refresh",
-                tooltip: "Refresh Data",
-                isFreeAction: true,
-                onClick: () =>
-                  rnsTableRef.current && rnsTableRef.current.onQueryChange(),
-              },
-            ]}
-            options={{
-              search: false,
-              paging: false,
-              filtering: false,
-            }}
+            actions={actionRefreshButton(rnsTableRef)}
+            options={optionsReadOnlyTable}
           />
         </Grid>
         <Grid item xs={6}>
@@ -133,20 +122,8 @@ const AzureMappingView = (props) => {
                 });
               })
             }
-            actions={[
-              {
-                icon: "refresh",
-                tooltip: "Refresh Data",
-                isFreeAction: true,
-                onClick: () =>
-                  azdTableRef.current && azdTableRef.current.onQueryChange(),
-              },
-            ]}
-            options={{
-              search: false,
-              paging: false,
-              filtering: false,
-            }}
+            actions={actionRefreshButton(azdTableRef)}
+            options={optionsReadOnlyTable}
           />
         </Grid>
       </Grid>
@@ -155,6 +132,25 @@ const AzureMappingView = (props) => {
 };
 
 export default AzureMappingView;
+
+const actionRefreshButton = (ref) => {
+  return [
+    {
+      icon: () => <Refresh />,
+      tooltip: "Refresh Data",
+      isFreeAction: true,
+      onClick: () => ref.current && ref.current.onQueryChange(),
+    },
+  ];
+};
+
+const optionsReadOnlyTable = {
+  search: false,
+  paging: false,
+  filtering: false,
+  maxBodyHeight: 400,
+  headerStyle: { position: "sticky", top: 0 },
+};
 
 // Material-table needs to know about every icon that we are going to use
 // One way of achieving this is to specify each Icon.
