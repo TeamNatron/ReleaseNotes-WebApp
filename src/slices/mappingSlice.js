@@ -1,4 +1,4 @@
-import { createAction, createReducer } from "@reduxjs/toolkit";
+import { createAction, createReducer, createSelector } from "@reduxjs/toolkit";
 import GlobalAxios from "axios";
 import Axios from "axios";
 import { authHeader } from "../utils/azureUtils";
@@ -63,6 +63,7 @@ export const mappingReducer = createReducer(initialState, {
   },
 });
 
+// THUNKS
 export const fetchRNSMappable = () => async (dispatch) => {
   dispatch(fetchRNSMappablePending());
   Axios.get("mappablefields/")
@@ -119,3 +120,21 @@ const buildWorkitemTypeURL = (project, org, itemType) => {
     "?api-version=5.1"
   );
 };
+
+// SELECTORS
+export const RNSFieldsSelector = createSelector(
+  (state) => {
+    if (!state) return [];
+    return state.mapping.RNSMappable;
+  },
+  (fields) => {
+    return fields;
+  }
+);
+
+export const RNSFieldsTableObjectSelector = createSelector(
+  RNSFieldsSelector,
+  (fields) => {
+    return fields.map((field) => field.name);
+  }
+);
