@@ -40,7 +40,7 @@ const DevOpsForm = () => {
       <MyGrid container spacing={1} direction="column" justify="center">
         <Grid item>
           <Typography variant="body1" style={{ marginBottom: "1.2em" }}>
-            Azure Integrasjon
+                Azure Pålogging
           </Typography>
         </Grid>
         <Grid item>
