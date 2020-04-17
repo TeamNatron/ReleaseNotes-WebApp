@@ -85,7 +85,7 @@ const AzureMappingView = (props) => {
       >
         <Typography>Release Note Mapping</Typography>
       </ExpansionPanelSummary>
-      <Grid container spacing={2}>
+      {/* <Grid container spacing={2}>
         <Grid item xs={6}>
           <MaterialTable
             icons={tableIcons}
@@ -130,7 +130,7 @@ const AzureMappingView = (props) => {
             options={optionsReadOnlyTable}
           />
         </Grid>
-      </Grid>
+      </Grid> */}
     </ExpansionPanel>
   );
 };
