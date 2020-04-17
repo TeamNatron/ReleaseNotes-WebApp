@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 import PropTypes from "prop-types";
 import { DatePicker } from "@material-ui/pickers";
 /**
  *
  */
-const ControlledDatePicker = props => {
+const ControlledDatePicker = (props) => {
   return (
     <DatePicker
       disableToolbar
@@ -24,5 +24,5 @@ export default ControlledDatePicker;
 ControlledDatePicker.propTypes = {
   value: PropTypes.object,
   setValue: PropTypes.func,
-  label: PropTypes.string
+  label: PropTypes.string,
 };

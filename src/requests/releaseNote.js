@@ -6,7 +6,7 @@ export function getReleaseNotes() {
     withCredentials: false,
     headers: {
       "Access-Control-Request-Headers": "Content-Type",
-      Authorization: "Bearer " + getAuthToken()
-    }
+      Authorization: "Bearer " + getAuthToken(),
+    },
   });
 }

@@ -1,7 +1,7 @@
 import { productVersions } from "./initialStates";
 import {
   FETCH_VERSIONS_SUCCESS,
-  actions
+  actions,
 } from "../actions/productVersionsActions";
 import { productVersionsReducer } from "./productVersionsReducer";
 
@@ -26,17 +26,17 @@ describe("products reducer", () => {
         {
           pending: false,
           items: [],
-          error: null
+          error: null,
         },
         {
           type: FETCH_VERSIONS_SUCCESS,
-          payload: [{ name: "test-Version" }]
+          payload: [{ name: "test-Version" }],
         }
       )
     ).toEqual({
       pending: false,
       items: [{ name: "test-Version" }],
-      error: null
+      error: null,
     });
   });
 });

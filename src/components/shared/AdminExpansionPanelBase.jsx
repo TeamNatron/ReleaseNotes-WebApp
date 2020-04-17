@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 import {
   ExpansionPanelSummary,
   ExpansionPanel,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import AdminTableBase, { basePropTypes } from "./AdminTableBase";
 
-const AdminExpansionPanelBase = props => {
+const AdminExpansionPanelBase = (props) => {
   return (
     <ExpansionPanel defaultExpanded={props.defaultExpanded}>
       <ExpansionPanelSummary
@@ -32,10 +32,10 @@ export const actions = {
   CREATE: "CREATE",
   UPDATE: "UPDATE",
   DELETE: "DELETE",
-  IMPORT: "IMPORT"
+  IMPORT: "IMPORT",
 };
 AdminExpansionPanelBase.propTypes = {
   ...basePropTypes,
   label: PropTypes.string,
-  defaultExpanded: PropTypes.bool
+  defaultExpanded: PropTypes.bool,
 };

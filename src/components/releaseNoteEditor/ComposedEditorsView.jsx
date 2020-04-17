@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { Editor, EditorState } from "draft-js";
 import { Paper, Typography } from "@material-ui/core";
 import styled from "styled-components";
@@ -6,22 +6,22 @@ import { Map } from "immutable";
 import { Editor as EditorWysiwyg } from "react-draft-wysiwyg";
 import PropTypes from "prop-types";
 
-const ComposedEditorsView = props => {
+const ComposedEditorsView = (props) => {
   const titleRenderMap = Map({
     unstyled: {
-      element: "h2"
-    }
+      element: "h2",
+    },
   });
 
   const ingressRenderMap = Map({
     unstyled: {
-      element: "section"
-    }
+      element: "section",
+    },
   });
 
   const killAllSpacing = {
     padding: "0px",
-    margin: "0px"
+    margin: "0px",
   };
 
   return (
@@ -82,13 +82,13 @@ export default ComposedEditorsView;
 ComposedEditorsView.defaultProps = {
   title: EditorState.createEmpty(),
   ingress: EditorState.createEmpty(),
-  description: EditorState.createEmpty()
+  description: EditorState.createEmpty(),
 };
 
 ComposedEditorsView.defaultProps = {
   title: PropTypes.object,
   ingress: PropTypes.object,
-  description: PropTypes.object
+  description: PropTypes.object,
 };
 
 const EditorInner = styled.div`

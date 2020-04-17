@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
  * Renders a html string in a Typography component
  * @param {*} props
  */
-const HtmlWrapper = props => {
+const HtmlWrapper = (props) => {
   return (
     <React.Fragment>
       {props.strip ? (
@@ -27,9 +27,9 @@ const HtmlWrapper = props => {
 export default HtmlWrapper;
 
 HtmlWrapper.propTypes = {
-  strip: PropTypes.bool
+  strip: PropTypes.bool,
 };
-const stripText = text => {
+const stripText = (text) => {
   if (!text) return null;
   return text.replace(/<\/?[^>]+(>|$)/g, "");
 };

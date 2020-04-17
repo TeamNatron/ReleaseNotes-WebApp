@@ -18,6 +18,7 @@ import "draft-js/dist/Draft.css";
 import draftToHtml from "draftjs-to-html";
 import PropTypes from "prop-types";
 import { convertToRaw, RichUtils, EditorState, ContentState } from "draft-js";
+
 import {
   Assignment,
   Person,

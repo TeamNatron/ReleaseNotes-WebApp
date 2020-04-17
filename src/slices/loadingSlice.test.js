@@ -33,8 +33,8 @@ const action2Pending = { type: "someOtherActionPending" };
 const actionError = { type: "someActionError" };
 
 const mockState = {
-  loading: { 1: false, 2: true, 3: true, 4: true, 5: false }
+  loading: { 1: false, 2: true, 3: true, 4: true, 5: false },
 };
 const mockStateAllFalse = {
-  loading: { 1: false, 2: false, 3: false, 4: false, 5: false }
+  loading: { 1: false, 2: false, 3: false, 4: false, 5: false },
 };
