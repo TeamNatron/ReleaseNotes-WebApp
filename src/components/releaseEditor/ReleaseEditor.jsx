@@ -7,13 +7,13 @@ import {
   Button,
   MenuItem,
   Switch,
-  FormControlLabel,
   Select,
   FormControl,
   InputLabel,
   FormHelperText,
   IconButton,
   Collapse,
+  FormControlLabel,
 } from "@material-ui/core";
 import TitleTextField from "./TitleTextField";
 import PropTypes from "prop-types";
@@ -22,6 +22,8 @@ import shortid from "shortid";
 import ToolbarBase from "../shared/ToolbarBase";
 import { FilterListRounded } from "@material-ui/icons";
 import FilterToolbar from "./FilterToolbar";
+import ModalButton from "../shared/ModalButton";
+import ReleaseView from "../releaseView/ReleaseView";
 
 class ReleaseEditor extends Component {
   constructor(props) {
@@ -39,7 +41,7 @@ class ReleaseEditor extends Component {
       productVersionIsError: isError,
       submitDisabled: true,
       isPublic: release?.isPublic || false,
-      title: release?.title,
+      title: release?.title || "",
       productVersions: [],
       selectedProductVersionLabel:
         productVersion?.product?.name + " - " + productVersion?.version,
@@ -195,18 +197,24 @@ class ReleaseEditor extends Component {
     this.props.onSave(release);
   };
 
+  getCurrentReleaseState = () => {
+    if (this.props.release) {
+      return {
+        productVersion: this.props.productVersionsResource.items.find(
+          (item) => item.id == this.state.selectedProductVersionId
+        ),
+        isPublic: this.state.isPublic,
+        id: this.props.release.id,
+        title: this.state.title,
+        releaseNotes: this.state.allItems.release.list,
+        date: Date.now(),
+      };
+    }
+  };
+
   handleSaveReleaseNote = (releaseNoteId, releaseNote) => {
     // save editor state locally, then save release note
-
-    const release = {
-      id: this.props.release.id,
-      productVersion: this.props.productVersionsResource.items.find(
-        (item) => item.id == this.state.selectedProductVersionId
-      ),
-      title: this.state.title,
-      isPublic: this.state.isPublic,
-      releaseNotes: this.state.allItems.release.list,
-    };
+    const release = this.getCurrentReleaseState();
     this.props.onSaveEditorState(release);
     this.props.onSaveReleaseNote(releaseNoteId, releaseNote);
   };
@@ -355,7 +363,6 @@ class ReleaseEditor extends Component {
     return (
       <React.Fragment>
         <BottomToolbar
-          loading={this.props.loading}
           left={[
             <Button
               key="cancelBtn"
@@ -367,6 +374,18 @@ class ReleaseEditor extends Component {
             </Button>,
           ]}
           right={[
+            <ModalButton
+              label="Forhåndsvis"
+              modalLabel="Forhåndsvis release"
+              buttonProps={{
+                color: "primary",
+                size: "small",
+                variant: "contained",
+                disableElevation: true,
+              }}
+            >
+              <ReleaseView release={this.getCurrentReleaseState()} />
+            </ModalButton>,
             <FormControlLabel
               key="isPublicSwitch"
               style={{ marginLeft: "15px" }}
