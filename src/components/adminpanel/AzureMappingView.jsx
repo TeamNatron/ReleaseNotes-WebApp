@@ -48,7 +48,7 @@ const AzureMappingView = (props) => {
   }, [dispatch]);
 
   useEffect(() => {
-    if ((authToken === "") | (project === "") | (org === "")) return;
+    if (authToken === "" || project === "" || org === "") return;
     dispatch(fetchAZDMappable(authToken, project, org, "task"));
   }, [authToken, dispatch, org, project]);
 
