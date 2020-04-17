@@ -10,6 +10,7 @@ import {
   getAllProductVersionsSelector,
   fetchProducts,
 } from "../../slices/productsSlice";
+import AzureMappingView from "./AzureMappingView";
 
 // EXAMPLE COMPONENT USED TO CONTAIN AZURE DEVOPS TOOLS
 // CAN BE MODYFIED OR REMOVED
@@ -73,7 +74,12 @@ const AzureDevOpsView = (props) => {
         rows={azureReleases}
         onAction={handleAction}
         import={true}
-      ></AdminExpansionPanelBase>
+      />
+      <AzureMappingView
+        project={selectedProject}
+        org={props.azureProps.organization}
+        authToken={props.azureProps.authToken}
+      />
     </React.Fragment>
   );
 };

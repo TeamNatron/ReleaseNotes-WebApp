@@ -1,6 +1,7 @@
 import { createReducer, createAction } from "@reduxjs/toolkit";
 import GlobalAxios from "axios";
 import { postRelease } from "./releaseSlice";
+import { authHeader } from "../utils/azureUtils";
 
 // azure axios instance
 export const AzureAxios = GlobalAxios.create({
@@ -99,18 +100,6 @@ export const fetchReleases = (params) => async (dispatch) => {
         getReleasesError(err);
       });
   }
-};
-
-/**
- * @param {String} authToken
- * @example Axios.get(url, authHeader("9u0fu8u94utgj03=="))
- */
-const authHeader = (authToken) => {
-  return {
-    headers: {
-      Authorization: "Basic " + authToken,
-    },
-  };
 };
 
 /**
