@@ -103,7 +103,6 @@ const ReleaseNoteEditor = (props) => {
     const savedContent2 = ingress.getCurrentContent().getPlainText();
     const savedContent3 = draftToHtml(descriptionRawContentState);
 
-    console.log(savedContent3);
     const returnObject = {
       title: savedContent1,
       ingress: savedContent2,
