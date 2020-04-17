@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { forwardRef, useEffect } from "react";
 import {
   ExpansionPanel,
   ExpansionPanelSummary,
@@ -23,23 +23,22 @@ import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import { useSelector, useDispatch } from "react-redux";
-import { RNSFieldsSelector, fetchRNSMappable } from "../../slices/mappingSlice";
-import { Refresh } from "@material-ui/icons";
+import {
+  RNSFieldsSelector,
+  fetchRNSMappable,
+  fetchAZDMappable,
+  AZDTableFieldSelector,
+} from "../../slices/mappingSlice";
 
 const AzureMappingView = (props) => {
+  const { authToken, project, org } = props;
+
   // To add more fields to the table, create new objects in the array
   // Each object needs the properties 'title' and 'field'.
   const columns = [{ title: "Felt", field: "name" }];
 
-  // Use the setAzureDevOpsFields method to update data in the table
-  const [azureDevOpsFieldsState, setAzureDevOpsFieldsState] = useState([
-    { id: 1, name: "Created" },
-    { id: 1, name: "WorkItemTitle" },
-    { id: 1, name: "Description" },
-    { id: 1, name: "Remember that this is test data" },
-  ]);
-
-  const tableRef = React.createRef();
+  const rnsTableRef = React.createRef();
+  const azdTableRef = React.createRef();
 
   const dispatch = useDispatch();
 
@@ -47,12 +46,30 @@ const AzureMappingView = (props) => {
     dispatch(fetchRNSMappable());
   }, [dispatch]);
 
-  const RNSFields = useSelector(RNSFieldsSelector);
+  useEffect(() => {
+    if ((authToken === "") | (project === "") | (org === "")) return;
+    dispatch(fetchAZDMappable(authToken, project, org, "task"));
+  }, [authToken, dispatch, org, project]);
+
+  const rnsFields = useSelector(RNSFieldsSelector);
+  const azdFields = useSelector(AZDTableFieldSelector);
 
   // Updates the fields on selector change
   useEffect(() => {
-    tableRef.current && tableRef.current.onQueryChange();
-  }, [RNSFields]);
+    rnsTableRef.current && rnsTableRef.current.onQueryChange();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rnsFields, azdFields]);
+
+  /**
+   * Returns a deepcopy of an array
+   * @param {Array of objects} arr
+   */
+  const deepCopyArray = (arr) => {
+    console.log(arr);
+    if (arr.length === 0) return [];
+    return arr.map((obj) => Object.create(obj));
+  };
 
   return (
     <ExpansionPanel>
@@ -67,14 +84,14 @@ const AzureMappingView = (props) => {
         <Grid item xs={6}>
           <MaterialTable
             icons={tableIcons}
-            tableRef={tableRef}
+            tableRef={rnsTableRef}
             title={"Release Note System fields"}
             columns={columns}
             data={(query) =>
               new Promise((resolve, reject) => {
                 // Creates a new array which clones each object it contains.
                 // This was done to make the objects mutable.
-                var newArray = RNSFields.map((obj) => Object.create(obj));
+                var newArray = deepCopyArray(rnsFields);
                 resolve({
                   data: newArray,
                   page: 0,
@@ -88,7 +105,7 @@ const AzureMappingView = (props) => {
                 tooltip: "Refresh Data",
                 isFreeAction: true,
                 onClick: () =>
-                  tableRef.current && tableRef.current.onQueryChange(),
+                  rnsTableRef.current && rnsTableRef.current.onQueryChange(),
               },
             ]}
             options={{
@@ -101,9 +118,30 @@ const AzureMappingView = (props) => {
         <Grid item xs={6}>
           <MaterialTable
             icons={tableIcons}
+            tableRef={azdTableRef}
             title={"Azure DevOps fields"}
             columns={columns}
-            data={azureDevOpsFieldsState}
+            data={(query) =>
+              new Promise((resolve, reject) => {
+                // Creates a new array which clones each object it contains.
+                // This was done to make the objects mutable.
+                var newArray = deepCopyArray(azdFields);
+                resolve({
+                  data: newArray,
+                  page: 0,
+                  totalCount: newArray.length,
+                });
+              })
+            }
+            actions={[
+              {
+                icon: "refresh",
+                tooltip: "Refresh Data",
+                isFreeAction: true,
+                onClick: () =>
+                  azdTableRef.current && azdTableRef.current.onQueryChange(),
+              },
+            ]}
             options={{
               search: false,
               paging: false,
