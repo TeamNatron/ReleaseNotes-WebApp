@@ -30,6 +30,7 @@ import {
   RNSTableFieldSelector,
   fetchRNSMappings,
   rnsMappingsTableFields,
+  putMapping,
 } from "../../slices/mappingSlice";
 import { useState } from "react";
 
