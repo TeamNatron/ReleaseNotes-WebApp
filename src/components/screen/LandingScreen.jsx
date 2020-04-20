@@ -5,10 +5,10 @@ import Product from "../product/Product";
 import List from "@material-ui/core/List";
 import { ListItem, Container } from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchProducts } from "../../actions/productActions";
+import { fetchProducts } from "../../slices/productsSlice";
 
-const LandingScreen = props => {
-  const products = useSelector(state => state.products);
+const LandingScreen = (props) => {
+  const products = useSelector((state) => state.products);
   const dispatch = useDispatch();
 
   // https://blog.bitsrc.io/using-react-redux-hooks-97654aff01e4
@@ -18,7 +18,7 @@ const LandingScreen = props => {
 
   return (
     <React.Fragment>
-      <WelcomeContainer maxWidth="false">
+      <WelcomeContainer maxWidth={false}>
         <div>
           <h1>Velkommen til Release Notes System</h1>
           <p>Her kan du finne ut hva som er nytt med ditt produkt!</p>
@@ -27,20 +27,21 @@ const LandingScreen = props => {
       </WelcomeContainer>
       <PageContainer>
         <ProductDisplay>
-            <React.Fragment>
-              {products.error ? (
-                <p>ERROR: {[products.error.toString()]}</p>
-              ) : (
-                products.items.map(item => (
-                  <ListItem>
-                    <Product
-                      img="https://constructionaccidentlawfirms.com/files/2019/08/AdobeStock_192077668.jpg"
-                      item={item}
-                      loading={products.loading}
-                    />
-                  </ListItem>
-              )))}
-            </React.Fragment>
+          <React.Fragment>
+            {products.error ? (
+              <p>ERROR: {[products.error.toString()]}</p>
+            ) : (
+              products.items.map((item) => (
+                <ListItem key={item.id}>
+                  <Product
+                    img="https://constructionaccidentlawfirms.com/files/2019/08/AdobeStock_192077668.jpg"
+                    item={item}
+                    loading={products.loading}
+                  />
+                </ListItem>
+              ))
+            )}
+          </React.Fragment>
         </ProductDisplay>
       </PageContainer>
     </React.Fragment>
@@ -53,7 +54,7 @@ const WelcomeContainer = styled(Container)`
   margin: 0 0 6vw 0;
   padding: 2vw 0 2vw 0;
   height: 100%;
-  background-color: ${props => props.theme.secondaryColor};
+  background-color: ${(props) => props.theme.secondaryColor};
   text-align: center;
   color: white;
   display: flex;

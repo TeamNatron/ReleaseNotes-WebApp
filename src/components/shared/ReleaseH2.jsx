@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const ReleaseH2 = props => {
+const ReleaseH2 = (props) => {
   return <Styledh2>{props.children}</Styledh2>;
 };
 

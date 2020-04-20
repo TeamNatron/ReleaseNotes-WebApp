@@ -1,10 +1,22 @@
 import {
   releaseReducer,
-  getPending,
   getSuccess,
-  getError,
-  putByIdSuccess
+  putByIdSuccess,
+  fetchReleaseById,
+  fetchReleases,
+  putReleaseById,
+  postRelease,
+  deleteRelease,
 } from "./releaseSlice";
+import { testThunkConformance } from "../utils/test/testThunkConformance";
+
+describe("releaseNotes Thunks", () => {
+  testThunkConformance(fetchReleaseById);
+  testThunkConformance(fetchReleases);
+  testThunkConformance(putReleaseById);
+  testThunkConformance(postRelease);
+  testThunkConformance(deleteRelease);
+});
 
 describe("releases reducer", () => {
   it("should handle initial state", () => {
@@ -17,8 +29,8 @@ describe("releases reducer", () => {
       type: putByIdSuccess.type,
       payload: {
         id: 666,
-        data: { release: "Some object.." }
-      }
+        data: { release: "Some object.." },
+      },
     });
     expect(updatedState.items).toContainEqual({ release: "Some object.." });
     expect(updatedState.items.length).toEqual(initialLength + 1);
@@ -28,13 +40,13 @@ describe("releases reducer", () => {
       type: putByIdSuccess.type,
       payload: {
         id: 100,
-        data: { release: "Some object.." }
-      }
+        data: { release: "Some object.." },
+      },
     });
     expect(updatedState).toEqual({
       pending: false,
       error: "",
-      items: [{ release: "Some object.." }]
+      items: [{ release: "Some object.." }],
     });
   });
   it("should handle getSuccess", () => {
@@ -48,7 +60,7 @@ const initialStateWithoutItems = {
   pending: false,
   error: "",
   items: [],
-  successMsg: ""
+  successMsg: "",
 };
 
 const initialState = {
@@ -62,13 +74,13 @@ const initialState = {
         productId: 100,
         product: null,
         version: "2.5.4",
-        isPublic: false
+        isPublic: false,
       },
       title: "Finally Rich",
       isPublic: false,
-      releaseNotes: []
-    }
-  ]
+      releaseNotes: [],
+    },
+  ],
 };
 const successActionWithPayload = {
   type: getSuccess.type,
@@ -80,11 +92,11 @@ const successActionWithPayload = {
         productId: 100,
         product: null,
         version: "2.5.4",
-        isPublic: false
+        isPublic: false,
       },
       title: "Finally Rich",
       isPublic: true,
-      releaseNotes: []
+      releaseNotes: [],
     },
     {
       id: 101,
@@ -93,11 +105,11 @@ const successActionWithPayload = {
         productId: 100,
         product: null,
         version: "3.1.1",
-        isPublic: false
+        isPublic: false,
       },
       title: "Love Sosa",
       isPublic: true,
-      releaseNotes: []
+      releaseNotes: [],
     },
     {
       id: 102,
@@ -106,11 +118,11 @@ const successActionWithPayload = {
         productId: 101,
         product: null,
         version: "5.3",
-        isPublic: false
+        isPublic: false,
       },
       title: "Chief Keef",
       isPublic: true,
-      releaseNotes: []
+      releaseNotes: [],
     },
     {
       id: 103,
@@ -119,13 +131,13 @@ const successActionWithPayload = {
         productId: 102,
         product: null,
         version: "4.2",
-        isPublic: false
+        isPublic: false,
       },
       title: "2012",
       isPublic: false,
-      releaseNotes: []
-    }
-  ]
+      releaseNotes: [],
+    },
+  ],
 };
 const updatedState = {
   pending: false,
@@ -138,11 +150,11 @@ const updatedState = {
         productId: 100,
         product: null,
         version: "2.5.4",
-        isPublic: false
+        isPublic: false,
       },
       title: "Finally Rich",
       isPublic: true,
-      releaseNotes: []
+      releaseNotes: [],
     },
 
     {
@@ -152,11 +164,11 @@ const updatedState = {
         productId: 100,
         product: null,
         version: "3.1.1",
-        isPublic: false
+        isPublic: false,
       },
       title: "Love Sosa",
       isPublic: true,
-      releaseNotes: []
+      releaseNotes: [],
     },
 
     {
@@ -166,11 +178,11 @@ const updatedState = {
         productId: 101,
         product: null,
         version: "5.3",
-        isPublic: false
+        isPublic: false,
       },
       title: "Chief Keef",
       isPublic: true,
-      releaseNotes: []
+      releaseNotes: [],
     },
 
     {
@@ -180,12 +192,12 @@ const updatedState = {
         productId: 102,
         product: null,
         version: "4.2",
-        isPublic: false
+        isPublic: false,
       },
       title: "2012",
       isPublic: false,
-      releaseNotes: []
-    }
+      releaseNotes: [],
+    },
   ],
-  successMsg: ""
+  successMsg: "",
 };

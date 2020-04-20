@@ -1,6 +1,7 @@
 import { createReducer, createAction } from "@reduxjs/toolkit";
 import Axios from "axios";
 import { updateInArray, deleteInArray } from "../utils/stateUtil";
+import { saveSuccess as saveReleaseNoteSuccess } from "./releaseNoteSlice";
 
 // ACTIONS
 export const name = "release/";
@@ -29,7 +30,7 @@ const initialState = {
   pending: false,
   error: "",
   items: [],
-  successMsg: ""
+  successMsg: "",
 };
 export const releaseReducer = createReducer(initialState, {
   [getSuccess]: (state, action) => {
@@ -42,16 +43,28 @@ export const releaseReducer = createReducer(initialState, {
     updateInArray(state, action);
     state.successMsg = action.payload.response;
   },
+  [saveReleaseNoteSuccess]: (state, action) => {
+    // release note updated, update affected releases
+    state.items.forEach((release) => {
+      const index = release.releaseNotes.findIndex(
+        (obj) => obj.id == action.payload.id
+      );
+      if (index !== -1) {
+        release.releaseNotes[index] = action.payload.data;
+      }
+    });
+  },
+
   [deleteSuccess]: (state, action) => {
     deleteInArray(state, action);
   },
   [postSuccess]: (state, action) => {
     state.successMsg = action.payload;
-  }
+  },
 });
 
 // THUNKS
-export const fetchReleases = queryParameters => async dispatch => {
+export const fetchReleases = (queryParameters) => async (dispatch) => {
   var query = "";
   if (queryParameters) {
     const id = queryParameters.product;
@@ -61,64 +74,60 @@ export const fetchReleases = queryParameters => async dispatch => {
 
   dispatch(getPending());
   Axios.get("/releases" + query)
-    .then(res => {
+    .then((res) => {
       dispatch(getSuccess(res.data));
     })
-    .catch(err => dispatch(getError(err)));
+    .catch((err) => dispatch(getError(err)));
 };
 
 // Thunk for fetching
-export const fetchReleaseById = id => async dispatch => {
-  if (!id) {
-    dispatch(
-      getByIdError({ id, error: "Attempted to fetch item with undefined Id" })
-    );
-    return;
-  }
+export const fetchReleaseById = (id) => async (dispatch) => {
   dispatch(getByIdPending({ id }));
   Axios.get("/releases/" + id)
-    .then(res => {
+    .then((res) => {
       dispatch(getByIdSuccess({ id, data: res.data }));
     })
-    .catch(error => {
+    .catch((error) => {
       dispatch(getByIdError({ id, error }));
     });
 };
 
-export const putReleaseById = (id, data) => async dispatch => {
+export const putReleaseById = (id, data) => async (dispatch) => {
   dispatch(putByIdPending({ id }));
   Axios.put("/releases/" + id, data)
-    .then(res => {
+    .then((res) => {
       dispatch(
         putByIdSuccess({ id: id, data: res.data, response: res.statusText })
       );
     })
-    .catch(error => {
+    .catch((error) => {
       dispatch(putByIdError({ id, error }));
     });
 };
 
 export function postRelease(releaseToCreate) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(postPending());
     return Axios.post("releases", releaseToCreate)
-      .then(response => {
-        dispatch(postSuccess(response.statusText));
+      .then((response) => {
+        dispatch(
+          postSuccess({ message: "Opprettelse av release var vellykket!" })
+        );
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(postError(error));
       });
   };
 }
 
 export function deleteRelease(id) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(deletePending());
     return Axios.delete("/releases/" + id)
-      .then(response => {
-        dispatch(deleteSuccess({id}));
+      .then((response) => {
+        dispatch(deleteSuccess({ id }));
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(deleteError(error));
       });
   };
@@ -127,6 +136,6 @@ export function deleteRelease(id) {
 // https://github.com/reduxjs/redux-toolkit/blob/master/docs/usage/usage-guide.md
 
 // SELECTORS
-export const getSuccesMessage = state => {
+export const getSuccesMessage = (state) => {
   return state.releases.successMsg;
 };

@@ -8,7 +8,7 @@ import {
   Divider,
   Typography,
   Tooltip,
-  IconButton
+  IconButton,
 } from "@material-ui/core";
 import styled from "styled-components";
 import ComposedEditorsView from "./ComposedEditorsView";
@@ -22,7 +22,7 @@ import {
   RichUtils,
   EditorState,
   convertFromHTML,
-  ContentState
+  ContentState,
 } from "draft-js";
 import {
   Assignment,
@@ -30,12 +30,12 @@ import {
   Save,
   Check,
   FiberManualRecord,
-  Error
+  Error,
 } from "@material-ui/icons";
 import { green, orange } from "@material-ui/core/colors";
 import BottomToolbar from "../shared/BottomToolbar";
 
-const ReleaseNoteEditor = props => {
+const ReleaseNoteEditor = (props) => {
   //editor states
   const [title, setTitle] = React.useState(
     RichUtils.toggleBlockType(EditorState.createEmpty(), "header-two")
@@ -109,7 +109,7 @@ const ReleaseNoteEditor = props => {
       title: savedContent1,
       ingress: savedContent2,
       description: savedContent3,
-      isPublic: ready
+      isPublic: ready,
     };
     props.onSave(returnObject);
   };
@@ -137,12 +137,17 @@ const ReleaseNoteEditor = props => {
       <BottomToolbar
         loading={props.note.pending}
         left={[
-          <CancelButton color="secondary" onClick={props.onCancel}>
+          <CancelButton
+            key="backBtn"
+            color="secondary"
+            onClick={props.onCancel}
+          >
             Tilbake
-          </CancelButton>
+          </CancelButton>,
         ]}
         right={[
           <StyledFormControlLabel
+            key="readyLabel"
             edge="end"
             control={
               <Switch
@@ -157,13 +162,14 @@ const ReleaseNoteEditor = props => {
             label="Klar for release"
           />,
           <SaveButton
+            key="saveBtn"
             onClick={handleSave}
             disabled={canSave()}
             startIcon={<Save />}
           >
             Lagre
           </SaveButton>,
-          <IconButton disableRipple>
+          <IconButton key="iconBtn" disableRipple>
             {props.note.error ? (
               <Tooltip title="En feil oppstod når du prøvde å lagre endringene">
                 <Error />
@@ -180,7 +186,7 @@ const ReleaseNoteEditor = props => {
                 <Check style={{ color: green[500] }} />
               </Tooltip>
             )}
-          </IconButton>
+          </IconButton>,
         ]}
       />
 
@@ -216,7 +222,7 @@ const ReleaseNoteEditor = props => {
                 {props.note.workItemDescriptionHtml ? (
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: props.note.workItemDescriptionHtml
+                      __html: props.note.workItemDescriptionHtml,
                     }}
                   />
                 ) : (
@@ -227,7 +233,9 @@ const ReleaseNoteEditor = props => {
           </div>
           <div>
             <ReleaseNoteInput
-              onChange={editorState => handleEditorChange("TITLE", editorState)}
+              onChange={(editorState) =>
+                handleEditorChange("TITLE", editorState)
+              }
               editorState={title}
               label="Tittel"
             />
@@ -235,7 +243,7 @@ const ReleaseNoteEditor = props => {
 
           <div>
             <ReleaseNoteInput
-              onChange={editorState =>
+              onChange={(editorState) =>
                 handleEditorChange("INGRESS", editorState)
               }
               editorState={ingress}
@@ -245,7 +253,7 @@ const ReleaseNoteEditor = props => {
 
           <div>
             <ReleaseNoteRichInput
-              onChange={editorState =>
+              onChange={(editorState) =>
                 handleEditorChange("DESCRIPTION", editorState)
               }
               editorState={description}
@@ -269,12 +277,12 @@ const ReleaseNoteEditor = props => {
 export default ReleaseNoteEditor;
 
 ReleaseNoteEditor.defaultProps = {
-  note: { item: { error: "note is undefined" } }
+  note: { item: { error: "note is undefined" } },
 };
 
 ReleaseNoteEditor.propTypes = {
   onSave: PropTypes.func,
-  note: PropTypes.object
+  note: PropTypes.object,
 };
 
 const StyledFormControlLabel = styled(FormControlLabel)`
@@ -283,7 +291,7 @@ const StyledFormControlLabel = styled(FormControlLabel)`
 
 const SaveButton = styled(Button)`
   && {
-    background-color: ${props => props.theme.secondaryColor};
+    background-color: ${(props) => props.theme.secondaryColor};
     color: white;
   }
 `;

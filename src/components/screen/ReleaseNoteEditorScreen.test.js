@@ -1,7 +1,7 @@
-import { testScreenConformance } from "../../utils/test/testScreenConformance";
-import React from 'react';
+import React from "react";
 import ReleaseNoteEditorScreen from "./ReleaseNoteEditorScreen";
+import { testScreenConformance } from "../../utils/test/testScreenConformance";
 
-describe("<ReleaseNoteEditorScree  />", () => {
+describe("<ReleaseNoteEditorScreen />", () => {
   testScreenConformance(<ReleaseNoteEditorScreen />);
 });

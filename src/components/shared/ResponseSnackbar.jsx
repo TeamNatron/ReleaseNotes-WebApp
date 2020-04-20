@@ -1,20 +1,31 @@
 import React, { useEffect, useState } from "react";
 import MuiAlert from "@material-ui/lab/Alert";
 import { Snackbar } from "@material-ui/core";
+import PropTypes from "prop-types";
 
 /*Takes in prop values for success and error, and these messages
   in a SnackBar at the bottom of the screen viewport.*/
-const ResponseSnackbar = props => {
+const ResponseSnackbar = (props) => {
   const [open, setOpen] = useState();
+  const [displayText, setDisplayText] = useState("");
+  const [severity, setSeverity] = useState("info");
 
-  const { error, success } = props;
+  const { errorOccured, errorText, successOccured, successText } = props;
   useEffect(() => {
-    if (error) setOpen(true);
-  }, [error]);
+    if (errorText) {
+      setOpen(true);
+      setDisplayText(errorText);
+      setSeverity("error");
+    }
+  }, [setDisplayText, errorText, errorOccured]);
 
   useEffect(() => {
-    if (success) setOpen(true);
-  }, [success]);
+    if (successText) {
+      setOpen(true);
+      setDisplayText(successText);
+      setSeverity("success");
+    }
+  }, [setDisplayText, successText, successOccured]);
 
   const handleClose = (event, reason) => {
     // If the user presses anywhere on the screen,
@@ -30,14 +41,21 @@ const ResponseSnackbar = props => {
     <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
       <MuiAlert
         onClose={handleClose}
-        severity={props.error ? "Error" : "Success"}
+        severity={severity}
         elevation={6}
         variant="filled"
       >
-        {props.error ? props.error : props.success}
+        {displayText}
       </MuiAlert>
     </Snackbar>
   );
 };
 
 export default ResponseSnackbar;
+
+ResponseSnackbar.propTypes = {
+  errorOccured: PropTypes.string,
+  errorText: PropTypes.string,
+  successOccured: PropTypes.string,
+  successText: PropTypes.string,
+};

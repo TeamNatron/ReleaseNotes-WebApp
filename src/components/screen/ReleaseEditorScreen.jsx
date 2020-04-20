@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import styled from "styled-components";
 import PageContainer from "../shared/PageContainer";
 import ScreenTitle from "../shared/ScreenTitle";
@@ -12,18 +12,19 @@ import {
   fetchReleaseById,
   putReleaseById,
   postRelease,
-  getSuccesMessage
+  putByIdSuccess,
 } from "../../slices/releaseSlice";
 import { loadingSelector } from "../../slices/loadingSlice";
-import { fetchReleaseNotes } from "../../slices/releaseNoteSlice";
+import {
+  fetchReleaseNotes,
+  putReleaseNote,
+} from "../../slices/releaseNoteSlice";
 import {
   initReleaseEditorReleaseNotes,
-  findReleaseById
+  findReleaseById,
 } from "../../selectors/releaseEditorSelector";
-import ResponseSnackbar from "../shared/ResponseSnackbar";
-import { errorMessageSelector } from "../../slices/errorSlice";
 
-const ReleaseEditorScreen = props => {
+const ReleaseEditorScreen = (props) => {
   const id = props.match.params.id;
   const dispatch = useDispatch();
 
@@ -39,9 +40,10 @@ const ReleaseEditorScreen = props => {
     if (id) dispatch(fetchReleaseById(id));
   }, [dispatch, id]);
 
-  const handleSave = objectToSave => {
+  const handleSave = (objectToSave) => {
     // if screen has an id, a release is being updated
     // otherwise, a release is being created
+    console.log(objectToSave);
     if (id) {
       dispatch(putReleaseById(id, objectToSave));
     } else {
@@ -49,16 +51,28 @@ const ReleaseEditorScreen = props => {
     }
   };
 
-  const handleFilter = query => {
+  const handleSaveReleaseNote = useCallback(
+    (id, objectToSave) => {
+      dispatch(putReleaseNote(id, objectToSave));
+    },
+    [dispatch]
+  );
+
+  const handleSaveEditorState = useCallback(
+    (release) => {
+      dispatch(putByIdSuccess({ data: release, id }));
+    },
+    [dispatch, id]
+  );
+
+  const handleFilter = (query) => {
     dispatch(fetchReleaseNotes(query));
   };
 
-  const productVersionsResource = useSelector(state => state.productVersions);
+  const productVersionsResource = useSelector((state) => state.productVersions);
   const releaseNotes = useSelector(initReleaseEditorReleaseNotes(id));
   const loadedRelease = useSelector(findReleaseById(id));
   const loading = useSelector(loadingSelector);
-  const error = useSelector(errorMessageSelector);
-  const success = useSelector(getSuccesMessage);
 
   const history = useHistory();
   const handleCancel = () => {
@@ -78,9 +92,10 @@ const ReleaseEditorScreen = props => {
         onCancel={handleCancel}
         onSave={handleSave}
         onFilter={handleFilter}
+        onSaveEditorState={handleSaveEditorState}
+        onSaveReleaseNote={handleSaveReleaseNote}
         loading={loading}
       />
-      <ResponseSnackbar error={error} success={success} />
     </StyledPageContainer>
   );
 };

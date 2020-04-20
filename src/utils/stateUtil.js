@@ -1,7 +1,7 @@
 // Utils for manipulating redux state with immer
 
 export const updateInArray = (state, action) => {
-  let index = state.items.findIndex(obj => obj.id == action.payload.id);
+  let index = state.items.findIndex((obj) => obj.id == action.payload.id);
   if (index === -1) {
     state.items.push(action.payload.data);
   } else {
@@ -9,7 +9,7 @@ export const updateInArray = (state, action) => {
   }
 };
 export const deleteInArray = (state, action) => {
-  let index = state.items.findIndex(obj => obj.id == action.payload.id);
+  let index = state.items.findIndex((obj) => obj.id == action.payload.id);
   if (index !== -1) {
     state.items.splice(index, 1);
   }

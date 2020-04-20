@@ -6,17 +6,17 @@ import PageContainer from "../shared/PageContainer";
 import {
   fetchReleaseNoteById,
   putReleaseNote,
-  postReleaseNote
+  postReleaseNote,
 } from "../../slices/releaseNoteSlice";
 import ReleaseNoteEditor from "../releaseNoteEditor/ReleaseNoteEditor";
 
-const ReleaseNoteEditorScreen = props => {
+const ReleaseNoteEditorScreen = (props) => {
   const id = props.match.params.id;
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const note = useSelector(state =>
-    state.releaseNotes.items.find(r => r.id == id)
+  const note = useSelector((state) =>
+    state.releaseNotes.items.find((r) => r.id == id)
   );
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const ReleaseNoteEditorScreen = props => {
     }
   }, [dispatch, note, id]);
 
-  const handleSave = objectToSave => {
+  const handleSave = (objectToSave) => {
     // if screen has an id, a release is being updated
     // otherwise, a release is being created
     if (id) dispatch(putReleaseNote(id, objectToSave));

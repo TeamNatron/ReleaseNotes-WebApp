@@ -5,8 +5,8 @@ export function getReleaseNotes() {
   return Axios.get("releasenote", {
     withCredentials: false,
     headers: {
-      ["Access-Control-Request-Headers"]: "Content-Type",
-      ["Authorization"]: "Bearer " + getAuthToken()
-    }
+      "Access-Control-Request-Headers": "Content-Type",
+      Authorization: "Bearer " + getAuthToken(),
+    },
   });
 }

@@ -12,10 +12,10 @@ import ReleaseNoteEditorScreen from "./screen/ReleaseNoteEditorScreen";
 const Routes = () => {
   const history = useHistory();
   Axios.interceptors.response.use(
-    response => {
+    (response) => {
       return response;
     },
-    error => {
+    (error) => {
       if (error.response) {
         if (error.response.status === 401) history.push("/login");
       } else {
@@ -27,37 +27,32 @@ const Routes = () => {
     }
   );
   return (
-    <React.Fragment>
+    <>
       <Route path="/" exact component={LandingScreen} />
       <Route path="/releases" exact component={ReleasesScreen} />
-      <Route path="/admin/" exact component={AdminScreen} />
+      <Route path="/admin/">
+        <AdminScreen />
+      </Route>
+
       <Route
-        path="/admin/releasenotes/edit/:id"
+        path="/releasenotes/edit/:id"
         exact
-        render={props => <ReleaseNoteEditorScreen {...props} />}
+        render={(props) => <ReleaseNoteEditorScreen {...props} />}
       />
       <Route
-        path="/admin/releasenotes/create"
+        path="/releasenotes/create"
         exact
         component={ReleaseNoteEditorScreen}
       />
       <Route
         path="/release/:id"
         exact
-        render={props => <ReleaseScreen {...props} />}
+        render={(props) => <ReleaseScreen {...props} />}
       />
       <Route path="/login/" exact component={LoginScreen} />
-      <Route
-        path="/admin/releases/create"
-        exact
-        component={ReleaseEditorScreen}
-      />
-      <Route
-        path="/admin/releases/edit/:id"
-        exact
-        component={ReleaseEditorScreen}
-      />
-    </React.Fragment>
+      <Route path="/releases/create" exact component={ReleaseEditorScreen} />
+      <Route path="/releases/edit/:id" exact component={ReleaseEditorScreen} />
+    </>
   );
 };
 

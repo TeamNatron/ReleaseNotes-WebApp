@@ -1,69 +1,101 @@
-import { createAction, createReducer } from "@reduxjs/toolkit";
+import { createAction, createReducer, createSelector } from "@reduxjs/toolkit";
 import {
   setAuthToken,
   getAuthToken,
-  removeAuthToken
+  removeAuthToken,
 } from "../handlers/cookieHandler";
 import Axios from "axios";
 
 const name = "auth/";
-const postPending = createAction(name + "postPending");
-const postError = createAction(name + "postError");
-const postSuccess = createAction(name + "postSuccess");
+const azureName = "users/azure/";
+export const postPending = createAction(name + "postPending");
+export const postError = createAction(name + "postError");
+export const postSuccess = createAction(name + "postSuccess");
 
-const checkLoggedInPending = createAction(name + "checkLoggedInPending");
-const checkLoggedInError = createAction(name + "checkLoggedInError");
-const checkLoggedInSuccess = createAction(name + "checkLoggedInSuccess");
+export const getPending = createAction(azureName + "getPending");
+export const getSuccess = createAction(azureName + "getSuccess");
+export const getError = createAction(azureName + "getError");
 
-const logoutPending = createAction(name + "logoutPending");
-const logoutError = createAction(name + "logoutError");
-const logoutSuccess = createAction(name + "logoutSuccess");
+export const putPending = createAction(name + "putPending");
+export const putSuccess = createAction(name + "putSuccess");
+export const putError = createAction(name + "putError");
 
-export const authReducer = createReducer(
-  { isLogged: false, sucessMsg: "" },
-  {
-    [postSuccess]: (state, action) => {
-      state.isLogged = true;
-      state.sucessMsg = action.payload.statusText;
-      setAuthToken(action.payload.data);
+export const checkLoggedInPending = createAction(name + "checkLoggedInPending");
+export const checkLoggedInError = createAction(name + "checkLoggedInError");
+export const checkLoggedInSuccess = createAction(name + "checkLoggedInSuccess");
+
+export const logoutPending = createAction(name + "logoutPending");
+export const logoutError = createAction(name + "logoutError");
+export const logoutSuccess = createAction(name + "logoutSuccess");
+
+const initialState = {
+  isLogged: false,
+  sucessMsg: "",
+  currentUser: {
+    id: -1,
+    email: "",
+    roles: [],
+    azureInformation: {
+      id: -1,
+      userId: "",
+      pat: "",
+      organization: "",
     },
-    [checkLoggedInSuccess]: (state, action) => {
-      state.isLogged = true;
-    },
-    [checkLoggedInError]: state => {
-      state.isLogged = false;
-    },
-    [logoutSuccess]: state => {
-      state.isLogged = false;
-    }
-  }
-);
+  },
+};
 
-// THUNKS
-export const login = (paramEmail, paramPassword) => async dispatch => {
+export const authReducer = createReducer(initialState, {
+  [postSuccess]: (state, action) => {
+    state.isLogged = true;
+    state.sucessMsg = action.payload.statusText;
+    setAuthToken(action.payload.data);
+  },
+  [checkLoggedInSuccess]: (state, action) => {
+    state.isLogged = true;
+  },
+  [checkLoggedInError]: (state) => {
+    state.isLogged = false;
+  },
+  [logoutSuccess]: (state) => {
+    state.isLogged = false;
+  },
+  [putSuccess]: (state, action) => {
+    state.currentUser = action.payload.data;
+    state.sucessMsg = action.payload.statusText;
+  },
+  [getSuccess]: (state, action) => {
+    state.currentUser.azureInformation = action.payload.data;
+  },
+});
+
+// THUNKS.
+export const login = (paramEmail, paramPassword) => async (dispatch) => {
   dispatch(postPending());
-  Axios.post(
+  return await Axios.post(
     "login",
     {
       email: paramEmail,
-      password: paramPassword
+      password: paramPassword,
     },
     {
       withCredentials: false,
       headers: {
-        ["Access-Control-Request-Headers"]: "Content-Type"
-      }
+        "Access-Control-Request-Headers": "Content-Type",
+      },
     }
   )
-    .then(res => {
+    .then((res) => {
       dispatch(postSuccess({ data: res.data, statusText: res.statusText }));
+      return true;
     })
-    .catch(err => {
+    .catch((err) => {
+      console.log(err);
       dispatch(postError(err));
+      return false;
     });
 };
 
-export const logout = () => async dispatch => {
+export const logout = () => async (dispatch) => {
   dispatch(logoutPending);
 
   try {
@@ -74,7 +106,7 @@ export const logout = () => async dispatch => {
   }
 };
 
-export const checkLoggedIn = () => async dispatch => {
+export const checkLoggedIn = () => async (dispatch) => {
   dispatch(checkLoggedInPending());
   if (getAuthToken()) {
     dispatch(checkLoggedInSuccess());
@@ -83,7 +115,56 @@ export const checkLoggedIn = () => async dispatch => {
   dispatch(checkLoggedInError());
 };
 
+// thunk for fetching azure info
+export const fetchAzureInfo = () => async (dispatch) => {
+  dispatch(getPending());
+  Axios.get("/users/azure")
+    .then((res) => {
+      dispatch(getSuccess({ data: res.data }));
+    })
+    .catch((err) => {
+      dispatch(getError(err));
+    });
+};
+
+// Thunk for update azure info
+export const updateAzureInfo = (name, PAT, org) => async (dispatch) => {
+  dispatch(putPending());
+  Axios.put("/users", {
+    AzureInformation: {
+      userId: name,
+      pat: PAT,
+      Organization: org,
+    },
+  })
+    .then((res) => {
+      dispatch(putSuccess({ data: res.data, statusText: res.statusText }));
+    })
+    .catch((err) => {
+      dispatch(putError(err));
+    });
+};
+
 // SELECTORS
-export const loggedInSelector = state => {
+export const loggedInSelector = (state) => {
   return state.auth.isLogged;
+};
+
+export const azureApiSelector = createSelector(
+  (state) => state.auth.currentUser.azureInformation,
+  (azureInfo) => {
+    return {
+      organization: azureInfo.organization,
+      authToken: createAuthToken(azureInfo),
+    };
+  }
+);
+
+const createAuthToken = (azureInfo) => {
+  var authToken = btoa(azureInfo.userId + ":" + azureInfo.pat);
+  return authToken;
+};
+
+export const organizationSelector = (state) => {
+  return state.auth.organization;
 };
