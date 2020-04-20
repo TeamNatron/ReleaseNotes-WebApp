@@ -110,11 +110,17 @@ const AzureMappingView = (props) => {
       onRowUpdate: (newData, oldData) =>
         new Promise((resolve, reject) => {
           try {
+            // Get the field name to set
             const result = lookup[newData.azdFieldName];
+
+            // Get tableObject
             var index = localMappings.indexOf(oldData);
             var tableObject = localMappings[index];
-            var id = Object.getPrototypeOf(tableObject).id;
-            dispatch(putMapping(id, result));
+
+            // Get id of mapping
+            var mappingId = tableObject.id;
+
+            dispatch(putMapping(mappingId, result));
           } catch {
             throw new Error("Couldn't find object");
           }
