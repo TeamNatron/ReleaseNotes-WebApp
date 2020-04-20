@@ -167,38 +167,36 @@ const ReleaseEditor = (props) => {
     }
   };
 
-  const moveWithinSameColumn = useCallback(
-    (srcDroppableId, srcIndex, destIndex) => {
-      let allItemsCopy = JSON.parse(JSON.stringify(allItems));
+  const moveWithinSameColumn = (srcDroppableId, srcIndex, destIndex) => {
+    let allItemsCopy = JSON.parse(JSON.stringify(allItems));
 
-      let column = allItemsCopy[srcDroppableId].list;
+    let column = allItemsCopy[srcDroppableId].list;
 
-      let item = column[srcIndex];
+    let item = column[srcIndex];
 
-      column.splice(srcIndex, 1);
-      column.splice(destIndex, 0, item);
+    column.splice(srcIndex, 1);
+    column.splice(destIndex, 0, item);
 
-      setAllItems(allItemsCopy);
-    },
-    [allItems]
-  );
+    setAllItems(allItemsCopy);
+  };
+  const moveToAnotherColumn = (
+    srcDroppableId,
+    destDroppableId,
+    srcIndex,
+    destIndex
+  ) => {
+    let allItemsCopy = JSON.parse(JSON.stringify(allItems));
 
-  const moveToAnotherColumn = useCallback(
-    (srcDroppableId, destDroppableId, srcIndex, destIndex) => {
-      let allItemsCopy = JSON.parse(JSON.stringify(allItems));
+    const srcColumn = allItemsCopy[srcDroppableId].list;
+    const destColumn = allItemsCopy[destDroppableId].list;
 
-      const srcColumn = allItemsCopy[srcDroppableId].list;
-      const destColumn = allItemsCopy[destDroppableId].list;
+    let item = srcColumn[srcIndex];
 
-      let item = srcColumn[srcIndex];
+    srcColumn.splice(srcIndex, 1);
+    destColumn.splice(destIndex, 0, item);
 
-      srcColumn.splice(srcIndex, 1);
-      destColumn.splice(destIndex, 0, item);
-
-      setAllItems(allItemsCopy);
-    },
-    [allItems]
-  );
+    setAllItems(allItemsCopy);
+  };
 
   /**
    * update query string based on properties in received object
@@ -234,14 +232,10 @@ const ReleaseEditor = (props) => {
     setTitle(newTitle);
   };
 
-  const handleRemoveReleaseNote = useCallback(
-    (srcIndex) => {
-      moveToAnotherColumn("release", "releaseNotes", srcIndex, 0);
-    },
-    [moveToAnotherColumn]
-  );
-
-  const handleSave = useCallback(() => {
+  const handleRemoveReleaseNote = (srcIndex) => {
+    moveToAnotherColumn("release", "releaseNotes", srcIndex, 0);
+  };
+  const handleSave = () => {
     const release = {
       productVersionId: selectedPv.id,
       title: title,
@@ -249,9 +243,9 @@ const ReleaseEditor = (props) => {
       releaseNotesId: allItems.release.list.map((rn) => rn.id),
     };
     props.onSave(release);
-  }, [allItems, isPublic, props, selectedPv.id, title]);
+  };
 
-  const getCurrentReleaseState = useCallback(() => {
+  const getCurrentReleaseState = () => {
     if (props.release) {
       return {
         productVersion: props.productVersionsResource.items.find(
@@ -264,24 +258,14 @@ const ReleaseEditor = (props) => {
         date: Date.now(),
       };
     }
-  }, [
-    allItems.release.list,
-    isPublic,
-    props.productVersionsResource.items,
-    props.release,
-    selectedPv.id,
-    title,
-  ]);
+  };
 
-  const handleSaveReleaseNote = useCallback(
-    (releaseNoteId, releaseNote) => {
-      // save editor state locally, then save release note
-      const release = getCurrentReleaseState();
-      props.onSaveEditorState(release);
-      props.onSaveReleaseNote(releaseNoteId, releaseNote);
-    },
-    [props, getCurrentReleaseState]
-  );
+  const handleSaveReleaseNote = (releaseNoteId, releaseNote) => {
+    // save editor state locally, then save release note
+    const release = getCurrentReleaseState();
+    props.onSaveEditorState(release);
+    props.onSaveReleaseNote(releaseNoteId, releaseNote);
+  };
 
   const releaseNoteStyle = {
     minWidth: "20rem",
