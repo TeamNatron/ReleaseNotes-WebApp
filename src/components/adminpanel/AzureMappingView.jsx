@@ -45,7 +45,7 @@ const AzureMappingView = (props) => {
   });
 
   const [localMappings, setLocalMappings] = useState([{}]);
-  const [workItemTypes, setWorkItemTypes] = useState(["task", "bug"]);
+  const [workItemTypes] = useState(["task", "bug"]);
   const [selectedWorkItemType, setSelectedWorkItemType] = useState("task");
 
   useEffect(() => {
