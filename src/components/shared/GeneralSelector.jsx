@@ -13,10 +13,24 @@ import styled from "styled-components";
  * @param {*} props.items Must be an array with objects containing id and value or be a single fielded
  */
 const GeneralSelector = (props) => {
-  const { items, selected, handleChange, helperText, label } = props;
+  const { items, selected, handleChange, helperText, label, ml } = props;
 
   return (
-    <StyledFormControl>
+    <StyledFormControl
+      adornedStartfalse
+      color="primary"
+      disabledfalse
+      errorfalse
+      filledtrue
+      focusedfalse
+      fullWidthfalse
+      hiddenLabelfalse
+      margin="none"
+      requiredfalse
+      variant="standard"
+      ml={ml ? ml : 0}
+    >
+      {helperText ? <FormHelperText>{helperText}</FormHelperText> : ""}
       <Select label={label} value={selected} onChange={handleChange}>
         {items.map((obj) => (
           <MenuItem key={typeof obj === "string" ? obj : obj.id} value={obj}>
@@ -24,19 +38,19 @@ const GeneralSelector = (props) => {
           </MenuItem>
         ))}
       </Select>
-      <FormHelperText>{helperText}</FormHelperText>
     </StyledFormControl>
   );
 };
 
 GeneralSelector.prototype = {
   items: PropTypes.array,
+  ml: PropTypes.string,
 };
 
 export default GeneralSelector;
 
 const StyledFormControl = styled(FormControl)`
   && {
-    margin-left: 25px;
+    margin-left: ${(props) => (props.ml ? props.ml : 0)}px;
   }
 `;
