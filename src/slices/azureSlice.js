@@ -67,8 +67,8 @@ export const fetchProjects = (params) => async (dispatch) => {
     .then((res) => {
       dispatch(getProjectsSuccess({ data: res.data }));
     })
-    .catch((error) => {
-      dispatch(getProjectsError(error));
+    .catch(() => {
+      dispatch(getProjectsError());
     });
 };
 
