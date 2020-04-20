@@ -32,6 +32,12 @@ const ReleaseEditor = (props) => {
   const [title, setTitle] = useState(release?.title || "");
   const [selectedPv, setSelectedPv] = useState("");
 
+  const [titleError, setTitleError] = useState(null);
+  const [RNError, setRNError] = useState(null);
+  const [PVError, setPVError] = useState(null);
+
+  const [submitDisabled, setSubmitDisabled] = useState(false);
+
   const [allItems, setAllItems] = useState({
     release: {
       id: columns[0],
@@ -44,6 +50,34 @@ const ReleaseEditor = (props) => {
       list: props.releaseNotesResource || [],
     },
   });
+
+  const validateTitle = () => {
+    if (title === "") {
+      setTitleError("Felt kan ikke være tomt");
+    } else {
+      setTitleError(null);
+    }
+  };
+
+  const validateReleaseNotes = () => {
+    if (allItems.release.list.length !== 0) {
+      setRNError(null);
+    } else {
+      setRNError("Du må i hvert fall velge en Release Note");
+    }
+  };
+
+  const validateProductVersion = () => {
+    if (selectedPv) {
+      setPVError(null);
+    } else {
+      setPVError("Du må velge et produkt");
+    }
+  };
+
+  const validateSubmit = () => {
+    setSubmitDisabled(Boolean(titleError || RNError || PVError));
+  };
 
   // init loaded release
   useEffect(() => {
@@ -60,9 +94,6 @@ const ReleaseEditor = (props) => {
 
     setTitle(props.release.title);
     setIsPublic(Boolean(props.release.isPublic));
-
-    //this.validateTitle();
-    //this.validateProductVersion();
   }, [props.release]);
 
   // init loaded releaseNotes
@@ -83,6 +114,7 @@ const ReleaseEditor = (props) => {
   const { onFilter } = props;
   useEffect(() => {
     onFilter(filterQuery);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterQuery]);
 
   // init loaded productversion
@@ -96,6 +128,12 @@ const ReleaseEditor = (props) => {
       : undefined;
     itemToSelect && setSelectedPv(itemToSelect);
   }, [props.release, props.productVersionsResource]);
+
+  // form validation
+  useEffect(() => validateTitle(), [title]);
+  useEffect(() => validateReleaseNotes(), [allItems]);
+  useEffect(() => validateProductVersion(), [selectedPv]);
+  useEffect(() => validateSubmit(), [titleError, RNError, PVError]);
 
   const onDragEnd = (result) => {
     const { destination, source } = result;
@@ -138,7 +176,6 @@ const ReleaseEditor = (props) => {
       column.splice(destIndex, 0, item);
 
       setAllItems(allItemsCopy);
-      //validateReleaseNotes();
     },
     [allItems]
   );
@@ -156,7 +193,6 @@ const ReleaseEditor = (props) => {
       destColumn.splice(destIndex, 0, item);
 
       setAllItems(allItemsCopy);
-      //validateReleaseNotes();
     },
     [allItems]
   );
@@ -183,6 +219,7 @@ const ReleaseEditor = (props) => {
     });
     setFilterQuery(query);
   };
+
   const createQuery = (query, name, value) => {
     return query.length > 1
       ? query + "&" + name + "=" + value
@@ -192,7 +229,6 @@ const ReleaseEditor = (props) => {
   const handleOnChangeTitle = (result) => {
     const newTitle = result.target.value;
     setTitle(newTitle);
-    //validateTitle();
   };
 
   const handleRemoveReleaseNote = useCallback(
@@ -290,7 +326,7 @@ const ReleaseEditor = (props) => {
           />,
           <SaveButton
             key="saveBtn"
-            //disabled={submitDisabled}
+            disabled={submitDisabled}
             variant="contained"
             onClick={handleSave}
           >
@@ -299,11 +335,7 @@ const ReleaseEditor = (props) => {
         ]}
         middle={[
           <ErrorMsgContainer key="errorMsgContainer">
-            <span>
-              {
-                //releaseNoteErrorMsg
-              }
-            </span>
+            <span>{RNError}</span>
           </ErrorMsgContainer>,
         ]}
       />
@@ -313,6 +345,7 @@ const ReleaseEditor = (props) => {
             items={props.productVersionsResource.items}
             onChange={handlePvChange}
             value={selectedPv}
+            error={PVError}
           ></PVSelect>
         }
         right={
@@ -331,8 +364,8 @@ const ReleaseEditor = (props) => {
             <TitleTextField
               value={title}
               handleOnChangeTitle={handleOnChangeTitle}
-              //error={titleIsError}
-              //helperText={titleErrorMsg}
+              error={Boolean(titleError)}
+              helperText={titleError}
             />
             {useMemo(
               () => (
@@ -437,12 +470,7 @@ const VerticalDivider = styled(Divider)`
 const PVSelect = (props) => {
   const [open, setOpen] = useState(false);
   return (
-    <StyledFormControl
-      error={
-        ""
-        //productVersionIsError
-      }
-    >
+    <StyledFormControl error={props.error}>
       <InputLabel id="product-version-error-label">Produkt</InputLabel>
       <Select
         labelId="product-version-error-label"
@@ -463,11 +491,7 @@ const PVSelect = (props) => {
           </MenuItem>
         ))}
       </Select>
-      <FormHelperText>
-        {
-          //productVersionErrorMsg
-        }
-      </FormHelperText>
+      <FormHelperText>{props.error}</FormHelperText>
     </StyledFormControl>
   );
 };
