@@ -37,13 +37,9 @@ export const fetchRNSMappingsPending = createAction(RNS_MAPPING + "getPending");
 export const fetchRNSMappingsError = createAction(RNS_MAPPING + "getError");
 export const fetchRNSMappingsSuccess = createAction(RNS_MAPPING + "getSuccess");
 
-export const putMappingPending = createAction(
-  NAME + "postProductVersionPending"
-);
-export const putMappingError = createAction(NAME + "postProductVersionError");
-export const putMappingSuccess = createAction(
-  NAME + "postProductVersionSuccess"
-);
+export const putMappingPending = createAction(NAME + "putMappingPending");
+export const putMappingError = createAction(NAME + "putMappingError");
+export const putMappingSuccess = createAction(NAME + "putMappingSuccess");
 
 export const initialState = {
   RNSMappable: [],
@@ -60,6 +56,9 @@ export const mappingReducer = createReducer(initialState, {
   },
   [fetchRNSMappingsSuccess]: (state, action) => {
     state.RNSMappings = action.payload.data;
+  },
+  [putMappingSuccess]: (state, action) => {
+    //todo implement update state with new mapping
   },
 });
 
@@ -130,6 +129,19 @@ export const fetchRNSMappings = () => async (dispatch) => {
     })
     .catch(() => {
       dispatch(fetchRNSMappingsError());
+    });
+};
+
+export const putMapping = (id, data) => async (dispatch) => {
+  const url = "/MappableFields/" + id;
+  dispatch(putMappingPending());
+
+  Axios.put(url)
+    .then((res, data) => {
+      dispatch(putMappingSuccess({ data: res.data }));
+    })
+    .catch((err) => {
+      dispatch(putMappingError(err));
     });
 };
 
