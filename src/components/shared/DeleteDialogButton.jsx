@@ -51,12 +51,12 @@ export default function DeleteDialogButton(props) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Er du sikker på du vil slette denne entiteten? Den vil bli fjernet
+            Er du sikker på du vil slette "{props.entityName}"? Den vil bli fjernet
             fra systemet for all evighet.
           </DialogContentText>
           {releases ? (
             <DialogContentText id="alert-dialog-description">
-              {"Denne ReleaseNoten er benyttet av: "}
+              "{props.entityName}"{" er benyttet av: "}
               <BoldText>
                 {releases.map((r, i) => {
                   return releases[i + 1] ? r.title + ", " : r.title;
@@ -64,8 +64,8 @@ export default function DeleteDialogButton(props) {
               </BoldText>
             </DialogContentText>
           ) : (
-            ""
-          )}
+              ""
+            )}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
