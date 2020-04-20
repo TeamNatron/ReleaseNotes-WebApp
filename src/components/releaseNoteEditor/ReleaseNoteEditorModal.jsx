@@ -24,8 +24,8 @@ const ReleaseNoteEditorModal = (props) => {
 
   return (
     <React.Fragment>
-      <IconButton onClick={handleOpen}>
-        <Edit />
+      <IconButton onClick={handleOpen} color="primary" size={props.size}>
+        <Edit fontSize={props.size} />
       </IconButton>
       <Modal open={open} onClose={handleClose} style={{ overflow: "scroll" }}>
         <ModalContainer>
