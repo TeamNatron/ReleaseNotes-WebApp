@@ -32,7 +32,6 @@ import {
   putMapping,
 } from "../../slices/mappingSlice";
 import { useState } from "react";
-import { prototype } from "enzyme-adapter-react-16";
 
 const AzureMappingView = (props) => {
   const { authToken, project, org } = props;
@@ -44,7 +43,7 @@ const AzureMappingView = (props) => {
     0: "",
   });
 
-  const [localMappings, setLocalMappings] = useState([{ rnsFieldName: "" }]);
+  const [localMappings, setLocalMappings] = useState([{}]);
 
   useEffect(() => {
     dispatch(fetchRNSMappable());
@@ -65,6 +64,7 @@ const AzureMappingView = (props) => {
   }, [rnsMappings, setLocalMappings]);
 
   useEffect(() => {
+    // If there's no members in object, just return
     if (Object.keys(azdFields).length === 0 && azdFields.constructor === Object)
       return;
     setLookup(azdFields);
@@ -97,7 +97,6 @@ const AzureMappingView = (props) => {
           } catch {
             throw new Error("Couldn't find object");
           }
-          // dispatch(putMapping(newData))
           resolve();
         }),
     };
@@ -131,7 +130,7 @@ const AzureMappingView = (props) => {
         ]}
         data={localMappings}
         editable={getEditable()}
-        actions={actionsMappingTable(rnsTableRef)}
+        // actions={actionsMappingTable(rnsTableRef)}
         options={optionsMappingTable}
         // components={getAzureDevOpsFieldSelector()}
       />
