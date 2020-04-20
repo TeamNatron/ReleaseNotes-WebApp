@@ -153,17 +153,6 @@ const AzureMappingView = (props) => {
 
 export default AzureMappingView;
 
-const actionsMappingTable = (ref) => {
-  return [
-    {
-      icon: () => <Refresh />,
-      tooltip: "Refresh Data",
-      isFreeAction: true,
-      onClick: () => ref.current && ref.current.onQueryChange(),
-    },
-  ];
-};
-
 const optionsMappingTable = {
   search: false,
   paging: false,
