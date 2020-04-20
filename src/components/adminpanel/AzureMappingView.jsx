@@ -60,8 +60,29 @@ const AzureMappingView = (props) => {
 
   // Updates the fields
   useEffect(() => {
-    setLocalMappings(deepCopyArray(rnsMappings));
-  }, [rnsMappings, setLocalMappings]);
+    if (!rnsMappings) return;
+    if (!lookup || lookup[0] === "") {
+      setLocalMappings(rnsMappings);
+      return;
+    }
+
+    // To get the correct index of mappings, a comparison is made between strings
+    rnsMappings.forEach((obj) => {
+      if (obj.azureDevOpsField === "" || !obj.azureDevOpsField) return;
+
+      // Find the id of this string
+      for (const index in lookup) {
+        // find matching string
+        if (lookup[index] === obj.azureDevOpsField) {
+          // return id
+          obj.azdFieldName = index;
+          break;
+        }
+      }
+    });
+
+    setLocalMappings(rnsMappings);
+  }, [lookup, rnsMappings]);
 
   useEffect(() => {
     // If there's no members in object, just return
