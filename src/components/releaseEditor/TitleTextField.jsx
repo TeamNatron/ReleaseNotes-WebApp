@@ -4,16 +4,14 @@ import styled from "styled-components";
 
 const TitleTextField = (props) => {
   return (
-    <React.Fragment>
-      <StyledTextField
-        variant="outlined"
-        helperText={props.helperText}
-        error={props.error}
-        value={props.value}
-        onChange={props.handleOnChangeTitle}
-        placeholder="Skriv en tittel"
-      />
-    </React.Fragment>
+    <StyledTextField
+      variant="outlined"
+      helperText={props.helperText}
+      error={props.error}
+      value={props.value || ""}
+      onChange={props.handleOnChangeTitle}
+      placeholder="Skriv en tittel"
+    />
   );
 };
 
@@ -28,7 +26,7 @@ const StyledTextField = styled(TextField)`
     }
   }
   input {
-    height: 7rem;
+    height: 5rem;
     font-size: 2rem;
   }
 `;

@@ -214,8 +214,12 @@ export const importRelease = (
     );
 };
 
-// util
+// utils
 export const createWorkItem = (item) => {
+  var desc = item.fields["System.Description"];
+  if (isEmpty(desc)) {
+    desc = "";
+  }
   return {
     WorkItemId: item.id,
     WorkItemTitle: item.fields["System.Title"],
@@ -223,5 +227,12 @@ export const createWorkItem = (item) => {
     WorkItemDescriptionHtml: item.fields["System.Description"],
     AuthorName: item.fields["System.CreatedBy"]["displayName"],
     AuthorEmail: item.fields["System.CreatedBy"]["uniqueName"],
+    title: item.fields["System.Title"],
+    ingress: "",
+    Description: desc
   };
 };
+
+function isEmpty(str) {
+  return (!str || 0 === str.length);
+}
