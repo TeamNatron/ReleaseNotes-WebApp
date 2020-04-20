@@ -132,6 +132,14 @@ export const RNSFieldsSelector = createSelector(
   }
 );
 
+export const RNSTableFieldSelector = createSelector(
+  RNSFieldsSelector,
+  (fields) =>
+    fields.map((obj) => {
+      return { rnsFieldName: obj.name };
+    })
+);
+
 export const AZDFieldSelector = createSelector(
   (state) => {
     if (!state) return [];
@@ -144,8 +152,11 @@ export const AZDFieldSelector = createSelector(
 
 export const AZDTableFieldSelector = createSelector(
   AZDFieldSelector,
-  (fields) =>
-    fields.map((obj) => {
-      return { name: obj };
-    })
+  (fields) => {
+    let obj = {};
+    for (const [i, value] of fields.entries()) {
+      obj[i] = value;
+    }
+    return obj;
+  }
 );
