@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { DragDropContext } from "react-beautiful-dnd";
 import Column from "./Column";
@@ -22,6 +22,7 @@ import shortid from "shortid";
 import ToolbarBase from "../shared/ToolbarBase";
 import { FilterListRounded } from "@material-ui/icons";
 import FilterToolbar from "./FilterToolbar";
+import ModalButton from "../shared/ModalButton";
 
 const columns = ["release", "releaseNotes"];
 const ReleaseEditor = (props) => {
@@ -130,10 +131,12 @@ const ReleaseEditor = (props) => {
   }, [props.release, props.productVersionsResource]);
 
   // form validation
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => validateTitle(), [title]);
   useEffect(() => validateReleaseNotes(), [allItems]);
   useEffect(() => validateProductVersion(), [selectedPv]);
   useEffect(() => validateSubmit(), [titleError, RNError, PVError]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   const onDragEnd = (result) => {
     const { destination, source } = result;
@@ -238,7 +241,7 @@ const ReleaseEditor = (props) => {
     [moveToAnotherColumn]
   );
 
-  const handleSave = () => {
+  const handleSave = useCallback(() => {
     const release = {
       productVersionId: selectedPv.id,
       title: title,
@@ -246,7 +249,7 @@ const ReleaseEditor = (props) => {
       releaseNotesId: allItems.release.list.map((rn) => rn.id),
     };
     props.onSave(release);
-  };
+  }, [allItems, isPublic, props, selectedPv.id, title]);
 
   const getCurrentReleaseState = useCallback(() => {
     if (props.release) {
@@ -285,16 +288,23 @@ const ReleaseEditor = (props) => {
     flexBasis: "20%",
   };
 
-  const handlePvChange = (ev) => {
-    if (ev.target.value) {
-      const itemToSelect = props.productVersionsResource.items.find(
-        (item) => ev.target.value.id === item.id
-      );
-      if (itemToSelect) {
-        setSelectedPv(itemToSelect);
+  const handlePvChange = useCallback(
+    (ev) => {
+      if (ev.target.value) {
+        const itemToSelect = props.productVersionsResource.items.find(
+          (item) => ev.target.value.id === item.id
+        );
+        if (itemToSelect) {
+          setSelectedPv(itemToSelect);
+        }
       }
-    }
-  };
+    },
+    [props.productVersionsResource.items]
+  );
+
+  const handleIsPublicChange = useCallback(() => {
+    setIsPublic((oldIsPublic) => !oldIsPublic);
+  }, []);
 
   return (
     <React.Fragment>
@@ -310,19 +320,19 @@ const ReleaseEditor = (props) => {
           </Button>,
         ]}
         right={[
-          <FormControlLabel
-            key="isPublicSwitch"
-            style={{ marginLeft: "15px" }}
-            control={
-              <Switch
-                checked={isPublic}
-                onChange={() => setIsPublic(!isPublic)}
-                value={isPublic}
-                color="primary"
-                inputProps={{ "aria-label": "primary checkbox" }}
-              />
-            }
-            label="Publisert"
+          <ModalButton
+            label="Forhåndsvis"
+            modalLabel="Forhåndsvis release"
+            buttonProps={{
+              color: "primary",
+              size: "small",
+              variant: "contained",
+              disableElevation: true,
+            }}
+          ></ModalButton>,
+          <IsPublicSwitch
+            isPublic={isPublic}
+            onChange={handleIsPublicChange}
           />,
           <SaveButton
             key="saveBtn"
@@ -386,8 +396,6 @@ const ReleaseEditor = (props) => {
             id={allItems.releaseNotes.id}
             title={allItems.releaseNotes.name}
             releaseNotes={allItems.releaseNotes.list}
-            handleRemoveReleaseNote={handleRemoveReleaseNote}
-            onSaveReleaseNote={handleSaveReleaseNote}
           />
         </FlexContainer>
       </DragDropContext>
@@ -457,7 +465,7 @@ const VerticalDivider = styled(Divider)`
   }
 `;
 
-const PVSelect = (props) => {
+const PVSelect = React.memo(function MemoPVSelect(props) {
   const [open, setOpen] = useState(false);
   return (
     <StyledFormControl error={props.error}>
@@ -484,4 +492,23 @@ const PVSelect = (props) => {
       <FormHelperText>{props.error}</FormHelperText>
     </StyledFormControl>
   );
-};
+});
+
+const IsPublicSwitch = React.memo(function MemoIsPublicSwitch(props) {
+  return (
+    <FormControlLabel
+      key="isPublicSwitch"
+      style={{ marginLeft: "15px" }}
+      control={
+        <Switch
+          checked={props.isPublic}
+          onChange={props.onChange}
+          value={props.isPublic}
+          color="primary"
+          inputProps={{ "aria-label": "primary checkbox" }}
+        />
+      }
+      label="Publisert"
+    />
+  );
+});
