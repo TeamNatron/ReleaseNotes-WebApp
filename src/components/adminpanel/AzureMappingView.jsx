@@ -55,13 +55,23 @@ const AzureMappingView = (props) => {
 
   useEffect(() => {
     const { authToken, organization } = azureProps;
-    if (authToken === "" || selectedProject === "" || organization === "")
+    if (
+      authToken === "" ||
+      selectedProject === "" ||
+      organization === "" ||
+      selectedWorkItemType === ""
+    )
       return;
     if (!authToken || !selectedProject || !organization) return;
     dispatch(
-      fetchAZDMappable(authToken, selectedProject, organization, "task")
+      fetchAZDMappable(
+        authToken,
+        selectedProject,
+        organization,
+        selectedWorkItemType
+      )
     );
-  }, [dispatch, azureProps, selectedProject]);
+  }, [dispatch, azureProps, selectedProject, selectedWorkItemType]);
 
   const azdFields = useSelector(AZDTableFieldSelector);
   const rnsMappings = useSelector(rnsMappingsTableFields);
