@@ -23,6 +23,7 @@ import ToolbarBase from "../shared/ToolbarBase";
 import { FilterListRounded } from "@material-ui/icons";
 import FilterToolbar from "./FilterToolbar";
 import ModalButton from "../shared/ModalButton";
+import ReleaseView from "../releaseView/ReleaseView";
 
 const columns = ["release", "releaseNotes"];
 const ReleaseEditor = (props) => {
@@ -313,7 +314,9 @@ const ReleaseEditor = (props) => {
               variant: "contained",
               disableElevation: true,
             }}
-          ></ModalButton>,
+          >
+            <ReleaseView release={getCurrentReleaseState()} />
+          </ModalButton>,
           <IsPublicSwitch
             isPublic={isPublic}
             onChange={handleIsPublicChange}
