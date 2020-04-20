@@ -121,6 +121,18 @@ const buildWorkitemTypeURL = (project, org, itemType) => {
   );
 };
 
+export const fetchRNSMappings = () => async (dispatch) => {
+  const url = "/MappableFields?mapped";
+  dispatch(fetchRNSMappingsPending());
+  Axios.get(url)
+    .then((res) => {
+      dispatch(fetchRNSMappingsSuccess({ data: res.data }));
+    })
+    .catch(() => {
+      dispatch(fetchRNSMappingsError());
+    });
+};
+
 // SELECTORS
 export const RNSFieldsSelector = createSelector(
   (state) => {
@@ -158,5 +170,26 @@ export const AZDTableFieldSelector = createSelector(
       obj[i] = value;
     }
     return obj;
+  }
+);
+
+export const rnsFieldMappingSelector = createSelector(
+  (state) => {
+    if (!state) return {};
+    return state.mapping.RNSMappings;
+  },
+  (mappings) => {
+    return mappings.entity;
+  }
+);
+
+export const rnsMappingsTableFields = createSelector(
+  rnsFieldMappingSelector,
+  (fields) => {
+    if (!fields) return;
+    return fields.map((obj) => ({
+      rnsFieldName: obj.mappableField.name,
+      azdFieldName: obj.azureDevOpsField,
+    }));
   }
 );
