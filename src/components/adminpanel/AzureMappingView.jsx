@@ -32,6 +32,7 @@ import {
 } from "../../slices/mappingSlice";
 import PropTypes from "prop-types";
 import { useState } from "react";
+import GeneralSelector from "../shared/GeneralSelector";
 
 const AzureMappingView = (props) => {
   const { azureProps, selectedProject } = props;
@@ -44,6 +45,8 @@ const AzureMappingView = (props) => {
   });
 
   const [localMappings, setLocalMappings] = useState([{}]);
+  const [workItemTypes, setWorkItemTypes] = useState(["task", "bug"]);
+  const [selectedWorkItemType, setSelectedWorkItemType] = useState("task");
 
   useEffect(() => {
     dispatch(fetchRNSMappable());
@@ -120,6 +123,11 @@ const AzureMappingView = (props) => {
     };
   };
 
+  const handleSelectedWorkItemType = (event) => {
+    console.log(event.currentTarget.textContent);
+    setSelectedWorkItemType(event.currentTarget.textContent);
+  };
+
   return (
     <ExpansionPanel>
       <ExpansionPanelSummary
@@ -129,6 +137,13 @@ const AzureMappingView = (props) => {
       >
         <Typography>Release Note Mapping</Typography>
       </ExpansionPanelSummary>
+      <GeneralSelector
+        items={workItemTypes}
+        selected={selectedWorkItemType}
+        handleChange={handleSelectedWorkItemType}
+        helperText="Velg en Work-Item Type"
+        ml={25}
+      />
       <MaterialTable
         icons={tableIcons}
         tableRef={rnsTableRef}
