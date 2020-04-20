@@ -59,6 +59,14 @@ export const mappingReducer = createReducer(initialState, {
   },
   [putMappingSuccess]: (state, action) => {
     //todo implement update state with new mapping
+    const incomingObject = action.payload.data.entity;
+    const index = state.RNSMappings.entity.findIndex((obj) => {
+      return obj.id === incomingObject.id;
+    });
+    if (index !== -1) {
+      state.RNSMappings.entity[index].azureDevOpsField =
+        incomingObject.azureDevOpsField;
+    }
   },
 });
 
@@ -142,7 +150,7 @@ export const putMapping = (id, data) => async (dispatch) => {
       dispatch(
         putMappingSuccess({
           data: res.data,
-          successMsg: "Mapping er vellykket!",
+          successMsg: res.data.message,
         })
       );
     })
@@ -208,7 +216,7 @@ export const rnsMappingsTableFields = createSelector(
     return fields.map((obj) => ({
       id: obj.id,
       rnsFieldName: obj.mappableField.name,
-      azdFieldName: obj.azureDevOpsField,
+      azureDevOpsField: obj.azureDevOpsField,
     }));
   }
 );
