@@ -54,8 +54,7 @@ const AzureMappingView = (props) => {
     const { authToken, organization } = azureProps;
     if (authToken === "" || selectedProject === "" || organization === "")
       return;
-    if (!authToken === "" || !selectedProject === "" || !organization === "")
-      return;
+    if (!authToken || !selectedProject || !organization) return;
     dispatch(
       fetchAZDMappable(authToken, selectedProject, organization, "task")
     );
