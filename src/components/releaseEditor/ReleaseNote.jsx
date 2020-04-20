@@ -27,13 +27,15 @@ const ReleaseNote = (props) => {
                     <ReleaseNoteEditorModal
                       note={props.releaseNote}
                       onSave={props.onSave}
+                      size="small"
                     />
                   </FlexEnd>
 
                   <StyledIconButton
                     onClick={() => props.handleRemoveReleaseNote(props.index)}
+                    size="small"
                   >
-                    <Delete />
+                    <Delete fontSize="small" />
                   </StyledIconButton>
                 </React.Fragment>
               )}
@@ -50,6 +52,7 @@ export default ReleaseNote;
 
 const StyledIconButton = styled(IconButton)`
   && {
+    padding-top: 8px;
     margin-left: auto;
     display: flex-end;
   }
