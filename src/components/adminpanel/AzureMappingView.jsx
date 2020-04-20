@@ -91,20 +91,6 @@ const AzureMappingView = (props) => {
     setLookup(azdFields);
   }, [azdFields, setLookup]);
 
-  /**
-   * Returns a deepcopy of an array
-   * @param {Array of objects} arr
-   */
-  const deepCopyArray = (arr) => {
-    if (!arr || arr.length === 0) return [];
-    return arr.map((obj) => {
-      // Getting a mutable copy of previous state
-      var newObj = Object.create(obj);
-      newObj.azdFieldName = 0;
-      return newObj;
-    });
-  };
-
   const getEditable = () => {
     return {
       onRowUpdate: (newData, oldData) =>
