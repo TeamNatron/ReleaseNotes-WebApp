@@ -367,38 +367,28 @@ const ReleaseEditor = (props) => {
               error={Boolean(titleError)}
               helperText={titleError}
             />
-            {useMemo(
-              () => (
-                <Column
-                  isRelease={true}
-                  key={allItems.release.id}
-                  id={allItems.release.id}
-                  title={allItems.release.name}
-                  releaseNotes={allItems.release.list}
-                  handleRemoveReleaseNote={handleRemoveReleaseNote}
-                  onSaveReleaseNote={handleSaveReleaseNote}
-                />
-              ),
-              [allItems.release, handleRemoveReleaseNote, handleSaveReleaseNote]
-            )}
+            <Column
+              isRelease={true}
+              key={allItems.release.id}
+              id={allItems.release.id}
+              title={allItems.release.name}
+              releaseNotes={allItems.release.list}
+              handleRemoveReleaseNote={handleRemoveReleaseNote}
+              onSaveReleaseNote={handleSaveReleaseNote}
+            />
           </ReleaseContainer>
 
           <VerticalDivider orientation={"vertical"} />
-          {useMemo(
-            () => (
-              <Column
-                isRelease={false}
-                styleSheet={releaseNoteStyle}
-                key={allItems.releaseNotes.id}
-                id={allItems.releaseNotes.id}
-                title={allItems.releaseNotes.name}
-                releaseNotes={allItems.releaseNotes.list}
-                handleRemoveReleaseNote={handleRemoveReleaseNote}
-                onSaveReleaseNote={handleSaveReleaseNote}
-              />
-            ),
-            [allItems.releaseNotes, releaseNoteStyle]
-          )}
+          <Column
+            isRelease={false}
+            styleSheet={releaseNoteStyle}
+            key={allItems.releaseNotes.id}
+            id={allItems.releaseNotes.id}
+            title={allItems.releaseNotes.name}
+            releaseNotes={allItems.releaseNotes.list}
+            handleRemoveReleaseNote={handleRemoveReleaseNote}
+            onSaveReleaseNote={handleSaveReleaseNote}
+          />
         </FlexContainer>
       </DragDropContext>
     </React.Fragment>

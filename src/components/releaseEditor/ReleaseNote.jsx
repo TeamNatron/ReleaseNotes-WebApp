@@ -6,7 +6,7 @@ import { Delete } from "@material-ui/icons";
 import ReleaseNotePreview from "../shared/ReleaseNotePreview";
 import ReleaseNoteEditorModal from "../releaseNoteEditor/ReleaseNoteEditorModal";
 
-const ReleaseNote = (props) => {
+const ReleaseNote = React.memo(function MemoReleaseNote(props) {
   return (
     <Draggable draggableId={"draggable-" + props.id} index={props.index}>
       {(provided) => (
@@ -46,7 +46,7 @@ const ReleaseNote = (props) => {
       )}
     </Draggable>
   );
-};
+});
 
 export default ReleaseNote;
 

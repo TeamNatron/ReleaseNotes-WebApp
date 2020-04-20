@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import styled from "styled-components";
 import PageContainer from "../shared/PageContainer";
 import ScreenTitle from "../shared/ScreenTitle";
 import Ingress from "../shared/Ingress";
 import SpacedDivider from "../shared/SpacedDivider";
-import ReleaseEditor from "../releaseEditor/ReleaseEditor";
+import ReleaseEditor from "../releaseEditor/ReleaseEditorNew";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { fetchProductVersions } from "../../actions/productVersionsActions";
@@ -24,8 +24,6 @@ import {
   initReleaseEditorReleaseNotes,
   findReleaseById,
 } from "../../selectors/releaseEditorSelector";
-import ResponseSnackbar from "../shared/ResponseSnackbar";
-import { errorSelector } from "../../slices/errorSlice";
 
 const ReleaseEditorScreen = (props) => {
   const id = props.match.params.id;
@@ -54,13 +52,19 @@ const ReleaseEditorScreen = (props) => {
     }
   };
 
-  const handleSaveReleaseNote = (id, objectToSave) => {
-    dispatch(putReleaseNote(id, objectToSave));
-  };
+  const handleSaveReleaseNote = useCallback(
+    (id, objectToSave) => {
+      dispatch(putReleaseNote(id, objectToSave));
+    },
+    [dispatch]
+  );
 
-  const handleSaveEditorState = (release) => {
-    dispatch(putByIdSuccess({ data: release, id }));
-  };
+  const handleSaveEditorState = useCallback(
+    (release) => {
+      dispatch(putByIdSuccess({ data: release, id }));
+    },
+    [dispatch, id]
+  );
 
   const handleFilter = (query) => {
     dispatch(fetchReleaseNotes(query));
@@ -70,8 +74,6 @@ const ReleaseEditorScreen = (props) => {
   const releaseNotes = useSelector(initReleaseEditorReleaseNotes(id));
   const loadedRelease = useSelector(findReleaseById(id));
   const loading = useSelector(loadingSelector);
-  const error = useSelector(errorSelector);
-  const success = useSelector(getSuccesMessage);
 
   const history = useHistory();
   const handleCancel = () => {
@@ -95,7 +97,6 @@ const ReleaseEditorScreen = (props) => {
         onSaveReleaseNote={handleSaveReleaseNote}
         loading={loading}
       />
-      <ResponseSnackbar error={error} success={success} />
     </StyledPageContainer>
   );
 };
