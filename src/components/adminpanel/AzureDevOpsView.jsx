@@ -64,11 +64,6 @@ const AzureDevOpsView = (props) => {
         onAction={handleAction}
         import={true}
       />
-      <AzureMappingView
-        project={selectedProject}
-        org={props.azureProps.organization}
-        authToken={props.azureProps.authToken}
-      />
     </React.Fragment>
   );
 };
