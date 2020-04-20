@@ -3,7 +3,6 @@ import {
   ExpansionPanel,
   ExpansionPanelSummary,
   Typography,
-  Grid,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MaterialTable from "material-table";
@@ -25,26 +24,28 @@ import ViewColumn from "@material-ui/icons/ViewColumn";
 import Refresh from "@material-ui/icons/Refresh";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  RNSFieldsSelector,
   fetchRNSMappable,
   fetchAZDMappable,
   AZDTableFieldSelector,
+  RNSTableFieldSelector,
+  fetchRNSMappings,
+  rnsMappingsTableFields,
 } from "../../slices/mappingSlice";
+import { useState } from "react";
 
 const AzureMappingView = (props) => {
   const { authToken, project, org } = props;
-
-  // To add more fields to the table, create new objects in the array
-  // Each object needs the properties 'title' and 'field'.
-  const columns = [{ title: "Felt", field: "name" }];
-
   const rnsTableRef = React.createRef();
-  const azdTableRef = React.createRef();
-
   const dispatch = useDispatch();
+
+  // The state of the available AzureDevOps-fields.
+  const [lookup, setLookup] = useState({
+    0: "",
+  });
 
   useEffect(() => {
     dispatch(fetchRNSMappable());
+    dispatch(fetchRNSMappings());
   }, [dispatch]);
 
   useEffect(() => {
@@ -52,8 +53,9 @@ const AzureMappingView = (props) => {
     dispatch(fetchAZDMappable(authToken, project, org, "task"));
   }, [authToken, dispatch, org, project]);
 
-  const rnsFields = useSelector(RNSFieldsSelector);
+  const rnsFields = useSelector(RNSTableFieldSelector);
   const azdFields = useSelector(AZDTableFieldSelector);
+  const rnsMappings = useSelector(rnsMappingsTableFields);
 
   // Updates the fields on selector change
   useEffect(() => {
@@ -61,11 +63,34 @@ const AzureMappingView = (props) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rnsFields]);
-  useEffect(() => {
-    azdTableRef.current && azdTableRef.current.onQueryChange();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [azdFields]);
+  useEffect(() => {
+    if (Object.keys(azdFields).length === 0 && azdFields.constructor === Object)
+      return;
+    setLookup(azdFields);
+  }, [azdFields, setLookup]);
+
+  // TODO Debugger for column state
+  // useEffect(() => {
+  //   console.log("Printing lookup");
+  //   console.log(lookup);
+  // }, [lookup]);
+
+  // TODO Debugger for rnsMappings
+  useEffect(() => {
+    console.log("Printing mappings");
+    console.log(rnsMappings);
+  }, [rnsMappings]);
+
+  /**
+   * Returns an array of rows to be used by the mapping-table
+   * @param {*} arr
+   */
+  const createRows = (arr) => {
+    var resultArr;
+    resultArr = deepCopyArray(arr);
+    return resultArr;
+  };
 
   /**
    * Returns a deepcopy of an array
@@ -73,7 +98,29 @@ const AzureMappingView = (props) => {
    */
   const deepCopyArray = (arr) => {
     if (arr.length === 0) return [];
-    return arr.map((obj) => Object.create(obj));
+    return arr.map((obj) => {
+      // Getting a mutable copy of previous state
+      var newObj = Object.create(obj);
+      newObj.azdFieldName = 0;
+      return newObj;
+    });
+  };
+
+  const getEditable = () => {
+    return {
+      onRowUpdate: (newData, oldData) =>
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            // {
+            //   const data = this.state.data;
+            //   const index = data.indexOf(oldData);
+            //   data[index] = newData;
+            //   this.setState({ data }, () => resolve());
+            // }
+            resolve();
+          }, 1000);
+        }),
+    };
   };
 
   return (
@@ -85,6 +132,40 @@ const AzureMappingView = (props) => {
       >
         <Typography>Release Note Mapping</Typography>
       </ExpansionPanelSummary>
+      <MaterialTable
+        icons={tableIcons}
+        tableRef={rnsTableRef}
+        title={"Release Note System fields"}
+        columns={[
+          {
+            title: "ReleaseNote-Felt",
+            field: "rnsFieldName",
+            editable: false,
+            readOnly: true,
+          },
+          {
+            title: "AzureDevOps-Felt",
+            field: "azdFieldName",
+            lookup: lookup,
+          },
+        ]}
+        data={(query) =>
+          new Promise((resolve, reject) => {
+            // Creates a new array which clones each object it contains.
+            // This was done to make the objects mutable.
+            var newArray = createRows(rnsMappings);
+            resolve({
+              data: newArray,
+              page: 0,
+              totalCount: newArray.length,
+            });
+          })
+        }
+        editable={getEditable()}
+        actions={actionsMappingTable(rnsTableRef)}
+        options={optionsMappingTable}
+        // components={getAzureDevOpsFieldSelector()}
+      />
       {/* <Grid container spacing={2}>
         <Grid item xs={6}>
           <MaterialTable
@@ -137,7 +218,7 @@ const AzureMappingView = (props) => {
 
 export default AzureMappingView;
 
-const actionRefreshButton = (ref) => {
+const actionsMappingTable = (ref) => {
   return [
     {
       icon: () => <Refresh />,
@@ -148,7 +229,7 @@ const actionRefreshButton = (ref) => {
   ];
 };
 
-const optionsReadOnlyTable = {
+const optionsMappingTable = {
   search: false,
   paging: false,
   filtering: false,
