@@ -80,6 +80,9 @@ const mappedWorkitem = {
     '<div>Wireframe:</div><div><a href="https://confluence.uials.no/pages/viewpage.action?pageId=57378685">https://confluence.uials.no/pages/viewpage.action?pageId=57378685</a></div><div><br></div><div>ERD:</div><div><a href="https://confluence.uials.no/pages/viewpage.action?pageId=57377417">https://confluence.uials.no/pages/viewpage.action?pageId=57377417</a><br></div>',
   AuthorName: "Markus Randa",
   AuthorEmail: "markuran@ntnu.no",
+  ingress: "",
+  title: "Som en administrator kan jeg legge til Autentiserings-informasjon til Azure Devops.",
+  Description: '<div>Wireframe:</div><div><a href="https://confluence.uials.no/pages/viewpage.action?pageId=57378685">https://confluence.uials.no/pages/viewpage.action?pageId=57378685</a></div><div><br></div><div>ERD:</div><div><a href="https://confluence.uials.no/pages/viewpage.action?pageId=57377417">https://confluence.uials.no/pages/viewpage.action?pageId=57377417</a><br></div>',
 };
 
 const dummyWorkItemRaw = {
