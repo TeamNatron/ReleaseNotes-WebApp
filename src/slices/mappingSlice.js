@@ -134,11 +134,17 @@ export const fetchRNSMappings = () => async (dispatch) => {
 
 export const putMapping = (id, data) => async (dispatch) => {
   const url = "/MappableFields/" + id;
-  dispatch(putMappingPending());
+  const object = { azureDevOpsField: data };
 
-  Axios.put(url)
-    .then((res, data) => {
-      dispatch(putMappingSuccess({ data: res.data }));
+  dispatch(putMappingPending());
+  Axios.put(url, object)
+    .then((res) => {
+      dispatch(
+        putMappingSuccess({
+          data: res.data,
+          successMsg: "Mapping er vellykket!",
+        })
+      );
     })
     .catch((err) => {
       dispatch(putMappingError(err));
@@ -200,6 +206,7 @@ export const rnsMappingsTableFields = createSelector(
   (fields) => {
     if (!fields) return;
     return fields.map((obj) => ({
+      id: obj.id,
       rnsFieldName: obj.mappableField.name,
       azdFieldName: obj.azureDevOpsField,
     }));

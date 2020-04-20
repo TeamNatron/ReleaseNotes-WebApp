@@ -27,12 +27,12 @@ import {
   fetchRNSMappable,
   fetchAZDMappable,
   AZDTableFieldSelector,
-  RNSTableFieldSelector,
   fetchRNSMappings,
   rnsMappingsTableFields,
   putMapping,
 } from "../../slices/mappingSlice";
 import { useState } from "react";
+import { prototype } from "enzyme-adapter-react-16";
 
 const AzureMappingView = (props) => {
   const { authToken, project, org } = props;
@@ -44,6 +44,8 @@ const AzureMappingView = (props) => {
     0: "",
   });
 
+  const [localMappings, setLocalMappings] = useState([{ rnsFieldName: "" }]);
+
   useEffect(() => {
     dispatch(fetchRNSMappable());
     dispatch(fetchRNSMappings());
@@ -54,16 +56,13 @@ const AzureMappingView = (props) => {
     dispatch(fetchAZDMappable(authToken, project, org, "task"));
   }, [authToken, dispatch, org, project]);
 
-  const rnsFields = useSelector(RNSTableFieldSelector);
   const azdFields = useSelector(AZDTableFieldSelector);
   const rnsMappings = useSelector(rnsMappingsTableFields);
 
-  // Updates the fields on selector change
+  // Updates the fields
   useEffect(() => {
-    rnsTableRef.current && rnsTableRef.current.onQueryChange();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rnsFields]);
+    setLocalMappings(deepCopyArray(rnsMappings));
+  }, [rnsMappings, setLocalMappings]);
 
   useEffect(() => {
     if (Object.keys(azdFields).length === 0 && azdFields.constructor === Object)
@@ -71,34 +70,12 @@ const AzureMappingView = (props) => {
     setLookup(azdFields);
   }, [azdFields, setLookup]);
 
-  // TODO Debugger for column state
-  // useEffect(() => {
-  //   console.log("Printing lookup");
-  //   console.log(lookup);
-  // }, [lookup]);
-
-  // TODO Debugger for rnsMappings
-  useEffect(() => {
-    console.log("Printing mappings");
-    console.log(rnsMappings);
-  }, [rnsMappings]);
-
-  /**
-   * Returns an array of rows to be used by the mapping-table
-   * @param {*} arr
-   */
-  const createRows = (arr) => {
-    var resultArr;
-    resultArr = deepCopyArray(arr);
-    return resultArr;
-  };
-
   /**
    * Returns a deepcopy of an array
    * @param {Array of objects} arr
    */
   const deepCopyArray = (arr) => {
-    if (arr.length === 0) return [];
+    if (!arr || arr.length === 0) return [];
     return arr.map((obj) => {
       // Getting a mutable copy of previous state
       var newObj = Object.create(obj);
@@ -111,15 +88,17 @@ const AzureMappingView = (props) => {
     return {
       onRowUpdate: (newData, oldData) =>
         new Promise((resolve, reject) => {
-          setTimeout(() => {
-            // {
-            //   const data = this.state.data;
-            //   const index = data.indexOf(oldData);
-            //   data[index] = newData;
-            //   this.setState({ data }, () => resolve());
-            // }
-            resolve();
-          }, 1000);
+          try {
+            const result = lookup[newData.azdFieldName];
+            var index = localMappings.indexOf(oldData);
+            var tableObject = localMappings[index];
+            var id = Object.getPrototypeOf(tableObject).id;
+            dispatch(putMapping(id, result));
+          } catch {
+            throw new Error("Couldn't find object");
+          }
+          // dispatch(putMapping(newData))
+          resolve();
         }),
     };
   };
@@ -150,69 +129,12 @@ const AzureMappingView = (props) => {
             lookup: lookup,
           },
         ]}
-        data={(query) =>
-          new Promise((resolve, reject) => {
-            // Creates a new array which clones each object it contains.
-            // This was done to make the objects mutable.
-            var newArray = createRows(rnsMappings);
-            resolve({
-              data: newArray,
-              page: 0,
-              totalCount: newArray.length,
-            });
-          })
-        }
+        data={localMappings}
         editable={getEditable()}
         actions={actionsMappingTable(rnsTableRef)}
         options={optionsMappingTable}
         // components={getAzureDevOpsFieldSelector()}
       />
-      {/* <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <MaterialTable
-            icons={tableIcons}
-            tableRef={rnsTableRef}
-            title={"Release Note System fields"}
-            columns={columns}
-            data={(query) =>
-              new Promise((resolve, reject) => {
-                // Creates a new array which clones each object it contains.
-                // This was done to make the objects mutable.
-                var newArray = deepCopyArray(rnsFields);
-                resolve({
-                  data: newArray,
-                  page: 0,
-                  totalCount: newArray.length,
-                });
-              })
-            }
-            actions={actionRefreshButton(rnsTableRef)}
-            options={optionsReadOnlyTable}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <MaterialTable
-            icons={tableIcons}
-            tableRef={azdTableRef}
-            title={"Azure DevOps fields"}
-            columns={columns}
-            data={(query) =>
-              new Promise((resolve, reject) => {
-                // Creates a new array which clones each object it contains.
-                // This was done to make the objects mutable.
-                var newArray = deepCopyArray(azdFields);
-                resolve({
-                  data: newArray,
-                  page: 0,
-                  totalCount: newArray.length,
-                });
-              })
-            }
-            actions={actionRefreshButton(azdTableRef)}
-            options={optionsReadOnlyTable}
-          />
-        </Grid>
-      </Grid> */}
     </ExpansionPanel>
   );
 };
