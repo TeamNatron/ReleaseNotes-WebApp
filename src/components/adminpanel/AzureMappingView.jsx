@@ -30,10 +30,11 @@ import {
   rnsMappingsTableFields,
   putMapping,
 } from "../../slices/mappingSlice";
+import PropTypes from "prop-types";
 import { useState } from "react";
 
 const AzureMappingView = (props) => {
-  const { authToken, project, org } = props;
+  const { azureProps, selectedProject } = props;
   const rnsTableRef = React.createRef();
   const dispatch = useDispatch();
 
@@ -50,9 +51,15 @@ const AzureMappingView = (props) => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (authToken === "" || project === "" || org === "") return;
-    dispatch(fetchAZDMappable(authToken, project, org, "task"));
-  }, [authToken, dispatch, org, project]);
+    const { authToken, organization } = azureProps;
+    if (authToken === "" || selectedProject === "" || organization === "")
+      return;
+    if (!authToken === "" || !selectedProject === "" || !organization === "")
+      return;
+    dispatch(
+      fetchAZDMappable(authToken, selectedProject, organization, "task")
+    );
+  }, [dispatch, azureProps, selectedProject]);
 
   const azdFields = useSelector(AZDTableFieldSelector);
   const rnsMappings = useSelector(rnsMappingsTableFields);
@@ -151,6 +158,11 @@ const AzureMappingView = (props) => {
 };
 
 export default AzureMappingView;
+
+AzureMappingView.protoTypes = {
+  azureProps: PropTypes.object.isRequired,
+  selectedProject: PropTypes.string.isRequired,
+};
 
 const optionsMappingTable = {
   search: false,

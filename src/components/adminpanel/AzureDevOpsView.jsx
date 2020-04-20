@@ -64,6 +64,7 @@ const AzureDevOpsView = (props) => {
         onAction={handleAction}
         import={true}
       />
+      <AzureMappingView {...props} />
     </React.Fragment>
   );
 };
