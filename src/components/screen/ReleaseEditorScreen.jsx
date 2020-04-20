@@ -4,7 +4,7 @@ import PageContainer from "../shared/PageContainer";
 import ScreenTitle from "../shared/ScreenTitle";
 import Ingress from "../shared/Ingress";
 import SpacedDivider from "../shared/SpacedDivider";
-import ReleaseEditor from "../releaseEditor/ReleaseEditorNew";
+import ReleaseEditor from "../releaseEditor/ReleaseEditor";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { fetchProductVersions } from "../../actions/productVersionsActions";
@@ -12,7 +12,6 @@ import {
   fetchReleaseById,
   putReleaseById,
   postRelease,
-  getSuccesMessage,
   putByIdSuccess,
 } from "../../slices/releaseSlice";
 import { loadingSelector } from "../../slices/loadingSlice";
