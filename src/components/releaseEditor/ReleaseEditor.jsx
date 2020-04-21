@@ -1,7 +1,8 @@
-import React, { Component } from "react";
+import PropTypes from "prop-types";
+import React, { useState, useEffect, useCallback } from "react";
+import styled from "styled-components";
 import { DragDropContext } from "react-beautiful-dnd";
 import Column from "./Column";
-import styled from "styled-components";
 import {
   Divider,
   Button,
@@ -16,98 +17,129 @@ import {
   Collapse,
 } from "@material-ui/core";
 import TitleTextField from "./TitleTextField";
-import PropTypes from "prop-types";
 import BottomToolbar from "../shared/BottomToolbar";
 import shortid from "shortid";
 import ToolbarBase from "../shared/ToolbarBase";
 import { FilterListRounded } from "@material-ui/icons";
 import FilterToolbar from "./FilterToolbar";
+import ModalButton from "../shared/ModalButton";
+import ReleaseView from "../releaseView/ReleaseView";
 
-class ReleaseEditor extends Component {
-  constructor(props) {
-    super(props);
-    this.handleRemoveReleaseNote = this.handleRemoveReleaseNote.bind(this);
-    const release = props.release;
-    const productVersion = release?.productVersion;
-    const isError = release ? false : true;
-    this.state = {
-      filterQuery: "?",
-      filterOpen: false,
-      open: false,
-      titleIsError: isError,
-      releaseNotesIsError: isError,
-      productVersionIsError: isError,
-      submitDisabled: true,
-      isPublic: release?.isPublic || false,
-      title: release?.title,
-      productVersions: [],
-      selectedProductVersionLabel:
-        productVersion?.product?.name + " - " + productVersion?.version,
-      selectedProductVersionId: productVersion?.id,
-      allItems: {
+const columns = ["release", "releaseNotes"];
+const ReleaseEditor = (props) => {
+  const release = props.release;
+  const [filterQuery, setFilterQuery] = useState("?");
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [isPublic, setIsPublic] = useState(release?.isPublic || false);
+  const [title, setTitle] = useState(release?.title || "");
+  const [selectedPv, setSelectedPv] = useState("");
+
+  const [titleError, setTitleError] = useState(null);
+  const [RNError, setRNError] = useState(null);
+  const [PVError, setPVError] = useState(null);
+
+  const [submitDisabled, setSubmitDisabled] = useState(false);
+
+  const [allItems, setAllItems] = useState({
+    release: {
+      id: columns[0],
+      name: "Release",
+      list: props.release?.releaseNotes || [],
+    },
+    releaseNotes: {
+      id: columns[1],
+      name: "Release Notes",
+      list: props.releaseNotesResource || [],
+    },
+  });
+
+  const validateTitle = () => {
+    if (title === "") {
+      setTitleError("Felt kan ikke være tomt");
+    } else {
+      setTitleError(null);
+    }
+  };
+
+  const validateReleaseNotes = () => {
+    if (allItems.release.list.length !== 0) {
+      setRNError(null);
+    } else {
+      setRNError("Du må i hvert fall velge en Release Note");
+    }
+  };
+
+  const validateProductVersion = () => {
+    if (selectedPv) {
+      setPVError(null);
+    } else {
+      setPVError("Du må velge et produkt");
+    }
+  };
+
+  const validateSubmit = () => {
+    setSubmitDisabled(Boolean(titleError || RNError || PVError));
+  };
+
+  // init loaded release
+  useEffect(() => {
+    setAllItems((oldAllItems) => {
+      const newAll = {
+        ...oldAllItems,
         release: {
-          id: "release",
-          name: "Release",
-          list: [],
+          ...oldAllItems.release,
+          list: props.release.releaseNotes || [],
         },
+      };
+      return newAll;
+    });
+
+    setTitle(props.release.title);
+    setIsPublic(Boolean(props.release.isPublic));
+  }, [props.release]);
+
+  // init loaded releaseNotes
+  useEffect(() => {
+    setAllItems((oldAllItems) => {
+      const newAllItems = {
+        ...oldAllItems,
         releaseNotes: {
-          id: "releaseNotes",
-          name: "Release Notes",
-          list: props.releaseNotesResource ? props.releaseNotesResource : [],
+          ...oldAllItems.releaseNotes,
+          list: props.releaseNotesResource || [],
         },
-      },
-    };
-  }
+      };
+      return newAllItems;
+    });
+  }, [props.releaseNotesResource]);
 
-  componentDidMount() {
-    this.validateSubmit();
-  }
+  // apply filter on filterQuery change
+  const { onFilter } = props;
+  useEffect(() => {
+    onFilter(filterQuery);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterQuery]);
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.release !== this.props.release && this.props.release) {
-      this.setState(
-        (prevState) => {
-          const newAllItems = prevState.allItems;
-          newAllItems.release.list = this.props.release.releaseNotes;
-          const selectedVersion =
-            this.props.release.productVersion?.product?.name +
-            " - " +
-            this.props.release.productVersion.version;
-          return {
-            title: this.props.release.title,
-            allItems: newAllItems,
-            isPublic: this.props.release.isPublic,
-            selectedProductVersionLabel: selectedVersion,
-            selectedProductVersionId: this.props.release.productVersion?.id,
-          };
-        },
-        () => {
-          this.validateTitle();
-          this.validateProductVersion();
-        }
-      );
-    }
-    if (
-      prevProps.releaseNotesResource !== this.props.releaseNotesResource &&
-      this.props.releaseNotesResource
-    ) {
-      this.setState(
-        (prevState) => {
-          const newAllItems = prevState.allItems;
-          newAllItems.releaseNotes.list = this.props.releaseNotesResource;
-          return {
-            allItems: newAllItems,
-          };
-        },
-        () => this.validateReleaseNotes()
-      );
-    }
-    if (this.state.filterQuery !== prevState.filterQuery) {
-      this.props.onFilter(this.state.filterQuery);
-    }
-  }
+  // init loaded productversion
+  useEffect(() => {
+    // need to find pv from this array, as mui-select component
+    // relies on reference equality
+    const itemToSelect = props.release.productVersion
+      ? props.productVersionsResource.items.find(
+          (item) => props.release.productVersion.id === item.id
+        )
+      : undefined;
+    itemToSelect && setSelectedPv(itemToSelect);
+  }, [props.release, props.productVersionsResource]);
 
-  onDragEnd = (result) => {
+  // form validation
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => validateTitle(), [title]);
+  useEffect(() => validateReleaseNotes(), [allItems]);
+  useEffect(() => validateProductVersion(), [selectedPv]);
+  useEffect(() => validateSubmit(), [titleError, RNError, PVError]);
+  /* eslint-enable react-hooks/exhaustive-deps */
+
+  const onDragEnd = (result) => {
     const { destination, source } = result;
 
     // Return if destination is the same or nothing
@@ -123,15 +155,11 @@ class ReleaseEditor extends Component {
 
     // Moving within the same column
     if (destination.droppableId === source.droppableId) {
-      this.moveWithinSameColumn(
-        source.droppableId,
-        source.index,
-        destination.index
-      );
+      moveWithinSameColumn(source.droppableId, source.index, destination.index);
     }
     // Moving from one column, to the other
     else {
-      this.moveToAnotherColumn(
+      moveToAnotherColumn(
         source.droppableId,
         destination.droppableId,
         source.index,
@@ -140,8 +168,8 @@ class ReleaseEditor extends Component {
     }
   };
 
-  moveWithinSameColumn = (srcDroppableId, srcIndex, destIndex) => {
-    let allItemsCopy = JSON.parse(JSON.stringify(this.state.allItems));
+  const moveWithinSameColumn = (srcDroppableId, srcIndex, destIndex) => {
+    let allItemsCopy = JSON.parse(JSON.stringify(allItems));
 
     let column = allItemsCopy[srcDroppableId].list;
 
@@ -150,18 +178,15 @@ class ReleaseEditor extends Component {
     column.splice(srcIndex, 1);
     column.splice(destIndex, 0, item);
 
-    this.setState({ allItems: allItemsCopy }, () => {
-      this.validateReleaseNotes();
-    });
+    setAllItems(allItemsCopy);
   };
-
-  moveToAnotherColumn = (
+  const moveToAnotherColumn = (
     srcDroppableId,
     destDroppableId,
     srcIndex,
     destIndex
   ) => {
-    let allItemsCopy = JSON.parse(JSON.stringify(this.state.allItems));
+    let allItemsCopy = JSON.parse(JSON.stringify(allItems));
 
     const srcColumn = allItemsCopy[srcDroppableId].list;
     const destColumn = allItemsCopy[destDroppableId].list;
@@ -171,335 +196,205 @@ class ReleaseEditor extends Component {
     srcColumn.splice(srcIndex, 1);
     destColumn.splice(destIndex, 0, item);
 
-    this.setState({ allItems: allItemsCopy }, () => {
-      this.validateReleaseNotes();
-    });
-  };
-
-  releaseNoteStyle = {
-    minWidth: "20rem",
-    flexBasis: "20%",
-  };
-
-  handleRemoveReleaseNote(srcIndex) {
-    this.moveToAnotherColumn("release", "releaseNotes", srcIndex, 0);
-  }
-
-  handleSave = () => {
-    const release = {
-      productVersionId: this.state.selectedProductVersionId,
-      title: this.state.title,
-      isPublic: this.state.isPublic,
-      releaseNotesId: this.state.allItems.release.list.map((rn) => rn.id),
-    };
-    this.props.onSave(release);
-  };
-
-  handleSaveReleaseNote = (releaseNoteId, releaseNote) => {
-    // save editor state locally, then save release note
-
-    const release = {
-      id: this.props.release.id,
-      productVersion: this.props.productVersionsResource.items.find(
-        (item) => item.id == this.state.selectedProductVersionId
-      ),
-      title: this.state.title,
-      isPublic: this.state.isPublic,
-      releaseNotes: this.state.allItems.release.list,
-    };
-    this.props.onSaveEditorState(release);
-    this.props.onSaveReleaseNote(releaseNoteId, releaseNote);
-  };
-
-  handleOnChangeProductVersion = (event) => {
-    const newProductVersionId = event.currentTarget.id;
-    const newProductVersionLabel = event.target.value;
-    this.setState(
-      {
-        selectedProductVersionId: newProductVersionId,
-        selectedProductVersionLabel: newProductVersionLabel,
-      },
-      () => this.validateProductVersion()
-    );
-  };
-
-  handleCloseProductVersions = () => {
-    this.setState({ open: false });
-  };
-
-  handleOpenProductVersions = () => {
-    this.setState({ open: true });
-  };
-
-  handleOnChangeTitle = (result) => {
-    const newTitle = result.target.value;
-    this.setState({ title: newTitle }, () => {
-      this.validateTitle();
-    });
-  };
-
-  handleChangeIsPublic = () => {
-    this.setState({ isPublic: !this.state.isPublic });
-  };
-
-  validateTitle = () => {
-    const newTitle = this.state.title;
-    // prettier-ignore
-    if (newTitle === "") {
-      this.setState(
-        { titleIsError: true, titleErrorMsg: "Felt kan ikke være tomt" },
-        () => {
-          this.validateSubmit();
-        }
-      );
-    } else {
-      this.setState({ titleIsError: false, titleErrorMsg: "" }, () => {
-        this.validateSubmit();
-      });
-    }
-  };
-
-  validateReleaseNotes = () => {
-    if (this.state.allItems.release.list.length !== 0) {
-      this.setState(
-        { releaseNotesIsError: false, releaseNoteErrorMsg: "" },
-        () => {
-          this.validateSubmit();
-        }
-      );
-    } else {
-      this.setState(
-        {
-          releaseNotesIsError: true,
-          releaseNoteErrorMsg: "Du må i hvert fall velge en Release Note",
-        },
-        () => {
-          this.validateSubmit();
-        }
-      );
-    }
-  };
-
-  validateProductVersion = () => {
-    if (this.state.selectedProductVersionId) {
-      this.setState(
-        { productVersionIsError: false, productVersionErrorMsg: "" },
-        () => {
-          this.validateSubmit();
-        }
-      );
-    } else {
-      this.setState(
-        {
-          productVersionIsError: true,
-          productVersionErrorMsg: "Du må velge et produkt",
-        },
-        () => {
-          this.validateSubmit();
-        }
-      );
-    }
-  };
-
-  validateSubmit = () => {
-    if (
-      !(
-        this.state.titleIsError ||
-        this.state.releaseNotesIsError ||
-        this.state.productVersionIsError
-      )
-    ) {
-      this.setState({ submitDisabled: false });
-    } else {
-      this.setState({ submitDisabled: true });
-    }
-  };
-
-  toggleFilter = () => {
-    this.setState((state) => ({ filterOpen: !state.filterOpen }));
+    setAllItems(allItemsCopy);
   };
 
   /**
    * update query string based on properties in received object
    */
-  handleFilter = (object) => {
-    this.setState((state) => {
-      var query = state.filterQuery;
+  const handleFilter = (object) => {
+    var query = filterQuery;
+    Object.entries(object).forEach((e) => {
+      // e[0] = property name
+      // e[1] = property value
 
-      Object.entries(object).forEach((e) => {
-        // e[0] = property name
-        // e[1] = property value
-
-        // does entry exist in the string?
-        if (query.search(e[0]) !== -1) {
-          // replace entry
-          // regex to match the name+value of a given name in the query
-          const regex = new RegExp("(?=[&?]*)" + e[0] + "=(.*?)(?=&|$)");
-          query = query.replace(regex, e[0] + "=" + e[1]);
-        } else {
-          // add entry
-          query = this.createQuery(query, e[0], e[1]);
-        }
-      });
-      return { filterQuery: query };
+      // does entry exist in the string?
+      if (query.search(e[0]) !== -1) {
+        // replace entry
+        // regex to match the name+value of a given name in the query
+        const regex = new RegExp("(?=[&?]*)" + e[0] + "=(.*?)(?=&|$)");
+        query = query.replace(regex, e[0] + "=" + e[1]);
+      } else {
+        // add entry
+        query = createQuery(query, e[0], e[1]);
+      }
     });
+    setFilterQuery(query);
   };
 
-  createQuery = (query, name, value) => {
+  const createQuery = (query, name, value) => {
     return query.length > 1
       ? query + "&" + name + "=" + value
       : query + name + "=" + value;
   };
 
-  render() {
-    return (
-      <React.Fragment>
-        <BottomToolbar
-          loading={this.props.loading}
-          left={[
-            <Button
-              key="cancelBtn"
-              color="secondary"
-              variant="contained"
-              onClick={this.props.onCancel}
-            >
-              Avbryt
-            </Button>,
-          ]}
-          right={[
-            <FormControlLabel
-              key="isPublicSwitch"
-              style={{ marginLeft: "15px" }}
-              control={
-                <Switch
-                  checked={this.state.isPublic}
-                  onChange={this.handleChangeIsPublic}
-                  value={this.state.isPublic}
-                  color="primary"
-                  inputProps={{ "aria-label": "primary checkbox" }}
-                />
-              }
-              label="Publisert"
-            />,
-            <SaveButton
-              key="saveBtn"
-              disabled={this.state.submitDisabled}
-              variant="contained"
-              onClick={this.handleSave}
-            >
-              Lagre
-            </SaveButton>,
-          ]}
-          middle={[
-            <ErrorMsgContainer key="errorMsgContainer">
-              <span>{this.state.releaseNoteErrorMsg}</span>
-            </ErrorMsgContainer>,
-          ]}
-        />
+  const handleOnChangeTitle = (result) => {
+    const newTitle = result.target.value;
+    setTitle(newTitle);
+  };
 
-        {this.props.productVersionsResource ? (
-          // make sure props are not undefined
-          <React.Fragment>
-            <ToolbarBase
-              left={
-                <StyledFormControl error={this.state.productVersionIsError}>
-                  <InputLabel id="product-version-error-label">
-                    Produkt
-                  </InputLabel>
-                  <Select
-                    labelId="product-version-error-label"
-                    id="product-version-error-label"
-                    value={this.state.selectedProductVersionLabel}
-                    onChange={this.handleOnChangeProductVersion}
-                    onClose={this.handleCloseProductVersions}
-                    onOpen={this.handleOpenProductVersions}
-                    open={this.state.open}
-                    disabled={this.props.loading}
-                  >
-                    {!this.props.loading &&
-                      this.props.productVersionsResource.items.map(
-                        (productVersion) => (
-                          <MenuItem
-                            id={productVersion.id}
-                            key={shortid.generate()}
-                            value={
-                              productVersion.product.name +
-                              " - " +
-                              productVersion.version
-                            }
-                          >
-                            {productVersion.product.name +
-                              " - " +
-                              productVersion.version}
-                          </MenuItem>
-                        )
-                      )}
-                  </Select>
-                  <FormHelperText>
-                    {this.state.productVersionErrorMsg}
-                  </FormHelperText>
-                </StyledFormControl>
-              }
-              right={
-                <IconButton onClick={this.toggleFilter}>
-                  <FilterListRounded />
-                </IconButton>
-              }
-            ></ToolbarBase>
-            <Collapse in={this.state.filterOpen}>
-              <FilterToolbar onChange={this.handleFilter} />
-            </Collapse>
-          </React.Fragment>
-        ) : (
-          <React.Fragment />
-        )}
+  const handleRemoveReleaseNote = (srcIndex) => {
+    moveToAnotherColumn("release", "releaseNotes", srcIndex, 0);
+  };
+  const handleSave = () => {
+    const release = {
+      productVersionId: selectedPv.id,
+      title: title,
+      isPublic: isPublic,
+      releaseNotesId: allItems.release.list.map((rn) => rn.id),
+    };
+    props.onSave(release);
+  };
 
-        {this.props.releaseNotesResource ? (
-          <FlexContainer>
-            <DragDropContext
-              onBeforeCapture={this.onBeforeCapture}
-              onDragEnd={this.onDragEnd}
-            >
-              <ReleaseContainer>
-                <TitleTextField
-                  value={this.state.title}
-                  handleOnChangeTitle={this.handleOnChangeTitle}
-                  error={this.state.titleIsError}
-                  helperText={this.state.titleErrorMsg}
-                />
-                <Column
-                  isRelease={true}
-                  key={this.state.allItems.release.id}
-                  id={this.state.allItems.release.id}
-                  title={this.state.allItems.release.name}
-                  releaseNotes={this.state.allItems.release.list}
-                  noteWidth={this.state.noteWidth}
-                  handleRemoveReleaseNote={this.handleRemoveReleaseNote}
-                  onSaveReleaseNote={this.handleSaveReleaseNote}
-                />
-              </ReleaseContainer>
-              <VerticalDivider orientation={"vertical"} />
-              <Column
-                isRelease={false}
-                styleSheet={this.releaseNoteStyle}
-                key={this.state.allItems.releaseNotes.id}
-                id={this.state.allItems.releaseNotes.id}
-                title={this.state.allItems.releaseNotes.name}
-                releaseNotes={this.state.allItems.releaseNotes.list}
-              />
-            </DragDropContext>
-          </FlexContainer>
-        ) : (
-          <React.Fragment />
-        )}
-      </React.Fragment>
-    );
-  }
-}
+  const getCurrentReleaseState = () => {
+    if (props.release) {
+      return {
+        productVersion: props.productVersionsResource.items.find(
+          (item) => item.id === selectedPv.id
+        ),
+        isPublic: isPublic,
+        id: props.release.id,
+        title: title,
+        releaseNotes: allItems.release.list,
+        date: Date.now(),
+      };
+    }
+  };
+
+  const handleSaveReleaseNote = (releaseNoteId, releaseNote) => {
+    // save editor state locally, then save release note
+    const release = getCurrentReleaseState();
+    props.onSaveEditorState(release);
+    props.onSaveReleaseNote(releaseNoteId, releaseNote);
+  };
+
+  const releaseNoteStyle = {
+    minWidth: "20rem",
+    flexBasis: "20%",
+  };
+
+  const handlePvChange = useCallback(
+    (ev) => {
+      if (ev.target.value) {
+        const itemToSelect = props.productVersionsResource.items.find(
+          (item) => ev.target.value.id === item.id
+        );
+        if (itemToSelect) {
+          setSelectedPv(itemToSelect);
+        }
+      }
+    },
+    [props.productVersionsResource.items]
+  );
+
+  const handleIsPublicChange = useCallback(() => {
+    setIsPublic((oldIsPublic) => !oldIsPublic);
+  }, []);
+
+  return (
+    <React.Fragment>
+      <BottomToolbar
+        left={[
+          <Button
+            key="cancelBtn"
+            color="secondary"
+            variant="contained"
+            onClick={props.onCancel}
+          >
+            Avbryt
+          </Button>,
+        ]}
+        right={[
+          <ModalButton
+            label="Forhåndsvis"
+            modalLabel="Forhåndsvis release"
+            buttonProps={{
+              color: "primary",
+              size: "small",
+              variant: "contained",
+              disableElevation: true,
+            }}
+          >
+            <ReleaseView release={getCurrentReleaseState()} />
+          </ModalButton>,
+          <IsPublicSwitch
+            isPublic={isPublic}
+            onChange={handleIsPublicChange}
+          />,
+          <SaveButton
+            key="saveBtn"
+            disabled={submitDisabled}
+            variant="contained"
+            onClick={handleSave}
+          >
+            Lagre
+          </SaveButton>,
+        ]}
+        middle={[
+          <ErrorMsgContainer key="errorMsgContainer">
+            <span>{RNError}</span>
+          </ErrorMsgContainer>,
+        ]}
+      />
+      <ToolbarBase
+        left={
+          <PVSelect
+            items={props.productVersionsResource.items}
+            onChange={handlePvChange}
+            value={selectedPv}
+            error={PVError}
+          ></PVSelect>
+        }
+        right={
+          <IconButton onClick={() => setFilterOpen(!filterOpen)}>
+            <FilterListRounded />
+          </IconButton>
+        }
+      ></ToolbarBase>
+      <Collapse in={filterOpen}>
+        <FilterToolbar onChange={handleFilter} />
+      </Collapse>
+
+      <DragDropContext onDragEnd={onDragEnd}>
+        <FlexContainer>
+          <ReleaseContainer>
+            <TitleTextField
+              value={title}
+              handleOnChangeTitle={handleOnChangeTitle}
+              error={Boolean(titleError)}
+              helperText={titleError}
+            />
+            <Column
+              isRelease={true}
+              key={allItems.release.id}
+              id={allItems.release.id}
+              title={allItems.release.name}
+              releaseNotes={allItems.release.list}
+              handleRemoveReleaseNote={handleRemoveReleaseNote}
+              onSaveReleaseNote={handleSaveReleaseNote}
+            />
+          </ReleaseContainer>
+
+          <VerticalDivider orientation={"vertical"} />
+          <Column
+            isRelease={false}
+            styleSheet={releaseNoteStyle}
+            key={allItems.releaseNotes.id}
+            id={allItems.releaseNotes.id}
+            title={allItems.releaseNotes.name}
+            releaseNotes={allItems.releaseNotes.list}
+          />
+        </FlexContainer>
+      </DragDropContext>
+    </React.Fragment>
+  );
+};
 
 export default ReleaseEditor;
 
-ReleaseEditor.defaultProps = {};
+ReleaseEditor.defaultProps = {
+  release: {},
+};
 
 ReleaseEditor.propTypes = {
   releaseNotesResource: PropTypes.array,
@@ -556,3 +451,51 @@ const VerticalDivider = styled(Divider)`
     margin: 0 15px 0 15px;
   }
 `;
+
+const PVSelect = React.memo(function MemoPVSelect(props) {
+  const [open, setOpen] = useState(false);
+  return (
+    <StyledFormControl error={props.error}>
+      <InputLabel id="product-version-error-label">Produkt</InputLabel>
+      <Select
+        labelId="product-version-error-label"
+        id="product-version-error-label"
+        value={props.value}
+        onChange={props.onChange}
+        onClose={() => setOpen(false)}
+        onOpen={() => setOpen(true)}
+        open={open}
+      >
+        {props.items.map((productVersion) => (
+          <MenuItem
+            id={productVersion.id}
+            key={shortid.generate()}
+            value={productVersion}
+          >
+            {productVersion.fullName}
+          </MenuItem>
+        ))}
+      </Select>
+      <FormHelperText>{props.error}</FormHelperText>
+    </StyledFormControl>
+  );
+});
+
+const IsPublicSwitch = React.memo(function MemoIsPublicSwitch(props) {
+  return (
+    <FormControlLabel
+      key="isPublicSwitch"
+      style={{ marginLeft: "15px" }}
+      control={
+        <Switch
+          checked={props.isPublic}
+          onChange={props.onChange}
+          value={props.isPublic}
+          color="primary"
+          inputProps={{ "aria-label": "primary checkbox" }}
+        />
+      }
+      label="Publisert"
+    />
+  );
+});

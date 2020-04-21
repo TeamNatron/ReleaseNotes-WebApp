@@ -6,7 +6,7 @@ import { Delete } from "@material-ui/icons";
 import ReleaseNotePreview from "../shared/ReleaseNotePreview";
 import ReleaseNoteEditorModal from "../releaseNoteEditor/ReleaseNoteEditorModal";
 
-const ReleaseNote = (props) => {
+const ReleaseNote = React.memo(function MemoReleaseNote(props) {
   return (
     <Draggable draggableId={"draggable-" + props.id} index={props.index}>
       {(provided) => (
@@ -27,13 +27,15 @@ const ReleaseNote = (props) => {
                     <ReleaseNoteEditorModal
                       note={props.releaseNote}
                       onSave={props.onSave}
+                      size="small"
                     />
                   </FlexEnd>
 
                   <StyledIconButton
                     onClick={() => props.handleRemoveReleaseNote(props.index)}
+                    size="small"
                   >
-                    <Delete />
+                    <Delete fontSize="small" />
                   </StyledIconButton>
                 </React.Fragment>
               )}
@@ -44,12 +46,13 @@ const ReleaseNote = (props) => {
       )}
     </Draggable>
   );
-};
+});
 
 export default ReleaseNote;
 
 const StyledIconButton = styled(IconButton)`
   && {
+    padding-top: 8px;
     margin-left: auto;
     display: flex-end;
   }
