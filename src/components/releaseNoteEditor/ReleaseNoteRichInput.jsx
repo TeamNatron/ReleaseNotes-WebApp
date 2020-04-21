@@ -1,11 +1,13 @@
 import React from "react";
 import { FormControl, Divider } from "@material-ui/core";
 import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { uploadImage } from "../../slices/imageSlice";
 
 const ReleaseNoteRichInput = (props) => {
   let editor = React.createRef();
+  const dispatch = useDispatch();
 
   const focusEditor = () => {
     editor.current.focusEditor();
@@ -17,7 +19,13 @@ const ReleaseNoteRichInput = (props) => {
 
   const handleImageUpload = (image) => {
     return new Promise((resolve, reject) => {
-      resolve({ data: { link: URL.createObjectURL(image) } });
+      dispatch(
+        uploadImage(
+          image,
+          (url) => resolve({ data: { link: url } }),
+          (err) => reject()
+        )
+      );
     });
   };
 
@@ -53,7 +61,7 @@ const ReleaseNoteRichInput = (props) => {
               image: {
                 urlEnabled: true,
                 uploadEnabled: true,
-                alignmentEnabled: true,
+                alignmentEnabled: false,
                 uploadCallback: handleImageUpload,
                 previewImage: true,
                 inputAccept:
