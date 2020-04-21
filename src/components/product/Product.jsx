@@ -40,12 +40,6 @@ const Product = (props) => {
                   <Typography variant="h4" component="h2">
                     {props.item.name}
                   </Typography>
-                  <Typography>adjective</Typography>
-                  <Typography variant="body2" component="p">
-                    well meaning and kindly.
-                    <br />
-                    {'"a benevolent smile"'}
-                  </Typography>
                 </ProductCardContent>
               </Grid>
             </Grid>
