@@ -88,7 +88,6 @@ const EditProductForm = (props) => {
                 new Promise((resolve) => {
                   setTimeout(() => {
                     resolve();
-                    console.log(newData);
                     dispatch(
                       putProductVersion(props.id, {
                         id: 105,
