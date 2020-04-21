@@ -40,12 +40,6 @@ const Product = (props) => {
                   <Typography variant="h4" component="h2">
                     {props.item.name}
                   </Typography>
-                  <Typography>adjective</Typography>
-                  <Typography variant="body2" component="p">
-                    well meaning and kindly.
-                    <br />
-                    {'"a benevolent smile"'}
-                  </Typography>
                 </ProductCardContent>
               </Grid>
             </Grid>
@@ -78,7 +72,7 @@ const ProductCardContent = styled(CardContent)`
 
 const CardImage = styled(CardMedia)`
   && {
-    max-width: auto 400px;
+    max-width: 400px;
     max-height: 250px;
   }
 `;
