@@ -22,6 +22,10 @@ class Login extends Component {
     document.addEventListener("keydown", this.enterFunction, false);
   }
 
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.enterFunction, false);
+  }
+
   enterFunction = (event) => {
     if (event.keyCode === 13) {
       this.props.handleSubmit(this.state.email, this.state.password);
