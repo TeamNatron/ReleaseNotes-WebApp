@@ -56,6 +56,7 @@ const ReleaseNoteEditor = (props) => {
     setTitle(createStateFromText(props.note.title));
     setIngress(createStateFromText(props.note.ingress));
     setDescription(createStateFromText(props.note.description));
+    setReady(props.note.isPublic);
   }, [props.note]);
 
   // update the given editor
