@@ -17,7 +17,10 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-import { postProductVersion } from "../../slices/productsSlice";
+import {
+  postProductVersion,
+  putProductVersion,
+} from "../../slices/productsSlice";
 import { useDispatch } from "react-redux";
 
 const EditProductForm = (props) => {
@@ -40,7 +43,7 @@ const EditProductForm = (props) => {
       {
         title: "Full navn",
         field: "fullName",
-        editable: false,
+        editable: "never",
         readonly: true,
       },
     ],
@@ -85,6 +88,14 @@ const EditProductForm = (props) => {
                 new Promise((resolve) => {
                   setTimeout(() => {
                     resolve();
+                    console.log(newData);
+                    dispatch(
+                      putProductVersion(props.id, {
+                        id: 105,
+                        version: newData.version,
+                        isPublic: newData.isPublic,
+                      })
+                    );
                     if (oldData) {
                       setState((prevState) => {
                         const data = [...prevState.data];
