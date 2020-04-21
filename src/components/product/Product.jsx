@@ -22,7 +22,7 @@ const Product = (props) => {
 
   return (
     <Grow in={!props.loading}>
-      <ProductPaper elevation="6">
+      <ProductPaper>
         {props.loading ? (
           <React.Fragment>
             <Skeleton variant="rect" height={250} />

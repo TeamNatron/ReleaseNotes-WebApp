@@ -15,17 +15,13 @@ const Footer = () => {
             }
             alt="Cordel Kundesenter"
           />
-          <Typography variant="body2" color="#E2DCCD">
-            © Cordel Norge AS 2020
-          </Typography>
+          <Typography variant="body2">© Cordel Norge AS 2020</Typography>
           <Typography
             variant="body2"
             style={{ marginTop: "1rem" }}
             align="center"
           >
-            <Link to="/login/">
-              <LoginButton>Logg inn</LoginButton>
-            </Link>
+            <LoginButton to="/login/">Logg inn</LoginButton>
           </Typography>
         </Box>
       </Grid>
@@ -35,7 +31,7 @@ const Footer = () => {
 
 export default Footer;
 
-const LoginButton = styled.a`
+const LoginButton = styled(Link)`
   font-size: 0.8rem;
   text-decoration: underline;
   margin: 0 auto;
