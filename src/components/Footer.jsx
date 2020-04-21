@@ -15,9 +15,7 @@ const Footer = () => {
             }
             alt="Cordel Kundesenter"
           />
-          <Typography variant="body2" color="#E2DCCD">
-            © Cordel Norge AS 2020
-          </Typography>
+          <Typography variant="body2">© Cordel Norge AS 2020</Typography>
           <Typography
             variant="body2"
             style={{ marginTop: "1rem" }}
