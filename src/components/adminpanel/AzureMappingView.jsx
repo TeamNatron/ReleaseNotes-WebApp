@@ -23,7 +23,6 @@ import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  fetchRNSMappable,
   fetchAZDMappable,
   AZDTableFieldSelector,
   fetchRNSMappings,
@@ -39,19 +38,18 @@ const AzureMappingView = (props) => {
   const rnsTableRef = React.createRef();
   const dispatch = useDispatch();
 
-  // The state of the available AzureDevOps-fields.
+  // ------- STATES -------
   const [lookup, setLookup] = useState({
     0: "",
   });
-
   const [localMappings, setLocalMappings] = useState([{}]);
   const [workItemTypes] = useState(["task", "bug"]);
   const [selectedWorkItemType, setSelectedWorkItemType] = useState("task");
 
+  // ------- DATA FETCHING -------
   useEffect(() => {
-    dispatch(fetchRNSMappable());
-    dispatch(fetchRNSMappings());
-  }, [dispatch]);
+    dispatch(fetchRNSMappings(selectedWorkItemType));
+  }, [dispatch, selectedWorkItemType]);
 
   useEffect(() => {
     const { authToken, organization } = azureProps;
@@ -76,7 +74,7 @@ const AzureMappingView = (props) => {
   const azdFields = useSelector(AZDTableFieldSelector);
   const rnsMappings = useSelector(rnsMappingsTableFields);
 
-  // Updates the fields
+  // ------- UPDATE DATA -------
   useEffect(() => {
     if (!rnsMappings) return;
     if (!lookup || lookup[0] === "") {
@@ -102,6 +100,7 @@ const AzureMappingView = (props) => {
     setLocalMappings(rnsMappings);
   }, [lookup, rnsMappings]);
 
+  // Update local state with all the available fields from Azure
   useEffect(() => {
     // If there's no members in object, just return
     if (Object.keys(azdFields).length === 0 && azdFields.constructor === Object)
@@ -115,7 +114,7 @@ const AzureMappingView = (props) => {
         new Promise((resolve, reject) => {
           try {
             // Get the field name to set
-            const result = lookup[newData.azdFieldName];
+            const newAzdField = lookup[newData.azdFieldName];
 
             // Get tableObject
             var index = localMappings.indexOf(oldData);
@@ -124,7 +123,7 @@ const AzureMappingView = (props) => {
             // Get id of mapping
             var mappingId = tableObject.id;
 
-            dispatch(putMapping(mappingId, result));
+            dispatch(putMapping(mappingId, newAzdField, selectedWorkItemType));
           } catch {
             throw new Error("Couldn't find object");
           }
