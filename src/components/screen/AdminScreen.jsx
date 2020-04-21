@@ -20,7 +20,7 @@ const AdminScreen = () => {
       <TurboDivider />
       <StyledAppBar color="transparent" position="static">
         <Tabs
-          value={location.pathname}
+          value={location.pathname ? !"/admin/" : "/admin/home"}
           indicatorColor="primary"
           textColor="primary"
         >
