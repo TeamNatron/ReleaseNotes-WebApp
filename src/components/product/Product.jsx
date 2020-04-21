@@ -78,7 +78,7 @@ const ProductCardContent = styled(CardContent)`
 
 const CardImage = styled(CardMedia)`
   && {
-    max-width: auto 400px;
+    max-width: 400px;
     max-height: 250px;
   }
 `;
