@@ -1,0 +1,7 @@
+.rdw-image-center {
+  /* Override default "react-draft-wysiwyg.css" behaviour, 
+     since draft-wysiwyg defaults images to "rdw-image-center" even
+     with alignment disabled
+  */
+  justify-content: unset;
+}
