@@ -12,6 +12,7 @@ const AdminExpansionPanelRoute = (props) => {
     editContentRoute,
     onUpdate,
     onDelete,
+    isRelease,
     ...baseProps
   } = props;
   const handleAction = (action, rowData) => {
@@ -46,6 +47,7 @@ const AdminExpansionPanelRoute = (props) => {
         edit={Boolean(editContentRoute)}
         delete={Boolean(onDelete)}
         isPublic={Boolean(onUpdate)}
+        isRelease={Boolean(props.isRelease)}
         {...baseProps}
       />
     </React.Fragment>
@@ -61,4 +63,5 @@ AdminExpansionPanelRoute.propTypes = {
   createContentRoute: PropTypes.string,
   editContentRoute: PropTypes.string,
   onUpdate: PropTypes.func,
+  isRelease: PropTypes.bool.isRequired,
 };
