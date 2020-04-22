@@ -37,13 +37,9 @@ export const fetchRNSMappingsPending = createAction(RNS_MAPPING + "getPending");
 export const fetchRNSMappingsError = createAction(RNS_MAPPING + "getError");
 export const fetchRNSMappingsSuccess = createAction(RNS_MAPPING + "getSuccess");
 
-export const putMappingPending = createAction(
-  NAME + "postProductVersionPending"
-);
-export const putMappingError = createAction(NAME + "postProductVersionError");
-export const putMappingSuccess = createAction(
-  NAME + "postProductVersionSuccess"
-);
+export const putMappingPending = createAction(NAME + "putMappingPending");
+export const putMappingError = createAction(NAME + "putMappingError");
+export const putMappingSuccess = createAction(NAME + "putMappingSuccess");
 
 export const initialState = {
   RNSMappable: [],
@@ -60,6 +56,17 @@ export const mappingReducer = createReducer(initialState, {
   },
   [fetchRNSMappingsSuccess]: (state, action) => {
     state.RNSMappings = action.payload.data;
+  },
+  [putMappingSuccess]: (state, action) => {
+    //todo implement update state with new mapping
+    const incomingObject = action.payload.data.entity;
+    const index = state.RNSMappings.entity.findIndex((obj) => {
+      return obj.id === incomingObject.id;
+    });
+    if (index !== -1) {
+      state.RNSMappings.entity[index].azureDevOpsField =
+        incomingObject.azureDevOpsField;
+    }
   },
 });
 
@@ -121,6 +128,37 @@ const buildWorkitemTypeURL = (project, org, itemType) => {
   );
 };
 
+export const fetchRNSMappings = () => async (dispatch) => {
+  const url = "/MappableFields?mapped";
+  dispatch(fetchRNSMappingsPending());
+  Axios.get(url)
+    .then((res) => {
+      dispatch(fetchRNSMappingsSuccess({ data: res.data }));
+    })
+    .catch(() => {
+      dispatch(fetchRNSMappingsError());
+    });
+};
+
+export const putMapping = (id, data) => async (dispatch) => {
+  const url = "/MappableFields/" + id;
+  const object = { azureDevOpsField: data };
+
+  dispatch(putMappingPending());
+  Axios.put(url, object)
+    .then((res) => {
+      dispatch(
+        putMappingSuccess({
+          data: res.data,
+          successMsg: res.data.message,
+        })
+      );
+    })
+    .catch((err) => {
+      dispatch(putMappingError(err));
+    });
+};
+
 // SELECTORS
 export const RNSFieldsSelector = createSelector(
   (state) => {
@@ -130,6 +168,14 @@ export const RNSFieldsSelector = createSelector(
   (fields) => {
     return fields;
   }
+);
+
+export const RNSTableFieldSelector = createSelector(
+  RNSFieldsSelector,
+  (fields) =>
+    fields.map((obj) => {
+      return { rnsFieldName: obj.name };
+    })
 );
 
 export const AZDFieldSelector = createSelector(
@@ -144,8 +190,33 @@ export const AZDFieldSelector = createSelector(
 
 export const AZDTableFieldSelector = createSelector(
   AZDFieldSelector,
-  (fields) =>
-    fields.map((obj) => {
-      return { name: obj };
-    })
+  (fields) => {
+    let obj = {};
+    for (const [i, value] of fields.entries()) {
+      obj[i] = value;
+    }
+    return obj;
+  }
+);
+
+export const rnsFieldMappingSelector = createSelector(
+  (state) => {
+    if (!state) return {};
+    return state.mapping.RNSMappings;
+  },
+  (mappings) => {
+    return mappings.entity;
+  }
+);
+
+export const rnsMappingsTableFields = createSelector(
+  rnsFieldMappingSelector,
+  (fields) => {
+    if (!fields) return;
+    return fields.map((obj) => ({
+      id: obj.id,
+      rnsFieldName: obj.mappableField.name,
+      azureDevOpsField: obj.azureDevOpsField,
+    }));
+  }
 );

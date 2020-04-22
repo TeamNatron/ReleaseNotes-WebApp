@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   List,
   ListItem,
@@ -23,41 +23,44 @@ const ChangePasswordForm = (props) => {
   const [submitDisabled, setSubmitDisabled] = useState();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    validatePwd(password);
-  }, [password]);
+  const validatePwd = useCallback(
+    (input) => {
+      if (input === "") {
+        setPwdIsError(true);
+        setPwdErrorMsg("Felt kan ikke være tomt");
+      } else if (password.length <= 5) {
+        setPwdIsError(true);
+        setPwdErrorMsg("Passordet må inneholde minst 5 tegn");
+      } else if (password !== passwordConfirm) {
+        setPwdIsError(true);
+        setPwdErrorMsg("Passordet er ikke det samme");
+      } else {
+        setPwdIsError(false);
+        setPwdErrorMsg("");
+      }
+    },
+    [password, passwordConfirm]
+  );
 
-  useEffect(() => {
-    validatePwd(passwordConfirm);
-  }, [passwordConfirm]);
-
-  useEffect(() => {
-    validateSubmit();
-  }, [pwdIsError]);
-
-  const validatePwd = (input) => {
-    if (input === "") {
-      setPwdIsError(true);
-      setPwdErrorMsg("Felt kan ikke være tomt");
-    } else if (password.length <= 5) {
-      setPwdIsError(true);
-      setPwdErrorMsg("Passordet må inneholde minst 5 tegn");
-    } else if (password !== passwordConfirm) {
-      setPwdIsError(true);
-      setPwdErrorMsg("Passordet er ikke det samme");
-    } else {
-      setPwdIsError(false);
-      setPwdErrorMsg("");
-    }
-  };
-
-  const validateSubmit = () => {
+  const validateSubmit = useCallback(() => {
     if (!pwdIsError) {
       setSubmitDisabled(false);
     } else {
       setSubmitDisabled(true);
     }
-  };
+  }, [pwdIsError]);
+
+  useEffect(() => {
+    validatePwd(password);
+  }, [password, validatePwd]);
+
+  useEffect(() => {
+    validatePwd(passwordConfirm);
+  }, [passwordConfirm, validatePwd]);
+
+  useEffect(() => {
+    validateSubmit();
+  }, [pwdIsError, validateSubmit]);
 
   const onChangePwd = (input) => {
     const newValue = input.target.value;

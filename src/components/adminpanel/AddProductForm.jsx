@@ -36,6 +36,10 @@ class AddProductForm extends Component {
     document.addEventListener("keydown", this.enterFunction, false);
   }
 
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.enterFunction, false);
+  }
+
   enterFunction = (event) => {
     if (event.keyCode === 13) {
       this.handleSubmit();
@@ -83,11 +87,11 @@ class AddProductForm extends Component {
   handleSubmit = () => {
     let promise = registerNewProduct(this.state.name, this.state.isPublic);
     promise
-      .then(
-        (response) => (
-          (document.getElementById("successMessage").hidden = false),
+      .then((response) =>
+        (document.getElementById("successMessage").hidden = false)(
           (document.getElementById("successMessage").innerHTML =
-            "Registering av " + response.data.name + " er velykket!"),
+            "Registering av " + response.data.name + " er velykket!")
+        )(
           (document.getElementById("successMessage").style.cssText =
             "color: green;")
         )

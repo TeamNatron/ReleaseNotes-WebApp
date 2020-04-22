@@ -6,6 +6,7 @@ export const fetchProductsPending = createAction(name + "getPending");
 export const fetchProductsError = createAction(name + "getError");
 export const fetchProductsSuccess = createAction(name + "getSuccess");
 
+// POST
 export const postProductVersionPending = createAction(
   name + "postProductVersionPending"
 );
@@ -16,6 +17,17 @@ export const postProductVersionSuccess = createAction(
   name + "postProductVersionSuccess"
 );
 
+// PUT
+export const putProductVersionPending = createAction(
+  name + "putProductVersionPending"
+);
+export const putProductVersionError = createAction(
+  name + "putProductVersionError"
+);
+export const putProductVersionSuccess = createAction(
+  name + "putProductVersionSuccess"
+);
+
 export const productsReducer = createReducer(
   { items: [] },
   {
@@ -23,6 +35,10 @@ export const productsReducer = createReducer(
       state.items = action.payload.data;
     },
     [postProductVersionSuccess]: (state, action) => {
+      const product = state.items.find((p) => p.id === action.payload.id);
+      product.versions.push(action.payload.data);
+    },
+    [putProductVersionSuccess]: (state, action) => {
       const product = state.items.find((p) => p.id === action.payload.id);
       product.versions.push(action.payload.data);
     },
@@ -37,6 +53,17 @@ export const postProductVersion = (id, productVersion) => async (dispatch) => {
     })
     .catch((error) => {
       dispatch(postProductVersionError(error));
+    });
+};
+
+export const putProductVersion = (id, productVersion) => async (dispatch) => {
+  dispatch(putProductVersionPending());
+  Axios.put("products/" + id + "/version", productVersion)
+    .then((res) => {
+      dispatch(putProductVersionSuccess({ data: res.data, id: id }));
+    })
+    .catch((error) => {
+      dispatch(putProductVersionError(error));
     });
 };
 

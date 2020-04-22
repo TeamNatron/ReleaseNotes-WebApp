@@ -67,8 +67,8 @@ export const fetchProjects = (params) => async (dispatch) => {
     .then((res) => {
       dispatch(getProjectsSuccess({ data: res.data }));
     })
-    .catch((error) => {
-      dispatch(getProjectsError(error));
+    .catch(() => {
+      dispatch(getProjectsError());
     });
 };
 
@@ -174,6 +174,10 @@ export const importRelease = (
     .then((res) => {
       var ids = res.data.value.map(({ id }) => id);
 
+      if (ids === undefined || ids.length === 0) {
+        throw new Error("Fant ingen assosierte WorkItems.");
+      }
+
       // Get data of each work item
       fetchWorkItems(project, params, ids)
         .then((res) => {
@@ -229,10 +233,10 @@ export const createWorkItem = (item) => {
     AuthorEmail: item.fields["System.CreatedBy"]["uniqueName"],
     title: item.fields["System.Title"],
     ingress: "",
-    Description: desc
+    Description: desc,
   };
 };
 
 function isEmpty(str) {
-  return (!str || 0 === str.length);
+  return !str || 0 === str.length;
 }

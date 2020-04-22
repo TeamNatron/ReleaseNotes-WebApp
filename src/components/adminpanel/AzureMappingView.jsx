@@ -3,7 +3,6 @@ import {
   ExpansionPanel,
   ExpansionPanelSummary,
   Typography,
-  Grid,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MaterialTable from "material-table";
@@ -22,58 +21,103 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-import Refresh from "@material-ui/icons/Refresh";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  RNSFieldsSelector,
   fetchRNSMappable,
   fetchAZDMappable,
   AZDTableFieldSelector,
+  fetchRNSMappings,
+  rnsMappingsTableFields,
+  putMapping,
 } from "../../slices/mappingSlice";
+import PropTypes from "prop-types";
+import { useState } from "react";
 
 const AzureMappingView = (props) => {
-  const { authToken, project, org } = props;
-
-  // To add more fields to the table, create new objects in the array
-  // Each object needs the properties 'title' and 'field'.
-  const columns = [{ title: "Felt", field: "name" }];
-
+  const { azureProps, selectedProject } = props;
   const rnsTableRef = React.createRef();
-  const azdTableRef = React.createRef();
-
   const dispatch = useDispatch();
+
+  // The state of the available AzureDevOps-fields.
+  const [lookup, setLookup] = useState({
+    0: "",
+  });
+
+  const [localMappings, setLocalMappings] = useState([{}]);
 
   useEffect(() => {
     dispatch(fetchRNSMappable());
+    dispatch(fetchRNSMappings());
   }, [dispatch]);
 
   useEffect(() => {
-    if (authToken === "" || project === "" || org === "") return;
-    dispatch(fetchAZDMappable(authToken, project, org, "task"));
-  }, [authToken, dispatch, org, project]);
+    const { authToken, organization } = azureProps;
+    if (authToken === "" || selectedProject === "" || organization === "")
+      return;
+    if (!authToken || !selectedProject || !organization) return;
+    dispatch(
+      fetchAZDMappable(authToken, selectedProject, organization, "task")
+    );
+  }, [dispatch, azureProps, selectedProject]);
 
-  const rnsFields = useSelector(RNSFieldsSelector);
   const azdFields = useSelector(AZDTableFieldSelector);
+  const rnsMappings = useSelector(rnsMappingsTableFields);
 
-  // Updates the fields on selector change
+  // Updates the fields
   useEffect(() => {
-    rnsTableRef.current && rnsTableRef.current.onQueryChange();
+    if (!rnsMappings) return;
+    if (!lookup || lookup[0] === "") {
+      setLocalMappings(rnsMappings);
+      return;
+    }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rnsFields]);
+    // To get the correct index of mappings, a comparison is made between strings
+    rnsMappings.forEach((obj) => {
+      if (obj.azureDevOpsField === "" || !obj.azureDevOpsField) return;
+
+      // Find the id of this string
+      for (const index in lookup) {
+        // find matching string
+        if (lookup[index] === obj.azureDevOpsField) {
+          // return id
+          obj.azdFieldName = index;
+          break;
+        }
+      }
+    });
+
+    setLocalMappings(rnsMappings);
+  }, [lookup, rnsMappings]);
+
   useEffect(() => {
-    azdTableRef.current && azdTableRef.current.onQueryChange();
+    // If there's no members in object, just return
+    if (Object.keys(azdFields).length === 0 && azdFields.constructor === Object)
+      return;
+    setLookup(azdFields);
+  }, [azdFields, setLookup]);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [azdFields]);
+  const getEditable = () => {
+    return {
+      onRowUpdate: (newData, oldData) =>
+        new Promise((resolve, reject) => {
+          try {
+            // Get the field name to set
+            const result = lookup[newData.azdFieldName];
 
-  /**
-   * Returns a deepcopy of an array
-   * @param {Array of objects} arr
-   */
-  const deepCopyArray = (arr) => {
-    if (arr.length === 0) return [];
-    return arr.map((obj) => Object.create(obj));
+            // Get tableObject
+            var index = localMappings.indexOf(oldData);
+            var tableObject = localMappings[index];
+
+            // Get id of mapping
+            var mappingId = tableObject.id;
+
+            dispatch(putMapping(mappingId, result));
+          } catch {
+            throw new Error("Couldn't find object");
+          }
+          resolve();
+        }),
+    };
   };
 
   return (
@@ -85,70 +129,41 @@ const AzureMappingView = (props) => {
       >
         <Typography>Release Note Mapping</Typography>
       </ExpansionPanelSummary>
-      {/* <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <MaterialTable
-            icons={tableIcons}
-            tableRef={rnsTableRef}
-            title={"Release Note System fields"}
-            columns={columns}
-            data={(query) =>
-              new Promise((resolve, reject) => {
-                // Creates a new array which clones each object it contains.
-                // This was done to make the objects mutable.
-                var newArray = deepCopyArray(rnsFields);
-                resolve({
-                  data: newArray,
-                  page: 0,
-                  totalCount: newArray.length,
-                });
-              })
-            }
-            actions={actionRefreshButton(rnsTableRef)}
-            options={optionsReadOnlyTable}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <MaterialTable
-            icons={tableIcons}
-            tableRef={azdTableRef}
-            title={"Azure DevOps fields"}
-            columns={columns}
-            data={(query) =>
-              new Promise((resolve, reject) => {
-                // Creates a new array which clones each object it contains.
-                // This was done to make the objects mutable.
-                var newArray = deepCopyArray(azdFields);
-                resolve({
-                  data: newArray,
-                  page: 0,
-                  totalCount: newArray.length,
-                });
-              })
-            }
-            actions={actionRefreshButton(azdTableRef)}
-            options={optionsReadOnlyTable}
-          />
-        </Grid>
-      </Grid> */}
+      <MaterialTable
+        icons={tableIcons}
+        tableRef={rnsTableRef}
+        title={"Release Note System fields"}
+        columns={[
+          {
+            title: "ReleaseNote-Felt",
+            field: "rnsFieldName",
+            editable: "never",
+            readOnly: true,
+          },
+          {
+            title: "AzureDevOps-Felt",
+            field: "azdFieldName",
+            lookup: lookup,
+          },
+        ]}
+        data={localMappings}
+        editable={getEditable()}
+        // actions={actionsMappingTable(rnsTableRef)}
+        options={optionsMappingTable}
+        // components={getAzureDevOpsFieldSelector()}
+      />
     </ExpansionPanel>
   );
 };
 
 export default AzureMappingView;
 
-const actionRefreshButton = (ref) => {
-  return [
-    {
-      icon: () => <Refresh />,
-      tooltip: "Refresh Data",
-      isFreeAction: true,
-      onClick: () => ref.current && ref.current.onQueryChange(),
-    },
-  ];
+AzureMappingView.propTypes = {
+  azureProps: PropTypes.object.isRequired,
+  selectedProject: PropTypes.string.isRequired,
 };
 
-const optionsReadOnlyTable = {
+const optionsMappingTable = {
   search: false,
   paging: false,
   filtering: false,

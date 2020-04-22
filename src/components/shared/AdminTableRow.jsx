@@ -19,8 +19,8 @@ const AdminTableRow = (props) => {
                   fontSize: "small",
                 })
               ) : (
-                <React.Fragment />
-              )}
+                  <React.Fragment />
+                )}
             </StyledTableCell>
           );
         } else if (column.id === "isPublicSwitch") {
@@ -48,6 +48,7 @@ const AdminTableRow = (props) => {
                   onConfirm={() => props.onAction(actions.DELETE, { ...row })}
                   id={row.id}
                   entityName={row.name}
+                  isRelease={props.isRelease}
                 />
               </StyledTableCell>
             )

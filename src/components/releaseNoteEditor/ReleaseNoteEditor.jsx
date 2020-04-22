@@ -17,13 +17,8 @@ import ReleaseNoteRichInput from "./ReleaseNoteRichInput";
 import "draft-js/dist/Draft.css";
 import draftToHtml from "draftjs-to-html";
 import PropTypes from "prop-types";
-import {
-  convertToRaw,
-  RichUtils,
-  EditorState,
-  convertFromHTML,
-  ContentState,
-} from "draft-js";
+import { convertToRaw, RichUtils, EditorState, ContentState } from "draft-js";
+
 import {
   Assignment,
   Person,
@@ -34,6 +29,9 @@ import {
 } from "@material-ui/icons";
 import { green, orange } from "@material-ui/core/colors";
 import BottomToolbar from "../shared/BottomToolbar";
+import htmlToDraft from "html-to-draftjs";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import "./release-note-editor.css";
 
 const ReleaseNoteEditor = (props) => {
   //editor states
@@ -58,6 +56,7 @@ const ReleaseNoteEditor = (props) => {
     setTitle(createStateFromText(props.note.title));
     setIngress(createStateFromText(props.note.ingress));
     setDescription(createStateFromText(props.note.description));
+    setReady(props.note.isPublic);
   }, [props.note]);
 
   // update the given editor
@@ -88,7 +87,7 @@ const ReleaseNoteEditor = (props) => {
     if (!text) {
       return EditorState.createEmpty();
     }
-    const blocksFromHTML = convertFromHTML(text);
+    const blocksFromHTML = htmlToDraft(text);
     const contentState = ContentState.createFromBlockArray(
       blocksFromHTML.contentBlocks,
       blocksFromHTML.entityMap
