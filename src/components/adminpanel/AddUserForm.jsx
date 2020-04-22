@@ -36,6 +36,10 @@ class AddUserForm extends Component {
     document.addEventListener("keydown", this.enterFunction, false);
   }
 
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.enterFunction, false);
+  }
+
   enterFunction = (event) => {
     if (event.keyCode === 13) {
       this.handleSubmit();
@@ -51,7 +55,7 @@ class AddUserForm extends Component {
           this.validateSubmit();
         }
       );
-    } else if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(input))) {
+    } else if (!(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(input))) {
       this.setState({
         emailIsError: true,
         emailErrorMsg: "Ikke en gyldig e-postadresse"
@@ -123,20 +127,20 @@ class AddUserForm extends Component {
   handleSubmit = () => {
     let promise = registerNewUser(this.state.email, this.state.password);
     promise
-      .then(
-        (response) => (
-          (document.getElementById("successMessage").hidden = false),
+      .then((response) =>
+        (document.getElementById("successMessage").hidden = false)(
           (document.getElementById("successMessage").innerHTML =
-            "Registering av " + response.data.email + " er velykket!"),
+            "Registering av " + response.data.email + " er velykket!")
+        )(
           (document.getElementById("successMessage").style.cssText =
             "color: green;")
         )
       )
-      .catch(
-        (error) => (
-          (document.getElementById("successMessage").hidden = false),
+      .catch((error) =>
+        (document.getElementById("successMessage").hidden = false)(
           (document.getElementById("successMessage").innerHTML =
-            error.response.data),
+            error.response.data)
+        )(
           (document.getElementById("successMessage").style.cssText =
             "color: red;")
         )
