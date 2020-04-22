@@ -91,7 +91,7 @@ export default AdminHomeView;
 
 const releaseTitlesSelector = createSelector(
   (state) => state.releases.items,
-  (items) => items.map((r) => createData(r, r.title, r.id, r.isPublic, r.isRelease))
+  (items) => items.map((r) => createData(r, r.title, r.id, r.isPublic))
 );
 
 const productTitlesSelector = createSelector(
