@@ -68,6 +68,7 @@ const AdminHomeView = (props) => {
         label="Releases"
         icon={<Description />}
         rows={releaseTitles}
+        isRelease={true}
         createContentRoute="/releases/create"
         editContentRoute="/releases/edit/:id"
         onUpdate={putReleaseById}
@@ -77,6 +78,7 @@ const AdminHomeView = (props) => {
         label="Release notes"
         icon={<Description />}
         rows={releaseNoteRows}
+        isRelease={false}
         createContentRoute="/releasenotes/create"
         editContentRoute="/releasenotes/edit/:id"
         onUpdate={putReleaseNote}
@@ -89,7 +91,7 @@ export default AdminHomeView;
 
 const releaseTitlesSelector = createSelector(
   (state) => state.releases.items,
-  (items) => items.map((r) => createData(r, r.title, r.id, r.isPublic))
+  (items) => items.map((r) => createData(r, r.title, r.id, r.isPublic, r.isRelease))
 );
 
 const productTitlesSelector = createSelector(
