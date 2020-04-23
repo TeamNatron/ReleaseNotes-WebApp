@@ -9,8 +9,6 @@ export const AzureAxios = GlobalAxios.create({
   timeout: 5000,
 });
 
-const ERROR_WORK_ITEM_TYPE_NOT_PROVIDED = "You need to provide a WormItemType!";
-
 /*
     RNS == Release Note System
     AZD == Azure DevOps
@@ -74,7 +72,7 @@ export const mappingReducer = createReducer(initialState, {
 });
 
 // THUNKS
-export const fetchRNSMappable = () => async (dispatch) => {
+export const fetchRNSMappable = (itemType) => async (dispatch) => {
   dispatch(fetchRNSMappablePending());
   Axios.get("mappablefields/")
     .then((res) => {
@@ -130,7 +128,6 @@ const buildWorkitemTypeURL = (project, org, itemType) => {
     "?api-version=5.1"
   );
 };
-
 export const fetchRNSMappings = (type) => async (dispatch) => {
   if (!type || type === "") throw Error(ERROR_WORK_ITEM_TYPE_NOT_PROVIDED);
 
