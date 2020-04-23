@@ -133,7 +133,6 @@ const AzureMappingView = (props) => {
   };
 
   const handleSelectedWorkItemType = (event) => {
-    console.log(event.currentTarget.textContent);
     setSelectedWorkItemType(event.currentTarget.textContent);
   };
 
@@ -172,9 +171,7 @@ const AzureMappingView = (props) => {
         ]}
         data={localMappings}
         editable={getEditable()}
-        // actions={actionsMappingTable(rnsTableRef)}
         options={optionsMappingTable}
-        // components={getAzureDevOpsFieldSelector()}
       />
     </ExpansionPanel>
   );
