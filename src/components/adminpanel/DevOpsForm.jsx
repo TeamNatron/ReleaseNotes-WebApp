@@ -32,7 +32,7 @@ const DevOpsForm = (props) => {
 
   const handleSubmit = () => {
     // see if the fields have beeen filled out
-    if (name === "" || PAT === "" || org === "") {
+    if (name === "" || org === "") {
       alert("felt mangler innhold");
     } else dispatch(updateAzureInfo(name, PAT, org));
   };

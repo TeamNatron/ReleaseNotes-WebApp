@@ -18,7 +18,10 @@ export const errorReducer = (state = {}, action) => {
     return state;
   }
   if (payload) {
-    if (payload.response) {
+    // It error is provided with an 'message' member, use this as error message
+    if (payload.message) {
+      return { text: payload.message, occured: date };
+    } else if (payload.response) {
       // The api-server returns these weird responses where they are packaged in named objects with arrays
       // This handling will ensure that the first object field's array will get turned in to a string and
       var errObj = payload.response.data[Object.keys(payload.response.data)[0]];

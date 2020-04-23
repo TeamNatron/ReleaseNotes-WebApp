@@ -182,7 +182,7 @@ const AzureMappingView = (props) => {
 
 export default AzureMappingView;
 
-AzureMappingView.protoTypes = {
+AzureMappingView.propTypes = {
   azureProps: PropTypes.object.isRequired,
   selectedProject: PropTypes.string.isRequired,
 };
