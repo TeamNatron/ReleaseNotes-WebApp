@@ -133,7 +133,7 @@ const buildWorkitemTypeURL = (project, org, itemType) => {
 export const fetchRNSMappings = (type) => async (dispatch) => {
   if (!type || type === "") throw Error(ERROR_WORK_ITEM_TYPE_NOT_PROVIDED);
 
-  const url = "/MappableFields?mapped";
+  const url = "/MappableFields?mapped&type=" + type;
 
   dispatch(fetchRNSMappingsPending());
   Axios.get(url)
@@ -221,8 +221,7 @@ export const rnsMappingsTableFields = createSelector(
   (fields) => {
     if (!fields) return;
     return fields.map((obj) => ({
-      id: obj.id,
-      rnsFieldName: obj.mappableField.name,
+      rnsFieldName: obj.mappableField,
       azureDevOpsField: obj.azureDevOpsField,
     }));
   }
