@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect } from "react";
+import React, { forwardRef, useEffect, useCallback } from "react";
 import {
   ExpansionPanel,
   ExpansionPanelSummary,
@@ -77,14 +77,37 @@ const AzureMappingView = (props) => {
   const rnsMappings = useSelector(rnsMappingsTableFields);
 
   // ------- UPDATE DATA -------
-  useEffect(() => {
-    if (!rnsMappings) return;
-    if (!lookup || lookup[0] === "") {
-      setLocalMappings(rnsMappings);
-      return;
-    }
+  const addMissingLookupElements = useCallback(() => {
+    const azdFields = rnsMappings
+      .filter((obj) => obj.azureDevOpsField)
+      .map(({ azureDevOpsField }) => azureDevOpsField);
 
-    // To get the correct index of mappings, a comparison is made between strings
+    if (azdFields.length > 0) {
+      // Grab a copy of lookupState
+      let lookupCopy = Object.create(lookup);
+
+      // Iterate over all azdFields that's used in mappings
+      azdFields.forEach((newString) => {
+        // Try to find a match for current string
+        const foundString = Object.values(lookupCopy).find((lookupString) => {
+          return lookupString === newString;
+        });
+
+        // If there's no match, the fields is missing, and should be added
+        const nextIndex = Object.values(lookupCopy).length;
+
+        if (!foundString) {
+          lookupCopy[nextIndex] = newString;
+        }
+      });
+      // Set the copy as the new state, if there's no changes nothing will be different
+      if (JSON.stringify(lookup) !== JSON.stringify(lookupCopy)) {
+        setLookup(lookupCopy);
+      }
+    }
+  }, [lookup, rnsMappings]);
+
+  const setCorrectAzdFieldsToCorrectIndex = useCallback(() => {
     rnsMappings.forEach((obj) => {
       if (obj.azureDevOpsField === "" || !obj.azureDevOpsField) return;
 
@@ -98,9 +121,31 @@ const AzureMappingView = (props) => {
         }
       }
     });
+  }, [lookup, rnsMappings]);
+
+  useEffect(() => {
+    // console.log(lookup);
+    if (!rnsMappings) return;
+
+    // To get azdFields from ReleaseNoteSystem that hasn't been fetched yet from
+    // Azure, we need to add these as lookup-options.
+    addMissingLookupElements();
+
+    if (!lookup || lookup[0] === "") {
+      setLocalMappings(rnsMappings);
+      return;
+    }
+
+    // To get the correct index of mappings, a comparison is made between strings
+    setCorrectAzdFieldsToCorrectIndex();
 
     setLocalMappings(rnsMappings);
-  }, [lookup, rnsMappings]);
+  }, [
+    addMissingLookupElements,
+    lookup,
+    rnsMappings,
+    setCorrectAzdFieldsToCorrectIndex,
+  ]);
 
   // Update local state with all the available fields from Azure
   useEffect(() => {
