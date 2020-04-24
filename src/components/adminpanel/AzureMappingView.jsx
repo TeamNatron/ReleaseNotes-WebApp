@@ -44,7 +44,9 @@ const AzureMappingView = (props) => {
   });
   const [localMappings, setLocalMappings] = useState([{}]);
   const [workItemTypes] = useState(["task", "bug"]);
-  const [selectedWorkItemType, setSelectedWorkItemType] = useState("task");
+  const [selectedWorkItemType, setSelectedWorkItemType] = useState(
+    workItemTypes[0]
+  );
 
   // ------- DATA FETCHING -------
   useEffect(() => {
@@ -121,9 +123,11 @@ const AzureMappingView = (props) => {
             var tableObject = localMappings[index];
 
             // Get id of mapping
-            var mappingId = tableObject.id;
+            var rnsFieldName = tableObject.rnsFieldName;
 
-            dispatch(putMapping(mappingId, newAzdField, selectedWorkItemType));
+            dispatch(
+              putMapping(rnsFieldName, newAzdField, selectedWorkItemType)
+            );
           } catch {
             throw new Error("Couldn't find object");
           }

@@ -62,7 +62,7 @@ export const mappingReducer = createReducer(initialState, {
     //todo implement update state with new mapping
     const incomingObject = action.payload.data.entity;
     const index = state.RNSMappings.entity.findIndex((obj) => {
-      return obj.id === incomingObject.id;
+      return obj.mappableField === incomingObject.mappableField;
     });
     if (index !== -1) {
       state.RNSMappings.entity[index].azureDevOpsField =
@@ -143,11 +143,14 @@ export const fetchRNSMappings = (type) => async (dispatch) => {
     });
 };
 
-export const putMapping = (id, data, workItemType) => async (dispatch) => {
+export const putMapping = (rnsField, newAzdField, workItemType) => async (
+  dispatch
+) => {
   if (!workItemType || workItemType === "")
     throw Error(ERROR_WORK_ITEM_TYPE_NOT_PROVIDED);
-  const url = "/MappableFields/" + id;
-  const object = { azureDevOpsField: data };
+  // {{base_url}}/api/MappableFields/task/title
+  const url = "/MappableFields/" + workItemType + "/" + rnsField;
+  const object = { azureDevOpsField: newAzdField };
 
   dispatch(putMappingPending());
   Axios.put(url, object)
