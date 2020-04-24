@@ -129,7 +129,7 @@ const buildWorkitemTypeURL = (project, org, itemType) => {
   );
 };
 export const fetchRNSMappings = (type) => async (dispatch) => {
-  if (!type || type === "") throw Error(ERROR_WORK_ITEM_TYPE_NOT_PROVIDED);
+  if (!type) throw Error(ERROR_WORK_ITEM_TYPE_NOT_PROVIDED);
 
   const url = "/MappableFields?mapped&type=" + type;
 
@@ -146,8 +146,7 @@ export const fetchRNSMappings = (type) => async (dispatch) => {
 export const putMapping = (rnsField, newAzdField, workItemType) => async (
   dispatch
 ) => {
-  if (!workItemType || workItemType === "")
-    throw Error(ERROR_WORK_ITEM_TYPE_NOT_PROVIDED);
+  if (!workItemType) throw Error(ERROR_WORK_ITEM_TYPE_NOT_PROVIDED);
   // {{base_url}}/api/MappableFields/task/title
   const url = "/MappableFields/" + workItemType + "/" + rnsField;
   const object = { azureDevOpsField: newAzdField };
