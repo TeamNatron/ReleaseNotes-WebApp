@@ -43,7 +43,8 @@ const GeneralSelector = (props) => {
 };
 
 GeneralSelector.prototype = {
-  items: PropTypes.array,
+  items: PropTypes.array.isRequired,
+  selected: PropTypes.any.isRequired,
   ml: PropTypes.string,
 };
 
