@@ -131,6 +131,7 @@ const AzureMappingView = (props) => {
     // Azure, we need to add these as lookup-options.
     addMissingLookupElements();
 
+    // If there's no lookup to bind azdFields to, just set mappings and return
     if (!lookup || lookup[0] === "") {
       setLocalMappings(rnsMappings);
       return;
