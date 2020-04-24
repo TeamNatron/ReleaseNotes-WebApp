@@ -17,16 +17,8 @@ const GeneralSelector = (props) => {
 
   return (
     <StyledFormControl
-      adornedStartfalse
       color="primary"
-      disabledfalse
-      errorfalse
-      filledtrue
-      focusedfalse
-      fullWidthfalse
-      hiddenLabelfalse
       margin="none"
-      requiredfalse
       variant="standard"
       ml={ml ? ml : 0}
     >
