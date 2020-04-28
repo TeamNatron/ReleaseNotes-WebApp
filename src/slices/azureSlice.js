@@ -242,7 +242,7 @@ export const createWorkItem = (item) => {
 };
 
 function isUndefined(str) {
-  return !str || str == null;
+  return !str || str === null || str === undefined;
 }
 
 function isEmpty(str) {
