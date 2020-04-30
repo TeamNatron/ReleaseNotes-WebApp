@@ -222,8 +222,8 @@ export const importRelease = (
 export const createWorkItem = (item) => {
   let desc = item.fields["System.Description"];
   if (isEmptyOrUndefined(desc)) {
-    desc = " ";
-    item.fields["System.Description"] = " ";
+    desc = "";
+    item.fields["System.Description"] = "";
   }
   return {
     WorkItemId: item.id,
