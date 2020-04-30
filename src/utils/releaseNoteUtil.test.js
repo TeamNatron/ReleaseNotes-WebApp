@@ -38,7 +38,7 @@ describe("releaseNoteUtil", () => {
       description: "<p></p><p></p><p></p>",
     };
     const result = classifyReleaseNote(note);
-    expect(result).toEqual("NO-DESCRIPTION");
+    expect(result).toEqual("DENSE");
   });
 
   it("is not undefined when a tag has text ", () => {
@@ -57,7 +57,7 @@ describe("releaseNoteUtil", () => {
       description: undefined,
     };
     const result = classifyReleaseNote(note);
-    expect(result).toEqual("NO-DESCRIPTION");
+    expect(result).toEqual("DENSE");
   });
   it("returns dense", () => {
     const note = {
