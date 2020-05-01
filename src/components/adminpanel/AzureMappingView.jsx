@@ -84,7 +84,7 @@ const AzureMappingView = (props) => {
 
     if (azdFields.length > 0) {
       // Grab a copy of lookupState
-      let lookupCopy = Object.create(lookup);
+      let lookupCopy = JSON.parse(JSON.stringify(lookup));
 
       // Iterate over all azdFields that's used in mappings
       azdFields.forEach((newString) => {
@@ -124,7 +124,6 @@ const AzureMappingView = (props) => {
   }, [lookup, rnsMappings]);
 
   useEffect(() => {
-    // console.log(lookup);
     if (!rnsMappings) return;
 
     // To get azdFields from ReleaseNoteSystem that hasn't been fetched yet from
@@ -132,7 +131,7 @@ const AzureMappingView = (props) => {
     addMissingLookupElements();
 
     // If there's no lookup to bind azdFields to, just set mappings and return
-    if (!lookup || lookup[0] === "") {
+    if (!lookup || Object.values(lookup).length < 1) {
       setLocalMappings(rnsMappings);
       return;
     }
