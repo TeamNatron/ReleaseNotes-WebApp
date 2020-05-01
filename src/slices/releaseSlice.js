@@ -105,10 +105,21 @@ export const putReleaseById = (id, data) => async (dispatch) => {
     });
 };
 
-export function postRelease(releaseToCreate) {
+/**
+ *
+ * @param {The release to create} releaseToCreate
+ * @param {A boolean flag that tells the function that
+ *          the release contains raw work items, that
+ *          requires a specific endpoint} raw
+ */
+export function postRelease(releaseToCreate, raw) {
   return (dispatch) => {
+    let url = "releases";
     dispatch(postPending());
-    return Axios.post("releases", releaseToCreate)
+    if (raw) {
+      url += "/azure";
+    }
+    return Axios.post(url, releaseToCreate)
       .then((response) => {
         dispatch(
           postSuccess({ message: "Opprettelse av release var vellykket!" })

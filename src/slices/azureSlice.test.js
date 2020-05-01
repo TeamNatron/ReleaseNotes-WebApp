@@ -5,7 +5,7 @@ import {
   getProjectsSuccess,
 } from "./azureSlice";
 import { testThunkConformance } from "../utils/test/testThunkConformance";
-import { fetchReleases, createWorkItem } from "./azureSlice";
+import { fetchReleases } from "./azureSlice";
 import { AzureAxios } from "./azureSlice";
 
 const initialState = {
@@ -61,59 +61,12 @@ describe("azure Thunks", () => {
 });
 
 describe("Import Release", () => {
-  it("Should return mapped Work Item", async () => {
-    const workItem = createWorkItem(dummyWorkItemRaw);
-    expect(workItem).toEqual(mappedWorkitem);
-  });
   it.todo("should fetchWorkItemIds");
   it.todo("should fetchWorkItems");
   it.todo("should importRelease");
 });
 
 // DUMMY DATA
-const mappedWorkitem = {
-  WorkItemId: 224,
-  WorkItemTitle:
-    "Som en administrator kan jeg legge til Autentiserings-informasjon til Azure Devops.",
-  ClosedDate: "2020-03-25T16:22:24.503Z",
-  WorkItemDescriptionHtml:
-    '<div>Wireframe:</div><div><a href="https://confluence.uials.no/pages/viewpage.action?pageId=57378685">https://confluence.uials.no/pages/viewpage.action?pageId=57378685</a></div><div><br></div><div>ERD:</div><div><a href="https://confluence.uials.no/pages/viewpage.action?pageId=57377417">https://confluence.uials.no/pages/viewpage.action?pageId=57377417</a><br></div>',
-  AuthorName: "Markus Randa",
-  AuthorEmail: "markuran@ntnu.no",
-  ingress: "",
-  title: "Som en administrator kan jeg legge til Autentiserings-informasjon til Azure Devops.",
-  Description: '<div>Wireframe:</div><div><a href="https://confluence.uials.no/pages/viewpage.action?pageId=57378685">https://confluence.uials.no/pages/viewpage.action?pageId=57378685</a></div><div><br></div><div>ERD:</div><div><a href="https://confluence.uials.no/pages/viewpage.action?pageId=57377417">https://confluence.uials.no/pages/viewpage.action?pageId=57377417</a><br></div>',
-};
-
-const dummyWorkItemRaw = {
-  id: 224,
-  rev: 10,
-  fields: {
-    "System.CreatedDate": "2020-03-25T16:22:24.503Z",
-    "System.CreatedBy": {
-      displayName: "Markus Randa",
-      url:
-        "https://spsprodweu1.vssps.visualstudio.com/A025f0995-ba99-4e30-998a-739dc40106c6/_apis/Identities/daab4d46-973a-64b4-9795-742508e96bfc",
-      _links: {
-        avatar: {
-          href:
-            "https://dev.azure.com/ReleaseNoteSystem/_apis/GraphProfile/MemberAvatars/aad.ZGFhYjRkNDYtOTczYS03NGI0LTk3OTUtNzQyNTA4ZTk2YmZj",
-        },
-      },
-      id: "daab4d46-973a-64b4-9795-742508e96bfc",
-      uniqueName: "markuran@ntnu.no",
-      imageUrl:
-        "https://dev.azure.com/ReleaseNoteSystem/_apis/GraphProfile/MemberAvatars/aad.ZGFhYjRkNDYtOTczYS03NGI0LTk3OTUtNzQyNTA4ZTk2YmZj",
-      descriptor: "aad.ZGFhYjRkNDYtOTczYS03NGI0LTk3OTUtNzQyNTA4ZTk2YmZj",
-    },
-    "System.Title":
-      "Som en administrator kan jeg legge til Autentiserings-informasjon til Azure Devops.",
-    "System.Description":
-      '<div>Wireframe:</div><div><a href="https://confluence.uials.no/pages/viewpage.action?pageId=57378685">https://confluence.uials.no/pages/viewpage.action?pageId=57378685</a></div><div><br></div><div>ERD:</div><div><a href="https://confluence.uials.no/pages/viewpage.action?pageId=57377417">https://confluence.uials.no/pages/viewpage.action?pageId=57377417</a><br></div>',
-  },
-  url: "https://dev.azure.com/ReleaseNoteSystem/_apis/wit/workItems/224",
-};
-
 const dummyReleases = {
   count: 17,
   value: [

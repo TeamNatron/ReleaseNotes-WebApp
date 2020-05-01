@@ -135,17 +135,10 @@ export const fetchWorkItemIds = async (project, params, id) => {
 export const fetchWorkItems = async (project, params, ids) => {
   // https://dev.azure.com/{organization}/{project}/_apis/wit/workitems?ids={ids}&api-version=5.1
   // create request url
-  const fields =
-    "&fields=System.CreatedBy,System.CreatedDate,System.Description,System.Title";
   const instance =
     "dev.azure.com/" + params.organization + "/" + project.replace(/ /g, "%20");
   const url =
-    "https://" +
-    instance +
-    "/_apis/wit/workitems?ids=" +
-    ids +
-    API_VERSION +
-    fields;
+    "https://" + instance + "/_apis/wit/workitems?ids=" + ids + API_VERSION;
   const authToken = params.authToken;
 
   return AzureAxios.get(url, authHeader(authToken));
@@ -182,26 +175,20 @@ export const importRelease = (
       fetchWorkItems(project, params, ids)
         .then((res) => {
           var rawWorkItems = res.data.value;
-          var workItems = [];
-
-          // Format and filter each work item
-          rawWorkItems.forEach((wi) => {
-            workItems.push(createWorkItem(wi));
-          });
 
           // Create new release
           const release = {
             title: title,
             isPublic: false,
             productVersionId: productVersionId,
-            releaseNotes: workItems,
+            releaseNotes: rawWorkItems,
           };
 
           // all requests to azure api are successful
           dispatch(importReleaseSuccess());
 
-          // post the new release
-          dispatch(postRelease(release));
+          // post the new
+          dispatch(postRelease(release, true));
         })
         .catch((err) => {
           throw err;
@@ -217,26 +204,3 @@ export const importRelease = (
       )
     );
 };
-
-// utils
-export const createWorkItem = (item) => {
-  var desc = item.fields["System.Description"];
-  if (isEmpty(desc)) {
-    desc = "";
-  }
-  return {
-    WorkItemId: item.id,
-    WorkItemTitle: item.fields["System.Title"],
-    ClosedDate: item.fields["System.CreatedDate"],
-    WorkItemDescriptionHtml: item.fields["System.Description"],
-    AuthorName: item.fields["System.CreatedBy"]["displayName"],
-    AuthorEmail: item.fields["System.CreatedBy"]["uniqueName"],
-    title: item.fields["System.Title"],
-    ingress: "",
-    Description: desc,
-  };
-};
-
-function isEmpty(str) {
-  return !str || 0 === str.length;
-}
