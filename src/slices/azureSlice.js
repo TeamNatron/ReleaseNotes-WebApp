@@ -188,7 +188,7 @@ export const importRelease = (
           dispatch(importReleaseSuccess());
 
           // post the new
-          dispatch(postRelease(release));
+          dispatch(postRelease(release, true));
         })
         .catch((err) => {
           throw err;
