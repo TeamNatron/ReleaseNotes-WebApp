@@ -204,27 +204,3 @@ export const importRelease = (
       )
     );
 };
-
-// utils
-export const createWorkItem = (item) => {
-  let desc = item.fields["System.Description"];
-  if (isEmptyOrUndefined(desc)) {
-    desc = "";
-    item.fields["System.Description"] = "";
-  }
-  return {
-    WorkItemId: item.id,
-    WorkItemTitle: item.fields["System.Title"],
-    ClosedDate: item.fields["System.CreatedDate"],
-    WorkItemDescriptionHtml: item.fields["System.Description"],
-    AuthorName: item.fields["System.CreatedBy"]["displayName"],
-    AuthorEmail: item.fields["System.CreatedBy"]["uniqueName"],
-    title: item.fields["System.Title"],
-    ingress: "",
-    Description: desc,
-  };
-};
-
-function isEmptyOrUndefined(str) {
-  return !str || 0 === str.length || str == null;
-}
