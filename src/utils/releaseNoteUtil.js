@@ -3,12 +3,10 @@ export const classifyReleaseNote = (note) => {
   const [hasTitle, hasIngress, hasDescription] = [
     title && title.length > 0,
     ingress && ingress.length > 0,
-    hasText(description),
+    description && hasText(description),
   ];
-  if (!hasDescription) return "NO-DESCRIPTION"; // there should always be a description
-  if (!hasIngress && !hasTitle) {
-    return "DENSE";
-  } else return "FULL";
+  if (hasTitle) return "FULL";
+  return "DENSE";
 };
 
 /**
