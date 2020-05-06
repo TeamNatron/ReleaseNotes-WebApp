@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect } from "react";
+import React, { forwardRef, useEffect, useCallback } from "react";
 import {
   ExpansionPanel,
   ExpansionPanelSummary,
@@ -23,7 +23,6 @@ import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  fetchRNSMappable,
   fetchAZDMappable,
   AZDTableFieldSelector,
   fetchRNSMappings,
@@ -32,46 +31,83 @@ import {
 } from "../../slices/mappingSlice";
 import PropTypes from "prop-types";
 import { useState } from "react";
+import GeneralSelector from "../shared/GeneralSelector";
 
 const AzureMappingView = (props) => {
   const { azureProps, selectedProject } = props;
   const rnsTableRef = React.createRef();
   const dispatch = useDispatch();
 
-  // The state of the available AzureDevOps-fields.
+  // ------- STATES -------
   const [lookup, setLookup] = useState({
     0: "",
   });
-
   const [localMappings, setLocalMappings] = useState([{}]);
+  const [workItemTypes] = useState(["task", "bug"]);
+  const [selectedWorkItemType, setSelectedWorkItemType] = useState(
+    workItemTypes[0]
+  );
 
+  // ------- DATA FETCHING -------
   useEffect(() => {
-    dispatch(fetchRNSMappable());
-    dispatch(fetchRNSMappings());
-  }, [dispatch]);
+    dispatch(fetchRNSMappings(selectedWorkItemType));
+  }, [dispatch, selectedWorkItemType]);
 
   useEffect(() => {
     const { authToken, organization } = azureProps;
-    if (authToken === "" || selectedProject === "" || organization === "")
+    if (
+      authToken === "" ||
+      selectedProject === "" ||
+      organization === "" ||
+      selectedWorkItemType === ""
+    )
       return;
     if (!authToken || !selectedProject || !organization) return;
     dispatch(
-      fetchAZDMappable(authToken, selectedProject, organization, "task")
+      fetchAZDMappable(
+        authToken,
+        selectedProject,
+        organization,
+        selectedWorkItemType
+      )
     );
-  }, [dispatch, azureProps, selectedProject]);
+  }, [dispatch, azureProps, selectedProject, selectedWorkItemType]);
 
   const azdFields = useSelector(AZDTableFieldSelector);
   const rnsMappings = useSelector(rnsMappingsTableFields);
 
-  // Updates the fields
-  useEffect(() => {
-    if (!rnsMappings) return;
-    if (!lookup || lookup[0] === "") {
-      setLocalMappings(rnsMappings);
-      return;
-    }
+  // ------- UPDATE DATA -------
+  const addMissingLookupElements = useCallback(() => {
+    const azdFields = rnsMappings
+      .filter((obj) => obj.azureDevOpsField)
+      .map(({ azureDevOpsField }) => azureDevOpsField);
 
-    // To get the correct index of mappings, a comparison is made between strings
+    if (azdFields.length > 0) {
+      // Grab a copy of lookupState
+      let lookupCopy = JSON.parse(JSON.stringify(lookup));
+
+      // Iterate over all azdFields that's used in mappings
+      azdFields.forEach((newString) => {
+        // Try to find a match for current string
+        const foundString = Object.values(lookupCopy).find((lookupString) => {
+          return lookupString === newString;
+        });
+
+        // If there's no match, the fields is missing, and should be added
+        const nextIndex = Object.values(lookupCopy).length;
+
+        if (!foundString) {
+          lookupCopy[nextIndex] = newString;
+        }
+      });
+      // Set the copy as the new state, if there's no changes nothing will be different
+      if (JSON.stringify(lookup) !== JSON.stringify(lookupCopy)) {
+        setLookup(lookupCopy);
+      }
+    }
+  }, [lookup, rnsMappings]);
+
+  const setCorrectAzdFieldsToCorrectIndex = useCallback(() => {
     rnsMappings.forEach((obj) => {
       if (obj.azureDevOpsField === "" || !obj.azureDevOpsField) return;
 
@@ -85,10 +121,33 @@ const AzureMappingView = (props) => {
         }
       }
     });
-
-    setLocalMappings(rnsMappings);
   }, [lookup, rnsMappings]);
 
+  useEffect(() => {
+    if (!rnsMappings) return;
+
+    // To get azdFields from ReleaseNoteSystem that hasn't been fetched yet from
+    // Azure, we need to add these as lookup-options.
+    addMissingLookupElements();
+
+    // If there's no lookup to bind azdFields to, just set mappings and return
+    if (!lookup || Object.values(lookup).length < 1) {
+      setLocalMappings(rnsMappings);
+      return;
+    }
+
+    // To get the correct index of mappings, a comparison is made between strings
+    setCorrectAzdFieldsToCorrectIndex();
+
+    setLocalMappings(rnsMappings);
+  }, [
+    addMissingLookupElements,
+    lookup,
+    rnsMappings,
+    setCorrectAzdFieldsToCorrectIndex,
+  ]);
+
+  // Update local state with all the available fields from Azure
   useEffect(() => {
     // If there's no members in object, just return
     if (Object.keys(azdFields).length === 0 && azdFields.constructor === Object)
@@ -102,22 +161,28 @@ const AzureMappingView = (props) => {
         new Promise((resolve, reject) => {
           try {
             // Get the field name to set
-            const result = lookup[newData.azdFieldName];
+            const newAzdField = lookup[newData.azdFieldName];
 
             // Get tableObject
             var index = localMappings.indexOf(oldData);
             var tableObject = localMappings[index];
 
             // Get id of mapping
-            var mappingId = tableObject.id;
+            var rnsFieldName = tableObject.rnsFieldName;
 
-            dispatch(putMapping(mappingId, result));
+            dispatch(
+              putMapping(rnsFieldName, newAzdField, selectedWorkItemType)
+            );
           } catch {
             throw new Error("Couldn't find object");
           }
           resolve();
         }),
     };
+  };
+
+  const handleSelectedWorkItemType = (event) => {
+    setSelectedWorkItemType(event.currentTarget.textContent);
   };
 
   return (
@@ -129,6 +194,13 @@ const AzureMappingView = (props) => {
       >
         <Typography>Release Note Mapping</Typography>
       </ExpansionPanelSummary>
+      <GeneralSelector
+        items={workItemTypes}
+        selected={selectedWorkItemType}
+        handleChange={handleSelectedWorkItemType}
+        helperText="Velg en Work-Item Type"
+        ml={25}
+      />
       <MaterialTable
         icons={tableIcons}
         tableRef={rnsTableRef}
@@ -148,9 +220,7 @@ const AzureMappingView = (props) => {
         ]}
         data={localMappings}
         editable={getEditable()}
-        // actions={actionsMappingTable(rnsTableRef)}
         options={optionsMappingTable}
-        // components={getAzureDevOpsFieldSelector()}
       />
     </ExpansionPanel>
   );

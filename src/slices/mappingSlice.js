@@ -2,6 +2,7 @@ import { createAction, createReducer, createSelector } from "@reduxjs/toolkit";
 import GlobalAxios from "axios";
 import Axios from "axios";
 import { authHeader } from "../utils/azureUtils";
+import { ERROR_WORK_ITEM_TYPE_NOT_PROVIDED } from "../constants/userFeedback";
 
 // azure axios instance
 export const AzureAxios = GlobalAxios.create({
@@ -61,7 +62,7 @@ export const mappingReducer = createReducer(initialState, {
     //todo implement update state with new mapping
     const incomingObject = action.payload.data.entity;
     const index = state.RNSMappings.entity.findIndex((obj) => {
-      return obj.id === incomingObject.id;
+      return obj.mappableField === incomingObject.mappableField;
     });
     if (index !== -1) {
       state.RNSMappings.entity[index].azureDevOpsField =
@@ -71,7 +72,7 @@ export const mappingReducer = createReducer(initialState, {
 });
 
 // THUNKS
-export const fetchRNSMappable = () => async (dispatch) => {
+export const fetchRNSMappable = (itemType) => async (dispatch) => {
   dispatch(fetchRNSMappablePending());
   Axios.get("mappablefields/")
     .then((res) => {
@@ -127,9 +128,11 @@ const buildWorkitemTypeURL = (project, org, itemType) => {
     "?api-version=5.1"
   );
 };
+export const fetchRNSMappings = (type) => async (dispatch) => {
+  if (!type) throw Error(ERROR_WORK_ITEM_TYPE_NOT_PROVIDED);
 
-export const fetchRNSMappings = () => async (dispatch) => {
-  const url = "/MappableFields?mapped";
+  const url = "/MappableFields?mapped&type=" + type;
+
   dispatch(fetchRNSMappingsPending());
   Axios.get(url)
     .then((res) => {
@@ -140,9 +143,13 @@ export const fetchRNSMappings = () => async (dispatch) => {
     });
 };
 
-export const putMapping = (id, data) => async (dispatch) => {
-  const url = "/MappableFields/" + id;
-  const object = { azureDevOpsField: data };
+export const putMapping = (rnsField, newAzdField, workItemType) => async (
+  dispatch
+) => {
+  if (!workItemType) throw Error(ERROR_WORK_ITEM_TYPE_NOT_PROVIDED);
+  // {{base_url}}/api/MappableFields/task/title
+  const url = "/MappableFields/" + workItemType + "/" + rnsField;
+  const object = { azureDevOpsField: newAzdField };
 
   dispatch(putMappingPending());
   Axios.put(url, object)
@@ -214,8 +221,7 @@ export const rnsMappingsTableFields = createSelector(
   (fields) => {
     if (!fields) return;
     return fields.map((obj) => ({
-      id: obj.id,
-      rnsFieldName: obj.mappableField.name,
+      rnsFieldName: obj.mappableField,
       azureDevOpsField: obj.azureDevOpsField,
     }));
   }

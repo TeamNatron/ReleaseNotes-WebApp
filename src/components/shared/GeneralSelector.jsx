@@ -17,16 +17,8 @@ const GeneralSelector = (props) => {
 
   return (
     <StyledFormControl
-      adornedStartfalse
       color="primary"
-      disabledfalse
-      errorfalse
-      filledtrue
-      focusedfalse
-      fullWidthfalse
-      hiddenLabelfalse
       margin="none"
-      requiredfalse
       variant="standard"
       ml={ml ? ml : 0}
     >
@@ -43,7 +35,8 @@ const GeneralSelector = (props) => {
 };
 
 GeneralSelector.prototype = {
-  items: PropTypes.array,
+  items: PropTypes.array.isRequired,
+  selected: PropTypes.any.isRequired,
   ml: PropTypes.string,
 };
 

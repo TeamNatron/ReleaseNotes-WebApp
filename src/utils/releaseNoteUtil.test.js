@@ -31,15 +31,6 @@ describe("releaseNoteUtil", () => {
     const result = classifyReleaseNote(note);
     expect(result).toEqual("FULL");
   });
-  it("is undefined when description only has empty html tags", () => {
-    const note = {
-      title: "",
-      ingress: "",
-      description: "<p></p><p></p><p></p>",
-    };
-    const result = classifyReleaseNote(note);
-    expect(result).toEqual("NO-DESCRIPTION");
-  });
 
   it("is not undefined when a tag has text ", () => {
     const note = {
@@ -50,15 +41,7 @@ describe("releaseNoteUtil", () => {
     const result = classifyReleaseNote(note);
     expect(result).toEqual("FULL");
   });
-  it("works with undefined fields ", () => {
-    const note = {
-      title: undefined,
-      ingress: undefined,
-      description: undefined,
-    };
-    const result = classifyReleaseNote(note);
-    expect(result).toEqual("NO-DESCRIPTION");
-  });
+
   it("returns dense", () => {
     const note = {
       title: undefined,
