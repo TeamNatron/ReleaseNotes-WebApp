@@ -1,32 +1,14 @@
 import { createAction, createReducer, createSelector } from "@reduxjs/toolkit";
 import Axios from "axios";
+import {
+  postProductVersionSuccess,
+  putProductVersionSuccess,
+} from "./productVersionsSlice";
 
 const name = "products/";
 export const fetchProductsPending = createAction(name + "getPending");
 export const fetchProductsError = createAction(name + "getError");
 export const fetchProductsSuccess = createAction(name + "getSuccess");
-
-// POST
-export const postProductVersionPending = createAction(
-  name + "postProductVersionPending"
-);
-export const postProductVersionError = createAction(
-  name + "postProductVersionError"
-);
-export const postProductVersionSuccess = createAction(
-  name + "postProductVersionSuccess"
-);
-
-// PUT
-export const putProductVersionPending = createAction(
-  name + "putProductVersionPending"
-);
-export const putProductVersionError = createAction(
-  name + "putProductVersionError"
-);
-export const putProductVersionSuccess = createAction(
-  name + "putProductVersionSuccess"
-);
 
 export const productsReducer = createReducer(
   { items: [] },
@@ -44,28 +26,6 @@ export const productsReducer = createReducer(
     },
   }
 );
-
-export const postProductVersion = (id, productVersion) => async (dispatch) => {
-  dispatch(postProductVersionPending());
-  Axios.post("products/" + id + "/version", productVersion)
-    .then((res) => {
-      dispatch(postProductVersionSuccess({ data: res.data, id: id }));
-    })
-    .catch((error) => {
-      dispatch(postProductVersionError(error));
-    });
-};
-
-export const putProductVersion = (id, productVersion) => async (dispatch) => {
-  dispatch(putProductVersionPending());
-  Axios.put("products/" + id + "/version", productVersion)
-    .then((res) => {
-      dispatch(putProductVersionSuccess({ data: res.data, id: id }));
-    })
-    .catch((error) => {
-      dispatch(putProductVersionError(error));
-    });
-};
 
 export function fetchProducts() {
   return (dispatch) => {
