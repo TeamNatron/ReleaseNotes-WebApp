@@ -3,9 +3,9 @@ import {
   fetchProductsSuccess,
   fetchProducts,
   getProductVersions,
-  postProductVersionSuccess,
 } from "./productsSlice";
 import { testThunkConformance } from "../utils/test/testThunkConformance";
+import { postProductVersionSuccess } from "./productVersionsSlice";
 
 describe("products reducer", () => {
   describe("fetchProductsSuccess", () => {

@@ -11,6 +11,10 @@ export const putPending = createAction(name + "putPending");
 export const putSuccess = createAction(name + "putSuccess");
 export const putError = createAction(name + "putError");
 
+export const postPending = createAction(name + "postPending");
+export const postSuccess = createAction(name + "postSuccess");
+export const postError = createAction(name + "postError");
+
 // REDUCER
 const initialState = {
   items: [],
@@ -31,6 +35,13 @@ export const fetchUsers = () => (dispatch) => {
     .catch((error) => {
       dispatch(getError(error));
     });
+};
+
+export const registerNewUser = (paramEmail, paramPassword) => {
+  return Axios.post("users", {
+    email: paramEmail,
+    password: paramPassword,
+  });
 };
 
 export const changePassword = (paramPassword, id) => async (dispatch) => {

@@ -1,15 +1,9 @@
-import { productVersions } from "./initialStates";
 import {
-  FETCH_VERSIONS_SUCCESS,
-  actions,
-} from "../actions/productVersionsActions";
-import { productVersionsReducer } from "./productVersionsReducer";
-import { fetchProductVersionsSuccess } from "./productVersionsSlice";
+  fetchProductVersionsSuccess,
+  productVersionsReducer,
+} from "./productVersionsSlice";
 
 describe("products reducer", () => {
-  it("should return the initial state", () => {
-    expect(productVersionsReducer(undefined, {})).toEqual(productVersions);
-  });
   it("should handle fetching products", () => {
     expect(
       productVersionsReducer(

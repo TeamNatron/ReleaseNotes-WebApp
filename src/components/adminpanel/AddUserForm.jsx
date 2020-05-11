@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import styled from "styled-components";
 import { Email, VpnKey } from "@material-ui/icons";
-import { registerNewUser } from "../../requests/user";
+import { registerNewUser } from "../../slices/userSlice";
 
 class AddUserForm extends Component {
   constructor() {

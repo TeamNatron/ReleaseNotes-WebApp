@@ -7,7 +7,6 @@ import SpacedDivider from "../shared/SpacedDivider";
 import ReleaseEditor from "../releaseEditor/ReleaseEditor";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router";
-import { fetchProductVersions } from "../../actions/productVersionsActions";
 import {
   fetchReleaseById,
   putReleaseById,
@@ -23,6 +22,7 @@ import {
   initReleaseEditorReleaseNotes,
   findReleaseById,
 } from "../../selectors/releaseEditorSelector";
+import { fetchProductVersions } from "../../slices/productVersionsSlice";
 
 const ReleaseEditorScreen = (props) => {
   const id = props.match.params.id;
