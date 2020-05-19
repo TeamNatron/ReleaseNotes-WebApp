@@ -16,7 +16,7 @@ import { getAuthToken } from "./handlers/cookieHandler";
 import Routes from "./components/Routes";
 
 // https://github.com/axios/axios
-Axios.defaults.baseURL = process.env.REACT_APP_APP_URL + "/api/";
+Axios.defaults.baseURL = "http://192.168.99.100:5000" + "/api/";
 Axios.interceptors.request.use((request) => {
   const token = getAuthToken();
   if (token) {
