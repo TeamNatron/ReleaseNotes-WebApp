@@ -126,25 +126,10 @@ class AddUserForm extends Component {
 
   handleSubmit = () => {
     let promise = registerNewUser(this.state.email, this.state.password);
-    promise
-      .then((response) =>
-        (document.getElementById("successMessage").hidden = false)(
-          (document.getElementById("successMessage").innerHTML =
-            "Registering av " + response.data.email + " er velykket!")
-        )(
-          (document.getElementById("successMessage").style.cssText =
-            "color: green;")
-        )
-      )
-      .catch((error) =>
-        (document.getElementById("successMessage").hidden = false)(
-          (document.getElementById("successMessage").innerHTML =
-            error.response.data)
-        )(
-          (document.getElementById("successMessage").style.cssText =
-            "color: red;")
-        )
-      );
+    promise.then((response) => {
+      this.props.fetchUsers();
+      console.log(response);
+    });
   };
 
   render() {

@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import styled from "styled-components";
 import { DesktopWindows } from "@material-ui/icons";
-import { registerNewProduct } from "../../slices/productsSlice";
+import { registerNewProduct, fetchProducts } from "../../slices/productsSlice";
 
 class AddProductForm extends Component {
   constructor() {
@@ -27,7 +27,6 @@ class AddProductForm extends Component {
       isPublicErrorMsg: "",
       submitDisabled: true,
     };
-
     this.onChangeName.bind(this);
     this.onChangeIsPublic.bind(this);
   }
@@ -86,27 +85,10 @@ class AddProductForm extends Component {
 
   handleSubmit = () => {
     let promise = registerNewProduct(this.state.name, this.state.isPublic);
-    promise
-      .then((response) =>
-        (document.getElementById("successMessage").hidden = false)(
-          (document.getElementById("successMessage").innerHTML =
-            "Registering av " + response.data.name + " er velykket!")
-        )(
-          (document.getElementById("successMessage").style.cssText =
-            "color: green;")
-        )
-      )
-      .catch((error) => {
-        document.getElementById("successMessage").hidden = false;
-        var message;
-        if (error.response.data === "") {
-          message = error.response.statusText;
-        } else {
-          message = error.response.data;
-        }
-        document.getElementById("successMessage").innerHTML = message;
-        document.getElementById("successMessage").style.cssText = "color: red;";
-      });
+    promise.then((response) => {
+      this.props.fetchProducts();
+      console.log(response);
+    });
   };
 
   render() {

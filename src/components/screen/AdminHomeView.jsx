@@ -48,20 +48,30 @@ const AdminHomeView = (props) => {
   const userRows = useSelector(userRowsSelector);
   const releaseNoteRows = useSelector(releaseNoteRowsSelector);
 
+  const fetchTheProducts = () => {
+    dispatch(fetchProducts());
+  };
+
+  const fetchTheUsers = () => {
+    dispatch(fetchUsers());
+  };
+
   return (
     <>
       <AdminExpansionPanelModal
         label="Produkter"
         icon={<DesktopWindows />}
         rows={productTitles}
-        createContentComponent={<AddProductForm />}
+        createContentComponent={
+          <AddProductForm fetchProducts={fetchTheProducts} />
+        }
         editContentComponent={<EditProductForm />}
       />
       <AdminExpansionPanelModal
         label="Brukere"
         icon={<PermIdentity />}
         rows={userRows}
-        createContentComponent={<AddUserForm />}
+        createContentComponent={<AddUserForm fetchUsers={fetchTheUsers} />}
         editContentComponent={<ChangePasswordForm />}
       />
       <AdminExpansionPanelRoute
