@@ -8,7 +8,8 @@
 This repository contains the front-end part of Release Note System, which mainly consists of one react-app.
 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Live demo:
+http://markuran-releasenotessystem.uials.no/
 
 ## Available Scripts
 
