@@ -3,6 +3,11 @@
 
 [![Coverage](https://img.shields.io/azure-devops/coverage/ReleaseNoteSystem/Release%20Note%20System/4/develop)](https://dev.azure.com/ReleaseNoteSystem/Release%20Note%20System/_build?definitionId=4&_a=summary&view=ms.vss-pipelineanalytics-web.new-build-definition-pipeline-analytics-view-cardmetrics)
 
+
+## Release Note System WebApp
+This repository contains the front-end part of Release Note System, which mainly consists of one react-app.
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
